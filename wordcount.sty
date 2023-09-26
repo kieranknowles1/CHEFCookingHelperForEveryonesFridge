@@ -1,0 +1,6 @@
+\ProvidesPackage{wordcount}
+
+% https://tex.stackexchange.com/questions/534/is-there-any-way-to-do-a-correct-word-count-of-a-latex-document
+\immediate\write18{texcount -inc -sum -1 \jobname.tex -out=\jobname.wc}
+
+\newcommand\wordcount{\input{\jobname.wc}}

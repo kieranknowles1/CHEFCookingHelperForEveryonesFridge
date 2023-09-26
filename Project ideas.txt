@@ -1,0 +1,40 @@
+Name: C.H.E.F - Cooking Helper for Everyone's Fridge
+Lessen food waste and support local businesses
+Tracks what ingredients the user has in their fridge and
+suggests recipes based on those ingredients.
+
+Could include a feature to show ingredients available in nearby stores (within walking distance)
+and also show recipes that can be made with a trip to the store.
+
+Could allow the user to input ingredients they don't like or are allergic to and filter out recipes including them.
+If a user doesn't like mushrooms they won't like anything made with them
+For a household with multiple people, track each user's preferences individually. Allow filtering recipes that multiple or all users like.
+Have an option to increase the amount of an ingredient in a recipe if the user likes it (e.g., an excessive amount of garlic)
+
+Filter by prep time
+
+Show the cost of each recipe for users on a budget
+Need to find an API that provides recipe and cost data
+
+May want to scan the barcodes of products to ease data entry
+Find a library to scan the barcode then look it up in a database. Need to find an API for lookups.
+Need some way to determine what a product is from the returned data.
+Still need a manual entry option
+If data can't be found, allow the user to enter it manually and submit it to the database
+
+Consider ingredients that can be substituted for each other. Different coloured peppers can be used interchangeably, for example.
+
+Track what has been made recently to avoid repeating recipes too often.
+Different categories of recipes (e.g. breakfast, lunch, dinner, dessert, snack, etc.)
+Allow the user to add their recipes
+Allow selecting a random recipe
+If the user doesn't like a recipe, allow them to remove it from the list of suggestions
+
+Allow inputting regular deliveries that will automatically be added to their database
+
+Won't have: Track nutrition for healthy eating
+
+Project Supervisors:
+John Rooksby
+Garry Elvin
+Nick Dalton
