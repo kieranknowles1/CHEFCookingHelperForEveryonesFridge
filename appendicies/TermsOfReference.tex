@@ -2,6 +2,9 @@
 % 11pt Arial on double sided A4 paper with 1.5 inch left margin
 \documentclass[../CHEFCookingHelperForEveryonesFridge.tex]{subfiles}
 
+\usepackage[style=authoryear]{biblatex}
+\addbibresource{TermsOfReference.bib}
+
 \begin{document}
 
 \begin{table}[h!]
@@ -19,6 +22,8 @@
 \end{table}
 
 \subsection{Background to Project}
+As of 2020, UK households wasted 4.5 million tons of edible food per year \parencite{wrap_food_2020}. This equals
+approximately 150kg per household \parencite{census_families_2022}
 \todo{Background to Project}
 % This should describe the “context” of the proposed project and answer the question, “Why this project?” both from your own perspective as a student undertaking
 % a final year computing project, and that of any client. It should show what makes this proposal a worthwhile computing final year project.
@@ -78,8 +83,7 @@
 % The purpose of this section is to help you and your supervisor to assess how strong a base of learning you are building on, and whether the enhancements of your knowledge and skills that the project will require are feasible. Projects should generally be relevant to your degree course, e.g. students taking Web Design and Development should do projects that use skills relevant to that area and build on modules from that course.
 % Identify and list the skills that you will need to carry out the project work. You should explicitly identify both familiar areas of knowledge and skills and new/enhanced ones that the project will require. Against each, indicate which module that you have taken or are taking gives you those skills. If you will be acquiring skills during the course of your project, say how this will be done.
 
-\subsection{Sources of Information / Bibliography}
-\todo{Sources of Information / Bibliography}
+\printbibliography
 % 7.	Sources of information / bibliography
 % This is simply a reference list and bibliography, presented in the usual format. Include the sources have you consulted in preparing the Terms of Reference and any additional sources that you anticipate using during the work. It is not expected that you will yet have identified all the information that you will use. Ensure that you follow standard referencing guidelines.
 
@@ -138,5 +142,8 @@
 \todo{Project Plan - Schedule of Activities}
 % A detailed statement of the stages of the project is required. A Gantt chart should be used for expressing the schedule, together with supporting information. Identify the tasks needed to achieve each objective, estimate how long they will take, plan when they should be done, and include these tasks in your Gantt chart.
 % Your schedule must clearly indicate for each task the number of hours’ work required to accomplish it and the elapsed time over which this work should be done. The schedule should be expressed in weeks. Months do not allow for sufficiently detailed planning and control. Days are too detailed; in practice you will not yet know your daily workload in the second semester, so you cannot meaningfully plan down to the day. It is sensible to consult your assignment schedule when you make your project plan, and to avoid overloading yourself at times when you have other major commitments, but remember that your project is the largest and most important module of the year!
+
+% TODO: Remove once done
+\todos
 
 \end{document}
