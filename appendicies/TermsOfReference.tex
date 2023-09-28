@@ -5,6 +5,8 @@
 \usepackage[style=authoryear]{biblatex}
 \addbibresource{TermsOfReference.bib}
 
+\renewcommand{\cite}[1]{\parencite{#1}}
+
 \begin{document}
 
 \begin{table}[h!]
@@ -24,9 +26,9 @@
 \subsection{Background to Project}
 % This should describe the “context” of the proposed project and answer the question, “Why this project?” both from your perspective as a student undertaking
 % a final year computing project and that of any client. It should show what makes this proposal a worthwhile computing final-year project.
-As of 2020, UK households collectively wasted 4.5 million tons of food every year, or nearly 20\% of all purchased food \parencite{wrap_uk_2020}.
+As of 2020, UK households collectively wasted 4.5 million tons of food every year, or nearly 20\% of all purchased food \cite{wrap_uk_2020}.
 Whilst aware that food waste is increasing among consumers, "many do not yet acknowledge that this is an issue relevant to them or are not
-yet concerned enough to act" \parencite{wrap_uk_2020}. \todo{Is this correct referencing?}
+yet concerned enough to act" \cite{wrap_uk_2020}. \todo{Is this correct referencing?}
 One possible reason for this is consumers not knowing what to do with the food they have in their fridge, and therefore not using it before it goes off.
 Manually looking through a recipe book and checking that you have all the ingredients is a time-consuming process, and therefore people are less likely to do it.
 
@@ -41,19 +43,26 @@ Manually looking through a recipe book and checking that you have all the ingred
 % introduce the general features of the kind of application you are trying to build, and ideas related to the problem that you will investigate in your literature review.
 % You should by now have done a fair amount of reading about the area, to put your ideas into context and to ensure that the project idea is valid and viable,
 % and identified some useful literature about the problem that you are trying to solve or investigate; One reason for doing this is to show that you will be able
-% to find the useful and interesting ideas and information that your project will need. This requires references!  It is also a good chance for you to practise the academic style of writing needed for your report.
+% to find the useful and interesting ideas and information that your project will need. This requires references!
+% It is also a good chance for you to practise the academic style of writing needed for your report.
 % Indicate why the proposed project is of interest, both to you and more generally, and why it is useful and to whom.
-% For example, where did the idea come from? Was it requested by your client, or does it arise from your supervisor’s research?
+% For example, where did the idea come from? Was it requested by your client, or did it arise from your supervisor’s research?
 % Did some problem you encountered in real life or a paper that you read in the literature suggest a research question?
 % Will it benefit a client – and how? What problems will you need to solve?  Will you be using interesting or unfamiliar technologies?
 % What is challenging? (Remember that the project will stretch you beyond what you have achieved in other assignments.)
 
 \subsection{Proposed Work}
 \todo{Proposed Work}
-% This section follows directly from the background, and should give more details of what you are proposing to do. The project must exhibit a level of difficulty appropriate to final year honours BSc work, and be of a size that can be attempted in the time available; this section should define the topic and project work in enough detail for the markers to be sure that it is suitable. The more detail and discussion you produce at this stage, the stronger the foundation for the actual project work.
-% You should emphasise the computing aspects you expect to be involved in, including those specifically relevant to your programme. Remember that you are undertaking the project as part of a BSc programme in a computing-related discipline, and avoid being side-tracked into areas that are not relevant to your course.)
+% This section follows directly from the background and should give more details of what you are proposing to do.
+% The project must exhibit a level of difficulty appropriate to final year honours BSc work, and be of a size that
+% can be attempted in the time available; this section should define the topic and project work in enough detail
+% for the markers to be sure that it is suitable. The more detail and discussion you produce at this stage, the stronger the foundation for the actual project work.
+% You should emphasise the computing aspects you expect to be involved in, including those specifically relevant to your programme.
+% Remember that you are undertaking the project as part of a BSc programme in a computing-related discipline, and avoid being side-tracked
+% into areas that are not relevant to your course.)
 % Make sure that you include the following:
-% •	A brief description of the work involved in carrying out the project and your approach to the development or investigation. Bring out the technical aspects as well as the general processes.
+% •	A brief description of the work involved in carrying out the project and your approach to the development or investigation.
+% Bring out the technical aspects as well as the general processes.
 % •	What areas or questions will you need to investigate to carry out the project work? What topic(s) will your literature review cover and how does it help the project?
 % •	Any further details of the product to be built or practical investigative work that will help to define the size and scope of the project.
 % •	What computing technologies will be used and why?  (If you will be deciding this as part of the project work, say so, and indicate the possibilities.)
@@ -61,10 +70,11 @@ Manually looking through a recipe book and checking that you have all the ingred
 
 \subsection{Aims of Project}
 \todo{Aims of Project}
-% 	An overall statement of what the project is intended to accomplish. This should be expressed in terms relating to the project, not personal achievements. There will normally be only one or two aims. If you have more than three, then revise them since they will normally be inappropriate as aims.
+% 	An overall statement of what the project is intended to accomplish. This should be expressed in terms relating to the project,
+% not personal achievements. There will normally be only one or two aims. If you have more than three, then revise them since they will normally be inappropriate as aims.
 % The following are examples of project aims:
-% •	“To investigate and analyse the importance of the role of schedulability in real time systems.
-% •	To develop a learning tool that would help people to understand the importance of schedulability and carry out a schedulability analysis of real time systems.”
+% •	“To investigate and analyse the importance of the role of schedulability in real-time systems.
+% •	To develop a learning tool that would help people to understand the importance of schedulability and carry out a schedulability analysis of real-time systems.”
 % •	“To compare the effects of flat and deep menu structures on users’ website navigation performance.”
 % •	“To investigate how an e-card service is made and the types of database that can be used to store images.”
 % •	“To build an e-card service to allow a user to manipulate images and create their own e-card.”
@@ -72,7 +82,9 @@ Manually looking through a recipe book and checking that you have all the ingred
 
 \subsection{Objectives}
 \todo{Objectives}
-% 	Each objective should identify an expected outcome. By the end of the project, it should be obvious to you and your supervisor whether you have accomplished an objective or not, although it may be debatable as to how well you have accomplished it. Thus each objective must be clear, measurable and concrete. (The ‘SMART’ acronym is helpful here.) Phrase them so that it is clear what will show that the objective has been achieved. For example,
+% 	Each objective should identify an expected outcome. By the end of the project, it should be obvious to you and your supervisor whether you have accomplished
+% an objective or not, although it may be debatable as to how well you have accomplished it. Thus each objective must be clear, measurable and concrete.
+% (The ‘SMART’ acronym is helpful here.) Phrase them so that it is clear what will show that the objective has been achieved. For example,
 % 	‘Create a requirements specification for…’  is more exact than,
 % 	‘Identify requirements for…’.
 % 	Projects for this module typically have 7-12 objectives, relating to areas such as:
@@ -93,39 +105,57 @@ Manually looking through a recipe book and checking that you have all the ingred
 
 \subsection{Skills}
 \todo{Skills}
-% The purpose of this section is to help you and your supervisor to assess how strong a base of learning you are building on, and whether the enhancements of your knowledge and skills that the project will require are feasible. Projects should generally be relevant to your degree course, e.g. students taking Web Design and Development should do projects that use skills relevant to that area and build on modules from that course.
-% Identify and list the skills that you will need to carry out the project work. You should explicitly identify both familiar areas of knowledge and skills and new/enhanced ones that the project will require. Against each, indicate which module that you have taken or are taking gives you those skills. If you will be acquiring skills during the course of your project, say how this will be done.
+% The purpose of this section is to help you and your supervisor assess how strong a base of learning you are building on,
+% and whether the enhancements of your knowledge and skills that the project will require are feasible. Projects should generally
+% be relevant to your degree course, e.g. students taking Web Design and Development should do projects that use skills relevant
+% to that area and build on modules from that course.
+% Identify and list the skills that you will need to carry out the project work. You should explicitly identify both familiar areas
+% of knowledge and skills and new/enhanced ones that the project will require. Against each, indicate which module that you have taken
+% or are taking gives you those skills. If you will be acquiring skills during your project, say how this will be done.
 
 \printbibliography
-% 7.	Sources of information / bibliography
+% 7.	Sources of information/bibliography
 % This is simply a reference list and bibliography, presented in the usual format. Include the sources have you consulted in preparing the Terms of Reference and any additional sources that you anticipate using during the work. It is not expected that you will yet have identified all the information that you will use. Ensure that you follow standard referencing guidelines.
 
 \subsection{Resources - Statement of Hardware / Software Required}
 \todo{Resources - Statement of Hardware / Software Required}
-% The purpose of this section is to ensure that all the resources needed for the project are in fact available for it.
-% Identify and justify the software, computer hardware or any other equipment that you require for the project. You should also indicate how it will be provided, and its purpose in the project. A bulleted list that gives this information for each item is sufficient.
-% Consider carefully how you would cope if resources were not available; what alternative resources might be employed. This is particularly important if you intend to use your own equipment or that of an external body.
-% Note that you will need to demonstrate your product at the university. It is important to plan how this will be achieved. Your list of resources should include those needed for the demonstration.
-% Where relevant, you may use your own computer for part or all of the practical work, provided that it is suitable for the purpose, as agreed by the supervisor, and that all proprietary software is properly licensed for the machine on which it is running. Similarly, hardware and software provided by a client may be used, under the same conditions.
-% All software used in your project at any point must be used with the necessary licenses or permissions for that machine. This includes software on your own machine and software used in the demonstration/viva. Do not make illegal copies, whatever the cost of the software in question. You may be able to find a free alternative, or to use software that is available in our labs, or to choose a different approach. Software piracy is not acceptable under any circumstances.
+% The purpose of this section is to ensure that all the resources needed for the project are available for it.
+% Identify and justify the software, computer hardware or any other equipment that you require for the project.
+% You should also indicate how it will be provided, and its purpose in the project. A bulleted list that gives this information for each item is sufficient.
+% Consider carefully how you would cope if resources were not available; what alternative resources might be employed. This is particularly
+% important if you intend to use your equipment or that of an external body.
+% Note that you will need to demonstrate your product at the university.
+% It is important to plan how this will be achieved. Your list of resources should include those needed for the demonstration.
+% Where relevant, you may use your computer for part or all of the practical work, provided that it is suitable for the purpose,
+% as agreed by the supervisor and that all proprietary software is properly licensed for the machine on which it is running.
+% Similarly, hardware and software provided by a client may be used, under the same conditions.
+% All software used in your project at any point must be used with the necessary licenses or permissions for that machine.
+% This includes software on your machine and software used in the demonstration/viva. Do not make illegal copies,
+% whatever the cost of the software in question. You may be able to find a free alternative, use software that is available in our labs,
+% or choose a different approach. Software piracy is not acceptable under any circumstances.
 
 \subsection{Assessment Criteria for Practical Computing Work}
 \todo{Assessment Criteria for Practical Computing Work}
-% This is the part of the TOR that many students find the most difficult as you are asked to agree the criteria on which your practical work will be assessed. This is very important for your final project marking.
+% This is the part of the TOR that many students find the most difficult as you are asked to agree on the criteria on which your practical
+% work will be assessed. This is very important for your final project marking.
 
-% You should agree these criteria with your supervisor and 2nd marker at the TOR review meeting, and you are strongly advised to review them with your supervisor early in Semester 2 to ensure that they still reflect the planned direction of your project. Changes may be agreed at that point, and need to be recorded in your eLogbook.
+% You should agree on these criteria with your supervisor and 2nd marker at the TOR review meeting, and you are strongly advised to review them
+% with your supervisor early in Semester 2 to ensure that they still reflect the planned direction of your project. Changes may be agreed upon at
+% that point, and need to be recorded in your eLogbook.
 
 % (i)	Product
-% If your project involves building a product, the product does not only consist of the final software or hardware, but also of all the associated deliverables that you use to product it, e.g. requirements specifications, design models, test plans and results, etc. These may vary widely between projects.
+% If your project involves building a product, the product does not only consist of the final software or hardware but also of all the
+% associated deliverables that you use to produce it, e.g. requirements specifications, design models, test plans and results, etc. These may vary widely between projects.
 % The product should be marked in terms of two main criteria: ‘Fitness for Purpose’ and ‘Build Quality’.
-% 	Fitness for Purpose may be defined as “Has the student built the right kind of product?”
-% The main criterion for assessing this is whether the product meets its specified requirements as identified in the Research and Planning phase, and if not, why not? Other commonly usable criteria include:
+% 	Fitness for Purpose may be defined as “Have you built the right kind of product?”
+% The main criterion for assessing this is whether the product meets its specified requirements as identified in the Research and Planning phase,
+% and if not, why not? Other commonly usable criteria include:
 % 	usability / HCI
-% 	adequacy / completeness (bearing in mind that the product will typically be a prototype rather than a fully-fledged, complete product of practical use or commercial value),
+% 	adequacy/completeness (bearing in mind that the product will typically be a prototype rather than a fully-fledged, complete product of practical use or commercial value),
 % 	performance (e.g. good response time, sufficient data capacity),
 % 	robustness
 % 	error handling.
-% Build Quality may be defined as “Has the student built the product the right kind of way?”
+% Build Quality may be defined as “Have you built the product the right kind of way?”
 % 	A variety of criteria may be used in its assessment, for example:
 % 	design quality,
 % 	implementation quality,
@@ -133,28 +163,52 @@ Manually looking through a recipe book and checking that you have all the ingred
 % 	adherence to standards,
 % 	quality of testing and validation,
 % 	quality of specific documents.
-% In some cases, it may be difficult to decide under which heading a criterion should fit: e.g. HCI might fit under either, depending on the focus of the project.  In these cases, decide on the most appropriate and ensure that the overall marking scheme fits in with the choice.
-% List all the deliverables (finished software/hardware, requirement specification, design models, test plans, prototypes etc.) that will form part of your product. Then list the criteria on which fitness for purpose and build quality will be assessed. Some of these are provided as above, and you may add others.
-% Please note that the mark percentage for practical work in the marking scheme is not only for the quality of the product. It also includes how you describe and justify the development process and the decisions made and techniques/tools used.
+% In some cases, it may be difficult to decide under which heading a criterion should fit: e.g. HCI might fit under either,
+% depending on the focus of the project.  In these cases, decide on the most appropriate and ensure that the overall marking scheme fits in with the choice.
+% List all the deliverables (finished software/hardware, requirement specification, design models, test plans, prototypes etc.)
+% that will form part of your product. Then list the criteria on which fitness for purpose and build quality will be assessed.
+% Some of these are provided as above, and you may add others.
+% Please note that the mark percentage for practical work in the marking scheme is not only for the quality of the product.
+% It also includes how you describe and justify the development process, the decisions made, and the techniques/tools used.
 
 
 % (ii)	Quality of Practical Investigative Work
 
-% If your project focuses on investigating a research question/hypothesis, in this section of the TOR, you must specify the criteria on which your investigative work will be assessed. These will vary widely between projects. You should list all the deliverables (e.g. tools built, survey instruments designed, equipment configurations set up; conduct of sessions with participants; use of tools and techniques, etc) and choose criteria appropriate to the deliverables that you will produce. Some of these criteria may relate to the quality of deliverables produced; others may relate to the way that you have carried out your investigation. Observance of relevant ethical and safety guidelines must be included.  Ensure that the deliverables and criteria chosen will demonstrate your use of practical computing skills relevant to your course.
+% If your project focuses on investigating a research question/hypothesis, in this section of the TOR, you must specify the criteria
+% on which your investigative work will be assessed. These will vary widely between projects. You should list all the deliverables
+% (e.g. tools built, survey instruments designed, equipment configurations set up; conduct of sessions with participants; use of tools and techniques, etc.)
+% and choose criteria appropriate to the deliverables that you will produce. Some of these criteria may relate to the quality of deliverables produced;
+% others may relate to the way that you have carried out your investigation. Observance of relevant ethical and safety guidelines must be included.
+% Ensure that the deliverables and criteria chosen will demonstrate your use of practical computing skills relevant to your course.
 
-% The specified deliverables and other evidence must demonstrate the effective use of practical computing skills relevant to the student’s programme; these are broadly defined and include e.g. carrying out usability evaluation, use of appropriate tools. If insufficient evidence is provided, the student cannot score highly on this criterion.
-% Remember that your markers will need to be able to assess your work on these criteria. You should indicate what evidence will be provided; this will usually be included in your appendices but may be elsewhere in your submission.
+% The specified deliverables and other evidence must demonstrate the effective use of practical computing skills relevant to the student’s programme;
+% these are broadly defined and include e.g. carrying out usability evaluation, and use of appropriate tools. If insufficient evidence is provided,
+% the student cannot score highly on this criterion.
+% Remember that your markers will need to be able to assess your work on these criteria. You should indicate what evidence will be provided;
+% This will usually be included in your appendices but may be elsewhere in your submission.
 
 \subsection{Ethics, Social, Legal, and Professional Issues}
 \todo{Ethics, Social, Legal, and Professional Issues}
-% You need to consider any ethics, social, legal and professional issues that might arise in your project. Please refer to the university guidance on Ethics and Integrity for consultation. You need to discuss with your supervisor in which category your project will be classified as in terms of ethics. If your project is considered as a low or medium risk project, you need to justify the reasons in this session, and provide action plans on human participants, data collection, data management recruitment, risk assessment, health and safety, and any other relevant issues.
+% You need to consider any ethical, social, legal and professional issues that might arise in your project. Please refer to the university's
+% guidance on Ethics and Integrity for consultation. You need to discuss with your supervisor in which category your project will be classified
+% in terms of ethics. If your project is considered a low or medium-risk project, you need to justify the reasons in this session
+% and provide action plans on human participants, data collection, data management recruitment, risk assessment, health and safety, and any other relevant issues.
 
-% Ethics approval is a fail/pass component. You need to fill out an Ethics Approval Form and submit it together with the TOR document to provide enough information for review. Failure to submit both documents in a timely manner will result in you not being able to start your project, and consequently a delay in the project completion. Failure to pass the ethics approval will result in a failure in the module assessment result.  If a risk assessment is required, you should also fill out an Risk Assessment Form and attach it to the TOR document.
+% Ethics approval is a fail/pass component. You need to fill out an Ethics Approval Form and submit it together with the TOR document
+% to provide enough information for review. Failure to submit both documents promptly will result in you not being able to start your project,
+% and consequently a delay in the project completion. Failure to pass the ethics approval will result in failing the module assessment.
+% If a risk assessment is required, you should also fill out a Risk Assessment Form and attach it to the TOR document.
 
 \subsection{Project Plan - Schedule of Activities}
 \todo{Project Plan - Schedule of Activities}
-% A detailed statement of the stages of the project is required. A Gantt chart should be used for expressing the schedule, together with supporting information. Identify the tasks needed to achieve each objective, estimate how long they will take, plan when they should be done, and include these tasks in your Gantt chart.
-% Your schedule must clearly indicate for each task the number of hours’ work required to accomplish it and the elapsed time over which this work should be done. The schedule should be expressed in weeks. Months do not allow for sufficiently detailed planning and control. Days are too detailed; in practice you will not yet know your daily workload in the second semester, so you cannot meaningfully plan down to the day. It is sensible to consult your assignment schedule when you make your project plan, and to avoid overloading yourself at times when you have other major commitments, but remember that your project is the largest and most important module of the year!
+% A detailed statement of the stages of the project is required. A Gantt chart should be used for expressing the schedule, and
+% together with supporting information. Identify the tasks needed to achieve each objective, estimate how long they will take,
+% plan when they should be done, and include these tasks in your Gantt chart.
+% Your schedule must indicate for each task the number of hours work required to accomplish it and the elapsed
+% time over which this work should be done. The schedule should be expressed in weeks. Months do not allow for sufficiently detailed planning and control.
+% Days are too detailed; in practice, you will not yet know your daily workload in the second semester, so you cannot meaningfully plan down to the day.
+% It is sensible to consult your assignment schedule when you make your project plan, and to avoid overloading yourself at times when you have other major
+% commitments, but remember that your project is the largest and most important module of the year!
 
 % TODO: Remove once done
 \todos
