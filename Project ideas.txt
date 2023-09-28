@@ -1,5 +1,6 @@
 Name: C.H.E.F - Cooking Helper for Everyone's Fridge
 Lessen food waste and support local businesses
+Save money in the current cost of living crisis
 Tracks what ingredients the user has in their fridge and
 suggests recipes based on those ingredients.
 
@@ -18,6 +19,7 @@ Need to find an API that provides recipe and cost data
 
 May want to scan the barcodes of products to ease data entry
 Find a library to scan the barcode then look it up in a database. Need to find an API for lookups.
+If scanning a product that has already been partially used, allow the user to enter how much is left.
 Need some way to determine what a product is from the returned data.
 Still need a manual entry option
 If data can't be found, allow the user to enter it manually and submit it to the database
@@ -35,6 +37,6 @@ Allow inputting regular deliveries that will automatically be added to their dat
 Won't have: Track nutrition for healthy eating
 
 Project Supervisors:
+Andy Dow
 John Rooksby
-Garry Elvin
 Nick Dalton
