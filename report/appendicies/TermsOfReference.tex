@@ -9,6 +9,13 @@
 
 \newcommand{\chef}{C.H.E.F.}
 
+% Print bibliography on the same page
+% From biblatex docs
+\defbibheading{bibliography}[\bibname]{
+    \subsection{#1}
+    \markboth{#1}{#1}
+}
+
 \begin{document}
 
 \begin{table}[h!]
