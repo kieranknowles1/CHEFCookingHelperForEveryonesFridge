@@ -7,6 +7,8 @@
 
 \renewcommand{\cite}[1]{\parencite{#1}}
 
+\newcommand{\chef}{C.H.E.F.}
+
 \begin{document}
 
 \begin{table}[h!]
@@ -31,31 +33,58 @@
 As of 2020, UK households collectively wasted 4.5 million tons of food every year, or nearly 20\% of all purchased food.
 Whilst aware that food waste is increasing among consumers, "many do not yet acknowledge that this is an issue relevant to them or are not
 yet concerned enough to act" \cite{wrap_uk_2020}.
+\todo{Mention cost of living crisis}
 
 One possible reason for this is consumers not knowing what to do with the food they have in their fridge, and therefore not using it before it goes off.
 Manually looking through a recipe book and checking that you have all the ingredients is a time-consuming process, and therefore people are less likely to do it.
 
-This project aims to create a web application where the user will scan food as they put it in their fridge, the application will then track what
-they have and suggest recipes based on what the user can make with what they have. This will help reduce food waste by helping users know
-what to do with the food they already have rather than buying more and letting some go to waste.
-
-\todo{Background to Project}
 % After that, describe the problem domain you will be working in. This may include a practical context – for example, a client organisation and its needs.
 % It will certainly involve introducing the field in which you will be working. For example, what previous work suggested your research question?
+This project aims to create a web application that tracks what ingredients the user has, then suggests recipes that can be made with those ingredients.
+This will help to reduce food waste by helping users work with what they already have rather than buying more food and letting what they have go off.
+
 % What ideas will be important to defining and carrying out your project?  For software engineering projects in particular, it will usually be appropriate to
 % introduce the general features of the kind of application you are trying to build, and ideas related to the problem that you will investigate in your literature review.
 % You should by now have done a fair amount of reading about the area, to put your ideas into context and to ensure that the project idea is valid and viable,
 % and identified some useful literature about the problem that you are trying to solve or investigate; One reason for doing this is to show that you will be able
 % to find the useful and interesting ideas and information that your project will need. This requires references!
 % It is also a good chance for you to practise the academic style of writing needed for your report.
+\todo{Research existing solutions}
+
+
 % Indicate why the proposed project is of interest, both to you and more generally, and why it is useful and to whom.
 % For example, where did the idea come from? Was it requested by your client, or did it arise from your supervisor’s research?
 % Did some problem you encountered in real life or a paper that you read in the literature suggest a research question?
 % Will it benefit a client – and how? What problems will you need to solve?  Will you be using interesting or unfamiliar technologies?
 % What is challenging? (Remember that the project will stretch you beyond what you have achieved in other assignments.)
+The project is of interest to me personally as I often struggle to decide what to eat and instead end up eating fast food,
+the same meals over and over, or getting ready meals from the shop.
+
+The idea for the project came due to the increase in cost of living, and the realization of how much food we bought that was
+never consumed. I was searching for recipes which incorporated foods I had. This was time consuming and laborious.
+I had the idea to create an app where I could simply type in what food I had and would return how that could be incorporated
+into a meal.
+
+\todo{Background to Project}
+
 
 \subsection{Proposed Work}
-\todo{Proposed Work}
+The project will be the development of \chef{}, standing for Cooking Helper for Everyone's Fridge. I have chosen this name
+as it is a catchy and memorable acronym that describes the purpose of the project, helping people to make use of
+what they already have in their fridge.
+
+% •	A brief description of the work involved in carrying out the project and your approach to the development or investigation.
+% Bring out the technical aspects as well as the general processes.
+\chef{} will be a web application intended to be used on a mobile phone. It will allow users to create an account and log in,
+then add the ingredients that they have either by manually entering them or by scanning the barcode on the packaging.
+This ingredient will then be added to the user's virtual fridge and the user will be able to see what ingredients they have and how much of each.
+If a barcode is not found in the database, the user can manually enter the type of ingredient and its quantity (weight, volume or quantity depending on the ingredient).
+This information will then be stored in the database for future use \todo{All users or just the one inputting it?}.
+
+Whole foods such as fruits and vegetables will be entered by the user manually, as they do not have barcodes. This will likely use an interface where
+all supported ingredients are shown and the user clicks to add one to their fridge, clicking multiple times to add multiple of the same ingredient.
+Another option would be to use a classifier to identify the type of fruit or vegetable from a picture, however, this may be less accurate and more
+time consuming than the manual method.
 % This section follows directly from the background and should give more details of what you are proposing to do.
 % The project must exhibit a level of difficulty appropriate to final year honours BSc work, and be of a size that
 % can be attempted in the time available; this section should define the topic and project work in enough detail
@@ -64,12 +93,15 @@ what to do with the food they already have rather than buying more and letting s
 % Remember that you are undertaking the project as part of a BSc programme in a computing-related discipline, and avoid being side-tracked
 % into areas that are not relevant to your course.)
 % Make sure that you include the following:
-% •	A brief description of the work involved in carrying out the project and your approach to the development or investigation.
-% Bring out the technical aspects as well as the general processes.
 % •	What areas or questions will you need to investigate to carry out the project work? What topic(s) will your literature review cover and how does it help the project?
 % •	Any further details of the product to be built or practical investigative work that will help to define the size and scope of the project.
+\todo{Proposed Work}
+
 % •	What computing technologies will be used and why?  (If you will be deciding this as part of the project work, say so, and indicate the possibilities.)
+\chef{} will run on a local server with a Docker container for each component and a script to install dependencies and deploy the containers.
+Using Docker will compartmentalize the project and reduce the work required to transfer to a hybrid cloud environment if required.
 % This is one of the most important sections of your TOR. After reading this part of your TOR, the reader should know what would be involved in undertaking the project.
+\todo{Proposed Work}
 
 \subsection{Aims of Project}
 \todo{Aims of Project}

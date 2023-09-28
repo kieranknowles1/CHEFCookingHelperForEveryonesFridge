@@ -37,6 +37,6 @@ Allow inputting regular deliveries that will automatically be added to their dat
 Won't have: Track nutrition for healthy eating
 
 Project Supervisors:
+Nick Dalton
 Andy Dow
 John Rooksby
-Nick Dalton
