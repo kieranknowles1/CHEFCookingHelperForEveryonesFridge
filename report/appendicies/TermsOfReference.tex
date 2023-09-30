@@ -7,6 +7,8 @@
 
 \renewcommand{\cite}[1]{\parencite{#1}}
 
+\renewcommand{\thesubsection}{\arabic{subsection}}
+
 \newcommand{\chef}{C.H.E.F.}
 
 % Print the bibliography on the same page
@@ -92,6 +94,22 @@ Whole foods such as fruits and vegetables will be entered by the user manually, 
 all supported ingredients are shown and the user clicks to add one to their fridge, clicking multiple times to add multiple of the same ingredient.
 Another option would be to use a classifier to identify the type of fruit or vegetable from a picture, however, this may be less accurate and more
 time-consuming than the manual method.
+
+\chef{} will track what kinds of recipes each user has made recently and avoid suggesting similar recipes
+to ones that the user has recently made, such as different pasta dishes. This will help to avoid users
+getting bored of eating the same meals over and over.
+
+Users within the same household will be able to invite each other to an in-app household that shares a fridge.
+This will allow multiple people to add ingredients and use them to cook meals without having to sync up
+what they have.
+
+If a user does not like a certain ingredient, such as mushrooms, they can specify this in their profile and
+the \chef{} app will not suggest recipes including it. This is necessary as other members of the household
+may like the ingredient and therefore add it to the shared fridge.
+
+When finding a recipe, users will be able to select which members of the household they are cooking for.
+\chef{} will then find recipes that everyone likes in addition to using the available ingredients.
+
 % This section follows directly from the background and should give more details of what you are proposing to do.
 % The project must exhibit a level of difficulty appropriate to final year honours BSc work, and be of a size that
 % can be attempted in the time available; this section should define the topic and project work in enough detail
