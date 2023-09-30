@@ -9,8 +9,6 @@
 
 \renewcommand{\thesubsection}{\arabic{subsection}}
 
-\newcommand{\chef}{C.H.E.F.}
-
 % Print the bibliography on the same page
 % From biblatex docs
 \defbibheading{bibliography}[\bibname]{
@@ -52,8 +50,8 @@ Manually looking through a recipe book and checking that you have all the ingred
 This project aims to create a web application that tracks what ingredients the user has and then suggests recipes that can be made with those ingredients.
 This will help to reduce food waste by helping users work with what they already have rather than buying more food and letting what they have go off.
 
-% What ideas will be important to defining and carrying out your project?  For software engineering projects in particular, it will usually be appropriate to
-% introduce the general features of the kind of application you are trying to build, and ideas related to the problem that you will investigate in your literature review.
+% What ideas will be important to defining and carrying out your project?  For software engineering projects in particular, it will usually be appropriate to introduce
+% the general features of the kind of application you are trying to build, and ideas related to the problem that you will investigate in your literature review.
 % You should by now have done a fair amount of reading about the area, to put your ideas into context and to ensure that the project idea is valid and viable,
 % and identified some useful literature about the problem that you are trying to solve or investigate; One reason for doing this is to show that you will be able
 % to find the useful and interesting ideas and information that your project will need. This requires references!
@@ -173,9 +171,14 @@ Using Docker will compartmentalize the project and reduce the work required to t
 % of knowledge and skills and new/enhanced ones that the project will require. Against each, indicate which module that you have taken
 % or are taking gives you those skills. If you will be acquiring skills during your project, say how this will be done.
 
-\printbibliography
+\ifSubfilesClassLoaded{
+    \printbibliography
+}
 % 7.	Sources of information/bibliography
-% This is simply a reference list and bibliography, presented in the usual format. Include the sources have you consulted in preparing the Terms of Reference and any additional sources that you anticipate using during the work. It is not expected that you will yet have identified all the information that you will use. Ensure that you follow standard referencing guidelines.
+% This is simply a reference list and bibliography, presented in the usual format. Include the sources you
+% have consulted in preparing the Terms of Reference and any additional sources that you anticipate using
+% during the work. It is not expected that you will yet have identified all the information that you will use.
+% Ensure that you follow standard referencing guidelines.
 
 \subsection{Resources - Statement of Hardware / Software Required}
 \todo{Resources - Statement of Hardware / Software Required}
@@ -270,7 +273,9 @@ Using Docker will compartmentalize the project and reduce the work required to t
 % It is sensible to consult your assignment schedule when you make your project plan, and to avoid overloading yourself at times when you have other major
 % commitments, but remember that your project is the largest and most important module of the year!
 
-% TODO: Remove once done
-\todos
+\ifSubfilesClassLoaded{
+    % //TODO: Remove once done
+    \todos
+}{}
 
 \end{document}
