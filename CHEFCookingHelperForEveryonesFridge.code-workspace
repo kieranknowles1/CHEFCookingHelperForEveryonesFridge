@@ -39,7 +39,7 @@
 					"source": "cSpell",
 					"owner": "cSpell",
 					"pattern": {
-						"regexp": "([.\\\\a-zA-Z]+):(\\d+):(\\d+) - (.*)",
+						"regexp": "(.+):(\\d+):(\\d+) - (.*)",
 						"file": 1,
 						"line": 2,
 						"column": 3,
