@@ -5,21 +5,6 @@
 		}
 	],
 	"settings": {
-		"cSpell.dictionaryDefinitions": [
-			{
-				"name": "latex",
-				"path": "cspell/latex.txt",
-			}
-		],
-		"cSpell.languageSettings": [
-			{
-				"languageId": "latex",
-				"dictionaries": [
-					"latex"
-				]
-			}
-		],
-
 		"todo-tree.regex.regex": "(% (TODO)|\\\\todo\\{.+})",
 	},
 	"extensions": {
@@ -37,5 +22,33 @@
 
 			// cSpell: enable
 		],
+	},
+	"tasks": {
+		"version": "2.0.0",
+
+		"tasks": [
+			{
+				"label": "cSpell: Check Workspace",
+				"type": "shell",
+				"command": "cspell",
+				"args": [
+					"**",
+					"--gitignore",
+				],
+				"problemMatcher": {
+					"source": "cSpell",
+					"owner": "cSpell",
+					"pattern": {
+						"regexp": "([.\\\\a-zA-Z]+):(\\d+):(\\d+) - (.*)",
+						"file": 1,
+						"line": 2,
+						"column": 3,
+						"message": 4,
+					},
+					"severity": "info",
+				},
+				"group": "test",
+			}
+		]
 	}
 }
