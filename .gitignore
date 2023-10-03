@@ -10,5 +10,6 @@
 *.pdf
 *.run.xml
 *.synctex.gz
+*.synctex(busy)
 *.toc
 *.wc
