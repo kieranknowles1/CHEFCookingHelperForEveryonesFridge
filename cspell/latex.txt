@@ -1,0 +1,2 @@
+% TODO: Use the dictionary here or ignore cspell folder
+endignore

@@ -1,9 +1,10 @@
 Name: C.H.E.F - Cooking Helper for Everyone's Fridge
-Lessen food waste and support local businesses
-Save money in the current cost of living crisis
-Tracks what ingredients the user has in their fridge and
-suggests recipes based on those ingredients.
+A web app to lessen food waste and save money in the current cost of living crisis.
+Tracks what ingredients the user has in their fridge and suggests recipes based on those ingredients.
+ingredients can be scanned as they are being put away to track their amounts in the fridge and making
+a recipe deducts the ingredients from the tracked items.
 
+support local businesses
 Could include a feature to show ingredients available in nearby stores (within walking distance)
 and also show recipes that can be made with a trip to the store.
 

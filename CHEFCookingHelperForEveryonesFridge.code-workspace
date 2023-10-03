@@ -5,7 +5,22 @@
 		}
 	],
 	"settings": {
-		"todo-tree.regex.regex": "(% (TODO)|\\\\todo\\{.+})"
+		"cSpell.dictionaryDefinitions": [
+			{
+				"name": "latex",
+				"path": "cspell/latex.txt",
+			}
+		],
+		"cSpell.languageSettings": [
+			{
+				"languageId": "latex",
+				"dictionaries": [
+					"latex"
+				]
+			}
+		],
+
+		"todo-tree.regex.regex": "(% (TODO)|\\\\todo\\{.+})",
 	},
 	"extensions": {
 		"recommendations": [
@@ -13,13 +28,13 @@
 
 			// All
 			"gruntfuggly.todo-tree",
+			"streetsidesoftware.code-spell-checker",
 
 			// Code
-			"znck.grammarly",
 
 			// Report
 			"james-yu.latex-workshop",
-			"streetsidesoftware.code-spell-checker",
+
 			// cSpell: enable
 		],
 	}
