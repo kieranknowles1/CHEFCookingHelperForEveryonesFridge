@@ -9,5 +9,6 @@
         "*.bib"
     ],
 
+    // LaTeX convention is to use lowercase for commands
     "allowCompoundWords": true
 }
