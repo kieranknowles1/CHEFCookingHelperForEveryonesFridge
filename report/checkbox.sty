@@ -1,0 +1,13 @@
+\ProvidesPackage{checkbox}
+
+\newcommand{\checkbox}[1]{
+    $\square$
+    \ifstrequal{#1}{empty}{
+        % Don't need to do anything
+    }{\ifstrequal{#1}{checked}{
+        % TODO: Implement this
+        \PackageError{checkbox}{Not implemented}{}
+    }{
+        \PackageError{checkbox}{Invalid argument. Expected "empty" or "checked".}{}
+    }}
+}
