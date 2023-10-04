@@ -26,6 +26,7 @@
 	"tasks": {
 		"version": "2.0.0",
 
+		// % TODO: Use CI to run tests. Consider using mega linter
 		"tasks": [
 			{
 				"label": "cSpell: Check Workspace",
