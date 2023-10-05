@@ -34,8 +34,10 @@
 				"command": "cspell",
 				"args": [
 					"**",
-					// TODO: Don't show files with no errors
 					"--gitignore",
+					// Only log issues
+					"--no-progress",
+					"--no-summary",
 				],
 				"problemMatcher": {
 					"source": "cSpell",
