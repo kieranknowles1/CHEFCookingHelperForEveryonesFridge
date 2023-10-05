@@ -1,6 +1,7 @@
 \documentclass[../CHEFCookingHelperForEveryonesFridge.tex]{subfiles}
 
 \usepackage[style=authoryear]{biblatex}
+\usepackage{csquotes}
 \addbibresource{TermsOfReference.bib}
 
 \renewcommand{\cite}[1]{\parencite{#1}}
@@ -18,7 +19,7 @@
 
 \begin{table}[h!]
     \centering
-    \begin{tabulary}{\textwidth}{|c|c|}
+    \begin{tabular}{|c|c|}
         \hline
         \multicolumn{2}{|c|}{KV6003: Individual Computing Project Terms of References} \\\hline
         Student name: & Kieran Knowles \\\hline
@@ -27,7 +28,7 @@
         Project Title: & \chef{} - Cooking Helper for Everyone's Fridge \\\hline
         Supervisor: & \todo{Supervisor} \\\hline
         2\textsuperscript{nd} Marker: & \todo{2nd marker} \\\hline
-    \end{tabulary}
+    \end{tabular}
 \end{table}
 
 \subsection{Background to Project}
@@ -262,7 +263,7 @@ Using Docker will compartmentalize the project and reduce the work required to t
 \todo{Ethics, Social, Legal, and Professional Issues}
 
 \ifSubfilesClassLoaded{
-    \todo{Include ethics form here}
+    \subfile{appendicies/EthicsApprovalForm.tex}
 }{
     See the \hyperref[sec:ethics_approval]{Ethics Approval} appendix.
 }
