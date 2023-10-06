@@ -1,0 +1,25 @@
+version: "0.2"
+language: en-GB
+
+ignorePaths:
+  # From external sources
+  - "*.bib"
+
+# LaTeX convention is to use lowercase for commands
+allowCompoundWords: true
+
+dictionaryDefinitions:
+  - name: Acronyms
+    path: cspell/acronyms.txt
+  - name: English
+    path: cspell/english.txt
+  - name: Latex
+    path: cspell/latex.txt
+  - name: Names
+    path: cspell/names.txt
+
+dictionaries:
+  - Acronyms
+  - English
+  - Latex
+  - Names
