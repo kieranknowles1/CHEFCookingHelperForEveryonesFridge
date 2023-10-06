@@ -26,7 +26,6 @@
 	"tasks": {
 		"version": "2.0.0",
 
-		// % TODO: Use CI to run tests. Consider using mega linter
 		// % TODO: Add a grammer checker
 		"tasks": [
 			{
