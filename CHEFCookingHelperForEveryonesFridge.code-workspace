@@ -27,17 +27,18 @@
 		"version": "2.0.0",
 
 		// % TODO: Use CI to run tests. Consider using mega linter
+		// % TODO: Add a grammer checker
 		"tasks": [
 			{
-				"label": "cSpell: Check Workspace",
+				"label": "Tests: Spell Check Workspace",
 				"type": "shell",
 				"command": "cspell",
 				"args": [
 					"**",
 					"--gitignore",
+					"--validate-directives",
 					// Only log issues
-					"--no-progress",
-					"--no-summary",
+					"--quiet",
 				],
 				"problemMatcher": {
 					"source": "cSpell",
