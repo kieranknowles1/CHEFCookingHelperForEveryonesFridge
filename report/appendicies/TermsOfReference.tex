@@ -55,8 +55,31 @@ This will help to reduce food waste by helping users work with what they already
 % and identified some useful literature about the problem that you are trying to solve or investigate; One reason for doing this is to show that you will be able
 % to find the useful and interesting ideas and information that your project will need. This requires references!
 % It is also a good chance for you to practise the academic style of writing needed for your report.
-Research into the existing solutions \cite{myfridgefood_myfridgefood_nodate} and \cite{supercook_supercook_nodate}
-\todo{Research}
+Research into the existing solutions \cite{myfridgefood_myfridgefood_nodate} and \cite{supercook_supercook_nodate} found that both solutions provided an account
+system that would save a user's list of available ingredients. Both allow for recipes to be favorited/bookmarked which would then be shown on a separate page.
+SuperCook additionally shows which favorited recipes can be made using available ingredients and which ingredients are missing.
+
+However, neither of these apps allow for sharing pantries between users or specifying disliked ingredients. These features would be useful for households with multiple people.
+Additionally, the only way to update available ingredients is to manually add or remove them which is time-consuming and tedious. There is no tracking for the quantity of
+each ingredient, so there is no way to know if the user has enough of an ingredient without checking manually.
+
+Neither app tracks which recipes have been made recently, so there is no way to avoid suggesting similar recipes to ones that have been recently made which could lead to
+users getting bored of eating the same meals over and over.
+
+MyFridgeFood has a feature to submit new recipes which are shared between all users. This is a useful feature as it allows for the community to contribute to the database
+of recipes, however, these cannot be kept private to just one user.
+
+This research has led to the following requirements for the \chef{} app:
+\begin{itemize}
+    \item The system must allow for multiple users to share a pantry.
+    \item The system must allow for users to specify disliked ingredients that will not be used in suggested recipes.
+    \item The system must allow for users to submit new recipes, either to be shared with all users or kept private.
+    \item The system should allow for users to scan ingredients into their pantry.
+    \item The system should track how much of each ingredient is available.
+    \item The system should deduct from the available ingredients when a recipe is made.
+    \item The system should track which recipes have been made recently and avoid suggesting similar recipes.
+    \item The system should allow users to favourite recipes and have similar recipes suggested.
+\end{itemize}
 
 % Indicate why the proposed project is of interest, both to you and more generally, and why it is useful and to whom.
 % For example, where did the idea come from? Was it requested by your client, or did it arise from your supervisor’s research?
@@ -85,7 +108,7 @@ what they already have in their fridge.
 % Bring out the technical aspects as well as the general processes.
 \chef{} will be a web application intended to be used on a mobile phone. It will allow users to create an account and log in,
 then add the ingredients that they have either by manually entering them or by scanning the barcode on the packaging.
-This ingredient will then be added to the user's virtual fridge and the user will be able to see what ingredients they have and how much of each.
+This ingredient will then be added to the user's virtual pantry and the user will be able to see what ingredients they have and how much of each.
 If a barcode is not found in the database, the user can manually enter the type of ingredient and its quantity (weight, volume or quantity depending on the ingredient).
 This information will then be stored in the database for future use \todo{All users or just the one inputting it?}.
 
