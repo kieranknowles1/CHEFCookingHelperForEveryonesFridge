@@ -1,12 +1,13 @@
 \ProvidesPackage{checkbox}
 
+% For \ding
+\usepackage{pifont}
+
 \newcommand{\checkbox}[1]{
-    $\square$
     \ifstrequal{#1}{empty}{
-        % Don't need to do anything
+        $\square$
     }{\ifstrequal{#1}{checked}{
-        % TODO: Implement this
-        \PackageError{checkbox}{Not implemented}{}
+        \ding{51}
     }{
         \PackageError{checkbox}{Invalid argument. Expected "empty" or "checked".}{}
     }}
