@@ -35,53 +35,65 @@
 % TODO: Remove once done
 \usepackage{todo}
 \usepackage{draftwatermark}
+\usepackage{xcolor}
+\newcommand{\todoinline}[1]{
+    % This is only a temporary addition, so don't be fussy with spacing
+    \begin{sloppypar}
+        \colorlet{todo old}{.}
+        \color{red}
+        #1
+        \color{todo old}
+        \todo{See inline comment}
+    \end{sloppypar}
+}
 
 \usepackage{hyperref}
 
 
-% TODO: All of this, remove add stuff is added
-% This section gives an overview of the structure of the project report and describes the components that are common to all projects. These should be read in conjunction
-% with the marking scheme.
-% The project supervisor and 2nd marker will read the report independently. It must contain all the information relevant to the project since the 2nd marker especially
-% will be unaware of the details of the work undertaken. It is essential that it describes the work you have carried out, and that the reader can clearly identify the
-% subject of your investigation and the nature of any product from the report.
-
-% Each of the above should begin on a separate page.
-
-% Typical Length
-% The word limit for the report is 12,000. This excludes appendices, reference list and bibliography, title page, etc.
-% Remember that the report will be judged on quality, not quantity. There is no obligation to aim for the maximum length. A shorter report may gain more marks than a
-% longer one if it is of better quality.
-% A report that is much too short is unlikely to attract high marks, but reports will vary widely, and some very good reports are quite short. One that is at or above
-% the maximum length may be filled with material that is irrelevant or unnecessary,
-% or belongs in appendices. In most cases the typical length should be sufficient for you to express what needs to be discussed. A verbose or "waffly" style may attract
-% a lower mark for presentation. Individual report sections that contain unnecessary or inappropriate material may also receive a lower mark.
-
-% For marking purposes, the University regulations on word length are as follows:
-% Under the word limit, No Penalty:
-
-% If not making use of the full word count, students may have self-penalised their work. If students have been able to achieve the requirements of the assessment
-% using fewer words than allocated, they will not be penalised.
-
-% Up to 10% over word limit, No Penalty:
-
-% Situation flagged by tutor in feedback, but over-run is tolerated, and no deduction is made from the final mark.
-
-% More than 10% over the word limit:
-
-% The marker will stop reading when they judge that the word count exceeds the recommended word count by more than 10%. For a report with word limit of 12,000,
-% the marker will read only the first 13,200 words and will indicate on the text where they stop reading. The content following this point will not be read and
-% a mark will be awarded only for the content up to this point.
-
-
-% Format
-% Take care with spelling, grammar, layout, etc. The document should be well structured and easy to read,
-% and include appropriate illustrations. Material that would disturb the flow of the report,
-% such as specifications and test plans, should be included in an appendix and reference should be made to it where appropriate.
-
-
 \begin{document}
 %TC:ignore
+
+\todoinline{
+    % TODO: Where does this belong?
+    This section gives an overview of the structure of the project report and describes the components that are common to all projects. These should be read in conjunction
+    with the marking scheme.
+    The project supervisor and 2nd marker will read the report independently. It must contain all the information relevant to the project since the 2nd marker especially
+    will be unaware of the details of the work undertaken. It is essential that it describes the work you have carried out, and that the reader can clearly identify the
+    subject of your investigation and the nature of any product from the report.
+
+    Each of the above should begin on a separate page.
+
+    Typical Length
+    The word limit for the report is 12,000. This excludes appendices, reference list and bibliography, title page, etc.
+    Remember that the report will be judged on quality, not quantity. There is no obligation to aim for the maximum length. A shorter report may gain more marks than a
+    longer one if it is of better quality.
+    A report that is much too short is unlikely to attract high marks, but reports will vary widely, and some very good reports are quite short. One that is at or above
+    the maximum length may be filled with material that is irrelevant or unnecessary,
+    or belongs in appendices. In most cases the typical length should be sufficient for you to express what needs to be discussed. A verbose or "waffly" style may attract
+    a lower mark for presentation. Individual report sections that contain unnecessary or inappropriate material may also receive a lower mark.
+
+    For marking purposes, the University regulations on word length are as follows:
+    Under the word limit, No Penalty:
+
+    If not making use of the full word count, students may have self-penalised their work. If students have been able to achieve the requirements of the assessment
+    using fewer words than allocated, they will not be penalised.
+
+    Up to 10\% over word limit, No Penalty:
+
+    Situation flagged by tutor in feedback, but over-run is tolerated, and no deduction is made from the final mark.
+
+    More than 10\% over the word limit:
+
+    The marker will stop reading when they judge that the word count exceeds the recommended word count by more than 10\%. For a report with word limit of 12,000,
+    the marker will read only the first 13,200 words and will indicate on the text where they stop reading. The content following this point will not be read and
+    a mark will be awarded only for the content up to this point.
+
+
+    Format
+    Take care with spelling, grammar, layout, etc. The document should be well structured and easy to read,
+    and include appropriate illustrations. Material that would disturb the flow of the report,
+    such as specifications and test plans, should be included in an appendix and reference should be made to it where appropriate.
+}
 
 \title{
     A report submitted in partial fulfilment of the regulations governing the award of the Degree of
@@ -100,20 +112,30 @@
 
 \chapter*{Authorship Declaration}
 \subfile{sections/authourship_declaration.tex}
-% Authorship Declaration
-% This is a statement signed by yourself certifying that the report and the work described in it are your own and that ethical guidelines have been followed,
-% and stating what may happen to the report. A copy appears as an appendix to this handbook: you should read it carefully, then include a signed copy in your report.
-% You are advised to read the University’s regulations concerning plagiarism and collusion, and follow the Ethics guidance outlined in this handbook. You must provide a
-% word count: this includes only your report chapters, not the appendices, reference list or abstract.
+\todoinline{
+    Authorship Declaration
+
+    This is a statement signed by yourself certifying that the report and the work described in it are your own and that ethical guidelines have been followed,
+    and stating what may happen to the report. A copy appears as an appendix to this handbook: you should read it carefully, then include a signed copy in your report.
+    You are advised to read the University's regulations concerning plagiarism and collusion, and follow the Ethics guidance outlined in this handbook. You must provide a
+    word count: this includes only your report chapters, not the appendices, reference list or abstract.
+}
 
 \chapter*{Acknowledgements}
 \todo{Acknowledgements}
-% Acknowledgements
-% You may wish to acknowledge help given from three different sources:
-% •	From people outside the department, e.g. industrial companies,
-% •	Your supervisor for general guidance,
-% •	Special help from staff inside the department other than the supervisor.
-% Acknowledgements should be kept simple.
+\todoinline{
+    Acknowledgements
+
+    You may wish to acknowledge help given from three different sources:
+
+    •	From people outside the department, e.g. industrial companies,
+
+    •	Your supervisor for general guidance,
+
+    •	Special help from staff inside the department other than the supervisor.
+
+    Acknowledgements should be kept simple.
+}
 
 \chapter*{Abstract}
 \subfile{sections/abstract.tex}
@@ -122,9 +144,11 @@
 \renewcommand{\contentsname}{List of Contents}
 \tableofcontents
 \todo{Figures, Tables, Glossary, List of Symbols}
-% List of Contents
-% List the contents of the report by chapter and sub-section against page numbers. Include the appendices, which document the deliverables.
-% You may additionally decide to include a list of figures by page number, a glossary and/or a table defining any special symbols used in the report.
+\todoinline{
+    List of Contents
+    List the contents of the report by chapter and sub-section against page numbers. Include the appendices, which document the deliverables.
+    You may additionally decide to include a list of figures by page number, a glossary and/or a table defining any special symbols used in the report.
+}
 
 %TC:endignore
 
@@ -152,58 +176,63 @@
 
 \chapter{References}
 \todo{References}
-% References
-% It should be clear from the text which of the material presented and opinions expressed are yours and which are those of other people. This includes showing clearly when
-% you are quoting from other people’s work, by means of quotation marks or indentation, and referencing all quotations or information derived from other sources. You do not
-% need to worry about copyright in making direct quotations or copying figures provided you acknowledge the source. It is not good practice to copy sections of more than a
-% few lines from another author, even if the source is identified. Paraphrasing helps to demonstrate your understanding better than quoting, but long paraphrased sections
-% are to be avoided and it is not acceptable to take someone else’s work and simply change a few words.
-% You should indicate in your work each point at which you have used one of your information sources, and provide a complete list of references after the last chapter of
-% your report. Both of these are required: it is not sufficient only to provide a reference list. References should follow one of the approved referencing formats.
-% A common style is the Harvard system, which is used in this section. An authoritative definition of how to reference a wide variety of sources is given in ‘Cite Them Right,’
-% (Pears & Shields, 2013). You are strongly advised to use the online version or to buy a copy if needed (Palgrave Macmillan, 2014).
-% Full details are:
-% Pears, R. & Shields, G. (2013) Cite Them Right: the essential referencing guide, 9th edn. Basingstoke: Palgrave Macmillan.
-% Palgrave Macmillan (2014) Cite Them Right Online. Available at http://www.citethemrightonline.com/ (Accessed 03 September 2022)
-% Increasingly, Internet sites are a source of reference material. These must be used with care, as many web sites are of poor quality and contain unreliable information.
-% However, many excellent academic papers are also available online. When citing a Web source, you must include the name of the author or organisation, the source date,
-% the title of the page, the full URL and the date the site was visited. ‘Cite them Right’ gives fuller details. If you have written about software or other media, these
-% must also be referenced properly.
-% If you have made use of library software (other than standard language libraries) or other pre-existing software elements, media etc. in your product or deliverables,
-% appropriate credit must be given for these. You should indicate in your report that they have been used, and include the references in your list. Comments in your
-% product code should indicate any code used that you have acquired from elsewhere.
+\todoinline{
+    References
+    It should be clear from the text which of the material presented and opinions expressed are yours and which are those of other people. This includes showing clearly when
+    you are quoting from other people's work, by means of quotation marks or indentation, and referencing all quotations or information derived from other sources. You do not
+    need to worry about copyright in making direct quotations or copying figures provided you acknowledge the source. It is not good practice to copy sections of more than a
+    few lines from another author, even if the source is identified. Paraphrasing helps to demonstrate your understanding better than quoting, but long paraphrased sections
+    are to be avoided and it is not acceptable to take someone else's work and simply change a few words.
+    You should indicate in your work each point at which you have used one of your information sources, and provide a complete list of references after the last chapter of
+    your report. Both of these are required: it is not sufficient only to provide a reference list. References should follow one of the approved referencing formats.
+    A common style is the Harvard system, which is used in this section. An authoritative definition of how to reference a wide variety of sources is given in 'Cite Them Right,'
+    (Pears \& Shields, 2013). You are strongly advised to use the online version or to buy a copy if needed (Palgrave Macmillan, 2014).
+    Full details are:
+    Pears, R. \& Shields, G. (2013) Cite Them Right: the essential referencing guide, 9th edn. Basingstoke: Palgrave Macmillan.
+    Palgrave Macmillan (2014) Cite Them Right Online. Available at http://www.citethemrightonline.com/ (Accessed 03 September 2022)
+    Increasingly, Internet sites are a source of reference material. These must be used with care, as many web sites are of poor quality and contain unreliable information.
+    However, many excellent academic papers are also available online. When citing a Web source, you must include the name of the author or organisation, the source date,
+    the title of the page, the full URL and the date the site was visited. 'Cite them Right' gives fuller details. If you have written about software or other media, these
+    must also be referenced properly.
+    If you have made use of library software (other than standard language libraries) or other pre-existing software elements, media etc. in your product or deliverables,
+    appropriate credit must be given for these. You should indicate in your report that they have been used, and include the references in your list. Comments in your
+    product code should indicate any code used that you have acquired from elsewhere.
+}
 
 \chapter{Bibliography}
 \todo{Bibliography}
-% Bibliography
-% The bibliography is a list of sources that were consulted during the project, but which are not directly used and therefore do not need to be cited and included in
-% the reference list. This might include programming texts, other technical reference material that you consulted, general introductions to a topic, and other useful
-% background material.
+\todoinline{
+    Bibliography
+    The bibliography is a list of sources that were consulted during the project, but which are not directly used and therefore do not need to be cited and included in
+    the reference list. This might include programming texts, other technical reference material that you consulted, general introductions to a topic, and other useful
+    background material.
+}
 
 \chapter{Appendices}
 \todo{Appendices}
-% The appendices contain material that is not necessary to a first reading of the report and which if included in the main text would tend to confuse the general line
-% of argument. The appendices will also contain documentation about the product. The exact nature and extent of these documents should be clearly specified in the Terms
-% of Reference document. The appendices should not be excessively long.
-% Note on Product Documentation
-% For projects that have a product, documentary evidence of its quality must be included as appendices to the report. Normally, only small extracts from the product
-% deliverables should appear in the body of the report, where they are needed to support the discussion. The report should tell the reader when they should be looking
-% at documentation, and where to find it.
-% The product is represented by such items as requirement specifications, design documents, program listings, and user documentation. They should be arranged in a
-% sensible order and clearly identified. The nature and extent of the material to be submitted will be agreed with the supervisor and identified in the Terms of Reference.
-% Sections of code (beyond small snippets that can be incorporated and discussed in an implementation chapter) can be included in an appendix. Normally, these will be
-% representative or key sections, perhaps those to which the report has directly referred. It is not necessary to include the complete code in the appendix unless your
-% supervisor instructs you to do so: the place for this is on the product folder in your OneDrive space.
-% Other product documentation is more conveniently provided as appendices unless it is very extensive, when it may be treated in the same way as code. Data derived from
-% people, such as questionnaires or interview transcripts from requirements gathering, should be submitted in the evidence file if it cannot be presented in anonymised
-% form; representative anonymised samples may be given in an appendix.
-% All documentation appearing in the report must be presented to a good professional standard. Documentation and data provided in the OneDrive folder should be of
-% appropriate engineering quality and should be legible and logically arranged, but extensive formatting for purely cosmetic purposes is not required. The supervisor
-% will of course inspect the complete documents during the project.
+\todoinline{
+    The appendices contain material that is not necessary to a first reading of the report and which if included in the main text would tend to confuse the general line
+    of argument. The appendices will also contain documentation about the product. The exact nature and extent of these documents should be clearly specified in the Terms
+    of Reference document. The appendices should not be excessively long.
+    Note on Product Documentation
+    For projects that have a product, documentary evidence of its quality must be included as appendices to the report. Normally, only small extracts from the product
+    deliverables should appear in the body of the report, where they are needed to support the discussion. The report should tell the reader when they should be looking
+    at documentation, and where to find it.
+    The product is represented by such items as requirement specifications, design documents, program listings, and user documentation. They should be arranged in a
+    sensible order and clearly identified. The nature and extent of the material to be submitted will be agreed with the supervisor and identified in the Terms of Reference.
+    Sections of code (beyond small snippets that can be incorporated and discussed in an implementation chapter) can be included in an appendix. Normally, these will be
+    representative or key sections, perhaps those to which the report has directly referred. It is not necessary to include the complete code in the appendix unless your
+    supervisor instructs you to do so: the place for this is on the product folder in your OneDrive space.
+    Other product documentation is more conveniently provided as appendices unless it is very extensive, when it may be treated in the same way as code. Data derived from
+    people, such as questionnaires or interview transcripts from requirements gathering, should be submitted in the evidence file if it cannot be presented in anonymised
+    form; representative anonymised samples may be given in an appendix.
+    All documentation appearing in the report must be presented to a good professional standard. Documentation and data provided in the OneDrive folder should be of
+    appropriate engineering quality and should be legible and logically arranged, but extensive formatting for purely cosmetic purposes is not required. The supervisor
+    will of course inspect the complete documents during the project.
+}
 
 \section{Terms of Reference}
 \subfile{appendicies/TermsOfReference.tex}
-% You must include a copy of the Terms of Reference as the first Appendix to the report.
 
 \section{Ethics Approval}
 \label{sec:ethics_approval}

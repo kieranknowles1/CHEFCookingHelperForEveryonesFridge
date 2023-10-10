@@ -5,7 +5,7 @@
 		}
 	],
 	"settings": {
-		"todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.)|%)\\s*($TAGS)|(\\\\todo\\{)",
+		"todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.)|%)\\s*(TODO)|(\\\\todo(inline)?\\{)",
 	},
 	"extensions": {
 		"recommendations": [
