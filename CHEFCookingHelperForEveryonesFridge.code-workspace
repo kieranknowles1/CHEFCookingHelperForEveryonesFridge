@@ -37,8 +37,6 @@
 					"**",
 					"--gitignore",
 					"--validate-directives",
-					// Only log issues
-					"--quiet",
 				],
 				"problemMatcher": {
 					"source": "cSpell",
