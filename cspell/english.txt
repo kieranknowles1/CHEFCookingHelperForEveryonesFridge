@@ -1,4 +1,5 @@
 acomplished
 favorited
+favourited
 schedulability
 waffly
