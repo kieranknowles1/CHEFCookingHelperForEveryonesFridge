@@ -70,7 +70,9 @@ as part of the research into the problem domain. These solutions, while useful, 
 \cite{myfridgefood_myfridgefood_nodate} and \cite{supercook_supercook_nodate} both provide a user account system
 that saves a user's list of available ingredients. Creating an account also allows for recipes to be favourited/bookmarked
 which would then be shown on a dedicated page. SuperCook additionally shows which of the user's favourite recipes
-can be made using available ingredients and which ingredients are missing.
+can be made using available ingredients and which ingredients are missing. Both apps also use exclusively imperial
+units for ingredients which are not understood by the majority of the world. \chef{} will use metric units by default
+as it is targeted at a UK audience.
 
 However, neither of these apps has a system for sharing pantries between users or specifying disliked ingredients. These features would be useful for households with multiple people.
 Additionally, the only way to update available ingredients is to manually add or remove them which is time-consuming and tedious. There is no tracking for the quantity of
@@ -92,6 +94,7 @@ This research has led to the following requirements for the \chef{} app:
     \item The system should deduct from the available ingredients when a recipe is made.
     \item The system should track which recipes have been made recently and avoid suggesting similar recipes.
     \item The system should allow users to favourite recipes and have similar recipes suggested.
+    \item All ingredient lists should use metric units by default.
 \end{itemize}
 \todo{Should this research be in the main report?}
 \todoinline{
