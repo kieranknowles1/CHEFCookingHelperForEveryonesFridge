@@ -34,6 +34,10 @@
 \usepackage{subfiles}
 \usepackage{tabulary}
 
+\usepackage[style=authoryear]{biblatex}
+\usepackage{csquotes}
+\addbibresource{CHEFCookingHelperForEveryonesFridge.bib}
+
 % TODO: Remove once done
 \usepackage{todo}
 \usepackage{draftwatermark}
@@ -124,8 +128,15 @@
 
 %TC:ignore
 
-\chapter{References}
-\todo{References}
+% Print the bibliography as a chapter
+% From biblatex docs
+\renewcommand{\bibname}{References}
+\defbibheading{bibliography}[\bibname]{
+    \chapter{#1}
+    \markboth{#1}{#1}
+}
+\printbibliography
+\label{sec:references}
 \todoinline{
     References
     It should be clear from the text which of the material presented and opinions expressed are yours and which are those of other people. This includes showing clearly when

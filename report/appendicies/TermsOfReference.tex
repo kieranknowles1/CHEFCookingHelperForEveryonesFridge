@@ -1,19 +1,8 @@
 \documentclass[../CHEFCookingHelperForEveryonesFridge.tex]{subfiles}
 
-\usepackage[style=authoryear]{biblatex}
-\usepackage{csquotes}
-\addbibresource{TermsOfReference.bib}
-
 \renewcommand{\cite}[1]{\parencite{#1}}
 
 \renewcommand{\thesubsection}{\arabic{subsection}.}
-
-% Print the bibliography on the same page
-% From biblatex docs
-\defbibheading{bibliography}[\bibname]{
-    \subsection{#1}
-    \markboth{#1}{#1}
-}
 
 \begin{document}
 
@@ -63,18 +52,9 @@ This will help to reduce food waste by helping users work with what they already
 }
 
 \todo{Proofread this and next paragraph}
-\todo{Mention plan for comp analysai and talk about it in dissertation. Talk about in reiview}
-\todo{Should competetor andalysis go in main report?}
-The existing solutions \cite{myfridgefood_myfridgefood_nodate} and \cite{supercook_supercook_nodate} were consulted
-as part of the research into the problem domain. These solutions, while useful, had limitations as discussed below.
-\chef{} aims to address these limitations and provide a more useful solution.
+\todo{Mention the plan for comp analysis and talk about it in the dissertation. Talk about how it has been started in the reiview}
+\todo{Should competitor analysis go in the main report?}
 
-\cite{myfridgefood_myfridgefood_nodate} and \cite{supercook_supercook_nodate} both provide a user account system
-that saves a user's list of available ingredients. Creating an account also allows for recipes to be favourited/bookmarked
-which would then be shown on a dedicated page. SuperCook additionally shows which of the user's favourite recipes
-can be made using available ingredients and which ingredients are missing. Both apps also use exclusively imperial
-units for ingredients which are not understood by the majority of the world. \chef{} will use metric units by default
-as it is targeted at a UK audience.
 
 However, neither of these apps has a system for sharing pantries between users or specifying disliked ingredients. These features would be useful for households with multiple people.
 Additionally, the only way to update available ingredients is to manually add or remove them which is time-consuming and tedious. There is no tracking for the quantity of
@@ -261,7 +241,18 @@ Using Docker will compartmentalize the project and reduce the work required to t
 }
 
 \ifSubfilesClassLoaded{
+    % Print the bibliography on the same page
+    % From bib latex docs
+    \ifSubfilesClassLoaded{
+        \defbibheading{bibliography}[\bibname]{
+            \subsection{#1}
+            \markboth{#1}{#1}
+        }
+    }{}
     \printbibliography
+}{
+    \subsection{References}
+    See the \hyperref[sec:references]{References} section of the main report for the main reference list, including those that were consulted when preparing the TOR.
 }
 
 \todoinline{
