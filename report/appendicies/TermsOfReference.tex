@@ -84,18 +84,6 @@ users getting bored of eating the same meals over and over.
 MyFridgeFood has a feature to submit new recipes which are shared between all users. This is a useful feature as it allows for the community to contribute to the database
 of recipes, however, these cannot be kept private to just one user.
 
-This research has led to the following requirements for the \chef{} app:
-\begin{itemize}
-    \item The system must allow for multiple users to share a pantry.
-    \item The system must allow users to specify disliked ingredients that will not be used in suggested recipes.
-    \item The system must allow users to submit new recipes, either to be shared with all users or kept private.
-    \item The system should allow users to scan ingredients into their pantry.
-    \item The system should track how much of each ingredient is available.
-    \item The system should deduct from the available ingredients when a recipe is made.
-    \item The system should track which recipes have been made recently and avoid suggesting similar recipes.
-    \item The system should allow users to favourite recipes and have similar recipes suggested.
-    \item All ingredient lists should use metric units by default.
-\end{itemize}
 \todo{Should this research be in the main report?}
 \todoinline{
     Indicate why the proposed project is of interest, both to you and more generally, and why it is useful and to whom.
@@ -114,11 +102,87 @@ into a meal.
 
 \todo{Background to Project}
 
+\subsection{Aims and Objectives of Project}
+\todo{Aims of Project}
+\todoinline{
+    The larger overarching goal of what the project is trying to investigate or do
+    	An overall statement of what the project is intended to accomplish. This should be expressed in terms relating to the project,
+    not personal achievements. There will normally be only one or two aims. If you have more than three, then revise them since they will normally be inappropriate as aims.
+    The following are examples of project aims:
+    •	“To investigate and analyse the importance of the role of schedulability in real-time systems.
+    •	To develop a learning tool that would help people to understand the importance of schedulability and carry out a schedulability analysis of real-time systems.”
+    •	“To compare the effects of flat and deep menu structures on users’ website navigation performance.”
+    •	“To investigate how an e-card service is made and the types of database that can be used to store images.”
+    •	“To build an e-card service to allow a user to manipulate images and create their e-card.”
+    Note the English style in which aims are expressed and use the same style yourself.
+}
+
+\todo{Objectives}
+\todoinline{
+    Specific and measurable goals that outline what will be accomplished. Derived from the aims and serve as building blocks of the project
+    Should be:
+      Specific, clear and precise
+      Measurable for when it has been accomplished
+      Achievable, realistic with constraints
+      Relevant to the aims of the project
+      Time-bound, give a deadline that is in line with the Gantt chart
+    	Each objective should identify an expected outcome. By the end of the project, it should be obvious to you and your supervisor whether you have accomplished
+    an objective or not, although it may be debatable as to how well you have accomplished it. Thus each objective must be clear, measurable and concrete.
+    (The ‘SMART’ acronym is helpful here.) Phrase them so that it is clear what will show that the objective has been achieved. For example,
+    	‘Create a requirements specification for…’  is more exact than,
+    	‘Identify requirements for…’.
+    	Projects for this module typically have 7-12 objectives, relating to areas such as:
+    •	Literature review
+    •	Establishing requirements
+    •	Learning new/enhanced knowledge/skills,
+    •	Creation of designs for a product
+    •	Implementing a product
+    •	Experimental work
+    •	Production of items of systems/software documentation
+    •	Testing a product
+    •	Production of chapters of the project report
+    •	Analysis of investigation results
+    •	Evaluation of a product.
+    •	Evaluation of the project process,
+    •	Etc.
+    If you have more than one aim, then you should be able to associate objective(s) with each aim. To produce your project plan, you will identify the tasks needed to achieve your objectives.
+}
 
 \subsection{Proposed Work}
 \todoinline{
     Be as specific as possible, someone with no experience should be able to understand what it is asking
 }
+The background research has led to the following requirements for the \chef{} app:
+\todo{Should requirements be in the main report?}
+\subsubsection{Must Have}
+\begin{itemize}
+    \item The system must allow for multiple users to share a pantry.
+    \item The system must allow users to specify disliked ingredients that will not be used in suggested recipes.
+    \item The system must allow users to submit new recipes, either to be shared with all users or kept private.
+\end{itemize}
+
+\subsubsection{Should Have}
+\begin{itemize}
+    \item The system should allow users to scan ingredients into their pantry.
+    \item The system should track how much of each ingredient is available.
+    \item The system should deduct from the available ingredients when a recipe is made.
+    \item The system should track which recipes have been made recently and avoid suggesting similar recipes.
+    \item The system should allow users to favourite recipes and have similar recipes suggested.
+    \item All ingredient lists should use metric units by default.
+\end{itemize}
+
+\subsubsection{Could Have}
+\begin{itemize}
+    \item TODO
+\end{itemize}
+\todo{Could have requirements}
+
+\subsubsection{Won't Have}
+\todo{Should this be included?}
+\begin{itemize}
+    \item TODO
+\end{itemize}
+\todo{Won't have requirements}
 
 The project will be the development of \chef{}, standing for Cooking Helper for Everyone's Fridge. I have chosen this name
 as it is a catchy and memorable acronym that describes the purpose of the project, helping people to make use of
@@ -178,53 +242,6 @@ Using Docker will compartmentalize the project and reduce the work required to t
     This is one of the most important sections of your TOR. After reading this part of your TOR, the reader should know what would be involved in undertaking the project.
 }
 \todo{Proposed Work}
-
-\subsection{Aims of Project}
-\todo{Aims of Project}
-\todoinline{
-    The larger overarching goal of what the project is trying to investigate or do
-    	An overall statement of what the project is intended to accomplish. This should be expressed in terms relating to the project,
-    not personal achievements. There will normally be only one or two aims. If you have more than three, then revise them since they will normally be inappropriate as aims.
-    The following are examples of project aims:
-    •	“To investigate and analyse the importance of the role of schedulability in real-time systems.
-    •	To develop a learning tool that would help people to understand the importance of schedulability and carry out a schedulability analysis of real-time systems.”
-    •	“To compare the effects of flat and deep menu structures on users’ website navigation performance.”
-    •	“To investigate how an e-card service is made and the types of database that can be used to store images.”
-    •	“To build an e-card service to allow a user to manipulate images and create their e-card.”
-    Note the English style in which aims are expressed and use the same style yourself.
-}
-
-\subsection{Objectives}
-\todo{Objectives}
-\todoinline{
-    Specific and measurable goals that outline what will be accomplished. Derived from the aims and serve as building blocks of the project
-    Should be:
-      Specific, clear and precise
-      Measurable for when it has been accomplished
-      Achievable, realistic with constraints
-      Relevant to the aims of the project
-      Time-bound, give a deadline that is in line with the Gantt chart
-    	Each objective should identify an expected outcome. By the end of the project, it should be obvious to you and your supervisor whether you have accomplished
-    an objective or not, although it may be debatable as to how well you have accomplished it. Thus each objective must be clear, measurable and concrete.
-    (The ‘SMART’ acronym is helpful here.) Phrase them so that it is clear what will show that the objective has been achieved. For example,
-    	‘Create a requirements specification for…’  is more exact than,
-    	‘Identify requirements for…’.
-    	Projects for this module typically have 7-12 objectives, relating to areas such as:
-    •	Literature review
-    •	Establishing requirements
-    •	Learning new/enhanced knowledge/skills,
-    •	Creation of designs for a product
-    •	Implementing a product
-    •	Experimental work
-    •	Production of items of systems/software documentation
-    •	Testing a product
-    •	Production of chapters of the project report
-    •	Analysis of investigation results
-    •	Evaluation of a product.
-    •	Evaluation of the project process,
-    •	Etc.
-    If you have more than one aim, then you should be able to associate objective(s) with each aim. To produce your project plan, you will identify the tasks needed to achieve your objectives.
-}
 
 \subsection{Skills}
 \todo{Skills}
