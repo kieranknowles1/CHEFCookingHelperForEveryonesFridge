@@ -34,13 +34,18 @@
 \usepackage{subfiles}
 \usepackage{tabulary}
 
+% //SECTION - Citations
 \usepackage[style=authoryear]{biblatex}
 \usepackage{csquotes}
 \addbibresource{CHEFCookingHelperForEveryonesFridge.bib}
+\renewcommand{\cite}[1]{\parencite{#1}}
+% //!SECTION - Citations
 
 % TODO: Remove once done
+\ifSubfilesClassLoaded{}{
+    \usepackage{draftwatermark}
+}
 \usepackage{todo}
-\usepackage{draftwatermark}
 \usepackage{xcolor}
 \newcommand{\todoinline}[1]{
     % This is only a temporary addition, so don't be fussy with spacing
