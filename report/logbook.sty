@@ -1,5 +1,8 @@
 \ProvidesPackage{logbook}
 
+% For [H] in table
+\RequirePackage{float}
+
 % Add an entry to the logbook
 % Usage:
 %   #1 Heading
@@ -17,7 +20,7 @@
 
     % TODO: Always float to the header, adding new pages as needed
     % TODO: Background color accroding to template
-    \begin{table}[h!]
+    \begin{table}[H]
         \centering
         \begin{tabular}{|c|c|}
             \hline
