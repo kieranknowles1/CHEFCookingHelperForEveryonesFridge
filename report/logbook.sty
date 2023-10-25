@@ -1,0 +1,33 @@
+\ProvidesPackage{logbook}
+
+% Add an entry to the logbook
+% Usage:
+%   #1 Heading
+%   #2 Date and time of the meeting
+%   #3 Brief description of work done since the last meeting
+%   #4 Number of hours working since the last meeting
+%   #5 Questions/items to discuss at the meeting (agenda)
+%   #6 The agreed tasks for the next meeting
+%   #7 Documents discussed/any other issues
+%   #8 Date and time of the next meeting
+%   #9 As scheduled (yes/no)
+\newcommand{\logbookentry}[9]
+{
+    \subsection{#1}
+
+    \todo{Always float to the header, adding new pages as needed}
+    \begin{table}[h!]
+        \centering
+        \begin{tabular}{|c|c|}
+            \hline
+            Date and time of meeting: & #2 \\\hline
+            Brief description of work done since the last meeting: & #3 \\\hline
+            Number of hours spent on the project since the last meeting: & #4 \\\hline
+            Questions/items to discuss at the meeting (agenda): & #5 \\\hline
+            Agreed tasks for next meeting: & #6 \\\hline
+            Documents discussed /any other issues: & #7 \\\hline
+            Date and time of next meeting: & #8 \\\hline
+        \end{tabular}
+        \todo{As scheduled field. See template}
+    \end{table}
+}
