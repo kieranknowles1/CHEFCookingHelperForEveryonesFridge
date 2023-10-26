@@ -2,6 +2,10 @@
 
 % For [H] in table
 \RequirePackage{float}
+% For background colour
+\RequirePackage[table,usenames,dvipsnames]{xcolor}
+
+\newcommand{\logbookshadecolour}{Apricot}
 
 % Add an entry to the logbook
 % Usage:
@@ -24,13 +28,18 @@
         \centering
         \begin{tabulary}{\textwidth}{|L|L|}
             \hline
-            Date and time of meeting: & #2 \\\hline
-            Brief description of work done since the last meeting: & #3 \\\hline
-            Number of hours spent on the project since the last meeting: & #4 \\\hline
-            Questions/items to discuss at the meeting (agenda): & #5 \\\hline
-            Agreed tasks for next meeting: & #6 \\\hline
-            Documents discussed /any other issues: & #7 \\\hline
-            Date and time of next meeting: & #8 \\\hline
+            \rowcolor{\logbookshadecolour}
+            \textbf{Date and time of meeting:} & #2 \\\hline
+            \rowcolor{\logbookshadecolour}
+            \textbf{Brief description of work done since the last meeting:} & #3 \\\hline
+            \rowcolor{\logbookshadecolour}
+            \textbf{Number of hours spent on the project since the last meeting:} & #4 \\\hline
+            \rowcolor{\logbookshadecolour}
+            \textbf{Questions/items to discuss at the meeting (agenda):} & #5 \\\hline
+            \textbf{As scheduled:} & #9 \\\hline
+            \textbf{Agreed tasks for next meeting:} & #6 \\\hline
+            \textbf{Documents discussed /any other issues:} & #7 \\\hline
+            \textbf{Date and time of next meeting:} & #8 \\\hline
         \end{tabulary}
         % TODO: As scheduled field. See template
     \end{table}
