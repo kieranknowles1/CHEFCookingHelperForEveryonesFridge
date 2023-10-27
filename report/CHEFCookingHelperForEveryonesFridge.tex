@@ -18,6 +18,7 @@
 
 % British English
 \usepackage[UKenglish]{babel}
+\usepackage{csquotes}
 
 % Don't complain if only slightly overfull (default 0.5pt)
 % TODO: Probably not the neatest way to do this
@@ -35,7 +36,6 @@
 
 % //SECTION - Citations
 \usepackage[style=authoryear]{biblatex}
-\usepackage{csquotes}
 \addbibresource{CHEFCookingHelperForEveryonesFridge.bib}
 \renewcommand{\cite}[1]{\parencite{#1}}
 % //!SECTION - Citations
@@ -70,7 +70,7 @@
 
     \underline{Project Report}
 
-    "\chef{} - Cooking Helper for Everyone's Fridge"
+    \enquote*{\chef{} - Cooking Helper for Everyone's Fridge}
 }
 \author{Kieran Knowles w2001300}
 \date{2023-2024}
@@ -140,7 +140,7 @@
     \markboth{#1}{#1}
 }
 \printbibliography
-\label{sec:references}
+\label{sec:reference_list}
 \todoinline{
     References
     It should be clear from the text which of the material presented and opinions expressed are yours and which are those of other people. This includes showing clearly when
