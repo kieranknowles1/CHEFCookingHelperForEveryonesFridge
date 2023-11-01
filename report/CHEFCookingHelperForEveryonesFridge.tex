@@ -35,7 +35,9 @@
 \usepackage{tabulary}
 
 % //SECTION - Citations
-\usepackage[style=authoryear]{biblatex}
+% Break long URLs, needed for ONS citations
+% https://tex.stackexchange.com/questions/115690/urls-in-bibliography-latex-not-breaking-line-as-expected
+\usepackage[style=authoryear, block=ragged]{biblatex}
 \addbibresource{CHEFCookingHelperForEveryonesFridge.bib}
 \renewcommand{\cite}[1]{\parencite{#1}}
 % //!SECTION - Citations
