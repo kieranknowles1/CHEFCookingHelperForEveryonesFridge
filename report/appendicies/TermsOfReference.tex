@@ -25,48 +25,25 @@
 \end{table}
 
 \subsection{Background to Project}
-\todoinline{
-    This should describe the “context” of the proposed project and answer the question, “Why this project?” both from your perspective as a student undertaking
-    a final year computing project and that of any client. It should show what makes this proposal a worthwhile computing final-year project.
-    It must make clear both the application area or area of investigation and the computing aspects of your work.
-    It will be helpful to start by briefly stating the nature of the product that you intend to produce or the research question that you intend to investigate.
-}
-As of 2020, UK households collectively wasted 4.5 million tons of food every year, or nearly \%{20} of all purchased food.
+As of 2020, UK households collectively wasted 4.5 million tons of food every year, or nearly 20\% of all purchased food.
 Whilst aware that food waste is increasing among consumers, \textquote*{many do not yet acknowledge that this is an issue relevant to them or are not
 yet concerned enough to act} \cite{wrap_uk_2020}.
-\todo{Mention cost of living crisis}
+
+With the current cost of living crisis, where inflation, especially in food costs, is vastly outpacing wage growth \cite{census_families_2022}
+\cite{francis-devine_rising_2023}, families are looking to cut costs wherever possible. One way to do this is to reduce food waste which is a
+primary aim of this project.
 
 One possible reason for this is consumers not knowing what to do with the food they have in their fridge, and therefore not using it before it goes off.
 Manually looking through a recipe book and checking that you have all the ingredients is a time-consuming process, and therefore people are less likely to do it.
 
-\todoinline{
-    After that, describe the problem domain you will be working in. This may include a practical context - for example, a client organisation and its needs.
-    It will certainly involve introducing the field in which you will be working. For example, what previous work suggested your research question?
-}
 This project aims to create a web application that tracks what ingredients the user has and then suggests recipes that can be made with those ingredients.
 This will help to reduce food waste by helping users work with what they already have rather than buying more food and letting what they have go off.
 
-\todoinline{
-    What ideas will be important to defining and carrying out your project?  For software engineering projects in particular, it will usually be appropriate to introduce
-    the general features of the kind of application you are trying to build, and ideas related to the problem that you will investigate in your literature review.
-    You should by now have done a fair amount of reading about the area, to put your ideas into context and to ensure that the project idea is valid and viable,
-    and identified some useful literature about the problem that you are trying to solve or investigate; One reason for doing this is to show that you will be able
-    to find the useful and interesting ideas and information that your project will need. This requires references!
-    It is also a good chance for you to practise the academic style of writing needed for your report.
-}
-
 \todo{Proofread this and next paragraph}
 \todo{Mention the plan for comp analysis and talk about it in the dissertation. Talk about how it has been started in the review}
-\todo{Should competitor analysis go in the main report?}
 
 \todo{Should this research be in the main report?}
-\todoinline{
-    Indicate why the proposed project is of interest, both to you and more generally, and why it is useful and to whom.
-    For example, where did the idea come from? Was it requested by your client, or did it arise from your supervisor’s research?
-    Did some problem you encountered in real life or a paper that you read in the literature suggest a research question?
-    Will it benefit a client – and how? What problems will you need to solve?  Will you be using interesting or unfamiliar technologies?
-    What is challenging? (Remember that the project will stretch you beyond what you have achieved in other assignments.)
-}
+
 The project is of interest to me personally as I often struggle to decide what to eat and instead end up eating fast food,
 the same meals over and over, or getting ready meals from the shop.
 
@@ -75,59 +52,17 @@ never consumed. I was searching for recipes which incorporated foods I had. This
 I had the idea to create an app where I could simply type in what food I had and would return how that could be incorporated
 into a meal.
 
-\todo{Background to Project}
-
-
 \subsection{Proposed Work}
-\todoinline{
-    Be as specific as possible, someone with no experience should be able to understand what it is asking
-}
-\todo{Have a table listing what has been done to justify the requirements}
-The background research has led to the following requirements for the \chef{} app:
-\todo{Should requirements be in the main report?}
-\subsubsection{Must Have}
-\begin{itemize}
-    \item The system must allow for multiple users to share a pantry.
-    \item The system must allow users to specify disliked ingredients that will not be used in suggested recipes.
-    \item The system must allow users to submit new recipes, either to be shared with all users or kept private.
-\end{itemize}
-
-\subsubsection{Should Have}
-\begin{itemize}
-    \item The system should allow users to scan ingredients into their pantry.
-    \item The system should track how much of each ingredient is available.
-    \item The system should deduct from the available ingredients when a recipe is made.
-    \item The system should track which recipes have been made recently and avoid suggesting similar recipes.
-    \item The system should allow users to favourite recipes and have similar recipes suggested.
-    \item All ingredient lists should use metric units by default.
-\end{itemize}
-
-\subsubsection{Could Have}
-\begin{itemize}
-    \item TODO
-\end{itemize}
-\todo{Could have requirements}
-
-\subsubsection{Won't Have}
-\todo{Should this be included?}
-\begin{itemize}
-    \item TODO
-\end{itemize}
-\todo{Won't have requirements}
-
 The project will be the development of \chef{}, standing for Cooking Helper for Everyone's Fridge. I have chosen this name
 as it is a catchy and memorable acronym that describes the purpose of the project, helping people to make use of
 what they already have in their fridge.
 
-\todoinline{
-    •	A brief description of the work involved in carrying out the project and your approach to the development or investigation.
-    Bring out the technical aspects as well as the general processes.
-}
 \chef{} will be a web application intended to be used on a mobile phone. It will allow users to create an account and log in,
 then add the ingredients that they have either by manually entering them or by scanning the barcode on the packaging.
-This ingredient will then be added to the user's virtual pantry and the user will be able to see what ingredients they have and how much of each.
+This ingredient will then be added to the user's virtual fridge and the user will be able to see what ingredients they have and how much of each.
 If a barcode is not found in the database, the user can manually enter the type of ingredient and its quantity (weight, volume or quantity depending on the ingredient).
-This information will then be stored in the database for future use \todo{All users or just the one inputting it?}.
+This information will then be stored in the database for future use. As \chef{} will likely use an open-source dataset for barcodes, it could provide an option
+for users to submit their new barcodes to the dataset to help improve it.
 
 Whole foods such as fruits and vegetables will be entered by the user manually, as they do not have barcodes. This will likely use an interface where
 all supported ingredients are shown and the user clicks to add one to their fridge, clicking multiple times to add multiple of the same ingredient.
@@ -149,77 +84,56 @@ may like the ingredient and therefore add it to the shared fridge.
 When finding a recipe, users will be able to select which members of the household they are cooking for.
 \chef{} will then find recipes that everyone likes in addition to using the available ingredients.
 
-\todoinline{
-    This section follows directly from the background and should give more details of what you are proposing to do.
-    The project must exhibit a level of difficulty appropriate to final year honours BSc work, and be of a size that
-    can be attempted in the time available; this section should define the topic and project work in enough detail
-    for the markers to be sure that it is suitable. The more detail and discussion you produce at this stage, the stronger the foundation for the actual project work.
-    You should emphasise the computing aspects you expect to be involved in, including those specifically relevant to your programme.
-    Remember that you are undertaking the project as part of a BSc programme in a computing-related discipline, and avoid being side-tracked
-    into areas that are not relevant to your course.)
-    Make sure that you include the following:
-    •	What areas or questions will you need to investigate to carry out the project work? What topic(s) will your literature review cover and how does it help the project?
-    •	Any further details of the product to be built or practical investigative work that will help to define the size and scope of the project.
-}
-\todo{Proposed Work}
+The competitor analysis has been started on \cite{myfridgefood_myfridgefood_nodate} and \cite{supercook_supercook_nodate}.
+This has identified the following requirements for the \chef{} app which will be expanded upon in the requirements section
+of the main report.
 
-\todoinline{
-    •	What computing technologies will be used and why?  (If you will be deciding this as part of the project work, say so, and indicate the possibilities.)
-}
-\chef{} will run on a local server with a Docker container for each component and a script to install dependencies and deploy the containers.
-Using Docker will compartmentalize the project and reduce the work required to transfer to a hybrid cloud environment if required.
-\todo{This is an implementation detail that may be better suited to the implementation section of the practical work}
-\todoinline{
-    This is one of the most important sections of your TOR. After reading this part of your TOR, the reader should know what would be involved in undertaking the project.
-}
-\todo{Proposed Work}
+\subsubsection{Must Have}
+\begin{itemize}
+    \item The system must allow for multiple users to share a virtual fridge.
+    \item The system must allow for dietary requirements (e.g., allergies) to be specified for each user and must not suggest recipes that do not meet these requirements.
+    \item The system must allow users to specify disliked ingredients that will not be used in suggested recipes.
+    \item The system must allow users to submit new recipes, either to be shared with all users or kept private.
+\end{itemize}
+
+\subsubsection{Should Have}
+\begin{itemize}
+    \item The system should allow users to scan ingredients into their virtual fridge.
+    \item The system should track how much of each ingredient is available.
+    \item The system should deduct from the available ingredients when a recipe is made.
+    \item The system should track which recipes have been made recently and avoid suggesting similar recipes.
+    \item The system should allow users to favourite recipes and have similar recipes suggested.
+    \item All ingredient lists should use metric units by default.
+\end{itemize}
+
+\subsubsection{Could Have}
+\begin{itemize}
+    \item The system could allow for the scanning of a receipt to automatically add ingredients to the virtual fridge.
+    \item The system could provide an estimate of the cost of each recipe.
+    \item The system could provide an estimate of how much waste/money has been saved by using it.
+    \item The system could allow users to contribute to the datasets accessed by the app.
+\end{itemize}
+
+The technologies required for the \chef{} app are discussed below in the \hyperref[sec:resources]{Resources} section.
 
 \subsection{Aims of Project}
-\todo{Aims of Project}
-\todoinline{
-    The larger overarching goal of what the project is trying to investigate or do
-    	An overall statement of what the project is intended to accomplish. This should be expressed in terms relating to the project,
-    not personal achievements. There will normally be only one or two aims. If you have more than three, then revise them since they will normally be inappropriate as aims.
-    The following are examples of project aims:
-    •	“To investigate and analyse the importance of the role of schedulability in real-time systems.
-    •	To develop a learning tool that would help people to understand the importance of schedulability and carry out a schedulability analysis of real-time systems.”
-    •	“To compare the effects of flat and deep menu structures on users’ website navigation performance.”
-    •	“To investigate how an e-card service is made and the types of database that can be used to store images.”
-    •	“To build an e-card service to allow a user to manipulate images and create their e-card.”
-    Note the English style in which aims are expressed and use the same style yourself.
-}
+
+\begin{enumerate}
+    \item To create a system to reduce food waste by helping users make use of ingredients they already have.
+    \item To encourage users to try new recipes that they may not have known they could make.
+\end{enumerate}
 
 \subsection{Objectives}
-\todo{Objectives}
-\todoinline{
-    Specific and measurable goals that outline what will be accomplished. Derived from the aims and serve as building blocks of the project
-    Should be:
-      Specific, clear and precise
-      Measurable for when it has been accomplished
-      Achievable, realistic with constraints
-      Relevant to the aims of the project
-      Time-bound, give a deadline that is in line with the Gantt chart
-    	Each objective should identify an expected outcome. By the end of the project, it should be obvious to you and your supervisor whether you have accomplished
-    an objective or not, although it may be debatable as to how well you have accomplished it. Thus each objective must be clear, measurable and concrete.
-    (The ‘SMART’ acronym is helpful here.) Phrase them so that it is clear what will show that the objective has been achieved. For example,
-    	‘Create a requirements specification for…’  is more exact than,
-    	‘Identify requirements for…’.
-    	Projects for this module typically have 7-12 objectives, relating to areas such as:
-    •	Literature review
-    •	Establishing requirements
-    •	Learning new/enhanced knowledge/skills,
-    •	Creation of designs for a product
-    •	Implementing a product
-    •	Experimental work
-    •	Production of items of systems/software documentation
-    •	Testing a product
-    •	Production of chapters of the project report
-    •	Analysis of investigation results
-    •	Evaluation of a product.
-    •	Evaluation of the project process,
-    •	Etc.
-    If you have more than one aim, then you should be able to associate objective(s) with each aim. To produce your project plan, you will identify the tasks needed to achieve your objectives.
-}
+
+\begin{enumerate}
+    \item Research existing solutions to identify what features are useful and what can be improved upon.
+    \item Research potential data sources for ingredients and recipes.
+    \item Research potential technologies for identifying ingredients from barcodes, images, and receipts.
+    \item Expand on the existing requirements to create a full set of requirements for the \chef{} app.
+    \item Develop the \chef{} application in line with the requirements.
+    \item Test the \chef{} application to ensure that it meets the requirements.
+    \item Evaluate the final product to determine if it meets the aims of the project.
+\end{enumerate}
 
 \subsection{Skills}
 \todo{Skills}
@@ -248,36 +162,22 @@ Using Docker will compartmentalize the project and reduce the work required to t
     See the \hyperref[sec:reference_list]{References} section of the main report for the main reference list, including those that were consulted when preparing the TOR.
 }
 
-\todoinline{
-    7.	Sources of information/bibliography
-    This is simply a reference list and bibliography, presented in the usual format. Include the sources you
-    have consulted in preparing the Terms of Reference and any additional sources that you anticipate using
-    during the work. It is not expected that you will yet have identified all the information that you will use.
-    Ensure that you follow standard referencing guidelines.
-}
-
 \subsection{Resources - Statement of Hardware / Software Required}
+\label{sec:resources}
+
 \todo{Resources - Statement of Hardware / Software Required}
 
-\chef is intended to use open-source software wherever possible and to be deployed on a local server which I already own.
+\chef{} is intended to use open-source software wherever possible and to be deployed on a local server which I already own.
 
-A setup script will be created to install all dependencies and deploy the server. This will allow for easy deployment to a different server if required.
-\todoinline{
-    The purpose of this section is to ensure that all the resources needed for the project are available for it.
-    Identify and justify the software, computer hardware or any other equipment that you require for the project.
-    You should also indicate how it will be provided, and its purpose in the project. A bulleted list that gives this information for each item is sufficient.
-    Consider carefully how you would cope if resources were not available; and what alternative resources might be employed. This is particularly
-    important if you intend to use your equipment or that of an external body.
-    Note that you will need to demonstrate your product at the university.
-    It is important to plan how this will be achieved. Your list of resources should include those needed for the demonstration.
-    Where relevant, you may use your computer for part or all of the practical work provided that it is suitable for the purpose,
-    as agreed by the supervisor and that all proprietary software is properly licensed for the machine on which it is running.
-    Similarly, hardware and software provided by a client may be used, under the same conditions.
-    All software used in your project at any point must be used with the necessary licenses or permissions for that machine.
-    This includes software on your machine and software used in the demonstration/viva. Do not make illegal copies,
-    whatever the cost of the software in question. You may be able to find a free alternative, use software that is available in our labs,
-    or choose a different approach. Software piracy is not acceptable under any circumstances.
-}
+A setup script will be created to install all dependencies and deploy the server. This will allow for quick and easy deployment to a new server
+if required and for a reproducible development environment.
+
+Recipes and barcodes will be sourced from an external API, preferably open-source. This will remove the need to manually enter data and allow for
+\chef{} to automatically update with new recipes and barcodes as its data sources are updated.
+
+If needed, more demanding tasks such as image recognition will be offloaded to a cloud service such as Azure as the server I own has limited hardware.
+
+Frontend code will be written in TypeScript using the React framework while the backend is currently undecided.
 
 \subsection{Assessment Criteria for Practical Computing Work}
 \todo{Assessment Criteria for Practical Computing Work}
