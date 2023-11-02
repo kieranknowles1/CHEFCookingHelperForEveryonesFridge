@@ -253,17 +253,53 @@ Frontend code will be written in TypeScript using the React framework while the 
 
 \subsection{Project Plan - Schedule of Activities}
 
-\begin{ganttchart}[hgrid, vgrid, x unit=1cm]{6}{12}
-    \gantttitle{2023 Week 6 to Christmas}{7} \\
+\newganttlinktype{rd}{
+    \ganttsetstartanchor{on right=0.5}
+    \ganttsetendanchor{on top=0.5}
+    \draw[/pgfgantt/link]
+        (\xLeft, \yUpper) --
+        (\xRight, \yUpper) --
+        (\xRight, \yLower);
+}
+
+\newganttlinktype{r!}{
+    \ganttsetstartanchor{on right=0.5}
+    \ganttsetendanchor{on top=0.5}
+    \draw
+        (\xLeft, \yUpper) --
+        (\xRight, \yUpper);
+}
+
+\begin{ganttchart}[hgrid, vgrid]{6}{12}
+    \gantttitle{Week 6 to Christmas}{7} \\
     \gantttitlelist{6,...,12}{1} \\
+
+    \ganttbar[name=competitor_analysis]{Competitor Analysis}{6}{6} \\
+    \ganttbar[name=find_data_sources]{Find Data Sources}{6}{7} \\
+    \ganttbar[name=research_ingredient_scan]{Research Ingredint Scanning Methods}{6}{7} \\
+
+    \ganttbar[name=requirements]{Complete Requirements Specification}{8}{9} \\
+    \ganttlink[link type=rd]{competitor_analysis}{requirements}
+    \ganttlink[link type=r!]{find_data_sources}{requirements}
+    \ganttlink[link type=r!]{research_ingredient_scan}{requirements}
+
+    \ganttmilestone[name=implementation]{Start Implementation}{9} \\
+    \ganttlink{requirements}{implementation}
+
+    \ganttbar[name=track_ingredients]{Track Ingredients}{10}{10} \\
+    \ganttlink{implementation}{track_ingredients}
+
+    \ganttbar[name=suggest_recipes]{Suggest Recipes}{11}{12}
+    \ganttlink{track_ingredients}{suggest_recipes}
 \end{ganttchart}
 
+\todo{2024 gantt chart}
 \begin{ganttchart}[hgrid, vgrid]{1}{16}
-    \gantttitle{2024 January to Submission}{16} \\
+    \gantttitle{January to Submission}{16} \\
     \gantttitlelist{1,...,16}{1} \\
 \end{ganttchart}
 
-\todo{Project Plan - Schedule of Activities, use a Gantt chart broken down by week}
+\todo{Should I explain tasks in detail?}
 \todoinline{
     A detailed statement of the stages of the project is required. A Gantt chart should be used for expressing the schedule, and
     together with supporting information. Identify the tasks needed to achieve each objective, estimate how long they will take,
