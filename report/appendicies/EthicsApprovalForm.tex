@@ -1,13 +1,18 @@
 \documentclass[../CHEFCookingHelperForEveryonesFridge.tex]{subfiles}
 
-% TODO: Remove once done
-\ifSubfilesClassLoaded{
-    \usepackage{draftwatermark}
-}
+\ifSubfilesClassLoaded{\raggedbottom}{}
 
 \renewcommand{\thesubsection}{\arabic{subsection}.}
 
 \begin{document}
+
+\ifstrequal{\jobname}{TermsOfReference}{
+    \newcommand{\ethicsSection}[1]{\subsection{#1}}
+    \newcommand{\ethicsSectionStar}[1]{\subsection*{#1}}
+}{
+    \newcommand{\ethicsSection}[1]{\subsubsection{#1}}
+    \newcommand{\ethicsSectionStar}[1]{\subsubsection*{#1}}
+}
 Student Project Ethics Approval Form
 You should use this document if your project is not high-risk. Please complete this document and discuss your study
 with your supervisor before you collect any data. \ul{\textit{Failure to complete this document and have all aspects signed
@@ -42,7 +47,7 @@ via the main university ethics system.
 
 Please answer the following questions and complete all information in full:
 
-\subsection{Human Participants}
+\ethicsSection{Human Participants}
 Does your study involve human participants \textbf{NO}
 
 
@@ -59,13 +64,11 @@ letters for participants in Appendix B:
     \end{tabulary}
 \end{table}
 
-\subsection{Data Collection}
-\todo{Data Collection}
+\ethicsSection{Data Collection}
 Will your study collect any primary data or use any secondary data not in the public domain? \textbf{NO}
 
 Please complete the following questions, noting that somebody should be able to read this and replicate your approach:
 
-\todo{Analysis methods}
 \begin{table}[H]
     \begin{tabulary}{\textwidth}{|L|L|}
         \hline
@@ -80,19 +83,20 @@ Please complete the following questions, noting that somebody should be able to 
             \\\hline
         2c) What methods will you use to analyse this data?
             &
-
+        The features common to multiple competitors will be identified as part of the minimum viable product for \chef{}.
+        Features requested by users will then be added to create the final product.
             \\\hline
     \end{tabulary}
 \end{table}
 
-\subsection{Data Management}
+\ethicsSection{}{Data Management}
 Standard phrases have been added to the information sheet (available on Blackboard). In rare instances,
 these may not be appropriate for your study. If not,
 please describe any additional data management procedures below:
 
-\todo{Data Management}
+N/A - All data collected is publicly available.
 
-\subsection{Risk Assessment, Health and Safety}
+\ethicsSection{}{Risk Assessment, Health and Safety}
 All research activity carried out by Northumbria University is subject to risk assessment and health and safety
 issues. Depending on the nature of your research work, you may need to use one of the risk assessments below
 and/or complete a Project Risk Assessment in discussion with your supervisor. Once you have identified risks
@@ -134,21 +138,16 @@ Supervisor (and/or Second Marker where appropriate) to assess using the followin
     \end{tabular}
 \end{table}
 
-
-
-\todo{Add the following to the end of the document}
-
-\subsection*{Appendix B: Participant Information \& Consent Form}
+\ethicsSectionStar{Appendix B: Participant Information \& Consent Form}
 Note: this section MUST be completed if you are including human participants in your study
 
 Please include here your participant information sheet, participant consent form plus any participant recruitment materials and permission letters.
 
-\subsection*{Appendix C: Risk Assessment Form}
-If your project involves any healthy, safety risks, please also include a risk assessment form.
+N/A - No human participants are involved in this study.
 
-\ifSubfilesClassLoaded{
-    % TODO: Remove once done
-    \todos
-}{}
+\ethicsSectionStar{Appendix C: Risk Assessment Form}
+If your project involves any health and safety risks, please also include a risk assessment form.
+
+N/A - No human participants are involved in this study.
 
 \end{document}

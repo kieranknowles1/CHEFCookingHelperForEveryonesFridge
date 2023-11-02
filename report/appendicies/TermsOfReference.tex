@@ -4,6 +4,8 @@
     \usepackage{draftwatermark}
 }
 
+\ifSubfilesClassLoaded{\raggedbottom}{}
+
 \renewcommand{\thesubsection}{\arabic{subsection}.}
 
 \begin{document}
@@ -77,11 +79,11 @@ may like the ingredient and therefore add it to the shared fridge.
 When finding a recipe, users will be able to select which members of the household they are cooking for.
 \chef{} will then find recipes that everyone likes in addition to using the available ingredients.
 
-A competitor analysis will be performed to identify features that are common among similar apps and to identify potential
-improvements that could be made for \chef{}. This has been started in the \mainfilehyperref{sec:competitor_analysis}{Competitor Analysis}
-section of the main report with the apps  \cite{myfridgefood_myfridgefood_nodate} and \cite{supercook_supercook_nodate}.
-This has identified the following requirements for the \chef{} app which will be expanded upon in the requirements section
-of the main report.
+A competitor analysis will be performed to identify features that are common among similar apps. The user reviews of existing apps
+will be consulted to identify features that users like and those that are commonly requested. This will help to identify
+improvements that could be made for \chef{}. The competitor analysis has been started in the \mainfilehyperref{sec:competitor_analysis}{Competitor Analysis}
+section of the main report with the apps \cite{myfridgefood_myfridgefood_nodate} and \cite{supercook_supercook_nodate} which has identified the following
+requirements for the \chef{} app which will be expanded upon in the main report:
 
 \subsubsection{Must Have}
 \begin{itemize}
@@ -131,6 +133,7 @@ The technologies required for the \chef{} app are discussed below in the \hyperr
 \end{enumerate}
 
 \subsection{Skills}
+The following skills will be used in the project:
 
 \begin{itemize}
     \item Programming skills learned in \textit{KV4000 Programming 1}, \textit{KV4001 Programming 2},
@@ -141,6 +144,7 @@ The technologies required for the \chef{} app are discussed below in the \hyperr
     \item Database programming learned in \textit{KC4000 Relational Databases} and \textit{KF5008 Program Design and Development}.
     \item Project planning skills learned in \textit{KF4011 Systems Analysis}
     \item Interface design skills learned in \textit{KV5003 Human-Computer Interaction}.
+    \item Container-based server deployment, to be learned from the \textit{Docker} documentation.
 \end{itemize}
 
 \todo{Skills}
@@ -242,10 +246,7 @@ Frontend code will be written in TypeScript using the React framework while the 
 \subsection{Ethics, Social, Legal, and Professional Issues}
 
 \ifSubfilesClassLoaded{
-    {
-        \renewcommand{\subsection}[1]{\subsubsection{#1}}
-        \subfile{EthicsApprovalForm.tex}
-    }
+    \subfile{EthicsApprovalForm.tex}
 }{
     See the \hyperref[sec:ethics_approval]{Ethics Approval Form} appendix for the ethics approval form.
 }
@@ -253,21 +254,13 @@ Frontend code will be written in TypeScript using the React framework while the 
 \subsection{Project Plan - Schedule of Activities}
 
 \begin{ganttchart}[hgrid, vgrid, x unit=1cm]{6}{12}
-    \gantttitle{2023 Week 6 to Christmas Break}{7} \\
+    \gantttitle{2023 Week 6 to Christmas}{7} \\
     \gantttitlelist{6,...,12}{1} \\
-    \ganttbar[name=research_solutions]{Research existing solutions}{6}{6} \\
-    \ganttbar[name=research_sources]{Research data sources}{7}{7} \\
-    \ganttbar[name=research_technologies]{Research data input technologies}{8}{8} \\
-
-    \ganttbar[name=requirements]{Expand on requirements}{9}{12}
-    \ganttlink[link type=dr]{research_solutions}{requirements}
-    \ganttlink[link type=dr]{research_sources}{requirements}
-    \ganttlink[link type=dr]{research_technologies}{requirements}
 \end{ganttchart}
 
-\begin{ganttchart}[hgrid, vgrid]{1}{12}
-    \gantttitle{2024 Week 1 to Submission}{12} \\
-    \gantttitlelist{1,...,12}{1} \\
+\begin{ganttchart}[hgrid, vgrid]{1}{16}
+    \gantttitle{2024 January to Submission}{16} \\
+    \gantttitlelist{1,...,16}{1} \\
 \end{ganttchart}
 
 \todo{Project Plan - Schedule of Activities, use a Gantt chart broken down by week}
@@ -284,8 +277,7 @@ Frontend code will be written in TypeScript using the React framework while the 
 
 \ifSubfilesClassLoaded{
     % TODO: Remove once done
-    % Using a list from the ethics form
-    % \todos
+    \todos
 }{}
 
 \end{document}
