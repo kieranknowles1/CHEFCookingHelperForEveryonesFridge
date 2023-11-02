@@ -244,6 +244,15 @@ Frontend code will be written in TypeScript using the React framework while the 
     If a risk assessment is required, you should also fill out a Risk Assessment Form and attach it to the TOR document.
 }
 
+\ifSubfilesClassLoaded{
+    {
+        \renewcommand{\subsection}[1]{\subsubsection{#1}}
+        \subfile{EthicsApprovalForm.tex}
+    }
+}{
+    See the \hyperref[sec:ethics_approval]{Ethics Approval Form} appendix for the ethics approval form.
+}
+
 \subsection{Project Plan - Schedule of Activities}
 \todo{Project Plan - Schedule of Activities, use a Gantt chart broken down by week}
 \todoinline{
@@ -259,7 +268,8 @@ Frontend code will be written in TypeScript using the React framework while the 
 
 \ifSubfilesClassLoaded{
     % TODO: Remove once done
-    \todos
+    % Using list from ethics form
+    % \todos
 }{}
 
 \end{document}
