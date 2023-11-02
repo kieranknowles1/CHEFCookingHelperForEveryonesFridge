@@ -53,7 +53,7 @@ what they already have in their fridge.
 \chef{} will be a web application intended to be used on a mobile phone. It will allow users to create an account and log in,
 then add the ingredients that they have either by manually entering them or by scanning the barcode on the packaging.
 This ingredient will then be added to the user's virtual fridge and the user will be able to see what ingredients they have and how much of each.
-If a barcode is not found in the database, the user can manually enter the type of ingredient and its quantity (weight, volume or quantity depending on the ingredient).
+If a barcode is not found in the database, the user can manually enter the type of ingredient and its quantity (weight, volume, or quantity depending on the ingredient).
 This information will then be stored in the database for future use. As \chef{} will likely use an open-source dataset for barcodes, it could provide an option
 for users to submit their new barcodes to the dataset to help improve it.
 
@@ -204,7 +204,7 @@ Frontend code will be written in TypeScript using the React framework while the 
     •	quality of specific documents.
     In some cases, it may be difficult to decide under which heading a criterion should fit: e.g. HCI might fit under either,
     depending on the focus of the project.  In these cases, decide on the most appropriate and ensure that the overall marking scheme fits in with the choice.
-    List all the deliverables (finished software/hardware, requirement specification, design models, test plans, prototypes etc.)
+    List all the deliverables (finished software/hardware, requirement specification, design models, test plans, prototypes, etc.)
     that will form part of your product. Then list the criteria on which fitness for purpose and build quality will be assessed.
     Some of these are provided as above, and you may add others.
     Please note that the mark percentage for practical work in the marking scheme is not only for the quality of the product.
@@ -228,19 +228,6 @@ Frontend code will be written in TypeScript using the React framework while the 
 }
 
 \subsection{Ethics, Social, Legal, and Professional Issues}
-\todo{Ethics, Social, Legal, and Professional Issues}
-
-\todoinline{
-    You need to consider any ethical, social, legal and professional issues that might arise in your project. Please refer to the university's
-    guidance on Ethics and Integrity for consultation. You need to discuss with your supervisor in which category your project will be classified
-    in terms of ethics. If your project is considered a low or medium-risk project, you need to justify the reasons in this session
-    and provide action plans on human participants, data collection, data management recruitment, risk assessment, health and safety, and any other relevant issues.
-
-    Ethics approval is a fail/pass component. You need to fill out an Ethics Approval Form and submit it together with the TOR document
-    to provide enough information for review. Failure to submit both documents promptly will result in you not being able to start your project,
-    and consequently a delay in the project completion. Failure to pass the ethics approval will result in failing the module assessment.
-    If a risk assessment is required, you should also fill out a Risk Assessment Form and attach it to the TOR document.
-}
 
 \ifSubfilesClassLoaded{
     {
@@ -252,6 +239,20 @@ Frontend code will be written in TypeScript using the React framework while the 
 }
 
 \subsection{Project Plan - Schedule of Activities}
+
+\begin{ganttchart}[hgrid, vgrid, x unit=1cm]{6}{12}
+    \gantttitle{2023 Week 6 to Christmas Break}{7} \\
+    \gantttitlelist{6,...,12}{1} \\
+    \ganttbar[name=research_solutions]{Research existing solutions}{6}{6} \\
+    \ganttbar[name=research_sources]{Research data sources}{7}{7} \\
+    \ganttbar[name=research_technologies]{Research data input technologies}{8}{8} \\
+
+    \ganttbar[name=requirements]{Expand on requirements}{9}{12}
+    \ganttlink[link type=dr]{research_solutions}{requirements}
+    \ganttlink[link type=dr]{research_sources}{requirements}
+    \ganttlink[link type=dr]{research_technologies}{requirements}
+\end{ganttchart}
+
 \todo{Project Plan - Schedule of Activities, use a Gantt chart broken down by week}
 \todoinline{
     A detailed statement of the stages of the project is required. A Gantt chart should be used for expressing the schedule, and
