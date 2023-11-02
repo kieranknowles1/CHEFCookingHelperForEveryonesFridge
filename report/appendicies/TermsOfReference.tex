@@ -284,13 +284,13 @@ Frontend code will be written in TypeScript using the React framework while the 
     \ganttlink[link type=r!]{research_ingredient_scan}{requirements}
 
     \ganttmilestone[name=implementation]{Start Implementation}{9} \\
-    \ganttlink{requirements}{implementation}
+    \ganttlink[link type=dr]{requirements}{implementation}
 
     \ganttbar[name=track_ingredients]{Track Ingredients}{10}{10} \\
-    \ganttlink{implementation}{track_ingredients}
+    \ganttlink[link type=rd]{implementation}{track_ingredients}
 
     \ganttbar[name=suggest_recipes]{Suggest Recipes}{11}{12}
-    \ganttlink{track_ingredients}{suggest_recipes}
+    \ganttlink[link type=dr]{track_ingredients}{suggest_recipes}
 \end{ganttchart}
 
 \todo{2024 gantt chart}
