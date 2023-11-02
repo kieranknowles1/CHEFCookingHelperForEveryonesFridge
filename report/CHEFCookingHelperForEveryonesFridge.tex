@@ -65,6 +65,15 @@
 
 \usepackage{hyperref}
 
+% TODO: Package?
+\newcommand{\mainfilehyperref}[2]{
+    \ifSubfilesClassLoaded{
+        #2
+    }{
+        \hyperref[#1]{#2}
+    }
+}
+
 
 \begin{document}
 %TC:ignore
