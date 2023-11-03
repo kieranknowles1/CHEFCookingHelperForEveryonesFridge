@@ -1,8 +1,4 @@
 \documentclass[../CHEFCookingHelperForEveryonesFridge.tex]{subfiles}
-% TODO: Remove once done
-\ifSubfilesClassLoaded{
-    \usepackage{draftwatermark}
-}
 
 \ifSubfilesClassLoaded{\raggedbottom}{}
 
@@ -10,11 +6,13 @@
 
 \begin{document}
 
+\newcommand{\torrevision}{1.0}
+
 \begin{table}[h!]
     \centering
     \begin{tabular}{|c|c|}
         \hline
-        \multicolumn{2}{|c|}{KV6003: Individual Computing Project Terms of References} \\\hline
+        \multicolumn{2}{|c|}{KV6003: Individual Computing Project Terms of References revision \torrevision{}} \\\hline
         Student name: & Kieran Knowles \\\hline
         Student ID: & w20013000 \\\hline
         Course: & BSC (HONS) Computer Science \\\hline
@@ -180,59 +178,29 @@ If needed, more demanding tasks such as image recognition will be offloaded to a
 Both the front and backend code will be written in TypeScript with the frontend using the React framework and the backend using Node.js.
 
 \subsection{Assessment Criteria for Practical Computing Work}
-\todo{Assessment Criteria for Practical Computing Work}
-\todoinline{
-    This is the part of the TOR that many students find the most difficult as you are asked to agree on the criteria on which your practical
-    work will be assessed. This is very important for your final project marking.
 
-    You should agree on these criteria with your supervisor and 2nd marker at the TOR review meeting, and you are strongly advised to review them
-    with your supervisor early in Semester 2 to ensure that they still reflect the planned direction of your project. Changes may be agreed upon at
-    that point, and need to be recorded in your eLogbook.
-
-    (i)	Product
-    If your project involves building a product, the product does not only consist of the final software or hardware but also of all the
-    associated deliverables that you use to produce it, e.g. requirements specifications, design models, test plans and results, etc. These may vary widely between projects.
-    The product should be marked in terms of two main criteria: ‘Fitness for Purpose’ and ‘Build Quality’.
-    	Fitness for Purpose may be defined as “Have you built the right kind of product?”
-    The main criterion for assessing this is whether the product meets its specified requirements as identified in the Research and Planning phase,
-    and if not, why not? Other commonly usable criteria include:
-    •	usability / HCI
-    •	adequacy/completeness (bearing in mind that the product will typically be a prototype rather than a fully-fledged, complete product of practical use or commercial value),
-    •	performance (e.g. good response time, sufficient data capacity),
-    •	robustness
-    •	error handling.
-    Build Quality may be defined as “Have you built the product the right kind of way?”
-    	A variety of criteria may be used in its assessment, for example:
-    •	design quality,
-    •	implementation quality,
-    •	correspondence of implementation to the design,
-    •	adherence to standards,
-    •	quality of testing and validation,
-    •	quality of specific documents.
-    In some cases, it may be difficult to decide under which heading a criterion should fit: e.g. HCI might fit under either,
-    depending on the focus of the project.  In these cases, decide on the most appropriate and ensure that the overall marking scheme fits in with the choice.
-    List all the deliverables (finished software/hardware, requirement specification, design models, test plans, prototypes, etc.)
-    that will form part of your product. Then list the criteria on which fitness for purpose and build quality will be assessed.
-    Some of these are provided as above, and you may add others.
-    Please note that the mark percentage for practical work in the marking scheme is not only for the quality of the product.
-    It also includes how you describe and justify the development process, the decisions made, and the techniques/tools used.
-
-
-    (ii)	Quality of Practical Investigative Work
-
-    If your project focuses on investigating a research question/hypothesis, in this section of the TOR, you must specify the criteria
-    on which your investigative work will be assessed. These will vary widely between projects. You should list all the deliverables
-    (e.g. tools built, survey instruments designed, equipment configurations set up; conduct of sessions with participants; use of tools and techniques, etc.)
-    and choose criteria appropriate to the deliverables that you will produce. Some of these criteria may relate to the quality of deliverables produced;
-    others may relate to the way that you have carried out your investigation. Observance of relevant ethical and safety guidelines must be included.
-    Ensure that the deliverables and criteria chosen will demonstrate your use of practical computing skills relevant to your course.
-
-    The specified deliverables and other evidence must demonstrate the effective use of practical computing skills relevant to the student's program;
-    these are broadly defined and include e.g. carrying out usability evaluation, and use of appropriate tools. If insufficient evidence is provided,
-    the student cannot score highly on this criterion.
-    Remember that your markers will need to be able to assess your work on these criteria. You should indicate what evidence will be provided;
-    This will usually be included in your appendices but may be elsewhere in your submission.
-}
+\begin{table}[h!]
+    \begin{tabulary}{\textwidth}{|L|l|}
+        \hline
+        \textbf{Criteria} & \textbf{Mark} \\\hline
+        \makecell[l]{
+            Fitness for Purpose \\
+            - How well the app meets the requirements \\
+        } & 40 \\\hline
+        \makecell[l]{
+            Build Quality \\
+            - Whether the app passes its unit tests \\
+            - Quality of documentation \\
+            - Whether the app runs without issue \\
+            - Ease of setup \\
+        } & 40 \\\hline
+        \makecell[l]{
+            Usability \\
+            - Responsive layout on different devices \\
+            - Performance - the app should feel responsive to use \\
+        } & 20 \\\hline
+    \end{tabulary}
+\end{table}
 
 \subsection{Ethics, Social, Legal, and Professional Issues}
 
@@ -294,10 +262,5 @@ Both the front and backend code will be written in TypeScript with the frontend 
     \ganttbar[name=report]{Prepare Report}{6}{14}
     \ganttlink[link type=dr]{cost}{report}
 \end{ganttchart}
-
-\ifSubfilesClassLoaded{
-    % TODO: Remove once done
-    \todos
-}{}
 
 \end{document}
