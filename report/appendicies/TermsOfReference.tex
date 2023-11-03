@@ -147,17 +147,6 @@ The following skills will be used in the project:
     \item Container-based server deployment, to be learned from the \textit{Docker} documentation.
 \end{itemize}
 
-\todo{Skills}
-\todoinline{
-    The purpose of this section is to help you and your supervisor assess how strong a base of learning you are building on,
-    and whether the enhancements of your knowledge and skills that the project will require are feasible. Projects should generally
-    be relevant to your degree course, e.g. students taking Web Design and Development should do projects that use skills relevant
-    to that area and build on modules from that course.
-    Identify and list the skills that you will need to carry out the project work. You should explicitly identify both familiar areas
-    of knowledge and skills and new/enhanced ones that the project will require. Against each, indicate which module that you have taken
-    or are taking gives you those skills. If you will be acquiring skills during your project, say how this will be done.
-}
-
 \ifSubfilesClassLoaded{
     % Print the bibliography on the same page
     % From bib latex docs
@@ -262,14 +251,6 @@ Frontend code will be written in TypeScript using the React framework while the 
         (\xRight, \yLower);
 }
 
-\newganttlinktype{r!}{
-    \ganttsetstartanchor{on right=0.5}
-    \ganttsetendanchor{on top=0.5}
-    \draw
-        (\xLeft, \yUpper) --
-        (\xRight, \yUpper);
-}
-
 \begin{ganttchart}[hgrid, vgrid]{6}{12}
     \gantttitle{Week 6 to Christmas}{7} \\
     \gantttitlelist{6,...,12}{1} \\
@@ -280,8 +261,8 @@ Frontend code will be written in TypeScript using the React framework while the 
 
     \ganttbar[name=requirements]{Complete Requirements Specification}{8}{9} \\
     \ganttlink[link type=rd]{competitor_analysis}{requirements}
-    \ganttlink[link type=r!]{find_data_sources}{requirements}
-    \ganttlink[link type=r!]{research_ingredient_scan}{requirements}
+    \ganttlink[link type=rd]{find_data_sources}{requirements}
+    \ganttlink[link type=rd]{research_ingredient_scan}{requirements}
 
     \ganttmilestone[name=implementation]{Start Implementation}{9} \\
     \ganttlink[link type=dr]{requirements}{implementation}
@@ -293,23 +274,24 @@ Frontend code will be written in TypeScript using the React framework while the 
     \ganttlink[link type=dr]{track_ingredients}{suggest_recipes}
 \end{ganttchart}
 
-\todo{2024 gantt chart}
 \begin{ganttchart}[hgrid, vgrid]{1}{16}
     \gantttitle{January to Submission}{16} \\
     \gantttitlelist{1,...,16}{1} \\
-\end{ganttchart}
 
-\todo{Should I explain tasks in detail?}
-\todoinline{
-    A detailed statement of the stages of the project is required. A Gantt chart should be used for expressing the schedule, and
-    together with supporting information. Identify the tasks needed to achieve each objective, estimate how long they will take,
-    plan when they should be done, and include these tasks in your Gantt chart.
-    Your schedule must indicate for each task the number of hours work required to accomplish it and the elapsed
-    time over which this work should be done. The schedule should be expressed in weeks. Months do not allow for sufficiently detailed planning and control.
-    Days are too detailed; in practice, you will not yet know your daily workload in the second semester, so you cannot meaningfully plan down to the day.
-    It is sensible to consult your assignment schedule when you make your project plan and to avoid overloading yourself at times when you have other major
-    commitments, but remember that your project is the largest and most important module of the year!
-}
+    \ganttbar[name=diet]{Specify Dietary Requirements}{3}{3} \\
+
+    \ganttbar[name=scan]{Scan Ingredients Into the App}{4}{4} \\
+    \ganttlink[link type=dr]{diet}{scan}
+
+    \ganttbar[name=cost]{Estimate the Cost of Recipes}{5}{5} \\
+    \ganttlink[link type=dr]{scan}{cost}
+
+    \ganttbar[name=test]{Test the final \chef{} App}{6}{6} \\
+    \ganttlink[link type=dr]{cost}{test}
+
+    \ganttbar[name=report]{Prepare Report}{6}{14}
+    \ganttlink[link type=dr]{cost}{report}
+\end{ganttchart}
 
 \ifSubfilesClassLoaded{
     % TODO: Remove once done
