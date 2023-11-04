@@ -20,11 +20,11 @@
 		"prefix": "\\logbookentry",
 		"body": [
 			"\\logbookentry{",
-			"	${1:TODO: Date/time}",
-			"}{"
-			"	${2:TODO: Description of work since the last meeting}"
+			"	${1:TODO: Heading}",
 			"}{",
-			"	${3:TODO: Brief description of work since the last meeting}",
+			"	${2:TODO: Date/time}",
+			"}{"
+			"	${3:TODO: Description of work since the last meeting}"
 			"}{",
 			"	${4:TODO: Number of hours since the last meeting}",
 			"}{",
