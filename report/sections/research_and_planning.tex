@@ -111,6 +111,72 @@ MyFridgeFood has a feature to submit new recipes which are shared between all us
 of recipes, however, these cannot be kept private to just one user.
 
 \section{Product Requirements}
+
+% https://tex.stackexchange.com/questions/503668/increment-a-counter
+\newcounter{functionalreqcounter}
+\newcommand{\requirementtype}{FR}
+% Usage:
+%   #1 Requirement
+%   #2 Source
+%   #3 Priority
+\newcommand{\requirement}[3]{
+    \requirementtype\stepcounter{functionalreqcounter}\arabic{functionalreqcounter}
+        &
+    #1
+        &
+    #2
+        &
+    #3
+        \\\hline
+}
+
+\begin{table}[h!]
+    \begin{tabulary}{\textwidth}{|l|L|l|l|}
+        \hline
+        \multicolumn{4}{|c|}{\textbf{Functional Requirements}} \\\hline
+        \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} \\\hline
+
+        \requirement{
+            \textbf{User registration.} The system \textbf{must} allow users to sign up and log in to the app.
+        }{
+            Trivial
+        }{
+            Must-have
+        }
+
+        \requirement{
+            \textbf{Recipe Suggestion} the system \textbf{must} suggest recipes based on the user's available ingredients
+        }{
+            Competitor Analysis
+        }{
+            Must-have
+
+            % NOTE: This has to be in the last argument of the last requirement
+            \setcounter{functionalreqcounter}{0}
+        }
+    \end{tabulary}
+\end{table}
+
+\renewcommand{\requirementtype}{NFR}
+\begin{table}[h!]
+    \begin{tabulary}{\textwidth}{|l|L|l|l|}
+        \hline
+        \multicolumn{4}{|c|}{\textbf{Non-functional Requirements}} \\\hline
+        \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} \\\hline
+
+        \requirement{
+            TODO: Name
+        }{
+            TODO: Source
+        }{
+            TODO: Priority
+
+            % NOTE: This has to be in the last argument of the last requirement
+            \setcounter{functionalreqcounter}{0}
+        }
+    \end{tabulary}
+\end{table}
+
 \todoinline{
     Summarize the requirements for the product to be built.
 
@@ -150,6 +216,9 @@ of recipes, however, these cannot be kept private to just one user.
 }
 
 \section{Approach/Methodology}
+\subsection{The Dataset}
+\todo{Dataset}
+
 \todo{Approach/Methodology}
 
 \section{Commentary on Requirements Specification}
