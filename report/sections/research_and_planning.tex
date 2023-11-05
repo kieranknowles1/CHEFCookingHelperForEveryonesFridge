@@ -170,12 +170,21 @@ of recipes, however, these cannot be kept private to just one user.
         }
 
         \requirement{
-            \textbf{Scan ingredients.} The system \textbf{should} allow for scanning the barcodes of ingredients to add
-            them to the user's \virtualfridge
+            \textbf{Scan ingredients.} The system \textbf{should} allow the user to scan the barcodes of ingredients to add
+            them to their \virtualfridge
         }{
             TODO: Source
         }{
             Should-have
+        }
+
+        \requirement{
+            \textbf{Scan receipt.} The system \textbf{could} allow the user to scan a receipt from a store to add ingredients
+            to their \virtualfridge
+        }{
+            TODO: Source
+        }{
+            Could-have
         }
 
         \requirement{
@@ -286,9 +295,9 @@ The following information is included for each recipe:
 
         Title & String & The name of the recipe. \\\hline
 
-        Ingredients & String array & A list of ingredients along with the quantity required. Quantities use imperial units. \\\hline
+        Ingredients & String array & A list of ingredients along with the quantity required. Quantities are presented in imperial units. \\\hline
 
-        Directions & String array & A list of directions to make the recipe. Temperatures are in fahrenheit. \\\hline
+        Directions & String array & A list of directions to make the recipe. Temperatures are presented in Fahrenheit. \\\hline
 
         Link & String & A link to the page where the recipe was sourced. \\\hline
 
@@ -300,6 +309,8 @@ The following information is included for each recipe:
     \caption{RecipeNLG Row Format}
     \label{tab:recipenlg_row_format}
 \end{table}
+
+This data is imported into the app's database during setup. See \todo{Schema} for the schema.
 
 \todo{Sample entry}
 
