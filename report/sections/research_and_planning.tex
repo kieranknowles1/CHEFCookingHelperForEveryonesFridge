@@ -167,6 +167,24 @@ of recipes, however, these cannot be kept private to just one user.
             Competitor Analysis
         }{
             Must-have
+        }
+
+        \requirement{
+            \textbf{Scan ingredients.} The system \textbf{should} allow for scanning the barcodes of ingredients to add
+            them to the user's \virtualfridge
+        }{
+            TODO: Source
+        }{
+            Should-have
+        }
+
+        \requirement{
+            \textbf{Find similar recipes.} The system \textbf{should} use a machine learning model to find and suggest
+            similar recipes to those that the user has previously made.
+        }{
+            TODO: Source
+        }{
+            Should-have
 
             % NOTE: This has to be in the last argument of the last requirement
             \setcounter{functionalreqcounter}{0}
@@ -180,6 +198,14 @@ of recipes, however, these cannot be kept private to just one user.
         \hline
         \multicolumn{4}{|c|}{\textbf{Non-functional Requirements}} \\\hline
         \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} \\\hline
+
+        \requirement{
+            \textbf{Ease of setup.} the system \textbf{should} be installable using a single script and minimal manual input.
+        }{
+            Trivial
+        }{
+            Should-have
+        }
 
         \requirement{
             TODO: Name
@@ -233,10 +259,21 @@ of recipes, however, these cannot be kept private to just one user.
 }
 
 \section{Approach/Methodology}
-\subsection{The Dataset}
-\todo{Dataset}
-
 \todo{Approach/Methodology}
+
+\subsection{The Dataset}
+
+\todo{Should I talk about how Recipe Box was considered?}
+
+The RecipeNLG dataset \cite{bien_recipenlg_2020} was decided upon for the \chef{} app. This contains ~2 million recipes
+each with an ingredient list, a list of directions, and its source URL.
+
+While licensing restrictions would prevent this from being used for a commercial app, it is still available for
+research purposes.
+
+\todo{Sample entry}
+
+\todo{Dataset}
 
 \section{Commentary on Requirements Specification}
 \todo{Commentary on Requirements Specification. Discuss the specification, which is a separate document}
