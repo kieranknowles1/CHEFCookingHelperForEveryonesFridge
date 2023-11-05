@@ -190,6 +190,9 @@ of recipes, however, these cannot be kept private to just one user.
             \setcounter{functionalreqcounter}{0}
         }
     \end{tabulary}
+
+    \caption{Functional Requirements}
+    \label{tab:functional_requirements}
 \end{table}
 
 \renewcommand{\requirementtype}{NFR}
@@ -218,6 +221,9 @@ of recipes, however, these cannot be kept private to just one user.
             \setcounter{functionalreqcounter}{0}
         }
     \end{tabulary}
+
+    \caption{Non-functional Requirements}
+    \label{tab:non_functional_requirements}
 \end{table}
 
 \todoinline{
@@ -270,6 +276,30 @@ each with an ingredient list, a list of directions, and its source URL.
 
 While licensing restrictions would prevent this from being used for a commercial app, it is still available for
 research purposes.
+
+The following information is included for each recipe:
+
+\begin{table}[h!]
+    \begin{tabulary}{\textwidth}{|l|l|L|}
+        \hline
+        \textbf{Name} & \textbf{Type} & \textbf{Description} \\\hline
+
+        Title & String & The name of the recipe. \\\hline
+
+        Ingredients & String array & A list of ingredients along with the quantity required. Quantities use imperial units. \\\hline
+
+        Directions & String array & A list of directions to make the recipe. Temperatures are in fahrenheit. \\\hline
+
+        Link & String & A link to the page where the recipe was sourced. \\\hline
+
+        Source & String & The dataset the recipe was sourced from, \enquote*{Gathered} for recipes collected for RecipeNLG itself or the name of another dataset. \\\hline
+
+        NER & String array & A list of ingredients without quantities. \\\hline
+    \end{tabulary}
+
+    \caption{RecipeNLG Row Format}
+    \label{tab:recipenlg_row_format}
+\end{table}
 
 \todo{Sample entry}
 
