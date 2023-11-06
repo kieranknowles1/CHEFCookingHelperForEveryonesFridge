@@ -15,3 +15,5 @@
 *.synctex(busy)
 *.toc
 *.wc
+
+node_modules/
