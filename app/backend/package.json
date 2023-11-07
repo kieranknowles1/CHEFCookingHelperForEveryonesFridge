@@ -14,6 +14,8 @@
   "author": "Kieran Knowles",
   "license": "ISC",
   "devDependencies": {
+    "@types/cli-progress": "^3.11.5",
+    "@types/progress-stream": "^2.0.4",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "eslint": "^8.53.0",
     "eslint-config-standard-with-typescript": "^39.1.1",
@@ -25,6 +27,9 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "cli-progress": "^3.12.0",
+    "csv-parse": "^5.5.2",
+    "progress-stream": "^2.0.0",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.6"
   }
