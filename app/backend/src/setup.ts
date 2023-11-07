@@ -60,22 +60,18 @@ async function getIngredientNames (): Promise<Map<string, number>> {
     .on('end', () => {
       bar.stop()
       resolve(names)
+
+      // Filter out ingredients that appear less than a set number of times. This likely means it is too similar and/or a misspelling
+      names.forEach((value, key) => {
+        if (value < MIN_INGREDIENT_OCCURENCES) {
+          names.delete(key)
+        }
+      })
     }))
 }
 
-async function parseIngredients (db: Database): Promise<void> {
-  console.log('Getting ingredient names')
-  const list = await getIngredientNames()
-
-  // Filter out ingredients that appear less than a set number of times. This likely means it is too similar and/or a misspelling
-  list.forEach((value, key) => {
-    if (value < MIN_INGREDIENT_OCCURENCES) {
-      list.delete(key)
-    }
-  })
-
-  console.log(list)
-  console.log(`Found ${list.size} unique ingredients.`)
+async function addIngredientsToDatabase (db: Database, ingredients: Map<string, number>): Promise<void> {
+  // TODO: Implement
 }
 
 function addRow (db: Database, row: any): void {
@@ -83,7 +79,7 @@ function addRow (db: Database, row: any): void {
   db.run('INSERT INTO recipe (name, directions, link) VALUES (?, ?, ?)', row.title, row.directions, row.link)
 }
 
-async function importData (db: Database): Promise<void> {
+async function importData (db: Database, ingredients: Map<string, number>): Promise<void> {
   // Run everything within a transaction in order to reduce I/O workload
   db.run('BEGIN TRANSACTION')
 
@@ -93,7 +89,18 @@ async function importData (db: Database): Promise<void> {
     .pipe(progress)
     .pipe(csv.parse({ columns: true }))
     .on('data', (data) => {
-      addRow(db, data)
+      // TODO: Parse row to an object first
+      const rowIngredients = JSON.parse(data.NER.toLowerCase()) as string[]
+      let valid = true
+      rowIngredients.forEach(ingredient => {
+        if (ingredients.get(ingredient) === undefined) {
+          valid = false
+        }
+      })
+
+      if (valid) {
+        addRow(db, data)
+      }
     })
     .on('end', () => {
       bar.stop()
@@ -109,12 +116,15 @@ async function main (): Promise<void> {
   console.log('Setting up schema')
   setupSchema(db)
 
-  console.log('Getting ingredients')
-  await parseIngredients(db)
+  console.log('Getting ingredient names')
+  const ingredients = await getIngredientNames()
+
+  console.log('Adding ingredients to database')
+  await addIngredientsToDatabase(db, ingredients)
 
   console.log('Importing data into the database')
   // TODO
-  //await importData(db)
+  await importData(db, ingredients)
 
   console.log('Setup done')
 }
