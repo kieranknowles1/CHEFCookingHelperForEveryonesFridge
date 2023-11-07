@@ -15,6 +15,8 @@ import { openDb } from './openDb'
 // TODO: Use environment variables and put this somewhere outside the container
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
+// TODO: Needs fine tuning
+const MIN_INGREDIENT_OCCURENCES = 1000
 
 /**
  * Create a progress listener and bar and start the bar. The bar must be stopped once finished
@@ -41,8 +43,8 @@ function setupSchema (db: Database): void {
   db.exec(schema)
 }
 
-async function getIngredientNames (): Promise<Set<string>> {
-  const names = new Set<string>()
+async function getIngredientNames (): Promise<Map<string, number>> {
+  const names = new Map<string, number>()
   const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
 
   return new Promise((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
@@ -51,7 +53,8 @@ async function getIngredientNames (): Promise<Set<string>> {
     .on('data', (data) => {
       const ingredients = JSON.parse(data.NER) as string[]
       ingredients.forEach(item => {
-        names.add(item)
+        const lower = item.toLowerCase()
+        names.set(lower, (names.get(lower) ?? 0) + 1)
       })
     })
     .on('end', () => {
@@ -63,7 +66,16 @@ async function getIngredientNames (): Promise<Set<string>> {
 async function parseIngredients (db: Database): Promise<void> {
   console.log('Getting ingredient names')
   const list = await getIngredientNames()
+
+  // Filter out ingredients that appear less than a set number of times. This likely means it is too similar and/or a misspelling
+  list.forEach((value, key) => {
+    if (value < MIN_INGREDIENT_OCCURENCES) {
+      list.delete(key)
+    }
+  })
+
   console.log(list)
+  console.log(`Found ${list.size} unique ingredients.`)
 }
 
 function addRow (db: Database, row: any): void {
@@ -101,7 +113,8 @@ async function main (): Promise<void> {
   await parseIngredients(db)
 
   console.log('Importing data into the database')
-  await importData(db)
+  // TODO
+  //await importData(db)
 
   console.log('Setup done')
 }

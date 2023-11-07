@@ -51,6 +51,7 @@
 \todo{Design}
 
 \section{Implementation}
+
 \todoinline{
     In an implementation chapter, you are describing and justifying how you implemented your product, which for a software product means at the code level.
     Do not attempt to describe every detail. For a software product, do not include large sections of program code. Any code presented should be to illustrate important
@@ -64,6 +65,18 @@
     Pick out the key parts of your implementation and provide a rationale for them. During your attempts to implement your product, you may have had to face unforeseen
     problems. Explain how you overcame them. They may have caused you to modify the original design. Discuss the implications of those changes.
 }
+
+\subsection{Backend}
+
+\subsubsection{Data Import}
+\todo{Data import}
+
+Data is imported from the \cite{bien_recipenlg_2020} dataset during setup and converted into the schema for the app.
+
+An unforseen issue came up during import where many of the ingredients were extremely specific and/or contained misspellings,
+e.g., \enquote*{lemon juice several minced anchovy filets} resulting in ~200,000 total ingredients being listed.
+This was worked around by filtering ingredients to those that appear in at least \todo{How many?} recipes resulting in a
+much more manageable \todo{How many?} ingredients with \todo{How many?} recipes.
 
 \todo{Implementation}
 
