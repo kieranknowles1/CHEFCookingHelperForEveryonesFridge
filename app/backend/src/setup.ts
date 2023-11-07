@@ -3,9 +3,8 @@
  * This script should be run using `npm run setup` before running the main script.
  */
 
-import { createReadStream, statSync } from 'fs'
-import { readFile } from 'fs/promises'
-import { type Database } from 'sqlite'
+import { createReadStream, statSync, readFileSync } from 'fs'
+import { type Database } from 'sqlite3'
 import cliProgress from 'cli-progress'
 import csv from 'csv-parse'
 import path from 'path'
@@ -17,19 +16,19 @@ import { openDb } from './openDb'
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
 
-async function setupSchema (db: Database): Promise<void> {
-  const schema = await readFile(SCHEMA_PATH, 'utf-8')
-  await db.exec(schema)
+function setupSchema (db: Database): void {
+  const schema = readFileSync(SCHEMA_PATH, 'utf-8')
+  db.exec(schema)
 }
 
 function addRow (db: Database, row: any): void {
   // TODO: Handle the ingredients and convert directions to one string. Probably need a separate pass to gather ingredients first
-  db.run('INSERT INTO recipe (name, directions, link) VALUES (?, ?, ?)', row.title, row.directions, row.link).catch((ex) => { throw ex })
+  db.run('INSERT INTO recipe (name, directions, link) VALUES (?, ?, ?)', row.title, row.directions, row.link)
 }
 
-async function loadData (db: Database): Promise<void> {
+function loadData (db: Database): void {
   // Run everything within a transaction in order to reduce I/O workload
-  await db.run('BEGIN TRANSACTION')
+  db.run('BEGIN TRANSACTION')
   const total = statSync(INITIAL_DATA_PATH).size
 
   const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
@@ -50,18 +49,14 @@ async function loadData (db: Database): Promise<void> {
     })
     .on('end', () => {
       bar.stop()
-      db.run('COMMIT').catch((ex) => { throw ex })
+      db.run('COMMIT')
     })
 }
 
-async function main (): Promise<void> {
-  const db = await openDb()
+const db = openDb()
 
-  console.log('Setting up schema')
-  await setupSchema(db)
+console.log('Setting up schema')
+setupSchema(db)
 
-  console.log('Importing data into the database')
-  await loadData(db)
-}
-
-main().catch((ex) => { throw ex })
+console.log('Importing data into the database')
+loadData(db)
