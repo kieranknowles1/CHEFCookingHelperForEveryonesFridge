@@ -12,7 +12,7 @@ apt-get update
 # TODO
 
 # Setup app
-# TODO: This may be part of init for containers
+# TODO: Download dataset
 
 # Run app
 # TODO

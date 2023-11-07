@@ -17,3 +17,4 @@
 *.wc
 
 node_modules/
+working_data/

@@ -4,9 +4,11 @@
   "description": "Backend for the CHEF system.",
   "main": "index.js",
   "scripts": {
+    "setup": "node build/setup.js",
     "start": "node build/index.js",
     "build": "tsc -p .",
     "dev": "nodemon src/index.ts",
+    "dev-setup": "nodemon src/setup.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Kieran Knowles",
@@ -21,5 +23,9 @@
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.6"
   }
 }
