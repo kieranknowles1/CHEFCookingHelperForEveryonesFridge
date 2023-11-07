@@ -10,7 +10,7 @@ import csv from 'csv-parse'
 import path from 'path'
 import progressTracker from 'progress-stream'
 
-import { openDb } from './openDb'
+import ChefDatabase from 'ChefDatabase'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
@@ -22,7 +22,7 @@ const MIN_INGREDIENT_OCCURENCES = 1000
  * Create a progress listener and bar and start the bar. The bar must be stopped once finished
  * @param path
  */
-function createTrackers(path: string): [progressTracker.ProgressStream, cliProgress.Bar] {
+function createTrackers (path: string): [progressTracker.ProgressStream, cliProgress.Bar] {
   const total = statSync(path).size
 
   const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
