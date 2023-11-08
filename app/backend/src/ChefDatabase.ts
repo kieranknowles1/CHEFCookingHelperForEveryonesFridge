@@ -9,10 +9,23 @@ const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
 
 /**
  * Writable interface to the database, passed to the callback of {@link ChefDatabase.wrapTransaction}
+ * and is only valid for the duration of the callback.
  */
 class WritableDatabase {
   private readonly _db: ChefDatabase
   private readonly _connection: sqlite.Database
+
+  /** Whether the WritableDatabase is usable. Only true for the duration of {@link ChefDatabase.wrapTransaction} */
+  private _valid: boolean = true
+  public close (): void {
+    this._valid = false
+  }
+
+  private assertValid (): void {
+    if (!this._valid) {
+      throw new Error('WritableDatabase has been closed')
+    }
+  }
 
   public constructor (db: ChefDatabase, connection: sqlite.Database) {
     this._db = db
@@ -25,6 +38,7 @@ class WritableDatabase {
    * WARN: This will delete ALL data from the database.
    */
   public setupSchema (): void {
+    this.assertValid()
     const schema = readFileSync(SCHEMA_PATH, 'utf-8')
     this._connection.exec(schema)
   }
@@ -50,13 +64,16 @@ export default class ChefDatabase {
    * The transaction will be rolled back if an uncaught exception occurs and the exception re-thrown
    */
   public wrapTransaction (callback: (db: WritableDatabase) => void): void {
-    this._connection.run('BEGIN TRANSACTION')
+    const writable = new WritableDatabase(this, this._connection)
     try {
-      callback(new WritableDatabase(this, this._connection))
+      this._connection.run('BEGIN TRANSACTION')
+      callback(writable)
       this._connection.run('COMMIT')
     } catch (ex) {
       this._connection.run('ROLLBACK')
       throw ex
+    } finally {
+      writable.close()
     }
   }
 }
