@@ -3,8 +3,7 @@
  * This script should be run using `npm run setup` before running the main script.
  */
 
-import { createReadStream, statSync, readFileSync } from 'fs'
-import { type Database } from 'sqlite3'
+import { createReadStream, statSync } from 'fs'
 import cliProgress from 'cli-progress'
 import csv from 'csv-parse'
 import path from 'path'
@@ -14,7 +13,7 @@ import ChefDatabase from 'ChefDatabase'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
-const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
+
 // TODO: Needs fine tuning
 const MIN_INGREDIENT_OCCURENCES = 1000
 
@@ -36,11 +35,6 @@ function createTrackers (path: string): [progressTracker.ProgressStream, cliProg
   })
 
   return [progress, bar]
-}
-
-function setupSchema (db: Database): void {
-  const schema = readFileSync(SCHEMA_PATH, 'utf-8')
-  db.exec(schema)
 }
 
 async function getIngredientNames (): Promise<Map<string, number>> {
@@ -70,16 +64,16 @@ async function getIngredientNames (): Promise<Map<string, number>> {
     }))
 }
 
-async function addIngredientsToDatabase (db: Database, ingredients: Map<string, number>): Promise<void> {
+async function addIngredientsToDatabase (ingredients: Map<string, number>): Promise<void> {
   // TODO: Implement
 }
 
-function addRow (db: Database, row: any): void {
+function addRow (row: any): void {
   // TODO: Handle the ingredients and convert directions to one string. Probably need a separate pass to gather ingredients first
   db.run('INSERT INTO recipe (name, directions, link) VALUES (?, ?, ?)', row.title, row.directions, row.link)
 }
 
-async function importData (db: Database, ingredients: Map<string, number>): Promise<void> {
+async function importData (ingredients: Map<string, number>): Promise<void> {
   // Run everything within a transaction in order to reduce I/O workload
   db.run('BEGIN TRANSACTION')
 
@@ -99,7 +93,7 @@ async function importData (db: Database, ingredients: Map<string, number>): Prom
       })
 
       if (valid) {
-        addRow(db, data)
+        addRow(data)
       }
     })
     .on('end', () => {
@@ -111,20 +105,18 @@ async function importData (db: Database, ingredients: Map<string, number>): Prom
 }
 
 async function main (): Promise<void> {
-  const db = openDb()
-
   console.log('Setting up schema')
-  setupSchema(db)
+  ChefDatabase.Instance.wrapTransaction((writable) => { writable.setupSchema() })
 
   console.log('Getting ingredient names')
   const ingredients = await getIngredientNames()
 
   console.log('Adding ingredients to database')
-  await addIngredientsToDatabase(db, ingredients)
+  await addIngredientsToDatabase(ingredients)
 
   console.log('Importing data into the database')
   // TODO
-  await importData(db, ingredients)
+  await importData(ingredients)
 
   console.log('Setup done')
 }
