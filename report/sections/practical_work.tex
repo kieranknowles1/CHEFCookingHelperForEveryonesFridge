@@ -66,6 +66,8 @@
     problems. Explain how you overcame them. They may have caused you to modify the original design. Discuss the implications of those changes.
 }
 
+\todo{Implementation}
+
 \subsection{Backend}
 
 \subsubsection{Data Import}
@@ -73,12 +75,11 @@
 
 Data is imported from the \cite{bien_recipenlg_2020} dataset during setup and converted into the schema for the app.
 
-An unforseen issue came up during import where many of the ingredients were extremely specific and/or contained misspellings,
+An unforeseen issue came up during import where many of the ingredients were extremely specific and/or contained misspellings,
 e.g., \enquote*{lemon juice several minced anchovy filets} resulting in ~200,000 total ingredients being listed.
 This was worked around by filtering ingredients to those that appear in at least \todo{How many?} recipes resulting in a
 much more manageable \todo{How many?} ingredients with \todo{How many?} recipes.
 
-\todo{Implementation}
 
 \section{Testing}
 \todoinline{

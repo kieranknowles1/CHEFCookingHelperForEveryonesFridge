@@ -1,13 +1,12 @@
 \ProvidesPackage{checkbox}
 
-% For \ding
-\RequirePackage{pifont}
+\RequirePackage{dingnames}
 
 \newcommand{\checkbox}[1]{
     \ifstrequal{#1}{empty}{
         $\square$
     }{\ifstrequal{#1}{checked}{
-        \ding{51}
+        \dingcheck{}
     }{
         \PackageError{checkbox}{Invalid argument. Expected "empty" or "checked".}{}
     }}

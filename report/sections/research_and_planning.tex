@@ -97,7 +97,7 @@ as part of the research into the problem domain. These solutions, while useful, 
 that saves a user's list of available ingredients. Creating an account also allows for recipes to be favourited/bookmarked
 which would then be shown on a dedicated page. SuperCook additionally shows which of the user's favourite recipes
 can be made using available ingredients and which ingredients are missing. Both apps also use exclusively imperial
-units for ingredients which are not understood by the majority of the world. \chef{} will use metric units by default
+units for ingredients that are not understood by the majority of the world. \chef{} will use metric units by default
 as it is targeted at a UK audience.
 
 However, neither of these apps has a system for sharing pantries between users or specifying disliked ingredients. These features would be useful for households with multiple people.
@@ -109,6 +109,24 @@ users getting bored of eating the same meals over and over.
 
 MyFridgeFood has a feature to submit new recipes which are shared between all users. This is a useful feature as it allows for the community to contribute to the database
 of recipes, however, these cannot be kept private to just one user.
+
+\subsection{User Reviews}
+
+The user reviews of the analyzed competitors were consulted which found the following issues:
+
+\begin{figure}[h!]
+    \todo{How should I be including reviews?}
+    \textbf{Just Me} \dingstarfull \dingstarempty \dingstarempty \dingstarempty \dingstarempty
+
+    I tried the using the website first and I checked the ingredients I have on hand such as chicken,
+    butter, etc. The first recipes it gave me is Spicy garlic steak - um garlic nor steak was on my list another was
+    diet cola chicken well at least it got chicken right. Lol. I thought maybe the app was better but no it does the same thing.
+    I tried another app with the same ingredient list I have and it popped up great recipes so I'll stick with it.
+    This app is being Uninstalled. I don't recommend.
+
+    \caption{A user review complaining about MyFridgeFood suggesting recipes for which they lacked ingredients}
+    \label{fig:review_missing_ingredients}
+\end{figure}
 
 \section{Product Requirements}
 
@@ -131,9 +149,10 @@ of recipes, however, these cannot be kept private to just one user.
 }
 
 \begin{table}[h!]
+    \caption{Functional Requirements}
+    \label{tab:functional_requirements}
     \begin{tabulary}{\textwidth}{|l|L|l|l|}
         \hline
-        \multicolumn{4}{|c|}{\textbf{Functional Requirements}} \\\hline
         \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} \\\hline
 
         \requirement{
@@ -170,10 +189,27 @@ of recipes, however, these cannot be kept private to just one user.
         }
 
         \requirement{
+            \textbf{Avoid recipes with missing ingredients.} The system \textbf{must} not suggest recipes that the user
+            is missing ingredients for unless explicitly requested.
+        }{
+            Competitor Analysis
+        }{
+            Must-have
+        }
+
+        \requirement{
             \textbf{Scan ingredients.} The system \textbf{should} allow the user to scan the barcodes of ingredients to add
             them to their \virtualfridge
         }{
             TODO: Source
+        }{
+            Should-have
+        }
+
+        \requirement{
+            \textbf{Use metric units.} All units \textbf{should} be displayed in metric.
+        }{
+            Competitor Analysis
         }{
             Should-have
         }
@@ -188,8 +224,18 @@ of recipes, however, these cannot be kept private to just one user.
         }
 
         \requirement{
+            \label{req:similar_recipes}
             \textbf{Find similar recipes.} The system \textbf{should} use a machine learning model to find and suggest
             similar recipes to those that the user has previously made.
+        }{
+            TODO: Source
+        }{
+            Should-have
+        }
+
+        \requirement{
+            \textbf{Avoid repeating recipes.} The system \textbf{should} avoid suggesting recipes that are too similar
+            to those that have been made recently using the same model as \hyperref[req:similar_recipes]{\textbf{Find similar recipes}}
         }{
             TODO: Source
         }{
@@ -199,16 +245,15 @@ of recipes, however, these cannot be kept private to just one user.
             \setcounter{functionalreqcounter}{0}
         }
     \end{tabulary}
-
-    \caption{Functional Requirements}
-    \label{tab:functional_requirements}
 \end{table}
 
 \renewcommand{\requirementtype}{NFR}
 \begin{table}[h!]
+    \caption{Non-functional Requirements}
+    \label{tab:non_functional_requirements}
+
     \begin{tabulary}{\textwidth}{|l|L|l|l|}
         \hline
-        \multicolumn{4}{|c|}{\textbf{Non-functional Requirements}} \\\hline
         \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} \\\hline
 
         \requirement{
@@ -230,9 +275,6 @@ of recipes, however, these cannot be kept private to just one user.
             \setcounter{functionalreqcounter}{0}
         }
     \end{tabulary}
-
-    \caption{Non-functional Requirements}
-    \label{tab:non_functional_requirements}
 \end{table}
 
 \todoinline{
@@ -289,6 +331,9 @@ research purposes.
 The following information is included for each recipe:
 
 \begin{table}[h!]
+    \caption{RecipeNLG Row Format}
+    \label{tab:recipenlg_row_format}
+
     \begin{tabulary}{\textwidth}{|l|l|L|}
         \hline
         \textbf{Name} & \textbf{Type} & \textbf{Description} \\\hline
@@ -305,9 +350,6 @@ The following information is included for each recipe:
 
         NER & String array & A list of ingredients without quantities. \\\hline
     \end{tabulary}
-
-    \caption{RecipeNLG Row Format}
-    \label{tab:recipenlg_row_format}
 \end{table}
 
 This data is imported into the app's database during setup. See \todo{Schema} for the schema.
