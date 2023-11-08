@@ -70,8 +70,6 @@ async function addIngredientsToDatabase (ingredients: Map<string, number>): Prom
 }
 
 async function importData (): Promise<void> {
-  // Run everything within a transaction in order to reduce I/O workload
-
   const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
 
   return ChefDatabase.Instance.wrapTransactionAsync(async (writable) => {
