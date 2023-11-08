@@ -87,4 +87,24 @@ export default class ChefDatabase {
       writable.close()
     }
   }
+
+  /**
+   * Async version of {@link wrapTransaction} that waits for the promise to be
+   * settled before committing/rolling back
+   */
+  public async wrapTransactionAsync (callback: (db: WritableDatabase) => Promise<void>): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const writable = new WritableDatabase(this, this._connection)
+      this._connection.run('BEGIN TRANSACTION')
+      callback(writable).then(() => {
+        this._connection.run('COMMIT')
+        resolve()
+      }).catch((ex) => {
+        this._connection.run('ROLLBACK')
+        reject(ex)
+      }).finally(() => {
+        writable.close()
+      })
+    })
+  }
 }
