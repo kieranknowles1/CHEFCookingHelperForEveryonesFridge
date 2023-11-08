@@ -10,6 +10,7 @@ import path from 'path'
 import progressTracker from 'progress-stream'
 
 import ChefDatabase from 'ChefDatabase'
+import Recipe, { type ICsvRecipeRow } from 'Recipe'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
@@ -70,33 +71,25 @@ async function addIngredientsToDatabase (ingredients: Map<string, number>): Prom
 
 async function importData (ingredients: Map<string, number>): Promise<void> {
   // Run everything within a transaction in order to reduce I/O workload
-  db.run('BEGIN TRANSACTION')
 
   const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
 
-  return new Promise<void>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
-    .pipe(progress)
-    .pipe(csv.parse({ columns: true }))
-    .on('data', (data) => {
-      // TODO: Parse row to an object first
-      const rowIngredients = JSON.parse(data.NER.toLowerCase()) as string[]
-      let valid = true
-      rowIngredients.forEach(ingredient => {
-        if (ingredients.get(ingredient) === undefined) {
-          valid = false
-        }
-      })
+  return ChefDatabase.Instance.wrapTransactionAsync(async (writable) => {
+    return new Promise<void>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
+      .pipe(progress)
+      .pipe(csv.parse({ columns: true }))
+      .on('data', (data: ICsvRecipeRow) => {
+        const recipe = Recipe.fromCsvRow(data)
 
-      if (valid) {
-        addRow(data)
-      }
-    })
-    .on('end', () => {
-      bar.stop()
-      db.run('COMMIT')
-      resolve()
-    })
-  )
+        writable.addRecipe(recipe)
+      })
+      .on('end', () => {
+        bar.stop()
+        resolve()
+      })
+      .on('error', (err) => { reject(err) })
+    )
+  })
 }
 
 async function main (): Promise<void> {
