@@ -68,11 +68,6 @@ async function addIngredientsToDatabase (ingredients: Map<string, number>): Prom
   // TODO: Implement
 }
 
-function addRow (row: any): void {
-  // TODO: Handle the ingredients and convert directions to one string. Probably need a separate pass to gather ingredients first
-  db.run('INSERT INTO recipe (name, directions, link) VALUES (?, ?, ?)', row.title, row.directions, row.link)
-}
-
 async function importData (ingredients: Map<string, number>): Promise<void> {
   // Run everything within a transaction in order to reduce I/O workload
   db.run('BEGIN TRANSACTION')

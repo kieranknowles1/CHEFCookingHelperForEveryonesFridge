@@ -2,6 +2,7 @@ import sqlite from 'sqlite3'
 import path from 'path'
 
 import { readFileSync } from 'fs'
+import type Recipe from 'Recipe'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
@@ -41,6 +42,16 @@ class WritableDatabase {
     this.assertValid()
     const schema = readFileSync(SCHEMA_PATH, 'utf-8')
     this._connection.exec(schema)
+  }
+
+  public addRecipe (recipe: Recipe): void {
+    this.assertValid()
+    this._connection.run(`
+      INSERT INTO recipe
+        (name, directions, link)
+      VALUES
+        (?, ?, ?)
+    `, recipe.name, recipe.directions, recipe.link)
   }
 }
 
