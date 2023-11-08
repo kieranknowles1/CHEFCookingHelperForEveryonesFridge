@@ -9,8 +9,8 @@ import csv from 'csv-parse'
 import path from 'path'
 import progressTracker from 'progress-stream'
 
-import ChefDatabase from 'ChefDatabase'
-import Recipe, { type ICsvRecipeRow } from 'Recipe'
+import ChefDatabase from './ChefDatabase'
+import Recipe, { type ICsvRecipeRow } from './Recipe'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
@@ -69,7 +69,7 @@ async function addIngredientsToDatabase (ingredients: Map<string, number>): Prom
   // TODO: Implement
 }
 
-async function importData (ingredients: Map<string, number>): Promise<void> {
+async function importData (): Promise<void> {
   // Run everything within a transaction in order to reduce I/O workload
 
   const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
@@ -94,17 +94,17 @@ async function importData (ingredients: Map<string, number>): Promise<void> {
 
 async function main (): Promise<void> {
   console.log('Setting up schema')
-  ChefDatabase.Instance.wrapTransaction((writable) => { writable.setupSchema() })
+  ChefDatabase.Instance.setupSchema()
 
-  console.log('Getting ingredient names')
-  const ingredients = await getIngredientNames()
+  // console.log('Getting ingredient names')
+  // const ingredients = await getIngredientNames()
 
-  console.log('Adding ingredients to database')
-  await addIngredientsToDatabase(ingredients)
+  // console.log('Adding ingredients to database')
+  // await addIngredientsToDatabase(ingredients)
 
   console.log('Importing data into the database')
   // TODO
-  await importData(ingredients)
+  await importData()
 
   console.log('Setup done')
 }

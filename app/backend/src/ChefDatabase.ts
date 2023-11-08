@@ -33,17 +33,6 @@ class WritableDatabase {
     this._connection = connection
   }
 
-  /**
-   * Run the schema script. Should only be used during setup
-   *
-   * WARN: This will delete ALL data from the database.
-   */
-  public setupSchema (): void {
-    this.assertValid()
-    const schema = readFileSync(SCHEMA_PATH, 'utf-8')
-    this._connection.exec(schema)
-  }
-
   public addRecipe (recipe: Recipe): void {
     this.assertValid()
     this._connection.run(`
@@ -68,6 +57,16 @@ export default class ChefDatabase {
 
   private constructor () {
     this._connection = new sqlite.Database(DATABASE_PATH)
+  }
+
+  /**
+   * Run the schema script. Should only be used during setup
+   *
+   * WARN: This will delete ALL data from the database.
+   */
+  public setupSchema(): void {
+    const schema = readFileSync(SCHEMA_PATH, 'utf-8')
+    this._connection.exec(schema)
   }
 
   /**
