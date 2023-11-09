@@ -1,3 +1,5 @@
+import { type IngredientMap, ingredientMapFactory } from './Ingredient'
+
 /**
  * An unparsed row as it appears in full_dataset.csv
  * NOTE: Arrays are represented as strings here
@@ -25,9 +27,17 @@ export default class Recipe {
     const directionsArray = JSON.parse(row.directions) as string[]
     this.directions = directionsArray.join('\n')
     this.link = row.link
+
+    // TODO: Get the amounts
+    const ingredientsArray = JSON.parse(row.NER) as string[]
+    ingredientsArray.forEach(ingredient => {
+      this.ingredients.set(ingredient, 1)
+    })
   }
 
   name: string
   directions: string
   link: string
+
+  ingredients: IngredientMap = ingredientMapFactory()
 }

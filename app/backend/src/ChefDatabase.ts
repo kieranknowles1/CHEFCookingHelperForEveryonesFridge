@@ -3,6 +3,7 @@ import path from 'path'
 
 import { readFileSync } from 'fs'
 import type Recipe from 'Recipe'
+import { type Ingredient } from 'Ingredient'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
@@ -42,6 +43,16 @@ class WritableDatabase {
         (?, ?, ?)
     `, recipe.name, recipe.directions, recipe.link)
   }
+
+  public addIngredient (ingredient: Ingredient): void {
+    this.assertValid()
+    this._connection.run(`
+      INSERT INTO ingredient
+        (name)
+      VALUES
+        (?)
+      `, ingredient)
+  }
 }
 
 export default class ChefDatabase {
@@ -64,7 +75,7 @@ export default class ChefDatabase {
    *
    * WARN: This will delete ALL data from the database.
    */
-  public setupSchema(): void {
+  public setupSchema (): void {
     const schema = readFileSync(SCHEMA_PATH, 'utf-8')
     this._connection.exec(schema)
   }

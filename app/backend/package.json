@@ -27,6 +27,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@glossa-glo/case-insensitive-map": "^4.2.7-beta",
     "cli-progress": "^3.12.0",
     "csv-parse": "^5.5.2",
     "progress-stream": "^2.0.0",
