@@ -60,6 +60,9 @@ async function getIngredientUsageCounts (): Promise<Map<Ingredient, number>> {
     .on('end', () => {
       bar.stop()
       resolve(names)
+    })
+    .on('error', err => {
+      reject(err)
     }))
 }
 
@@ -84,6 +87,14 @@ function filterIngredients (raw: Map<Ingredient, number>): Set<Ingredient> {
   }
 
   return out
+}
+
+function addIngredientsToDatabase (ingredients: Set<Ingredient>): void {
+  ChefDatabase.Instance.wrapTransaction(writable => {
+    ingredients.forEach(ingredient => {
+      writable.addIngredient(ingredient)
+    })
+  })
 }
 
 async function importData (): Promise<void> {
@@ -119,8 +130,8 @@ async function main (): Promise<void> {
 
   console.log(filtered)
 
-  // console.log('Adding ingredients to database')
-  // await addIngredientsToDatabase(ingredients)
+  console.log('Adding ingredients to database')
+  addIngredientsToDatabase(filtered)
 
   console.log('Importing data into the database')
   // TODO
