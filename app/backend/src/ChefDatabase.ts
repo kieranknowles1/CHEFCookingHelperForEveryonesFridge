@@ -64,7 +64,7 @@ export default class ChefDatabase {
    *
    * WARN: This will delete ALL data from the database.
    */
-  public setupSchema(): void {
+  public setupSchema (): void {
     const schema = readFileSync(SCHEMA_PATH, 'utf-8')
     this._connection.exec(schema)
   }
