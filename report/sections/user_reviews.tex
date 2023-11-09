@@ -1,25 +1,46 @@
-\begin{figure}[H]
-    \caption{A user review complaining about MyFridgeFood suggesting recipes they lacked ingredients for}
-    \label{fig:review_missing_ingredients}
+% Usage:
+%   #1: Caption
+%   #2: Label ID
+%   #3: Reviewer
+%   #4: Stars (use dings)
+%   #5: App
+%   #6: Review content
+\newcommand{\review}[6]{
+    \begin{figure}[H]
+        \caption{#1}
+        \label{#2}
 
-    \todo{How should I be including reviews?}
-    \textbf{Just Me} \dingstarfull \dingstarempty \dingstarempty \dingstarempty \dingstarempty
+        \textbf{#3} #4
+        \hfill\textbf{#5}
 
-    I tried the using the website first and I checked the ingredients I have on hand such as chicken,
-    butter, etc. The first recipes it gave me is Spicy garlic steak - um garlic nor steak was on my list another was
-    diet cola chicken well at least it got chicken right. Lol. I thought maybe the app was better but no it does the same thing.
-    I tried another app with the same ingredient list I have and it popped up great recipes so I'll stick with it.
-    This app is being Uninstalled. I don't recommend.
-\end{figure}
+        #6
+    \end{figure}
+}
+\todo{How should I be including reviews?}
 
-\begin{figure}[H]
-    \caption{A user review complaining about the lack of variety in suggested recipes}
-    \label{fig:review_lack_variety}
+\review
+    {A user review complaining about MyFridgeFood suggesting recipes they lacked ingredients for}
+    {fig:review_missing_ingredients}
+    {Just Me}
+    {\dingstarfull \dingstarempty \dingstarempty \dingstarempty \dingstarempty}
+    {MyFridgeFood}
+    {
+        I tried the using the website first and I checked the ingredients I have on hand such as chicken,
+        butter, etc. The first recipes it gave me is Spicy garlic steak - um garlic nor steak was on my list another was
+        diet cola chicken well at least it got chicken right. Lol. I thought maybe the app was better but no it does the same thing.
+        I tried another app with the same ingredient list I have and it popped up great recipes so I'll stick with it.
+        This app is being Uninstalled. I don't recommend.
+    }
 
-    \textbf{Stephen Connell} \dingstarfull \dingstarfull \dingstarempty \dingstarempty \dingstarempty
-
-    Where are the recipes? I mean I like bacon, but not that much. I have tried many ingredients
-    but outside of chicken eggs and bacon it seem no content is available. As an example,
-    broccoli returns 1 result: for milkshake... 0\textunderscore o. Genuinely great idea but not with this
-    implementation. Shame really.
-\end{figure}
+\review
+    {A user review complaining about the lack of variety in suggested recipes}
+    {fig:review_lack_variety}
+    {Stephen Connell}
+    {\dingstarfull \dingstarfull \dingstarempty \dingstarempty \dingstarempty}
+    {MyFridgeFood}
+    {
+        Where are the recipes? I mean I like bacon, but not that much. I have tried many ingredients
+        but outside of chicken eggs and bacon it seem no content is available. As an example,
+        broccoli returns 1 result: for milkshake... 0\textunderscore o. Genuinely great idea but not with this
+        implementation. Shame really.
+    }
