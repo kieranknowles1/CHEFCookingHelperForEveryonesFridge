@@ -28,7 +28,7 @@ export function parseCsvRow (row: ICsvRecipeRow): IngredientMap {
   const map = new CiMap<IngredientId, IngredientAmount>()
 
   // NER contains names, ingredients contains names and amounts
-  const names = new Set(JSON.parse(row.NER) as string[])
+  const names = JSON.parse(row.NER) as string[]
   const amounts = JSON.parse(row.ingredients) as string[]
 
   names.forEach(name => {
