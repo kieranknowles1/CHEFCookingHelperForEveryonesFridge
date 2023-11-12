@@ -10,8 +10,8 @@ import path from 'path'
 import progressTracker from 'progress-stream'
 
 import ChefDatabase from './ChefDatabase'
-import Recipe, { type ICsvRecipeRow } from './Recipe'
-import type { Ingredient } from 'Ingredient'
+import Recipe from './Recipe'
+import type ICsvRecipeRow from './ICsvRecipeRow'
 
 const CSV_PARSER_OPTIONS: csv.Options = {
   // Use the first line for column names. Rows will be loaded as objects
@@ -22,9 +22,6 @@ const CSV_PARSER_OPTIONS: csv.Options = {
 
 // TODO: Use environment variables and put this somewhere outside the container
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
-
-// TODO: Needs fine tuning
-const MAX_INGREDIENTS = 100
 
 /**
  * Create a progress listener and bar and start the bar. The bar must be stopped once finished
@@ -44,59 +41,6 @@ function createTrackers (path: string): [progressTracker.ProgressStream, cliProg
   return [progress, bar]
 }
 
-async function getIngredientUsageCounts (): Promise<Map<Ingredient, number>> {
-  const names = new Map<Ingredient, number>()
-  const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
-
-  return new Promise((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
-    .pipe(progress)
-    .pipe(csv.parse(CSV_PARSER_OPTIONS))
-    .on('data', (data: ICsvRecipeRow) => {
-      const recipe = Recipe.fromCsvRow(data)
-      recipe.ingredients.forEach((amount, ingredient) => {
-        names.set(ingredient, (names.get(ingredient) ?? 0) + 1)
-      })
-    })
-    .on('end', () => {
-      bar.stop()
-      resolve(names)
-    })
-    .on('error', err => {
-      reject(err)
-    }))
-}
-
-/**
- * Filter ingredients to only the most common ones to keep the set of ingredients manageable
- */
-function filterIngredients (raw: Map<Ingredient, number>): Set<Ingredient> {
-  interface IngredientFrequency { ingredient: Ingredient, count: number }
-  const byFrequency: IngredientFrequency[] = []
-
-  raw.forEach((value, key) => {
-    byFrequency.push({
-      ingredient: key,
-      count: value
-    })
-  })
-  byFrequency.sort((a, b) => b.count - a.count)
-
-  const out = new Set<Ingredient>()
-  for (let i = 0; i < MAX_INGREDIENTS; i++) {
-    out.add(byFrequency[i].ingredient)
-  }
-
-  return out
-}
-
-function addIngredientsToDatabase (ingredients: Set<Ingredient>): void {
-  ChefDatabase.Instance.wrapTransaction(writable => {
-    ingredients.forEach(ingredient => {
-      writable.addIngredient(ingredient)
-    })
-  })
-}
-
 async function importData (): Promise<void> {
   const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
 
@@ -105,9 +49,13 @@ async function importData (): Promise<void> {
       .pipe(progress)
       .pipe(csv.parse(CSV_PARSER_OPTIONS))
       .on('data', (data: ICsvRecipeRow) => {
-        const recipe = Recipe.fromCsvRow(data)
-
-        writable.addRecipe(recipe)
+        try {
+          const recipe = Recipe.fromCsvRow(data)
+          writable.addRecipe(recipe)
+        } catch (ex) {
+          console.error(data.NER)
+          console.error(ex)
+        }
       })
       .on('end', () => {
         bar.stop()
@@ -121,17 +69,6 @@ async function importData (): Promise<void> {
 async function main (): Promise<void> {
   console.log('Setting up schema')
   ChefDatabase.Instance.setupSchema()
-
-  console.log('Getting ingredient names')
-  const ingredients = await getIngredientUsageCounts()
-
-  console.log('Filtering to most common ingredients')
-  const filtered = filterIngredients(ingredients)
-
-  console.log(filtered)
-
-  console.log('Adding ingredients to database')
-  addIngredientsToDatabase(filtered)
 
   console.log('Importing data into the database')
   // TODO

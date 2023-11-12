@@ -1,21 +1,5 @@
-import { type IngredientMap, ingredientMapFactory } from './Ingredient'
-
-/**
- * An unparsed row as it appears in full_dataset.csv
- * NOTE: Arrays are represented as strings here
- */
-export interface ICsvRecipeRow {
-  title: string
-  /** JSON array of ingredient names and amounts */
-  ingredients: string
-  /** JSON array of steps */
-  directions: string
-  link: string
-  /** The dataset the recipe was sourced from */
-  source: string
-  /** JSON array of ingredient names */
-  NER: string
-}
+import { parseCsvRow, type IngredientMap } from './Ingredient.js'
+import type ICsvRecipeRow from './ICsvRecipeRow'
 
 export default class Recipe {
   public static fromCsvRow (row: ICsvRecipeRow): Recipe {
@@ -29,15 +13,12 @@ export default class Recipe {
     this.link = row.link
 
     // TODO: Get the amounts
-    const ingredientsArray = JSON.parse(row.NER) as string[]
-    ingredientsArray.forEach(ingredient => {
-      this.ingredients.set(ingredient, 1)
-    })
+    this.ingredients = parseCsvRow(row)
   }
 
   name: string
   directions: string
   link: string
 
-  ingredients: IngredientMap = ingredientMapFactory()
+  ingredients: IngredientMap
 }
