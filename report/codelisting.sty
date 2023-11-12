@@ -1,0 +1,9 @@
+\ProvidesPackage{codelisting}
+
+\RequirePackage{xcolor}
+
+\definecolor{codelistingcolor}{rgb}{0.8,0.8,0.8}
+
+\newcommand{\codelisting}[1]{%
+    {\ttfamily\colorbox{codelistingcolor}{#1}}%
+}

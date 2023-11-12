@@ -1,4 +1,4 @@
-import { parseCsvRow, type IngredientMap } from './Ingredient.js'
+import { parseCsvRow, type IngredientMap } from './Ingredient'
 import type ICsvRecipeRow from './ICsvRecipeRow'
 
 export default class Recipe {

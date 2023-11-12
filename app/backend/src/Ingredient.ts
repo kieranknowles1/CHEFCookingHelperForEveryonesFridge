@@ -1,10 +1,10 @@
 import CiMap from '@glossa-glo/case-insensitive-map'
 import type ICsvRecipeRow from './ICsvRecipeRow.js'
-// NOTE: TypeScript is being awkward here and won't let me import the usual way
-//const Fraction = import('fraction.js')
+// NOTE: TypeScript is being awkward here. I need to include `mathjs` in package.json and include `fraction.js` here.
 import Fraction from 'fraction.js'
 
 export type IngredientId = string
+// TODO: This should include the units
 export type IngredientAmount = number
 export type IngredientMap = CiMap<IngredientId, IngredientAmount>
 
@@ -21,10 +21,7 @@ function getAmount (name: string, amounts: string[]): IngredientAmount {
   const match = found.match(AMOUNT_PATTERN)?.[1]
   if (match === undefined) { fail() }
 
-  //const frac = Fraction.
-
-  console.log(match)
-  return 0
+  return new Fraction(match).valueOf()
 }
 
 export function parseCsvRow (row: ICsvRecipeRow): IngredientMap {

@@ -31,5 +31,9 @@
 \section{Project Process}
 \todo{Project Process}
 
-An unforeseen issue during data import was the number of unique ingredients found which totalled ~200,000. This was worked
+An unexpected issue during data import was the number of unique ingredients found which totalled ~200,000. This was worked
 around by \todo{Document solution}
+
+The \codelisting{fraction.js} package used to parse ingredient amounts could not be imported at first due to it
+being packaged as an ECMAScript module while the backend is written in CommonJS. For unknown reasons, adding the
+\codelisting{mathjs} package allowed for \codelisting{fraction.js} to be imported without issue.
