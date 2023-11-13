@@ -4,16 +4,17 @@
  */
 
 import { createReadStream, statSync } from 'fs'
+import CiMap from '@glossa-glo/case-insensitive-map'
 import cliProgress from 'cli-progress'
 import csv from 'csv-parse'
 import path from 'path'
 import progressTracker from 'progress-stream'
 
+import { type IngredientId, UnparsedIngredientError } from './Ingredient'
 import ChefDatabase from './ChefDatabase'
+import logger, { logError } from './logger'
 import Recipe from './Recipe'
 import type ICsvRecipeRow from './ICsvRecipeRow'
-import { ingredientMapFactory, type IngredientId, UnparsedIngredientError } from './Ingredient'
-import logger, { logError } from './logger'
 
 const CSV_PARSER_OPTIONS: csv.Options = {
   // Use the first line for column names. Rows will be loaded as objects
@@ -24,11 +25,6 @@ const CSV_PARSER_OPTIONS: csv.Options = {
 
 // TODO: Use environment variables and put this somewhere outside the container
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
-
-/** The sample size for determining the most common ingredients */
-const DATASET_SAMPLE_SIZE = 10000
-/** The number of ingredients to use, selected from the most common */
-const NUM_INGREDIENTS = 100
 
 /**
  * Create a progress listener and bar and start the bar. The bar must be stopped once finished
@@ -48,14 +44,19 @@ function createTrackers (path: string): [progressTracker.ProgressStream, cliProg
   return [progress, bar]
 }
 
+/** Map of missed ingredient => frequency */
+const missedIngredients = new CiMap<string, number>()
+
 function recipeValid (row: ICsvRecipeRow, commonIngredients: Map<string, IngredientId>): boolean {
+  let valid = true
   const ingredients = JSON.parse(row.NER) as string[]
   for (const ingredient of ingredients) {
     if (!commonIngredients.has(ingredient)) {
-      return false
+      missedIngredients.set(ingredient, (missedIngredients.get(ingredient) ?? 0) + 1)
+      valid = false
     }
   }
-  return true
+  return valid
 }
 
 async function importData (): Promise<void> {
@@ -100,5 +101,8 @@ async function main (): Promise<void> {
   await importData()
 
   logger.log('info', 'Setup done')
+
+  const missedFrequencies = Array.from(missedIngredients).sort((a, b) => b[1] - a[1])
+  console.log(missedFrequencies)
 }
 main().catch((err) => { logError(err) })

@@ -22,3 +22,12 @@ CREATE TABLE recipe_ingredient (
     recipe_id INTEGER NOT NULL REFERENCES recipe(id) ON DELETE CASCADE,
     ingredient_id INTEGER NOT NULL REFERENCES ingredient(id)
 );
+
+INSERT INTO ingredient
+    (name)
+VALUES
+    ('Salt'),
+    ('Sugar'),
+    ('Flour'),
+    ('Eggs'),
+    ('Butter')

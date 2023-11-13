@@ -5,6 +5,7 @@ import path from 'path'
 import type { IRecipe } from './Recipe'
 import type { IIngredient, IngredientId } from './Ingredient'
 import Ingredient from './Ingredient'
+import CiMap from '@glossa-glo/case-insensitive-map'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
@@ -138,7 +139,7 @@ export default class ChefDatabase {
    */
   public findIngredientByName (name: string): Ingredient | null {
     const statement = this._connection.prepare(`
-      SELECT id FROM ingredient WHERE name = ?
+      SELECT id FROM ingredient WHERE name = ? COLLATE NOCASE
     `)
     const result = statement.get(name) as any
     if (result === undefined) {
@@ -153,12 +154,12 @@ export default class ChefDatabase {
   /**
    * Get a map of ingredient names to IDs
    */
-  public getIngredientIds (): Map<string, IngredientId> {
+  public getIngredientIds (): CiMap<string, IngredientId> {
     const statement = this._connection.prepare(`
       SELECT name, id FROM ingredient
     `)
     const result = statement.all() as Array<{ name: string, id: number }>
-    const map = new Map<string, IngredientId>()
+    const map = new CiMap<string, IngredientId>()
     for (const pair of result) {
       map.set(pair.name, pair.id)
     }
