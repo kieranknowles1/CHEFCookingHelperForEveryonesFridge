@@ -1,4 +1,4 @@
-import sqlite from 'sqlite3'
+import Database from 'better-sqlite3'
 import path from 'path'
 
 import { readFileSync } from 'fs'
@@ -14,7 +14,7 @@ const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
  */
 class WritableDatabase {
   private readonly _db: ChefDatabase
-  private readonly _connection: sqlite.Database
+  private readonly _connection: Database.Database
 
   /** Whether the WritableDatabase is usable. Only true for the duration of {@link ChefDatabase.wrapTransaction} */
   private _valid: boolean = true
@@ -28,19 +28,20 @@ class WritableDatabase {
     }
   }
 
-  public constructor (db: ChefDatabase, connection: sqlite.Database) {
+  public constructor (db: ChefDatabase, connection: Database.Database) {
     this._db = db
     this._connection = connection
   }
 
   public addRecipe (recipe: Recipe): void {
     this.assertValid()
-    this._connection.run(`
+    this._connection.prepare(`
       INSERT INTO recipe
         (name, directions, link)
       VALUES
         (?, ?, ?)
-    `, recipe.name, recipe.directions, recipe.link)
+    `)
+      .run(recipe.name, recipe.directions, recipe.link)
   }
 }
 
@@ -53,10 +54,10 @@ export default class ChefDatabase {
     return this._instance
   }
 
-  private readonly _connection: sqlite.Database
+  private readonly _connection: Database.Database
 
   private constructor () {
-    this._connection = new sqlite.Database(DATABASE_PATH)
+    this._connection = new Database(DATABASE_PATH)
   }
 
   /**
@@ -76,11 +77,11 @@ export default class ChefDatabase {
   public wrapTransaction (callback: (db: WritableDatabase) => void): void {
     const writable = new WritableDatabase(this, this._connection)
     try {
-      this._connection.run('BEGIN TRANSACTION')
+      this._connection.exec('BEGIN TRANSACTION')
       callback(writable)
-      this._connection.run('COMMIT')
+      this._connection.exec('COMMIT')
     } catch (ex) {
-      this._connection.run('ROLLBACK')
+      this._connection.exec('ROLLBACK')
       throw ex
     } finally {
       writable.close()
@@ -94,12 +95,12 @@ export default class ChefDatabase {
   public async wrapTransactionAsync (callback: (db: WritableDatabase) => Promise<void>): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       const writable = new WritableDatabase(this, this._connection)
-      this._connection.run('BEGIN TRANSACTION')
+      this._connection.exec('BEGIN TRANSACTION')
       callback(writable).then(() => {
-        this._connection.run('COMMIT')
+        this._connection.exec('COMMIT')
         resolve()
       }).catch((ex) => {
-        this._connection.run('ROLLBACK')
+        this._connection.exec('ROLLBACK')
         reject(ex)
       }).finally(() => {
         writable.close()
