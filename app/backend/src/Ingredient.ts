@@ -2,7 +2,9 @@ import CiMap from '@glossa-glo/case-insensitive-map'
 import type ICsvRecipeRow from './ICsvRecipeRow.js'
 import Fraction from 'fraction.js'
 
-export type IngredientId = string
+import ChefDatabase from './ChefDatabase'
+
+export type IngredientId = number
 // TODO: This should include the units
 export type IngredientAmount = number
 export type IngredientMap = CiMap<IngredientId, IngredientAmount>
@@ -38,16 +40,22 @@ export default class Ingredient implements IIngredient {
     const amounts = JSON.parse(row.ingredients) as string[]
 
     for (const name of names) {
-      map.set(name, this.getAmount(name, amounts))
+      const ingredient = ChefDatabase.Instance.findIngredientByName(name)
+      if (ingredient === null) {
+        throw new Error(`Ingredient ${name} does not exist in database`)
+      }
+      map.set(ingredient.id, this.getAmount(name, amounts))
     }
 
     return map
   }
 
-  constructor (raw: IIngredient) {
+  constructor (raw: IIngredient, id: IngredientId) {
+    this.id = id
     this.name = raw.name
   }
 
+  id: IngredientId
   name: string
 }
 

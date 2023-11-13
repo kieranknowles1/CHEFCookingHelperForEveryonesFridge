@@ -48,68 +48,30 @@ function createTrackers (path: string): [progressTracker.ProgressStream, cliProg
   return [progress, bar]
 }
 
-/**
- * Find the most common ingredients in the dataset from a subset of its entries
- */
-async function findCommonIngredients (): Promise<Set<IngredientId>> {
-  const frequencies = ingredientMapFactory()
-
-  return new Promise<Set<IngredientId>>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
-    .pipe(csv.parse({ columns: true, to: DATASET_SAMPLE_SIZE }))
-    .on('data', (row: ICsvRecipeRow) => {
-      try {
-        const recipe = Recipe.fromCsvRow(row)
-        for (const [key] of recipe.ingredients) {
-          frequencies.set(key, (frequencies.get(key) ?? 0) + 1)
-        }
-      } catch (err) {
-        if (err instanceof UnparsedIngredientError) {
-          logError(err, 'verbose')
-        } else {
-          throw err
-        }
-      }
-    })
-    .on('end', () => {
-      const entries = Array.from(frequencies.entries())
-      entries.sort((a, b) => b[1] - a[1])
-      resolve(new Set(entries.slice(0, NUM_INGREDIENTS).map(entry => entry[0])))
-    })
-    .on('error', err => { reject(err) })
-  )
-}
-
-function recipeValid (recipe: Recipe, commonIngredients: Set<IngredientId>): boolean {
-  for (const [key] of recipe.ingredients) {
-    if (!commonIngredients.has(key)) {
+function recipeValid (row: ICsvRecipeRow, commonIngredients: Map<string, IngredientId>): boolean {
+  const ingredients = JSON.parse(row.NER) as string[]
+  for (const ingredient of ingredients) {
+    if (!commonIngredients.has(ingredient)) {
       return false
     }
   }
   return true
 }
 
-function importIngredients (commonIngredients: Set<string>): void {
-  ChefDatabase.Instance.wrapTransaction(writable => {
-    for (const ingredient of commonIngredients) {
-      writable.addIngredient({
-        name: ingredient
-      })
-    }
-  })
-}
-
-async function importData (commonIngredients: Set<IngredientId>): Promise<void> {
+async function importData (): Promise<void> {
   const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
+
+  const supportedIngredients = ChefDatabase.Instance.getIngredientIds()
 
   return ChefDatabase.Instance.wrapTransactionAsync(async (writable) => {
     return new Promise<void>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
       .pipe(progress)
       .pipe(csv.parse(CSV_PARSER_OPTIONS))
-      .on('data', (data: ICsvRecipeRow) => {
+      .on('data', (row: ICsvRecipeRow) => {
         try {
-          const recipe = Recipe.fromCsvRow(data)
           // Filter to only the most common ingredients
-          if (recipeValid(recipe, commonIngredients)) {
+          if (recipeValid(row, supportedIngredients)) {
+            const recipe = Recipe.fromCsvRow(row)
             writable.addRecipe(recipe)
           }
         } catch (err) {
@@ -133,15 +95,9 @@ async function main (): Promise<void> {
   logger.log('info', 'Setting up schema')
   ChefDatabase.Instance.setupSchema()
 
-  logger.log('info', 'Finding the most common ingredients')
-  const commonIngredients = await findCommonIngredients()
-
-  logger.log('info', 'Adding ingredients to database')
-  importIngredients(commonIngredients)
-
   logger.log('info', 'Importing data into the database')
   // TODO
-  await importData(commonIngredients)
+  await importData()
 
   logger.log('info', 'Setup done')
 }

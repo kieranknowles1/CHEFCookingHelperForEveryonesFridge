@@ -1,9 +1,10 @@
+import { readFileSync } from 'fs'
 import Database from 'better-sqlite3'
 import path from 'path'
 
-import { readFileSync } from 'fs'
-import type { IRecipe } from 'Recipe'
-import { IIngredient } from 'Ingredient'
+import type { IRecipe } from './Recipe'
+import type { IIngredient, IngredientId } from './Ingredient'
+import Ingredient from './Ingredient'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
@@ -118,5 +119,50 @@ export default class ChefDatabase {
         writable.close()
       })
     })
+  }
+
+  public getIngredient (id: IngredientId): Ingredient {
+    const statement = this._connection.prepare(`
+      SELECT name FROM ingredient WHERE id = ?
+    `)
+    const result = statement.get(id) as any
+
+    return new Ingredient({
+      name: result.name as string
+    }, id)
+  }
+
+  /**
+   * @param name The name to search for
+   * @returns The ingredient, or null if it is not found
+   */
+  public findIngredientByName (name: string): Ingredient | null {
+    const statement = this._connection.prepare(`
+      SELECT id FROM ingredient WHERE name = ?
+    `)
+    const result = statement.get(name) as any
+    if (result === undefined) {
+      return null
+    }
+
+    return new Ingredient({
+      name
+    }, result.id as number)
+  }
+
+  /**
+   * Get a map of ingredient names to IDs
+   */
+  public getIngredientIds (): Map<string, IngredientId> {
+    const statement = this._connection.prepare(`
+      SELECT name, id FROM ingredient
+    `)
+    const result = statement.all() as Array<{ name: string, id: number }>
+    const map = new Map<string, IngredientId>()
+    for (const pair of result) {
+      map.set(pair.name, pair.id)
+    }
+
+    return map
   }
 }
