@@ -5,7 +5,7 @@ import Fraction from 'fraction.js'
 import ChefDatabase from './ChefDatabase'
 
 export type IngredientId = number
-// TODO: This should include the units
+// TODO: This should include the units and convert them to metric
 export type IngredientAmount = number
 export type IngredientMap = CiMap<IngredientId, IngredientAmount>
 

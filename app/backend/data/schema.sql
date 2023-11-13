@@ -20,7 +20,9 @@ CREATE TABLE recipe (
 
 CREATE TABLE recipe_ingredient (
     recipe_id INTEGER NOT NULL REFERENCES recipe(id) ON DELETE CASCADE,
-    ingredient_id INTEGER NOT NULL REFERENCES ingredient(id)
+    ingredient_id INTEGER NOT NULL REFERENCES ingredient(id),
+
+    amount REAL NOT NULL
 );
 
 INSERT INTO ingredient
@@ -30,4 +32,6 @@ VALUES
     ('Sugar'),
     ('Flour'),
     ('Eggs'),
-    ('Butter')
+    ('Butter'),
+    ('Onion'),
+    ('Milk')

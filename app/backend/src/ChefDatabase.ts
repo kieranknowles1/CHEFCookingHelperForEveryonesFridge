@@ -49,13 +49,23 @@ class WritableDatabase {
 
   public addRecipe (recipe: IRecipe): void {
     this.assertValid()
-    this._connection.prepare(`
+    const statement = this._connection.prepare(`
       INSERT INTO recipe
         (name, directions, link)
       VALUES
         (?, ?, ?)
     `)
-      .run(recipe.name, recipe.directions, recipe.link)
+    const id = statement.run(recipe.name, recipe.directions, recipe.link).lastInsertRowid
+
+    const ingredientStatement = this._connection.prepare(`
+      INSERT INTO recipe_ingredient
+        (recipe_id, ingredient_id, amount)
+      VALUES
+        (?, ?, ?)
+    `)
+    for (const [ingredientId, amount] of recipe.ingredients) {
+      ingredientStatement.run(id, ingredientId, amount)
+    }
   }
 }
 
