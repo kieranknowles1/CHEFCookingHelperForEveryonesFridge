@@ -12,7 +12,7 @@ import progressTracker from 'progress-stream'
 import ChefDatabase from './ChefDatabase'
 import Recipe from './Recipe'
 import type ICsvRecipeRow from './ICsvRecipeRow'
-import { ingredientMapFactory, type IngredientId } from './Ingredient'
+import { ingredientMapFactory, type IngredientId, UnparsedIngredientError } from './Ingredient'
 import logger, { logError } from './logger'
 
 const CSV_PARSER_OPTIONS: csv.Options = {
@@ -63,7 +63,11 @@ async function findCommonIngredients (): Promise<Set<IngredientId>> {
           frequencies.set(key, (frequencies.get(key) ?? 0) + 1)
         })
       } catch (err) {
-        logError(err, 'verbose')
+        if (err instanceof UnparsedIngredientError) {
+          logError(err, 'verbose')
+        } else {
+          throw err
+        }
       }
     })
     .on('end', () => {
@@ -100,7 +104,11 @@ async function importData (commonIngredients: Set<IngredientId>): Promise<void> 
             writable.addRecipe(recipe)
           }
         } catch (err) {
-          logError(err, 'verbose')
+          if (err instanceof UnparsedIngredientError) {
+            logError(err, 'verbose')
+          } else {
+            throw err
+          }
         }
       })
       .on('end', () => {
