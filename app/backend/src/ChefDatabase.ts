@@ -3,7 +3,7 @@ import CiMap from '@glossa-glo/case-insensitive-map'
 import Database from 'better-sqlite3'
 import path from 'path'
 
-import { type Unit } from 'Unit'
+import { type DatabaseUnit } from 'Unit'
 import Ingredient from './Ingredient'
 import type { IIngredient, IngredientId } from './Ingredient'
 import type { IRecipe } from './Recipe'
@@ -18,7 +18,7 @@ type AllResult<TRow> = TRow[]
 interface IngredientRow {
   id: number
   name: string
-  preferredUnit: Unit
+  preferredUnit: DatabaseUnit
 }
 
 interface RecipeRow {

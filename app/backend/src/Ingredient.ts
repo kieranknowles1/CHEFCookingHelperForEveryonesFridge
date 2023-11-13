@@ -3,7 +3,7 @@ import type ICsvRecipeRow from './ICsvRecipeRow.js'
 import Fraction from 'fraction.js'
 
 import ChefDatabase from './ChefDatabase'
-import { Unit } from './Unit'
+import { DatabaseUnit } from './Unit'
 
 export type IngredientId = number
 export type IngredientAmount = number
@@ -15,11 +15,15 @@ export class UnparsedIngredientError extends Error {}
 
 export interface IIngredient {
   name: string
-  preferredUnit: Unit
+  preferredUnit: DatabaseUnit
 }
 
 export default class Ingredient implements IIngredient {
   private static getAmount (ingredient: Ingredient, amounts: string[]): IngredientAmount {
+    if (ingredient.preferredUnit === DatabaseUnit.none) {
+      // TODO: Return null here
+      return 0
+    }
     function fail (): never { throw new UnparsedIngredientError(`Could not get amount for '${ingredient.name}'`) }
 
     const nameLower = ingredient.name.toLowerCase()
@@ -33,11 +37,8 @@ export default class Ingredient implements IIngredient {
     const amount = new Fraction(match[1]).valueOf()
     const unit = match[2]
 
-    if (ingredient.preferredUnit === Unit.whole) {
+    if (ingredient.preferredUnit === DatabaseUnit.whole) {
       // Nothing to do
-      return amount
-    } else if (ingredient.preferredUnit === Unit.none) {
-      // TODO: Return null here
       return amount
     } else {
       // TODO: Convert to metric
@@ -71,7 +72,7 @@ export default class Ingredient implements IIngredient {
 
   id: IngredientId
   name: string
-  preferredUnit: Unit
+  preferredUnit: DatabaseUnit
 }
 
 export function ingredientMapFactory (): IngredientMap {

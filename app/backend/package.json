@@ -16,6 +16,7 @@
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.7",
     "@types/cli-progress": "^3.11.5",
+    "@types/convert-units": "^2.3.9",
     "@types/progress-stream": "^2.0.4",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "eslint": "^8.53.0",
@@ -31,6 +32,7 @@
     "@glossa-glo/case-insensitive-map": "^4.2.7-beta",
     "better-sqlite3": "^9.1.1",
     "cli-progress": "^3.12.0",
+    "convert-units": "^2.3.4",
     "csv-parse": "^5.5.2",
     "fraction.js": "^4.3.4",
     "progress-stream": "^2.0.0",
