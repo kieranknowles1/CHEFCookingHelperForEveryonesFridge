@@ -13,6 +13,7 @@ import ChefDatabase from './ChefDatabase'
 import Recipe from './Recipe'
 import type ICsvRecipeRow from './ICsvRecipeRow'
 import { ingredientMapFactory, type IngredientId } from './Ingredient'
+import logger, { logError } from './logger'
 
 const CSV_PARSER_OPTIONS: csv.Options = {
   // Use the first line for column names. Rows will be loaded as objects
@@ -62,7 +63,7 @@ async function findCommonIngredients (): Promise<Set<IngredientId>> {
           frequencies.set(key, (frequencies.get(key) ?? 0) + 1)
         })
       } catch (err) {
-        console.error(err)
+        logError(err, 'verbose')
       }
     })
     .on('end', () => {
@@ -99,7 +100,7 @@ async function importData (commonIngredients: Set<IngredientId>): Promise<void> 
             writable.addRecipe(recipe)
           }
         } catch (err) {
-          console.error(err)
+          logError(err, 'verbose')
         }
       })
       .on('end', () => {
@@ -112,17 +113,16 @@ async function importData (commonIngredients: Set<IngredientId>): Promise<void> 
 }
 
 async function main (): Promise<void> {
-  console.log('Setting up schema')
+  logger.log('info', 'Setting up schema')
   ChefDatabase.Instance.setupSchema()
 
-  console.log('Finding the most common ingredients')
+  logger.log('info', 'Finding the most common ingredients')
   const commonIngredients = await findCommonIngredients()
-  console.log(commonIngredients)
 
-  console.log('Importing data into the database')
+  logger.log('info', 'Importing data into the database')
   // TODO
   await importData(commonIngredients)
 
-  console.log('Setup done')
+  logger.log('info', 'Setup done')
 }
-main().catch((err) => { console.error(err) })
+main().catch((err) => { logError(err) })
