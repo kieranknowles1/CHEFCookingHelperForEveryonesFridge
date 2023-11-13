@@ -1,15 +1,45 @@
 import { readFileSync } from 'fs'
+import CiMap from '@glossa-glo/case-insensitive-map'
 import Database from 'better-sqlite3'
 import path from 'path'
 
-import type { IRecipe } from './Recipe'
-import type { IIngredient, IngredientId } from './Ingredient'
+import { type Unit } from 'Unit'
 import Ingredient from './Ingredient'
-import CiMap from '@glossa-glo/case-insensitive-map'
+import type { IIngredient, IngredientId } from './Ingredient'
+import type { IRecipe } from './Recipe'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
+
+type GetResult<TRow> = TRow | undefined
+type AllResult<TRow> = TRow[]
+
+interface IngredientRow {
+  id: number
+  name: string
+  preferredUnit: Unit
+}
+
+interface RecipeRow {
+  id: number
+  name: string
+  directions: string
+  link: string
+}
+
+interface RecipeIngredientRow {
+  recipe_id: number
+  ingredient_id: number
+
+  amount: number
+}
+
+export class InvalidIdError extends Error {
+  constructor (table: string, id: number) {
+    super(`Invalid ID ${id} for table ${table}`)
+  }
+}
 
 /**
  * Writable interface to the database, passed to the callback of {@link ChefDatabase.wrapTransaction}
@@ -134,12 +164,17 @@ export default class ChefDatabase {
 
   public getIngredient (id: IngredientId): Ingredient {
     const statement = this._connection.prepare(`
-      SELECT name FROM ingredient WHERE id = ?
+      SELECT * FROM ingredient WHERE id = ?
     `)
-    const result = statement.get(id) as any
+    const result = statement.get(id) as GetResult<IngredientRow>
+
+    if (result === undefined) {
+      throw new InvalidIdError('ingredient', id)
+    }
 
     return new Ingredient({
-      name: result.name as string
+      name: result.name,
+      preferredUnit: result.preferredUnit
     }, id)
   }
 
@@ -149,16 +184,17 @@ export default class ChefDatabase {
    */
   public findIngredientByName (name: string): Ingredient | null {
     const statement = this._connection.prepare(`
-      SELECT id FROM ingredient WHERE name = ? COLLATE NOCASE
+      SELECT * FROM ingredient WHERE name = ? COLLATE NOCASE
     `)
-    const result = statement.get(name) as any
+    const result = statement.get(name) as GetResult<IngredientRow>
     if (result === undefined) {
       return null
     }
 
     return new Ingredient({
-      name
-    }, result.id as number)
+      name: result.name,
+      preferredUnit: result.preferredUnit
+    }, result.id)
   }
 
   /**
@@ -166,9 +202,9 @@ export default class ChefDatabase {
    */
   public getIngredientIds (): CiMap<string, IngredientId> {
     const statement = this._connection.prepare(`
-      SELECT name, id FROM ingredient
+      SELECT * FROM ingredient
     `)
-    const result = statement.all() as Array<{ name: string, id: number }>
+    const result = statement.all() as AllResult<IngredientRow>
     const map = new CiMap<string, IngredientId>()
     for (const pair of result) {
       map.set(pair.name, pair.id)

@@ -3,6 +3,7 @@ import type ICsvRecipeRow from './ICsvRecipeRow.js'
 import Fraction from 'fraction.js'
 
 import ChefDatabase from './ChefDatabase'
+import { type Unit } from 'Unit.js'
 
 export type IngredientId = number
 // TODO: This should include the units and convert them to metric
@@ -15,6 +16,7 @@ export class UnparsedIngredientError extends Error {}
 
 export interface IIngredient {
   name: string
+  preferredUnit: Unit
 }
 
 export default class Ingredient implements IIngredient {
@@ -53,10 +55,12 @@ export default class Ingredient implements IIngredient {
   constructor (raw: IIngredient, id: IngredientId) {
     this.id = id
     this.name = raw.name
+    this.preferredUnit = raw.preferredUnit
   }
 
   id: IngredientId
   name: string
+  preferredUnit: Unit
 }
 
 export function ingredientMapFactory (): IngredientMap {

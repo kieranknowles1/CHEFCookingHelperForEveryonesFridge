@@ -8,7 +8,10 @@ DROP TABLE IF EXISTS recipe;
 
 CREATE TABLE ingredient (
     id INTEGER NOT NULL PRIMARY KEY,
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+
+    -- NOTE: Must match enum in Unit.ts
+    preferredUnit TEXT CHECK(preferredUnit IN ('none', 'whole', 'ml', 'g')) NOT NULL
 );
 
 CREATE TABLE recipe (
@@ -26,12 +29,12 @@ CREATE TABLE recipe_ingredient (
 );
 
 INSERT INTO ingredient
-    (name)
+    (name, preferredUnit)
 VALUES
-    ('Salt'),
-    ('Sugar'),
-    ('Flour'),
-    ('Eggs'),
-    ('Butter'),
-    ('Onion'),
-    ('Milk')
+    ('Salt', 'none'),
+    ('Sugar', 'g'),
+    ('Flour', 'g'),
+    ('Eggs', 'whole'),
+    ('Butter', 'g'),
+    ('Onion', 'whole'),
+    ('Milk', 'ml')
