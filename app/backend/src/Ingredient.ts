@@ -36,9 +36,9 @@ export function parseCsvRow (row: ICsvRecipeRow): IngredientMap {
   const names = JSON.parse(row.NER) as string[]
   const amounts = JSON.parse(row.ingredients) as string[]
 
-  names.forEach(name => {
+  for (const name of names) {
     map.set(name, getAmount(name, amounts))
-  })
+  }
 
   return map
 }

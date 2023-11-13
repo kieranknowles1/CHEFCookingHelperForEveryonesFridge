@@ -59,9 +59,9 @@ async function findCommonIngredients (): Promise<Set<IngredientId>> {
     .on('data', (row: ICsvRecipeRow) => {
       try {
         const recipe = Recipe.fromCsvRow(row)
-        recipe.ingredients.forEach((value, key) => {
+        for (const [key] of recipe.ingredients) {
           frequencies.set(key, (frequencies.get(key) ?? 0) + 1)
-        })
+        }
       } catch (err) {
         if (err instanceof UnparsedIngredientError) {
           logError(err, 'verbose')
@@ -80,13 +80,12 @@ async function findCommonIngredients (): Promise<Set<IngredientId>> {
 }
 
 function recipeValid (recipe: Recipe, commonIngredients: Set<IngredientId>): boolean {
-  let valid = true
-  recipe.ingredients.forEach((value, key) => {
+  for (const [key] of recipe.ingredients) {
     if (!commonIngredients.has(key)) {
-      valid = false
+      return false
     }
-  })
-  return valid
+  }
+  return true
 }
 
 async function importData (commonIngredients: Set<IngredientId>): Promise<void> {
