@@ -88,6 +88,16 @@ function recipeValid (recipe: Recipe, commonIngredients: Set<IngredientId>): boo
   return true
 }
 
+function importIngredients (commonIngredients: Set<string>): void {
+  ChefDatabase.Instance.wrapTransaction(writable => {
+    for (const ingredient of commonIngredients) {
+      writable.addIngredient({
+        name: ingredient
+      })
+    }
+  })
+}
+
 async function importData (commonIngredients: Set<IngredientId>): Promise<void> {
   const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
 
@@ -125,6 +135,9 @@ async function main (): Promise<void> {
 
   logger.log('info', 'Finding the most common ingredients')
   const commonIngredients = await findCommonIngredients()
+
+  logger.log('info', 'Adding ingredients to database')
+  importIngredients(commonIngredients)
 
   logger.log('info', 'Importing data into the database')
   // TODO

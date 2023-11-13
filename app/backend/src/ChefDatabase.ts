@@ -3,6 +3,7 @@ import path from 'path'
 
 import { readFileSync } from 'fs'
 import type { IRecipe } from 'Recipe'
+import { IIngredient } from 'Ingredient'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
@@ -31,6 +32,17 @@ class WritableDatabase {
   public constructor (db: ChefDatabase, connection: Database.Database) {
     this._db = db
     this._connection = connection
+  }
+
+  public addIngredient (ingredient: IIngredient): void {
+    this.assertValid()
+    this._connection.prepare(`
+      INSERT INTO ingredient
+        (name)
+      VALUES
+        (?)
+    `)
+      .run(ingredient.name)
   }
 
   public addRecipe (recipe: IRecipe): void {
