@@ -2,7 +2,7 @@ import Database from 'better-sqlite3'
 import path from 'path'
 
 import { readFileSync } from 'fs'
-import type Recipe from 'Recipe'
+import type { IRecipe } from 'Recipe'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
@@ -33,7 +33,7 @@ class WritableDatabase {
     this._connection = connection
   }
 
-  public addRecipe (recipe: Recipe): void {
+  public addRecipe (recipe: IRecipe): void {
     this.assertValid()
     this._connection.prepare(`
       INSERT INTO recipe

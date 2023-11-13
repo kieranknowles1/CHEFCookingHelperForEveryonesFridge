@@ -11,34 +11,46 @@ const AMOUNT_PATTERN = /(\d+\/\d+|\d+ \d+\/\d+|\d+)/
 
 export class UnparsedIngredientError extends Error {}
 
-function getAmount (name: string, amounts: string[]): IngredientAmount {
-  function fail (): never { throw new UnparsedIngredientError(`Could not get amount for '${name}'`) }
+export interface IIngredient {
+  name: string
+}
 
-  const nameLower = name.toLowerCase()
-  const found = amounts.find(e => e.toLowerCase().includes(nameLower))
+export default class Ingredient implements IIngredient {
+  private static getAmount (name: string, amounts: string[]): IngredientAmount {
+    function fail (): never { throw new UnparsedIngredientError(`Could not get amount for '${name}'`) }
 
-  if (found === undefined) { fail() }
+    const nameLower = name.toLowerCase()
+    const found = amounts.find(e => e.toLowerCase().includes(nameLower))
 
-  const match = found.match(AMOUNT_PATTERN)?.[1]
-  if (match === undefined) { fail() }
+    if (found === undefined) { fail() }
 
-  return new Fraction(match).valueOf()
+    const match = found.match(AMOUNT_PATTERN)?.[1]
+    if (match === undefined) { fail() }
+
+    return new Fraction(match).valueOf()
+  }
+
+  static parseCsvRow (row: ICsvRecipeRow): IngredientMap {
+    const map = ingredientMapFactory()
+
+    // NER contains names, ingredients contains names and amounts
+    const names = JSON.parse(row.NER) as string[]
+    const amounts = JSON.parse(row.ingredients) as string[]
+
+    for (const name of names) {
+      map.set(name, this.getAmount(name, amounts))
+    }
+
+    return map
+  }
+
+  constructor (raw: IIngredient) {
+    this.name = raw.name
+  }
+
+  name: string
 }
 
 export function ingredientMapFactory (): IngredientMap {
   return new CiMap<IngredientId, IngredientAmount>()
-}
-
-export function parseCsvRow (row: ICsvRecipeRow): IngredientMap {
-  const map = ingredientMapFactory()
-
-  // NER contains names, ingredients contains names and amounts
-  const names = JSON.parse(row.NER) as string[]
-  const amounts = JSON.parse(row.ingredients) as string[]
-
-  for (const name of names) {
-    map.set(name, getAmount(name, amounts))
-  }
-
-  return map
 }

@@ -1,7 +1,14 @@
-import { parseCsvRow, type IngredientMap } from './Ingredient'
+import Ingredient, { type IngredientMap } from './Ingredient'
 import type ICsvRecipeRow from './ICsvRecipeRow'
 
-export default class Recipe {
+export interface IRecipe {
+  name: string
+  directions: string
+  link: string
+  ingredients: IngredientMap
+}
+
+export default class Recipe implements IRecipe {
   public static fromCsvRow (row: ICsvRecipeRow): Recipe {
     return new Recipe(row)
   }
@@ -13,7 +20,7 @@ export default class Recipe {
     this.link = row.link
 
     // TODO: Get the amounts
-    this.ingredients = parseCsvRow(row)
+    this.ingredients = Ingredient.parseCsvRow(row)
   }
 
   name: string
