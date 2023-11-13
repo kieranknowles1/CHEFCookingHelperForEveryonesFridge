@@ -10,7 +10,7 @@ export type IngredientMap = CiMap<IngredientId, IngredientAmount>
 const AMOUNT_PATTERN = /(\d+\/\d+|\d+ \d+\/\d+|\d+)/
 
 function getAmount (name: string, amounts: string[]): IngredientAmount {
-  function fail (): never { throw new Error(`Could not get amount for '${name}`) }
+  function fail (): never { throw new Error(`Could not get amount for '${name}'`) }
 
   const nameLower = name.toLowerCase()
   const found = amounts.find(e => e.toLowerCase().includes(nameLower))
