@@ -23,8 +23,12 @@ function getAmount (name: string, amounts: string[]): IngredientAmount {
   return new Fraction(match).valueOf()
 }
 
+export function ingredientMapFactory (): IngredientMap {
+  return new CiMap<IngredientId, IngredientAmount>()
+}
+
 export function parseCsvRow (row: ICsvRecipeRow): IngredientMap {
-  const map = new CiMap<IngredientId, IngredientAmount>()
+  const map = ingredientMapFactory()
 
   // NER contains names, ingredients contains names and amounts
   const names = JSON.parse(row.NER) as string[]
