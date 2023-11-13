@@ -34,6 +34,8 @@
 An unexpected issue during data import was the number of unique ingredients found which totalled ~200,000. This was worked
 around by \todo{Document solution}
 
-The \codelisting{fraction.js} package used to parse ingredient amounts could not be imported at first due to it
-being packaged as an ECMAScript module while the backend is written in CommonJS. For unknown reasons, adding the
-\codelisting{mathjs} package allowed for \codelisting{fraction.js} to be imported without issue.
+The \codelisting{fraction.js} package used to parse ingredient amounts could not be imported at first with an error message
+stating that \enquote*{The current file is a CommonJS module ... however, the referenced file is an ECMAScript module}.
+This issue had previously been reported by another user (\href{https://github.com/rawify/Fraction.js/issues/70}{https://github.com/rawify/Fraction.js/issues/70})
+and was worked around by downgrading to version 4.3.4 of \codelisting{fraction.js} while the latest version at the time
+of writing was 4.3.7.

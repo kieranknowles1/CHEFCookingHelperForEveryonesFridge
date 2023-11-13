@@ -1,6 +1,5 @@
 import CiMap from '@glossa-glo/case-insensitive-map'
 import type ICsvRecipeRow from './ICsvRecipeRow.js'
-// NOTE: TypeScript is being awkward here. I need to include `mathjs` in package.json and include `fraction.js` here.
 import Fraction from 'fraction.js'
 
 export type IngredientId = string
