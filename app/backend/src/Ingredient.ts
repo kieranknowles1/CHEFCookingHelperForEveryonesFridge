@@ -3,7 +3,7 @@ import type ICsvRecipeRow from './ICsvRecipeRow.js'
 import Fraction from 'fraction.js'
 
 import ChefDatabase from './ChefDatabase'
-import { DatabaseUnit } from './Unit'
+import { type DatabaseUnit, toBakingUnit } from './Unit'
 
 export type IngredientId = number
 export type IngredientAmount = number
@@ -20,7 +20,7 @@ export interface IIngredient {
 
 export default class Ingredient implements IIngredient {
   private static getAmount (ingredient: Ingredient, amounts: string[]): IngredientAmount {
-    if (ingredient.preferredUnit === DatabaseUnit.none) {
+    if (ingredient.preferredUnit === 'none') {
       // TODO: Return null here
       return 0
     }
@@ -35,14 +35,16 @@ export default class Ingredient implements IIngredient {
     if (match === null) { fail() }
 
     const amount = new Fraction(match[1]).valueOf()
-    const unit = match[2]
 
-    if (ingredient.preferredUnit === DatabaseUnit.whole) {
+    if (ingredient.preferredUnit === 'whole') {
       // Nothing to do
       return amount
     } else {
       // TODO: Convert to metric
-      return amount
+      const unit = match[2]
+      const [convertedAmount, convertedUnit] = toBakingUnit(amount, unit, ingredient)
+      // TODO: Convert volume to weight for flour
+      return convertedAmount
     }
   }
 
