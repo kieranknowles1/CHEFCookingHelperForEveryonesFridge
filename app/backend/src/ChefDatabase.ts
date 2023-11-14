@@ -15,21 +15,22 @@ const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
 type GetResult<TRow> = TRow | undefined
 type AllResult<TRow> = TRow[]
 
-interface IngredientRow {
+interface IIngredientRow {
   id: number
   name: string
   preferredUnit: DatabaseUnit
   density: number | null
+  assumeUnlimited: number
 }
 
-interface RecipeRow {
+interface RRecipeRow {
   id: number
   name: string
   directions: string
   link: string
 }
 
-interface RecipeIngredientRow {
+interface IRecipeIngredientRow {
   recipe_id: number
   ingredient_id: number
 
@@ -163,17 +164,26 @@ export default class ChefDatabase {
     })
   }
 
+  private ingredientFromRow (row: IIngredientRow): Ingredient {
+    return new Ingredient({
+      name: row.name,
+      preferredUnit: row.preferredUnit,
+      density: row.density,
+      assumeUnlimited: row.assumeUnlimited !== 0
+    }, row.id)
+  }
+
   public getIngredient (id: IngredientId): Ingredient {
     const statement = this._connection.prepare(`
       SELECT * FROM ingredient WHERE id = ?
     `)
-    const result = statement.get(id) as GetResult<IngredientRow>
+    const result = statement.get(id) as GetResult<IIngredientRow>
 
     if (result === undefined) {
       throw new InvalidIdError('ingredient', id)
     }
 
-    return new Ingredient(result, id)
+    return this.ingredientFromRow(result)
   }
 
   /**
@@ -184,12 +194,12 @@ export default class ChefDatabase {
     const statement = this._connection.prepare(`
       SELECT * FROM ingredient WHERE name = ? COLLATE NOCASE
     `)
-    const result = statement.get(name) as GetResult<IngredientRow>
+    const result = statement.get(name) as GetResult<IIngredientRow>
     if (result === undefined) {
       return null
     }
 
-    return new Ingredient(result, result.id)
+    return this.ingredientFromRow(result)
   }
 
   /**
@@ -199,7 +209,7 @@ export default class ChefDatabase {
     const statement = this._connection.prepare(`
       SELECT * FROM ingredient
     `)
-    const result = statement.all() as AllResult<IngredientRow>
+    const result = statement.all() as AllResult<IIngredientRow>
     const map = new CiMap<string, IngredientId>()
     for (const pair of result) {
       map.set(pair.name, pair.id)

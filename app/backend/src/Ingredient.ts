@@ -17,6 +17,7 @@ export interface IIngredient {
   name: string
   preferredUnit: DatabaseUnit
   density: number | null
+  assumeUnlimited: boolean
 }
 
 export default class Ingredient implements IIngredient {
@@ -71,12 +72,14 @@ export default class Ingredient implements IIngredient {
     this.name = raw.name
     this.preferredUnit = raw.preferredUnit
     this.density = raw.density
+    this.assumeUnlimited = raw.assumeUnlimited
   }
 
   id: IngredientId
   name: string
   preferredUnit: DatabaseUnit
   density: number | null
+  assumeUnlimited: boolean
 }
 
 export function ingredientMapFactory (): IngredientMap {

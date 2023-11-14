@@ -15,12 +15,18 @@ export function toMetric (amount: number, unit: string, ingredient: Ingredient):
       return [amount * 250, 'ml']
     case 'can': // Can of milk
       return [amount * 300, 'ml']
+    case 'lb': // Pound
+      return [amount * 450, 'g']
     case 'oz': // Ounce
       return [amount * 30, 'g']
+    case 'qt': // Quart
+      return [amount * 950, 'ml']
     case 'stick': // Stick of butter
       return [amount * 110, 'g']
     case 'tbsp': // Tablespoon
       return [amount * 15, 'ml']
+    case 'tsp': // Teaspoon
+      return [amount * 5, 'ml']
   }
   throw new Error(`Unhandled unit ${unit} for ${ingredient.name}`)
 }
@@ -35,6 +41,8 @@ export function convertToPreferred (amount: number, unit: MetricUnit, ingredient
 
   if (unit === 'ml' && ingredient.preferredUnit === 'g') {
     return amount * ingredient.density
+  } else if (unit === 'g' && ingredient.preferredUnit === 'ml') {
+    return amount / ingredient.density
   }
 
   throw new Error(`Unhandled conversion ${unit} to ${ingredient.preferredUnit}`)
