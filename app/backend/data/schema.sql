@@ -11,7 +11,10 @@ CREATE TABLE ingredient (
     name TEXT NOT NULL,
 
     -- NOTE: Must match enum in Unit.ts
-    preferredUnit TEXT CHECK(preferredUnit IN ('none', 'whole', 'ml', 'g')) NOT NULL
+    preferredUnit TEXT CHECK(preferredUnit IN ('none', 'whole', 'ml', 'g')) NOT NULL,
+
+    -- g/ml
+    density REAL
 );
 
 CREATE TABLE recipe (
@@ -32,9 +35,14 @@ INSERT INTO ingredient
     (name, preferredUnit)
 VALUES
     ('Salt', 'none'),
-    ('Sugar', 'g'),
-    ('Flour', 'g'),
     ('Eggs', 'whole'),
-    ('Butter', 'g'),
     ('Onion', 'whole'),
-    ('Milk', 'ml')
+    ('Milk', 'ml');
+
+-- Source: https://annaolson.ca/baking-conversions/
+INSERT INTO ingredient
+    (name, preferredUnit, density)
+VALUES
+    ('Butter', 'g', 0.9),
+    ('Flour', 'g', 0.6),
+    ('Sugar', 'g', 0.8);

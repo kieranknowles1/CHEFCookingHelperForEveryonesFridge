@@ -19,6 +19,7 @@ interface IngredientRow {
   id: number
   name: string
   preferredUnit: DatabaseUnit
+  density: number | null
 }
 
 interface RecipeRow {
@@ -172,10 +173,7 @@ export default class ChefDatabase {
       throw new InvalidIdError('ingredient', id)
     }
 
-    return new Ingredient({
-      name: result.name,
-      preferredUnit: result.preferredUnit
-    }, id)
+    return new Ingredient(result, id)
   }
 
   /**
@@ -191,10 +189,7 @@ export default class ChefDatabase {
       return null
     }
 
-    return new Ingredient({
-      name: result.name,
-      preferredUnit: result.preferredUnit
-    }, result.id)
+    return new Ingredient(result, result.id)
   }
 
   /**

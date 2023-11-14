@@ -3,7 +3,7 @@ import type ICsvRecipeRow from './ICsvRecipeRow.js'
 import Fraction from 'fraction.js'
 
 import ChefDatabase from './ChefDatabase'
-import { type DatabaseUnit, toBakingUnit } from './Unit'
+import { type DatabaseUnit, toMetric, convertToPreferred } from './Unit'
 
 export type IngredientId = number
 export type IngredientAmount = number
@@ -16,6 +16,7 @@ export class UnparsedIngredientError extends Error {}
 export interface IIngredient {
   name: string
   preferredUnit: DatabaseUnit
+  density: number | null
 }
 
 export default class Ingredient implements IIngredient {
@@ -42,9 +43,8 @@ export default class Ingredient implements IIngredient {
     } else {
       // TODO: Convert to metric
       const unit = match[2]
-      const [convertedAmount, convertedUnit] = toBakingUnit(amount, unit, ingredient)
-      // TODO: Convert volume to weight for flour
-      return convertedAmount
+      const [convertedAmount, convertedUnit] = toMetric(amount, unit, ingredient)
+      return convertToPreferred(convertedAmount, convertedUnit, ingredient)
     }
   }
 
@@ -70,11 +70,13 @@ export default class Ingredient implements IIngredient {
     this.id = id
     this.name = raw.name
     this.preferredUnit = raw.preferredUnit
+    this.density = raw.density
   }
 
   id: IngredientId
   name: string
   preferredUnit: DatabaseUnit
+  density: number | null
 }
 
 export function ingredientMapFactory (): IngredientMap {
