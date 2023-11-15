@@ -49,7 +49,8 @@ CREATE TABLE recipe_ingredient (
     recipe_id INTEGER NOT NULL REFERENCES recipe(id) ON DELETE CASCADE,
     ingredient_id INTEGER NOT NULL REFERENCES ingredient(id),
 
-    amount REAL NOT NULL
+    amount REAL,
+    original_line TEXT NOT NULL
 );
 
 CREATE INDEX index_recipe_ingredient_by_recipe_id

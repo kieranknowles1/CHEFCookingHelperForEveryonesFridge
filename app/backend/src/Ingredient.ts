@@ -7,12 +7,19 @@ import ChefDatabase from './ChefDatabase'
 import logger, { LogLevel } from './logger'
 
 export type IngredientId = number
-export type IngredientAmount = number
+export interface IngredientAmount {
+  amount: number | null
+  originalLine: string
+}
 export type IngredientMap = CiMap<IngredientId, IngredientAmount>
 
 const AMOUNT_PATTERN = /(\d+\/\d+|\d+ \d+\/\d+|\d+) (\w+)/g
 
-export class UnparsedIngredientError extends Error {}
+export class UnparsedIngredientError extends Error {
+  constructor (ingredient: Ingredient) {
+    super(`Could not get amount for '${ingredient.name}'`)
+  }
+}
 
 export interface IIngredient {
   name: string
@@ -22,30 +29,23 @@ export interface IIngredient {
 }
 
 export default class Ingredient implements IIngredient {
-  private static getAmount (originalName: string, ingredient: Ingredient, amounts: string[]): IngredientAmount {
-    if (ingredient.preferredUnit === 'none') {
-      // TODO: Return null here
-      return 0
-    }
-    function fail (): never { throw new UnparsedIngredientError(`Could not get amount for '${ingredient.name}'`) }
-    function amountFromMatch (match: RegExpMatchArray): number { return new Fraction(match[1]).valueOf() }
+  private static amountFromMatch (match: RegExpMatchArray): number {
+    return new Fraction(match[1]).valueOf()
+  }
 
-    const nameLower = originalName.toLowerCase()
-    const found = amounts.find(e => e.toLowerCase().includes(nameLower))
+  private static convertUnit (originalName: string, ingredientLine: string, ingredient: Ingredient, amounts: string[]): number {
+    const matches = Array.from(ingredientLine.matchAll(AMOUNT_PATTERN))
 
-    if (found === undefined) { fail() }
-    const matches = Array.from(found.matchAll(AMOUNT_PATTERN))
-
-    if (matches.length === 0) { fail() }
+    if (matches.length === 0) { throw new UnparsedIngredientError(ingredient) }
 
     if (ingredient.preferredUnit === 'whole') {
       // Nothing to do
-      return amountFromMatch(matches[0])
+      return this.amountFromMatch(matches[0])
     } else {
       // Convert to metric
       // Handle cases such as '1 to 2 tsp' by trying every match and using the first one that works
       for (const match of matches) {
-        const amount = amountFromMatch(match)
+        const amount = this.amountFromMatch(match)
         const unit = match[2]
         const converted = tryToMetric(amount, unit)
         if (converted !== null) {
@@ -54,8 +54,26 @@ export default class Ingredient implements IIngredient {
       }
       // No case was handled, throw error
       // This is a higher priority, so also log more detail
-      logger.log(LogLevel.warn, `Could not convert '${found}' to metric.`)
-      fail()
+      logger.log(LogLevel.warn, `Could not convert '${ingredientLine}' to metric.`)
+      throw new UnparsedIngredientError(ingredient)
+    }
+  }
+
+  private static getAmount (originalName: string, ingredient: Ingredient, amounts: string[]): IngredientAmount {
+    if (ingredient.preferredUnit === 'none') {
+      return {
+        amount: null,
+        originalLine: originalName
+      }
+    }
+
+    const nameLower = originalName.toLowerCase()
+    const found = amounts.find(e => e.toLowerCase().includes(nameLower))
+
+    if (found === undefined) { throw new UnparsedIngredientError(ingredient) }
+    return {
+      amount: this.convertUnit(originalName, found, ingredient, amounts),
+      originalLine: found
     }
   }
 

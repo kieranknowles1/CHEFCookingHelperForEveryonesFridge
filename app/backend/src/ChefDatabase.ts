@@ -34,7 +34,8 @@ interface IRecipeIngredientRow {
   recipe_id: number
   ingredient_id: number
 
-  amount: number
+  amount: number | null
+  original_line: string
 }
 
 export class InvalidIdError extends Error {
@@ -70,7 +71,7 @@ class WritableDatabase {
 
   public addIngredient (ingredient: IIngredient): void {
     this.assertValid()
-    this._connection.prepare(`
+    this._connection.prepare<string>(`
       INSERT INTO ingredient
         (name)
       VALUES
@@ -81,7 +82,7 @@ class WritableDatabase {
 
   public addRecipe (recipe: IRecipe): void {
     this.assertValid()
-    const statement = this._connection.prepare(`
+    const statement = this._connection.prepare<[string, string, string]>(`
       INSERT INTO recipe
         (name, directions, link)
       VALUES
@@ -89,14 +90,14 @@ class WritableDatabase {
     `)
     const id = statement.run(recipe.name, recipe.directions, recipe.link).lastInsertRowid
 
-    const ingredientStatement = this._connection.prepare(`
+    const ingredientStatement = this._connection.prepare<[number | bigint, number, number | null, string]>(`
       INSERT INTO recipe_ingredient
-        (recipe_id, ingredient_id, amount)
+        (recipe_id, ingredient_id, amount, original_line)
       VALUES
-        (?, ?, ?)
+        (?, ?, ?, ?)
     `)
     for (const [ingredientId, amount] of recipe.ingredients) {
-      ingredientStatement.run(id, ingredientId, amount)
+      ingredientStatement.run(id, ingredientId, amount.amount, amount.originalLine)
     }
   }
 }
@@ -174,7 +175,7 @@ export default class ChefDatabase {
   }
 
   public getIngredient (id: IngredientId): Ingredient {
-    const statement = this._connection.prepare(`
+    const statement = this._connection.prepare<number>(`
       SELECT * FROM ingredient WHERE id = ?
     `)
     const result = statement.get(id) as GetResult<IIngredientRow>
@@ -192,7 +193,7 @@ export default class ChefDatabase {
    * an equipotent ingredient if an exact match is not found.
    */
   public findIngredientByName (name: string): Ingredient | null {
-    const statement = this._connection.prepare(`
+    const statement = this._connection.prepare<string>(`
       SELECT ingredient.*
         FROM view_ingredient_by_name
         JOIN ingredient ON view_ingredient_by_name.id = ingredient.id
