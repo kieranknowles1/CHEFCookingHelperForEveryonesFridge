@@ -52,21 +52,27 @@ function recipeValid (row: ICsvRecipeRow, commonIngredients: Map<string, Ingredi
   return valid
 }
 
-async function importData (): Promise<void> {
+interface ImportDataReturn { success: number, total: number }
+async function importData (): Promise<ImportDataReturn> {
   const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
 
   const supportedIngredients = ChefDatabase.Instance.getIngredientIds()
 
-  return ChefDatabase.Instance.wrapTransactionAsync(async (writable) => {
-    return new Promise<void>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
+  let total = 0
+  let success = 0
+
+  return ChefDatabase.Instance.wrapTransactionAsync<ImportDataReturn>(async (writable) => {
+    return new Promise<ImportDataReturn>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
       .pipe(progress)
       .pipe(csv.parse({ columns: true }))
       .on('data', (row: ICsvRecipeRow) => {
+        total++
         try {
           // Filter to only the most common ingredients
           if (recipeValid(row, supportedIngredients)) {
             const recipe = Recipe.fromCsvRow(row)
             writable.addRecipe(recipe)
+            success++
           }
         } catch (err) {
           if (err instanceof UnparsedIngredientError) {
@@ -78,7 +84,10 @@ async function importData (): Promise<void> {
       })
       .on('end', () => {
         bar.stop()
-        resolve()
+        resolve({
+          total,
+          success
+        })
       })
       .on('error', err => { reject(err) })
     )
@@ -90,10 +99,9 @@ async function main (): Promise<void> {
   ChefDatabase.Instance.setupSchema()
 
   logger.log('info', 'Importing data into the database')
-  // TODO
-  await importData()
+  const dataInfo = await importData()
 
-  logger.log('info', 'Setup done')
+  logger.log('info', `Setup done, imported ${dataInfo.success} of ${dataInfo.total} recipes (${(dataInfo.success / dataInfo.total) * 100}%)`)
 
   const missedFrequencies = Array.from(missedIngredients).sort((a, b) => b[1] - a[1])
   console.log(missedFrequencies)

@@ -132,12 +132,13 @@ export default class ChefDatabase {
    * Wrap `callback` within a transaction. Must be used for any operations that write to the database
    * The transaction will be rolled back if an uncaught exception occurs and the exception re-thrown
    */
-  public wrapTransaction (callback: (db: WritableDatabase) => void): void {
+  public wrapTransaction<TReturn = void> (callback: (db: WritableDatabase) => TReturn): TReturn {
     const writable = new WritableDatabase(this, this._connection)
     try {
       this._connection.exec('BEGIN TRANSACTION')
-      callback(writable)
+      const data = callback(writable)
       this._connection.exec('COMMIT')
+      return data
     } catch (ex) {
       this._connection.exec('ROLLBACK')
       throw ex
@@ -149,14 +150,15 @@ export default class ChefDatabase {
   /**
    * Async version of {@link wrapTransaction} that waits for the promise to be
    * settled before committing/rolling back
+   * @returns The return value of `callback` or void if none
    */
-  public async wrapTransactionAsync (callback: (db: WritableDatabase) => Promise<void>): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
+  public async wrapTransactionAsync<TReturn = void> (callback: (db: WritableDatabase) => Promise<TReturn>): Promise<TReturn> {
+    return new Promise<TReturn>((resolve, reject) => {
       const writable = new WritableDatabase(this, this._connection)
       this._connection.exec('BEGIN TRANSACTION')
-      callback(writable).then(() => {
+      callback(writable).then(data => {
         this._connection.exec('COMMIT')
-        resolve()
+        resolve(data)
       }).catch((ex) => {
         this._connection.exec('ROLLBACK')
         reject(ex)
