@@ -2,8 +2,9 @@ import CiMap from '@glossa-glo/case-insensitive-map'
 import type ICsvRecipeRow from './ICsvRecipeRow.js'
 import Fraction from 'fraction.js'
 
+import { type DatabaseUnit, tryToMetric, convertToPreferred } from './Unit'
 import ChefDatabase from './ChefDatabase'
-import { type DatabaseUnit, tryToMetric, convertToPreferred, MetricUnit } from './Unit'
+import logger, { LogLevel } from './logger'
 
 export type IngredientId = number
 export type IngredientAmount = number
@@ -52,7 +53,9 @@ export default class Ingredient implements IIngredient {
         }
       }
       // No case was handled, throw error
-      throw new Error(`Could not convert units for '${found}' to metric`)
+      // This is a higher priority, so also log more detail
+      logger.log(LogLevel.warn, `Could not convert '${found}' to metric.`)
+      fail()
     }
   }
 

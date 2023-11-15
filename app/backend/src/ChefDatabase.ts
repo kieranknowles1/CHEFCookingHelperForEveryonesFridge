@@ -23,7 +23,7 @@ interface IIngredientRow {
   assumeUnlimited: number
 }
 
-interface RRecipeRow {
+interface IRecipeRow {
   id: number
   name: string
   directions: string

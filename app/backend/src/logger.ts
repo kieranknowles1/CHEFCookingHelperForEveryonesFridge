@@ -2,15 +2,25 @@ import winston from 'winston'
 import fs from 'fs'
 
 // TODO: Env variables
-const LOG_LEVEL = 'info'
+const MIN_LOG_LEVEL = 'info'
 const LOG_FILE = 'working_data/chefbackend.log'
+
+export enum LogLevel {
+  error = 'error',
+  warn = 'warn',
+  info = 'info',
+  http = 'http',
+  verbose = 'verbose',
+  debug = 'debug',
+  silly = 'silly',
+}
 
 if (fs.existsSync(LOG_FILE)) {
   fs.unlinkSync(LOG_FILE)
 }
 
 const logger = winston.createLogger({
-  level: LOG_LEVEL,
+  level: MIN_LOG_LEVEL,
   format: winston.format.json(),
   transports: [
     new winston.transports.Console(),

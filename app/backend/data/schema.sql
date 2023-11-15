@@ -35,22 +35,36 @@ CREATE TABLE recipe_ingredient (
 CREATE INDEX index_recipe_ingredient_by_recipe_id
     ON recipe_ingredient(recipe_id);
 
+CREATE INDEX index_ingredient_by_name_nocase
+    ON ingredient(name COLLATE NOCASE);
+
+-- //TODO: Handle plurals (ingredient alias table? e.g., Onions => Onion)
+
 INSERT INTO ingredient
     (name, preferredUnit)
 VALUES
-    ('Salt', 'none'),
+    ('Apples', 'whole'),
+    ('Bell Pepper', 'whole'),
+    ('Carrots', 'whole'),
+    ('Chicken Breasts', 'whole'),
     ('Eggs', 'whole'),
-    ('Onion', 'whole');
+    ('Ground Beef', 'g'),
+    ('Onions', 'whole'),
+    ('Pepper', 'none'),
+    ('Salt', 'none'),
+    ('Tomatoes', 'whole');
 
 INSERT INTO ingredient
     (name, preferredUnit, assumeUnlimited)
 VALUES
+    ('Boiling Water', 'ml', true),
     ('Water', 'ml', true);
 
 -- Source: https://annaolson.ca/baking-conversions/
 INSERT INTO ingredient
     (name, preferredUnit, density)
 VALUES
+    ('Brown Sugar', 'g', 0.8),
     ('Butter', 'g', 0.9),
     ('Flour', 'g', 0.6),
     ('Milk', 'ml', 1.0),
