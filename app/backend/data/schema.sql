@@ -11,7 +11,7 @@ DROP VIEW IF EXISTS view_ingredient_by_name;
 
 CREATE TABLE ingredient (
     id INTEGER NOT NULL PRIMARY KEY,
-    name TEXT NOT NULL,
+    name TEXT NOT NULL UNIQUE,
     assumeUnlimited BOOLEAN NOT NULL DEFAULT FALSE,
 
     -- NOTE: Must match enum in Unit.ts
@@ -26,7 +26,7 @@ CREATE INDEX index_ingredient_by_name_nocase
 
 -- Alternate names for ingredients that are recognised by data import
 CREATE TABLE ingredient_alt_name (
-    name TEXT NOT NULL,
+    name TEXT NOT NULL UNIQUE,
     ingredient_id INTEGER NOT NULL REFERENCES ingredient(id)
 );
 

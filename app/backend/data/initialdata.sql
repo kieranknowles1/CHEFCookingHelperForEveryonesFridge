@@ -7,6 +7,7 @@ VALUES
     ('Carrots', 'whole'),
     ('Chicken Breasts', 'whole'),
     ('Eggs', 'whole'),
+    ('Garlic', 'whole'),
     ('Hamburger', 'whole'),
     ('Onions', 'whole'),
     ('Pepper', 'none'),
@@ -23,16 +24,25 @@ VALUES
 INSERT INTO ingredient
     (name, preferredUnit, density)
 VALUES
+    ('Baking Powder', 'g', 1.0),
     ('Brown Sugar', 'g', 0.8),
     ('Butter', 'g', 0.9),
     ('Flour', 'g', 0.6),
     ('Ground Beef', 'g', 1.0),
     ('Milk', 'ml', 1.0),
-    ('Sugar', 'g', 0.8);
+    ('Nuts', 'g', 0.5),
+    ('Oil', 'ml', 0.9),
+    ('Sugar', 'g', 0.8),
+    ('Vanilla', 'ml', 0.9);
 
 INSERT INTO ingredient_alt_name
     (name, ingredient_id)
 VALUES
     ('Egg', (SELECT id FROM ingredient WHERE name = 'Eggs')),
+    ('Green Pepper', (SELECT id FROM ingredient WHERE name = 'Bell Pepper')),
     ('Margarine', (SELECT id FROM ingredient WHERE name = 'Butter')),
-    ('Onion', (SELECT id FROM ingredient WHERE name = 'Onions'));
+    ('Olive Oil', (SELECT id FROM ingredient WHERE name = 'Oil')),
+    ('Onion', (SELECT id FROM ingredient WHERE name = 'Onions')),
+    ('Red Bell Pepper', (SELECT id FROM ingredient WHERE name = 'Bell Pepper')),
+    ('Red Pepper', (SELECT id FROM ingredient WHERE name = 'Bell Pepper')),
+    ('White Sugar', (SELECT id FROM ingredient WHERE name = 'Sugar'));

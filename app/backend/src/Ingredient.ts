@@ -32,7 +32,7 @@ export default class Ingredient implements IIngredient {
     return new Fraction(match[1]).valueOf()
   }
 
-  private static convertUnit (originalName: string, ingredientLine: string, ingredient: Ingredient, amounts: string[]): number {
+  private static convertUnit (ingredientLine: string, ingredient: Ingredient): number {
     const matches = Array.from(ingredientLine.matchAll(AMOUNT_PATTERN))
 
     if (matches.length === 0) { throw new UnparsedIngredientError(ingredient) }
@@ -71,7 +71,7 @@ export default class Ingredient implements IIngredient {
 
     if (found === undefined) { throw new UnparsedIngredientError(ingredient) }
     return {
-      amount: this.convertUnit(originalName, found, ingredient, amounts),
+      amount: this.convertUnit(found, ingredient),
       originalLine: found
     }
   }
