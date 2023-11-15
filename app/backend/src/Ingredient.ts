@@ -22,7 +22,7 @@ export interface IIngredient {
 }
 
 export default class Ingredient implements IIngredient {
-  private static getAmount (ingredient: Ingredient, amounts: string[]): IngredientAmount {
+  private static getAmount (originalName: string, ingredient: Ingredient, amounts: string[]): IngredientAmount {
     if (ingredient.preferredUnit === 'none') {
       // TODO: Return null here
       return 0
@@ -30,7 +30,7 @@ export default class Ingredient implements IIngredient {
     function fail (): never { throw new UnparsedIngredientError(`Could not get amount for '${ingredient.name}'`) }
     function amountFromMatch (match: RegExpMatchArray): number { return new Fraction(match[1]).valueOf() }
 
-    const nameLower = ingredient.name.toLowerCase()
+    const nameLower = originalName.toLowerCase()
     const found = amounts.find(e => e.toLowerCase().includes(nameLower))
 
     if (found === undefined) { fail() }
@@ -66,12 +66,12 @@ export default class Ingredient implements IIngredient {
     const names = JSON.parse(row.NER) as string[]
     const amounts = JSON.parse(row.ingredients) as string[]
 
-    for (const name of names) {
-      const ingredient = ChefDatabase.Instance.findIngredientByName(name)
+    for (const originalName of names) {
+      const ingredient = ChefDatabase.Instance.findIngredientByName(originalName)
       if (ingredient === null) {
-        throw new Error(`Ingredient ${name} does not exist in database`)
+        throw new Error(`Ingredient ${originalName} does not exist in database`)
       }
-      map.set(ingredient.id, this.getAmount(ingredient, amounts))
+      map.set(ingredient.id, this.getAmount(originalName, ingredient, amounts))
     }
 
     return map
