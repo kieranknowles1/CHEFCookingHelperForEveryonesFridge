@@ -188,11 +188,15 @@ export default class ChefDatabase {
 
   /**
    * @param name The name to search for
-   * @returns The ingredient, or null if it is not found
+   * @returns The ingredient, or null if it is not found. May return
+   * an equipotent ingredient if an exact match is not found.
    */
   public findIngredientByName (name: string): Ingredient | null {
     const statement = this._connection.prepare(`
-      SELECT * FROM ingredient WHERE name = ? COLLATE NOCASE
+      SELECT ingredient.*
+        FROM view_ingredient_by_name
+        JOIN ingredient ON view_ingredient_by_name.id = ingredient.id
+        WHERE view_ingredient_by_name.name = ? COLLATE NOCASE
     `)
     const result = statement.get(name) as GetResult<IIngredientRow>
     if (result === undefined) {
@@ -203,11 +207,11 @@ export default class ChefDatabase {
   }
 
   /**
-   * Get a map of ingredient names to IDs
+   * Get a map of ingredient names to IDs, including any alternate names
    */
   public getIngredientIds (): CiMap<string, IngredientId> {
     const statement = this._connection.prepare(`
-      SELECT * FROM ingredient
+      SELECT * FROM view_ingredient_by_name
     `)
     const result = statement.all() as AllResult<IIngredientRow>
     const map = new CiMap<string, IngredientId>()

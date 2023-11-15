@@ -21,7 +21,7 @@ if (fs.existsSync(LOG_FILE)) {
 
 const logger = winston.createLogger({
   level: MIN_LOG_LEVEL,
-  format: winston.format.json(),
+  format: winston.format.prettyPrint(),
   transports: [
     new winston.transports.Console(),
     new winston.transports.File({ filename: LOG_FILE })
@@ -37,7 +37,7 @@ export default logger
  */
 export function logError (err: unknown, level: string = 'error'): void {
   if (err instanceof Error) {
-    logger.log(level, err.message)
+    logger.log(level, `${err.message} stack ${err.stack}`)
   } else {
     logger.log('error', `Unknown error type ${typeof err}`)
   }
