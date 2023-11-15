@@ -16,13 +16,6 @@ import logger, { logError } from './logger'
 import Recipe from './Recipe'
 import type ICsvRecipeRow from './ICsvRecipeRow'
 
-const CSV_PARSER_OPTIONS: csv.Options = {
-  // Use the first line for column names. Rows will be loaded as objects
-  columns: true,
-  // TODO: Parse the whole file, limit is just for testing
-  to: 10000
-}
-
 // TODO: Use environment variables and put this somewhere outside the container
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
 
@@ -67,7 +60,7 @@ async function importData (): Promise<void> {
   return ChefDatabase.Instance.wrapTransactionAsync(async (writable) => {
     return new Promise<void>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
       .pipe(progress)
-      .pipe(csv.parse(CSV_PARSER_OPTIONS))
+      .pipe(csv.parse({ columns: true }))
       .on('data', (row: ICsvRecipeRow) => {
         try {
           // Filter to only the most common ingredients
