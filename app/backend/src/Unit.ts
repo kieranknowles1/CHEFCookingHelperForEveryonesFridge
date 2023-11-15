@@ -8,8 +8,10 @@ export type DatabaseUnit = MetricUnit | 'none' | 'whole'
  * Convert US units to an standardised UK cooking unit
  * // TODO: Put in reference list?
  * Source: https://annaolson.ca/baking-conversions/
+ *
+ * @returns The amount and the metric unit, or null on failure
  */
-export function toMetric (amount: number, unit: string, ingredient: Ingredient): [number, MetricUnit] {
+export function tryToMetric (amount: number, unit: string): [number, MetricUnit] | null {
   switch (unit.toLowerCase()) {
     case 'c': // Cups
       return [amount * 250, 'ml']
@@ -28,7 +30,7 @@ export function toMetric (amount: number, unit: string, ingredient: Ingredient):
     case 'tsp': // Teaspoon
       return [amount * 5, 'ml']
   }
-  throw new Error(`Unhandled unit ${unit} for ${ingredient.name}`)
+  return null
 }
 
 export function convertToPreferred (amount: number, unit: MetricUnit, ingredient: Ingredient): number {

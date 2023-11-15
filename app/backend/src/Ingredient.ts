@@ -3,13 +3,13 @@ import type ICsvRecipeRow from './ICsvRecipeRow.js'
 import Fraction from 'fraction.js'
 
 import ChefDatabase from './ChefDatabase'
-import { type DatabaseUnit, toMetric, convertToPreferred } from './Unit'
+import { type DatabaseUnit, tryToMetric, convertToPreferred, MetricUnit } from './Unit'
 
 export type IngredientId = number
 export type IngredientAmount = number
 export type IngredientMap = CiMap<IngredientId, IngredientAmount>
 
-const AMOUNT_PATTERN = /(\d+\/\d+|\d+ \d+\/\d+|\d+) (\w+)/
+const AMOUNT_PATTERN = /(\d+\/\d+|\d+ \d+\/\d+|\d+) (\w+)/g
 
 export class UnparsedIngredientError extends Error {}
 
@@ -27,25 +27,32 @@ export default class Ingredient implements IIngredient {
       return 0
     }
     function fail (): never { throw new UnparsedIngredientError(`Could not get amount for '${ingredient.name}'`) }
+    function amountFromMatch (match: RegExpMatchArray): number { return new Fraction(match[1]).valueOf() }
 
     const nameLower = ingredient.name.toLowerCase()
     const found = amounts.find(e => e.toLowerCase().includes(nameLower))
 
     if (found === undefined) { fail() }
+    const matches = Array.from(found.matchAll(AMOUNT_PATTERN))
 
-    const match = found.match(AMOUNT_PATTERN)
-    if (match === null) { fail() }
-
-    const amount = new Fraction(match[1]).valueOf()
+    if (matches.length === 0) { fail() }
 
     if (ingredient.preferredUnit === 'whole') {
       // Nothing to do
-      return amount
+      return amountFromMatch(matches[0])
     } else {
-      // TODO: Convert to metric
-      const unit = match[2]
-      const [convertedAmount, convertedUnit] = toMetric(amount, unit, ingredient)
-      return convertToPreferred(convertedAmount, convertedUnit, ingredient)
+      // Convert to metric
+      // Handle cases such as '1 to 2 tsp' by trying every match and using the first one that works
+      for (const match of matches) {
+        const amount = amountFromMatch(match)
+        const unit = match[2]
+        const converted = tryToMetric(amount, unit)
+        if (converted !== null) {
+          return convertToPreferred(converted[0], converted[1], ingredient)
+        }
+      }
+      // No case was handled, throw error
+      throw new Error(`Could not convert units for '${found}' to metric`)
     }
   }
 
