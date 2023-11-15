@@ -96,7 +96,7 @@ async function importData (): Promise<ImportDataReturn> {
 
 async function main (): Promise<void> {
   logger.log('info', 'Setting up schema')
-  ChefDatabase.Instance.setupSchema()
+  ChefDatabase.Instance.resetDatabase('IKnowWhatIAmDoing')
 
   logger.log('info', 'Importing data into the database')
   const dataInfo = await importData()

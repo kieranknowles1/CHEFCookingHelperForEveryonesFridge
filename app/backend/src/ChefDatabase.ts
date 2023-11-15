@@ -11,6 +11,7 @@ import type { IRecipe } from './Recipe'
 // TODO: Use environment variables and put this somewhere outside the container
 const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
+const INITIAL_DATA_PATH = path.join(process.cwd(), 'data/initialdata.sql')
 
 export type RowId = number | bigint
 type GetResult<TRow> = TRow | undefined
@@ -119,13 +120,15 @@ export default class ChefDatabase {
   }
 
   /**
-   * Run the schema script. Should only be used during setup
+   * Run the schema and initial script. Should only be used during setup
    *
    * WARN: This will delete ALL data from the database.
    */
-  public setupSchema (): void {
+  public resetDatabase (_: 'IKnowWhatIAmDoing'): void {
     const schema = readFileSync(SCHEMA_PATH, 'utf-8')
     this._connection.exec(schema)
+    const initialData = readFileSync(INITIAL_DATA_PATH, 'utf-8')
+    this._connection.exec(initialData)
   }
 
   /**
