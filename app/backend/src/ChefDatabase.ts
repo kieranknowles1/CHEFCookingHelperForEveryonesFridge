@@ -12,11 +12,12 @@ import type { IRecipe } from './Recipe'
 const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
 
+export type RowId = number | bigint
 type GetResult<TRow> = TRow | undefined
 type AllResult<TRow> = TRow[]
 
 interface IIngredientRow {
-  id: number
+  id: RowId
   name: string
   preferredUnit: DatabaseUnit
   density: number | null
@@ -24,22 +25,22 @@ interface IIngredientRow {
 }
 
 interface IRecipeRow {
-  id: number
+  id: RowId
   name: string
   directions: string
   link: string
 }
 
 interface IRecipeIngredientRow {
-  recipe_id: number
-  ingredient_id: number
+  recipe_id: RowId
+  ingredient_id: RowId
 
   amount: number | null
   original_line: string
 }
 
 export class InvalidIdError extends Error {
-  constructor (table: string, id: number) {
+  constructor (table: string, id: RowId) {
     super(`Invalid ID ${id} for table ${table}`)
   }
 }
@@ -90,7 +91,7 @@ class WritableDatabase {
     `)
     const id = statement.run(recipe.name, recipe.directions, recipe.link).lastInsertRowid
 
-    const ingredientStatement = this._connection.prepare<[number | bigint, number, number | null, string]>(`
+    const ingredientStatement = this._connection.prepare<[RowId, RowId, number | null, string]>(`
       INSERT INTO recipe_ingredient
         (recipe_id, ingredient_id, amount, original_line)
       VALUES
@@ -175,7 +176,7 @@ export default class ChefDatabase {
   }
 
   public getIngredient (id: IngredientId): Ingredient {
-    const statement = this._connection.prepare<number>(`
+    const statement = this._connection.prepare<[RowId]>(`
       SELECT * FROM ingredient WHERE id = ?
     `)
     const result = statement.get(id) as GetResult<IIngredientRow>

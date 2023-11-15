@@ -1,17 +1,16 @@
-import CiMap from '@glossa-glo/case-insensitive-map'
 import type ICsvRecipeRow from './ICsvRecipeRow.js'
 import Fraction from 'fraction.js'
 
 import { type DatabaseUnit, tryToMetric, convertToPreferred } from './Unit'
-import ChefDatabase from './ChefDatabase'
+import ChefDatabase, { type RowId } from './ChefDatabase'
 import logger, { LogLevel } from './logger'
 
-export type IngredientId = number
+export type IngredientId = RowId
 export interface IngredientAmount {
   amount: number | null
   originalLine: string
 }
-export type IngredientMap = CiMap<IngredientId, IngredientAmount>
+export type IngredientMap = Map<IngredientId, IngredientAmount>
 
 const AMOUNT_PATTERN = /(\d+\/\d+|\d+ \d+\/\d+|\d+) (\w+)/g
 
@@ -111,5 +110,5 @@ export default class Ingredient implements IIngredient {
 }
 
 export function ingredientMapFactory (): IngredientMap {
-  return new CiMap<IngredientId, IngredientAmount>()
+  return new Map<IngredientId, IngredientAmount>()
 }
