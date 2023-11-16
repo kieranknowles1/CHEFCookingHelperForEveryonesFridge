@@ -4,6 +4,7 @@ import Fraction from 'fraction.js'
 import { type DatabaseUnit, tryToMetric, convertToPreferred } from './Unit'
 import ChefDatabase, { type RowId } from './ChefDatabase'
 import logger, { LogLevel } from './logger'
+import { getGroups } from './regexUtil'
 
 export type IngredientId = RowId
 export interface IngredientAmount {
@@ -12,7 +13,7 @@ export interface IngredientAmount {
 }
 export type IngredientMap = Map<IngredientId, IngredientAmount>
 
-const AMOUNT_PATTERN = /(\d+\/\d+|\d+ \d+\/\d+|\d+) (\w+)/g
+const AMOUNT_PATTERN = /(?<amount>\d+\/\d+|\d+ \d+\/\d+|\d+)( (level|heaping|heaped|round|rounded))? (?<unit>\w+)/g
 
 export class UnparsedIngredientError extends Error {
   constructor (ingredient: Ingredient) {
@@ -29,7 +30,7 @@ export interface IIngredient {
 
 export default class Ingredient implements IIngredient {
   private static amountFromMatch (match: RegExpMatchArray): number {
-    return new Fraction(match[1]).valueOf()
+    return new Fraction(getGroups(match).amount).valueOf()
   }
 
   private static convertUnit (ingredientLine: string, ingredient: Ingredient): number {
@@ -45,7 +46,7 @@ export default class Ingredient implements IIngredient {
       // Handle cases such as '1 to 2 tsp' by trying every match and using the first one that works
       for (const match of matches) {
         const amount = this.amountFromMatch(match)
-        const unit = match[2]
+        const unit = getGroups(match).unit
         const converted = tryToMetric(amount, unit)
         if (converted !== null) {
           return convertToPreferred(converted[0], converted[1], ingredient)

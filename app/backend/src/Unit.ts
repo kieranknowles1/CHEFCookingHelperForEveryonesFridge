@@ -15,8 +15,24 @@ export function tryToMetric (amount: number, unit: string): [number, MetricUnit]
   switch (unit.toLowerCase()) {
     // Metric
     case 'g':
+    case 'gm':
+    case 'gr':
     case 'grams':
       return [amount, 'g']
+
+    case 'kg':
+      return [amount * 1000, 'g']
+
+    case 'milliliters':
+    case 'ml':
+      return [amount, 'ml']
+
+    case 'liter':
+      return [amount * 1000, 'ml']
+
+    case 'cc':
+      return [amount, 'ml']
+
     // Imperial
     case 'c': // Cups
     case 'cup':
@@ -26,29 +42,40 @@ export function tryToMetric (amount: number, unit: string): [number, MetricUnit]
     case 'cans':
       return [amount * 300, 'ml']
     case 'gal': // Gallon
+    case 'gallon':
+    case 'gallons':
       return [amount * 3800, 'ml']
     case 'lb': // Pound
+    case 'lbs':
+    case 'pound':
+    case 'pounds':
       return [amount * 450, 'g']
-    case 'oz': // Ounce
     case 'ounce':
     case 'ounces':
+    case 'oz':
       return [amount * 30, 'g']
-    case 'pt': // Pint
+    case 'pint':
+    case 'pints':
+    case 'pt':
       return [amount * 470, 'ml']
     case 'qt': // Quart
+    case 'qts':
     case 'quart':
     case 'quarts':
       return [amount * 950, 'ml']
     case 'stick': // Stick of butter
     case 'sticks':
       return [amount * 110, 'g']
-    case 'tbsp': // Tablespoon
     case 'tablespoon':
     case 'tablespoons':
+    case 'tbls':
+    case 'tbs':
+    case 'tbsb':
+    case 'tbsp':
       return [amount * 15, 'ml']
-    case 'tsp': // Teaspoon
     case 'teaspoon':
     case 'teaspoons':
+    case 'tsp':
       return [amount * 5, 'ml']
   }
   return null
