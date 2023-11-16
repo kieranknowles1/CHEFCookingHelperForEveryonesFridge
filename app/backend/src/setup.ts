@@ -104,6 +104,6 @@ async function main (): Promise<void> {
   logger.log('info', `Setup done, imported ${dataInfo.success} of ${dataInfo.total} recipes (${(dataInfo.success / dataInfo.total) * 100}%)`)
 
   const missedFrequencies = Array.from(missedIngredients).sort((a, b) => b[1] - a[1])
-  console.log(missedFrequencies)
+  logger.log('info', `Missing ingredients by frequency: ${missedFrequencies.toString()}`)
 }
 main().catch((err) => { logError(err) })
