@@ -1,5 +1,6 @@
-import Ingredient, { type IngredientMap } from './Ingredient'
+import { type IngredientMap } from './Ingredient'
 import type ICsvRecipeRow from './ICsvRecipeRow'
+import parseIngredients from './parseIngredients'
 
 export interface IRecipe {
   name: string
@@ -19,8 +20,7 @@ export default class Recipe implements IRecipe {
     this.directions = directionsArray.join('\n')
     this.link = row.link
 
-    // TODO: Get the amounts
-    this.ingredients = Ingredient.parseCsvRow(row)
+    this.ingredients = parseIngredients(row)
   }
 
   name: string
