@@ -1,3 +1,6 @@
+import Recipe from './Recipe'
+import parseIngredients from './parseIngredients'
+
 /**
  * An unparsed row as it appears in full_dataset.csv
  * NOTE: Arrays are represented as strings here
@@ -13,4 +16,16 @@ export default interface ICsvRecipeRow {
   source: string
   /** JSON array of ingredient names */
   NER: string
+}
+
+export function parseCsvRecipeRow (row: ICsvRecipeRow): Recipe {
+  const directionsArray = JSON.parse(row.directions) as string[]
+  const directions = directionsArray.join('\n')
+  const ingredients = parseIngredients(row)
+  return new Recipe({
+    name: row.title,
+    directions,
+    link: row.link,
+    ingredients
+  })
 }

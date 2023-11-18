@@ -13,8 +13,8 @@ import progressTracker from 'progress-stream'
 import { type IngredientId, UnparsedIngredientError } from './Ingredient'
 import ChefDatabase from './database/ChefDatabase'
 import logger, { logError } from './logger'
-import Recipe from './Recipe'
 import type ICsvRecipeRow from './ICsvRecipeRow'
+import { parseCsvRecipeRow } from './ICsvRecipeRow'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
@@ -70,7 +70,7 @@ async function importData (): Promise<ImportDataReturn> {
         try {
           // Filter to only the most common ingredients
           if (recipeValid(row, supportedIngredients)) {
-            const recipe = Recipe.fromCsvRow(row)
+            const recipe = parseCsvRecipeRow(row)
             writable.addRecipe(recipe)
             success++
           }

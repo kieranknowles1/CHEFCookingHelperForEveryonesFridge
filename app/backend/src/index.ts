@@ -8,7 +8,7 @@ const app = express()
 const PORT = 3000
 
 // TODO: Remove test endpoint
-app.get('/hello', (req, res: TypedResponse<{message: string, to?: string}>) => {
+app.get('/hello', (req, res: TypedResponse<{ message: string, to?: string }>) => {
   res.status(200).json({
     message: 'Hello World!',
     to: req.ip
