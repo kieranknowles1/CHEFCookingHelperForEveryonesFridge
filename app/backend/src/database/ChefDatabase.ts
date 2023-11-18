@@ -3,10 +3,11 @@ import CiMap from '@glossa-glo/case-insensitive-map'
 import Database from 'better-sqlite3'
 import path from 'path'
 
-import type IIngredient from '../IIngredient'
 import { ingredientMapFactory, type IngredientId } from '../IIngredient'
-import type IRecipe from '../IRecipe'
+import type { IRecipeNoId } from '../IRecipe'
 import type * as types from './types'
+import type IIngredient from '../IIngredient'
+import type IRecipe from '../IRecipe'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
@@ -55,7 +56,7 @@ class WritableDatabase {
       .run(ingredient.name)
   }
 
-  public addRecipe (recipe: IRecipe): void {
+  public addRecipe (recipe: IRecipeNoId): void {
     this.assertValid()
     const statement = this._connection.prepare<[string, string, string]>(`
       INSERT INTO recipe
@@ -206,7 +207,7 @@ export default class ChefDatabase {
   /**
    * Get a recipe by its ID
    */
-  public getRecipeById (id: types.RowId): IRecipe {
+  public getRecipe (id: types.RowId): IRecipe {
     type Result = types.IRecipeRow & types.IRecipeIngredientRow
     const statement = this._connection.prepare<[types.RowId]>(`
       SELECT *
@@ -227,6 +228,7 @@ export default class ChefDatabase {
     }
 
     return {
+      id: result[0].id,
       name: result[0].name,
       directions: result[0].directions,
       ingredients,

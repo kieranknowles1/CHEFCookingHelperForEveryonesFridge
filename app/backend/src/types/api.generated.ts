@@ -50,12 +50,14 @@ export interface components {
       id: number;
       /** @example Chicken */
       name: string;
-      unit?: components["schemas"]["Unit"];
+      preferredUnit: components["schemas"]["Unit"];
     };
     IngredientEntry: {
       ingredient: components["schemas"]["Ingredient"];
       /** @example 250 */
-      amount: number;
+      amount?: number;
+      /** @example 250g of chicken */
+      originalLine: string;
     };
   };
   responses: never;

@@ -51,8 +51,8 @@ components:
       properties:
         id: { type: integer, example: 12345 }
         name: { type: string, example: 'Chicken' }
-        unit: { $ref: '#/components/schemas/Unit' }
-      required: [name, id]
+        preferredUnit: { $ref: '#/components/schemas/Unit' }
+      required: [name, id, preferredUnit]
       additionalProperties: false
 
     IngredientEntry:
@@ -60,5 +60,6 @@ components:
       properties:
         ingredient: { $ref: '#/components/schemas/Ingredient' }
         amount: { type: number, example: 250 }
-      required: [ingredient, amount]
+        originalLine: { type: string, example: '250g of chicken' }
+      required: [ingredient, originalLine]
       additionalProperties: false
