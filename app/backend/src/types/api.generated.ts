@@ -36,14 +36,14 @@ export interface components {
     Unit: "none" | "whole" | "ml" | "g";
     Recipe: {
       /** @example 12345 */
-      id?: number;
+      id: number;
       /** @example Chicken Pie */
-      name?: string;
+      name: string;
       /** @example The great thing about chicken pie is that you don't need to know how to make it, just get some chicken. And put it in a pie. */
-      directions?: string;
+      directions: string;
       /** @example example.com */
-      link?: string;
-      ingredients?: components["schemas"]["IngredientEntry"][];
+      link: string;
+      ingredients: components["schemas"]["IngredientEntry"][];
     };
     Ingredient: {
       /** @example 12345 */
