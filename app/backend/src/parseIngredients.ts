@@ -1,6 +1,6 @@
 import type Ingredient from './Ingredient'
 import { type IngredientMap, ingredientMapFactory, UnparsedIngredientError, type IngredientAmount } from './Ingredient'
-import ChefDatabase from './ChefDatabase'
+import ChefDatabase from './database/ChefDatabase'
 import type ICsvRecipeRow from './ICsvRecipeRow'
 import Fraction from 'fraction.js'
 import getRegexGroups from './getRegexGroups'

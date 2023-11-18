@@ -1,5 +1,5 @@
 import { type DatabaseUnit } from './Unit'
-import { type RowId } from './ChefDatabase.js'
+import { type RowId } from './database/types'
 
 export type IngredientId = RowId
 export interface IngredientAmount {

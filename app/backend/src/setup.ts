@@ -11,7 +11,7 @@ import path from 'path'
 import progressTracker from 'progress-stream'
 
 import { type IngredientId, UnparsedIngredientError } from './Ingredient'
-import ChefDatabase from './ChefDatabase'
+import ChefDatabase from './database/ChefDatabase'
 import logger, { logError } from './logger'
 import Recipe from './Recipe'
 import type ICsvRecipeRow from './ICsvRecipeRow'

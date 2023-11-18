@@ -3,45 +3,18 @@ import CiMap from '@glossa-glo/case-insensitive-map'
 import Database from 'better-sqlite3'
 import path from 'path'
 
-import { type DatabaseUnit } from 'Unit'
-import Ingredient from './Ingredient'
-import type { IIngredient, IngredientId } from './Ingredient'
-import type { IRecipe } from './Recipe'
+import Ingredient from '../Ingredient'
+import type { IIngredient, IngredientId } from '../Ingredient'
+import type { IRecipe } from '../Recipe'
+import type * as types from './types'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'data/initialdata.sql')
 
-export type RowId = number | bigint
-type GetResult<TRow> = TRow | undefined
-type AllResult<TRow> = TRow[]
-
-interface IIngredientRow {
-  id: RowId
-  name: string
-  preferredUnit: DatabaseUnit
-  density: number | null
-  assumeUnlimited: number
-}
-
-interface IRecipeRow {
-  id: RowId
-  name: string
-  directions: string
-  link: string
-}
-
-interface IRecipeIngredientRow {
-  recipe_id: RowId
-  ingredient_id: RowId
-
-  amount: number | null
-  original_line: string
-}
-
 export class InvalidIdError extends Error {
-  constructor (table: string, id: RowId) {
+  constructor (table: string, id: types.RowId) {
     super(`Invalid ID ${id} for table ${table}`)
   }
 }
@@ -92,7 +65,7 @@ class WritableDatabase {
     `)
     const id = statement.run(recipe.name, recipe.directions, recipe.link).lastInsertRowid
 
-    const ingredientStatement = this._connection.prepare<[RowId, RowId, number | null, string]>(`
+    const ingredientStatement = this._connection.prepare<[types.RowId, types.RowId, number | null, string]>(`
       INSERT INTO recipe_ingredient
         (recipe_id, ingredient_id, amount, original_line)
       VALUES
@@ -171,7 +144,7 @@ export default class ChefDatabase {
     })
   }
 
-  private ingredientFromRow (row: IIngredientRow): Ingredient {
+  private ingredientFromRow (row: types.IIngredientRow): Ingredient {
     return new Ingredient({
       name: row.name,
       preferredUnit: row.preferredUnit,
@@ -181,10 +154,10 @@ export default class ChefDatabase {
   }
 
   public getIngredient (id: IngredientId): Ingredient {
-    const statement = this._connection.prepare<[RowId]>(`
+    const statement = this._connection.prepare<[types.RowId]>(`
       SELECT * FROM ingredient WHERE id = ?
     `)
-    const result = statement.get(id) as GetResult<IIngredientRow>
+    const result = statement.get(id) as types.GetResult<types.IIngredientRow>
 
     if (result === undefined) {
       throw new InvalidIdError('ingredient', id)
@@ -205,7 +178,7 @@ export default class ChefDatabase {
         JOIN ingredient ON view_ingredient_by_name.id = ingredient.id
         WHERE view_ingredient_by_name.name = ? COLLATE NOCASE
     `)
-    const result = statement.get(name) as GetResult<IIngredientRow>
+    const result = statement.get(name) as types.GetResult<types.IIngredientRow>
     if (result === undefined) {
       return null
     }
@@ -220,7 +193,7 @@ export default class ChefDatabase {
     const statement = this._connection.prepare(`
       SELECT * FROM view_ingredient_by_name
     `)
-    const result = statement.all() as AllResult<IIngredientRow>
+    const result = statement.all() as types.AllResult<types.IIngredientRow>
     const map = new CiMap<string, IngredientId>()
     for (const pair of result) {
       map.set(pair.name, pair.id)
