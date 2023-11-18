@@ -1,5 +1,5 @@
-import type Ingredient from './Ingredient'
-import { type IngredientMap, ingredientMapFactory, UnparsedIngredientError, type IngredientAmount } from './Ingredient'
+import type IIngredient from './IIngredient'
+import { type IngredientMap, ingredientMapFactory, type IngredientAmount } from './IIngredient'
 import ChefDatabase from './database/ChefDatabase'
 import type ICsvRecipeRow from './ICsvRecipeRow'
 import Fraction from 'fraction.js'
@@ -7,13 +7,19 @@ import getRegexGroups from './getRegexGroups'
 import { convertToPreferred, tryToMetric } from './Unit'
 import logger, { LogLevel } from './logger'
 
+export class UnparsedIngredientError extends Error {
+  constructor (ingredient: IIngredient) {
+    super(`Could not get amount for '${ingredient.name}'`)
+  }
+}
+
 const AMOUNT_PATTERN = /(?<amount>\d+\/\d+|\d+ \d+\/\d+|\d+)( (level|heaping|heaped|round|rounded))? (?<unit>\w+)/g
 
 function amountFromMatch (match: RegExpMatchArray): number {
   return new Fraction(getRegexGroups(match).amount).valueOf()
 }
 
-function convertUnit (ingredientLine: string, ingredient: Ingredient): number {
+function convertUnit (ingredientLine: string, ingredient: IIngredient): number {
   const matches = Array.from(ingredientLine.matchAll(AMOUNT_PATTERN))
 
   if (matches.length === 0) { throw new UnparsedIngredientError(ingredient) }
@@ -39,7 +45,7 @@ function convertUnit (ingredientLine: string, ingredient: Ingredient): number {
   }
 }
 
-function getAmount (originalName: string, ingredient: Ingredient, amounts: string[]): IngredientAmount {
+function getAmount (originalName: string, ingredient: IIngredient, amounts: string[]): IngredientAmount {
   if (ingredient.preferredUnit === 'none') {
     return {
       amount: null,

@@ -1,4 +1,4 @@
-import type Ingredient from 'Ingredient'
+import type IIngredient from 'IIngredient'
 
 // NOTE: Must match check constraint on ingredient table in schema.sql
 export type MetricUnit = 'ml' | 'g'
@@ -81,7 +81,7 @@ export function tryToMetric (amount: number, unit: string): [number, MetricUnit]
   return null
 }
 
-export function convertToPreferred (amount: number, unit: MetricUnit, ingredient: Ingredient): number {
+export function convertToPreferred (amount: number, unit: MetricUnit, ingredient: IIngredient): number {
   if (unit === ingredient.preferredUnit) {
     return amount
   }

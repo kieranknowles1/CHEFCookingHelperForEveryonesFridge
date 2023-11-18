@@ -1,4 +1,4 @@
-import Recipe from './Recipe'
+import type IRecipe from './IRecipe'
 import parseIngredients from './parseIngredients'
 
 /**
@@ -18,14 +18,14 @@ export default interface ICsvRecipeRow {
   NER: string
 }
 
-export function parseCsvRecipeRow (row: ICsvRecipeRow): Recipe {
+export function parseCsvRecipeRow (row: ICsvRecipeRow): IRecipe {
   const directionsArray = JSON.parse(row.directions) as string[]
   const directions = directionsArray.join('\n')
   const ingredients = parseIngredients(row)
-  return new Recipe({
+  return {
     name: row.title,
     directions,
     link: row.link,
     ingredients
-  })
+  }
 }

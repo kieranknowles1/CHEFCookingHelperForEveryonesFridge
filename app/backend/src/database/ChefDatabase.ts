@@ -3,9 +3,9 @@ import CiMap from '@glossa-glo/case-insensitive-map'
 import Database from 'better-sqlite3'
 import path from 'path'
 
-import Ingredient from '../Ingredient'
-import type { IIngredient, IngredientId } from '../Ingredient'
-import type { IRecipe } from '../Recipe'
+import type IIngredient from '../IIngredient'
+import type { IngredientId } from '../IIngredient'
+import type IRecipe from '../IRecipe'
 import type * as types from './types'
 
 // TODO: Use environment variables and put this somewhere outside the container
@@ -144,16 +144,17 @@ export default class ChefDatabase {
     })
   }
 
-  private ingredientFromRow (row: types.IIngredientRow): Ingredient {
-    return new Ingredient({
+  private ingredientFromRow (row: types.IIngredientRow): IIngredient {
+    return {
+      id: row.id,
       name: row.name,
       preferredUnit: row.preferredUnit,
       density: row.density,
       assumeUnlimited: row.assumeUnlimited !== 0
-    }, row.id)
+    }
   }
 
-  public getIngredient (id: IngredientId): Ingredient {
+  public getIngredient (id: IngredientId): IIngredient {
     const statement = this._connection.prepare<[types.RowId]>(`
       SELECT * FROM ingredient WHERE id = ?
     `)
@@ -171,7 +172,7 @@ export default class ChefDatabase {
    * @returns The ingredient, or null if it is not found. May return
    * an equipotent ingredient if an exact match is not found.
    */
-  public findIngredientByName (name: string): Ingredient | null {
+  public findIngredientByName (name: string): IIngredient | null {
     const statement = this._connection.prepare<string>(`
       SELECT ingredient.*
         FROM view_ingredient_by_name

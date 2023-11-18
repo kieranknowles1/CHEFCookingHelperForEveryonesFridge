@@ -10,11 +10,12 @@ import csv from 'csv-parse'
 import path from 'path'
 import progressTracker from 'progress-stream'
 
-import { type IngredientId, UnparsedIngredientError } from './Ingredient'
+import { parseCsvRecipeRow } from './ICsvRecipeRow'
+import { type IngredientId } from './IIngredient'
+import { UnparsedIngredientError } from './parseIngredients'
 import ChefDatabase from './database/ChefDatabase'
 import logger, { logError } from './logger'
 import type ICsvRecipeRow from './ICsvRecipeRow'
-import { parseCsvRecipeRow } from './ICsvRecipeRow'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
