@@ -43,6 +43,8 @@ components:
         ingredients:
           type: array
           items: { $ref: '#/components/schemas/IngredientEntry' }
+      required: [id, name, directions, link, ingredients]
+      additionalProperties: false
 
     Ingredient:
       type: object
