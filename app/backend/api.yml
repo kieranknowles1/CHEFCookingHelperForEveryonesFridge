@@ -1,0 +1,62 @@
+openapi: 3.0.0
+
+info:
+  title: CHEF Backend API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost/api/v1
+
+paths:
+  /recipe/{id}:
+    get:
+      summary: Get a recipe by ID
+      parameters:
+        - in: path
+          name: id
+          schema: { type: integer }
+          required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Recipe' }
+
+components:
+  schemas:
+    Unit:
+      enum:
+        - none
+        - whole
+        - ml
+        - g
+      example: g
+
+    Recipe:
+      type: object
+      properties:
+        id: { type: integer, example: 12345 }
+        name: { type: string, example: 'Chicken Pie' }
+        directions: { type: string, example: "The great thing about chicken pie is that you don't need to know how to make it, just get some chicken. And put it in a pie."}
+        link: { type: string, example: 'example.com' }
+        ingredients:
+          type: array
+          items: { $ref: '#/components/schemas/IngredientEntry' }
+
+    Ingredient:
+      type: object
+      properties:
+        id: { type: integer, example: 12345 }
+        name: { type: string, example: 'Chicken' }
+        unit: { $ref: '#/components/schemas/Unit' }
+      required: [name, id]
+      additionalProperties: false
+
+    IngredientEntry:
+      type: object
+      properties:
+        ingredient: { $ref: '#/components/schemas/Ingredient' }
+        amount: { type: number, example: 250 }
+      required: [ingredient, amount]
+      additionalProperties: false
