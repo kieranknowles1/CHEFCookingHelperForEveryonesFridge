@@ -4,7 +4,7 @@ import Database from 'better-sqlite3'
 import path from 'path'
 
 import type IIngredient from '../IIngredient'
-import type { IngredientId } from '../IIngredient'
+import { ingredientMapFactory, type IngredientId } from '../IIngredient'
 import type IRecipe from '../IRecipe'
 import type * as types from './types'
 
@@ -201,5 +201,36 @@ export default class ChefDatabase {
     }
 
     return map
+  }
+
+  /**
+   * Get a recipe by its ID
+   */
+  public getRecipeById (id: types.RowId): IRecipe {
+    type Result = types.IRecipeRow & types.IRecipeIngredientRow
+    const statement = this._connection.prepare<[types.RowId]>(`
+      SELECT *
+        FROM recipe
+        JOIN recipe_ingredient ON recipe_ingredient.recipe_id = recipe.id
+        WHERE recipe.id = ?
+    `)
+
+    const result = statement.all(id) as types.AllResult<Result>
+    if (result.length === 0) { throw new InvalidIdError('recipe', id) }
+
+    const ingredients = ingredientMapFactory()
+    for (const row of result) {
+      ingredients.set(row.ingredient_id, {
+        amount: row.amount,
+        originalLine: row.original_line
+      })
+    }
+
+    return {
+      name: result[0].name,
+      directions: result[0].directions,
+      ingredients,
+      link: result[0].link
+    }
   }
 }
