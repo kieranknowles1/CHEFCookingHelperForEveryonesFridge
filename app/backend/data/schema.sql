@@ -7,6 +7,10 @@ DROP TABLE IF EXISTS ingredient_alt_name;
 DROP TABLE IF EXISTS ingredient;
 DROP TABLE IF EXISTS recipe;
 
+DROP TABLE IF EXISTS fridge_ingredient;
+DROP TABLE IF EXISTS fridge;
+DROP TABLE IF EXISTS user;
+
 DROP VIEW IF EXISTS view_ingredient_by_name;
 
 CREATE TABLE ingredient (
@@ -55,3 +59,27 @@ CREATE TABLE recipe_ingredient (
 
 CREATE INDEX index_recipe_ingredient_by_recipe_id
     ON recipe_ingredient(recipe_id);
+
+CREATE TABLE user (
+    id INTEGER NOT NULL PRIMARY KEY,
+    username TEXT NOT NULL UNIQUE
+    --// TODO: password
+);
+
+CREATE INDEX index_user_by_username
+    ON user(username);
+
+CREATE TABLE fridge (
+    id INTEGER NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    owner_id INTEGER NOT NULL REFERENCES user(id)
+);
+
+CREATE TABLE fridge_ingredient (
+    fridge_id INTEGER NOT NULL REFERENCES fridge(id),
+    ingredient_id INTEGER NOT NULL REFERENCES ingredient(id),
+    amount REAL NOT NULL
+);
+
+CREATE INDEX index_fridge_ingredient_by_fridge_id
+    ON fridge_ingredient(fridge_id);
