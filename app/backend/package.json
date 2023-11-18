@@ -4,6 +4,7 @@
   "description": "Backend for the CHEF system.",
   "main": "index.js",
   "scripts": {
+    "generate-types": "openapi-typescript ./api.yml --output src/types/api.generated.ts",
     "setup": "node build/setup.js",
     "start": "node build/index.js",
     "build": "tsc -p .",
@@ -26,6 +27,7 @@
     "eslint-plugin-n": "^16.2.0",
     "eslint-plugin-promise": "^6.1.1",
     "nodemon": "^3.0.1",
+    "openapi-typescript": "^6.7.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
