@@ -1,11 +1,11 @@
 import { readFileSync } from 'fs'
 import CiMap from '@glossa-glo/case-insensitive-map'
-import Database, { type Statement } from 'better-sqlite3'
+import Database from 'better-sqlite3'
 import path from 'path'
 
 import { ingredientMapFactory, type IngredientId } from '../IIngredient'
 import type { IRecipeNoId } from '../IRecipe'
-import * as types from './types'
+import type * as types from './types'
 import type IIngredient from '../IIngredient'
 import type IRecipe from '../IRecipe'
 import CodedError from '../CodedError'
