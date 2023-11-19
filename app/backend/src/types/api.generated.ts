@@ -23,6 +23,32 @@ export interface paths {
       };
     };
   };
+  "/ingredient/add": {
+    /**
+     * Add an ingredient to a virtual fridge
+     * @description Add `amount` of `ingredientId` to `fridgeId`.
+     */
+    post: {
+      requestBody: {
+        content: {
+          "application/json": {
+            /** @example 1234 */
+            fridgeId: number;
+            /** @example 1234 */
+            ingredientId: number;
+            /** @example 100 */
+            amount: number;
+          };
+        };
+      };
+      responses: {
+        /** @description No Content */
+        204: {
+          content: never;
+        };
+      };
+    };
+  };
 }
 
 export type webhooks = Record<string, never>;

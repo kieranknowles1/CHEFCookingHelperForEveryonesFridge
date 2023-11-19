@@ -4,12 +4,17 @@ info:
   title: CHEF Backend API
   version: 1.0.0
 
+tags:
+  - name: Fridge
+  - name: Recipe
+
 servers:
   - url: http://localhost/api/v1
 
 paths:
   /recipe/{id}:
     get:
+      tags: [Recipe]
       summary: Get a recipe by ID
       parameters:
         - in: path
@@ -22,6 +27,30 @@ paths:
           content:
             application/json:
               schema: { $ref: '#/components/schemas/Recipe' }
+
+  # TODO: Authentication
+  /ingredient/add:
+    post:
+      tags: [Fridge]
+      summary: Add an ingredient to a virtual fridge
+      description:
+        Add `amount` of `ingredientId` to `fridgeId`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fridgeId: { type: number, example: 1234 }
+                ingredientId: { type: number, example: 1234 }
+                amount: { type: number, example: 100 }
+              required: [fridgeId, ingredientId, amount]
+              additionalProperties: false
+      responses:
+        "204":
+          description: No Content
+
 
 components:
   schemas:
