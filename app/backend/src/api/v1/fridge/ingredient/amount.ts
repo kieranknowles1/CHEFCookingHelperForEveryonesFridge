@@ -1,12 +1,12 @@
 import { param, query, validationResult } from 'express-validator'
 import type { Express } from 'express'
 
-import ChefDatabase from '../../database/ChefDatabase'
-import type { TypedRequest } from '../../TypedEndpoint'
+import ChefDatabase from '../../../../database/ChefDatabase'
+import type { TypedRequest } from '../../../../TypedEndpoint'
 
 type AddIngredientPostRequest = TypedRequest<{ amount: string }, { fridgeId: string, ingredientId: string }, undefined>
 
-export default function installAddIngredientEndpoint (app: Express): void {
+export default function installIngredientEndpoint (app: Express): void {
   app.post(
     '/api/v1/fridge/:fridgeId/ingredient/:ingredientId/amount',
     param('fridgeId').isInt(),

@@ -1,9 +1,9 @@
 import type { Express } from 'express'
 import { param, validationResult } from 'express-validator'
 
-import type { components } from '../../types/api.generated'
-import type { TypedRequest, TypedResponse } from '../../TypedEndpoint'
-import ChefDatabase from '../../database/ChefDatabase'
+import type { components } from '../../../types/api.generated'
+import type { TypedRequest, TypedResponse } from '../../../TypedEndpoint'
+import ChefDatabase from '../../../database/ChefDatabase'
 
 type RecipeResponse = TypedResponse<components['schemas']['Recipe']>
 type IngredientEntry = components['schemas']['IngredientEntry']
