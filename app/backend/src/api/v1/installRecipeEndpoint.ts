@@ -13,9 +13,10 @@ type IngredientEntry = components['schemas']['IngredientEntry']
  */
 export default function installRecipeEndpoint (app: Express): void {
   app.get('/api/v1/recipe/:id', param('id').isInt(), (req: Request, res: RecipeResponse) => {
-    const result = validationResult(req)
-    if (!result.isEmpty()) {
-      res.status(400).json({ errors: result.array() })
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() })
+      return
     }
 
     const id = Number.parseInt(req.params.id)
