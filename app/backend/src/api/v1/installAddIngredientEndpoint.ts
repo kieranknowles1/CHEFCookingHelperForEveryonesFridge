@@ -1,5 +1,6 @@
 import { type Express } from 'express'
 import { body, validationResult } from 'express-validator'
+import ChefDatabase from '../../database/ChefDatabase'
 
 export default function installAddIngredientEndpoint (app: Express): void {
   app.post(
@@ -14,9 +15,16 @@ export default function installAddIngredientEndpoint (app: Express): void {
         return
       }
 
-      // TODO: Implement
+      const fridgeId = Number.parseInt(req.body.fridgeId)
+      const ingredientId = Number.parseInt(req.body.ingredientId)
+      const amount = Number.parseFloat(req.body.amount)
 
-      res.status(204)
+      const currentAmount = ChefDatabase.Instance.getIngredientAmount(fridgeId, ingredientId)
+
+      ChefDatabase.Instance.wrapTransaction(writable => {
+        writable.setIngredientAmount(fridgeId, ingredientId, currentAmount + amount)
+      })
+      res.status(204).send()
     }
   )
 }

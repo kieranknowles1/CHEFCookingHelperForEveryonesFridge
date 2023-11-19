@@ -68,3 +68,18 @@ VALUES
     ('Tomato', (SELECT id FROM ingredient WHERE name = 'Tomatoes')),
     ('Unsalted Butter', (SELECT id FROM ingredient WHERE name = 'Butter')),
     ('White Sugar', (SELECT id FROM ingredient WHERE name = 'Sugar'));
+
+INSERT INTO user
+    (id, username)
+VALUES
+    (1, 'Bob');
+
+INSERT INTO fridge
+    (id, name, owner_id)
+VALUES
+    (1, 'Bobs Fridge', 1);
+
+INSERT INTO fridge_ingredient
+    (fridge_id, ingredient_id, amount)
+VALUES
+    (1, (SELECT id FROM ingredient WHERE name = 'Bananas'), 5);

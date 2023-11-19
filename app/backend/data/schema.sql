@@ -54,7 +54,9 @@ CREATE TABLE recipe_ingredient (
     ingredient_id INTEGER NOT NULL REFERENCES ingredient(id),
 
     amount REAL,
-    original_line TEXT NOT NULL
+    original_line TEXT NOT NULL,
+
+    PRIMARY KEY (recipe_id, ingredient_id)
 );
 
 CREATE INDEX index_recipe_ingredient_by_recipe_id
@@ -78,7 +80,9 @@ CREATE TABLE fridge (
 CREATE TABLE fridge_ingredient (
     fridge_id INTEGER NOT NULL REFERENCES fridge(id),
     ingredient_id INTEGER NOT NULL REFERENCES ingredient(id),
-    amount REAL NOT NULL
+    amount REAL NOT NULL,
+
+    PRIMARY KEY (fridge_id, ingredient_id)
 );
 
 CREATE INDEX index_fridge_ingredient_by_fridge_id

@@ -1,11 +1,11 @@
 import { readFileSync } from 'fs'
 import CiMap from '@glossa-glo/case-insensitive-map'
-import Database from 'better-sqlite3'
+import Database, { type Statement } from 'better-sqlite3'
 import path from 'path'
 
 import { ingredientMapFactory, type IngredientId } from '../IIngredient'
 import type { IRecipeNoId } from '../IRecipe'
-import type * as types from './types'
+import * as types from './types'
 import type IIngredient from '../IIngredient'
 import type IRecipe from '../IRecipe'
 import CodedError from '../CodedError'
@@ -76,6 +76,23 @@ class WritableDatabase {
     `)
     for (const [ingredientId, amount] of recipe.ingredients) {
       ingredientStatement.run(id, ingredientId, amount.amount, amount.originalLine)
+    }
+  }
+
+  public setIngredientAmount (fridgeId: types.RowId, ingredientId: types.RowId, amount: number): void {
+    if (amount === 0) {
+      const statement = this._connection.prepare<[types.RowId, types.RowId]>(`
+        DELETE FROM fridge_ingredient WHERE fridge_id = ? AND ingredient_id = ?
+      `)
+      statement.run(fridgeId, ingredientId)
+    } else {
+      const statement = this._connection.prepare<[types.RowId, types.RowId, types.RowId]>(`
+        INSERT OR REPLACE INTO fridge_ingredient
+          (fridge_id, ingredient_id, amount)
+        VALUES
+          (?, ?, ?)
+      `)
+      statement.run(fridgeId, ingredientId, amount)
     }
   }
 }
@@ -236,5 +253,19 @@ export default class ChefDatabase {
       ingredients,
       link: result[0].link
     }
+  }
+
+  /**
+   * Get the amount of an ingredient in a fridge
+   */
+  public getIngredientAmount (fridgeId: types.RowId, ingredientId: types.RowId): number {
+    const statement = this._connection.prepare<[types.RowId, types.RowId]>(`
+      SELECT amount
+      FROM fridge_ingredient
+      WHERE fridge_id = ? AND ingredient_id = ?
+    `)
+    const result = statement.get(fridgeId, ingredientId) as types.GetResult<{ amount: number }>
+
+    return result?.amount ?? 0
   }
 }
