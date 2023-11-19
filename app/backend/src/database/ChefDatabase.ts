@@ -8,13 +8,15 @@ import type { IRecipeNoId } from '../IRecipe'
 import type * as types from './types'
 import type IIngredient from '../IIngredient'
 import type IRecipe from '../IRecipe'
+import CodedError from '../CodedError'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'data/initialdata.sql')
 
-export class InvalidIdError extends Error {
+export class InvalidIdError extends CodedError {
+  public readonly code = 404
   constructor (table: string, id: types.RowId) {
     super(`Invalid ID ${id} for table ${table}`)
   }
