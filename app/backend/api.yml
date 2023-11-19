@@ -29,24 +29,26 @@ paths:
               schema: { $ref: '#/components/schemas/Recipe' }
 
   # TODO: Authentication
-  /ingredient/add:
+  /fridge/{fridgeId}/ingredient/{ingredientId}/amount:
     post:
       tags: [Fridge]
-      summary: Add an ingredient to a virtual fridge
+      summary: Update the amount of an ingredient in the fridge
       description:
-        Add `amount` of `ingredientId` to `fridgeId`.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                fridgeId: { type: number, example: 1234 }
-                ingredientId: { type: number, example: 1234 }
-                amount: { type: number, example: 100 }
-              required: [fridgeId, ingredientId, amount]
-              additionalProperties: false
+        Set the amount of `ingredientId` in `fridgeId` to `amount`
+      parameters:
+        - in: path
+          name: fridgeId
+          schema: { type: integer, example: 1 }
+          required: true
+        - in: path
+          name: ingredientId
+          schema: { type: integer, example: 1 }
+          required: true
+        - in: query
+          name: amount
+          description: Amount to set the ingredient to
+          schema: { type: integer, example: 1 }
+          required: true
       responses:
         "204":
           description: No Content

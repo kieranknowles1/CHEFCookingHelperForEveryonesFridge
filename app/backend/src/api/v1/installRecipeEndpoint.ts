@@ -1,18 +1,20 @@
-import type { Express, Request } from 'express'
+import type { Express } from 'express'
 import { param, validationResult } from 'express-validator'
 
 import type { components } from '../../types/api.generated'
-import type TypedResponse from '../../TypedResponse'
+import type { TypedRequest, TypedResponse } from '../../TypedEndpoint'
 import ChefDatabase from '../../database/ChefDatabase'
 
 type RecipeResponse = TypedResponse<components['schemas']['Recipe']>
 type IngredientEntry = components['schemas']['IngredientEntry']
 
+type RecipeRequest = TypedRequest<undefined, { id: string }, undefined>
+
 /**
  * Endpoint to get a specific recipe by its ID
  */
 export default function installRecipeEndpoint (app: Express): void {
-  app.get('/api/v1/recipe/:id', param('id').isInt(), (req: Request, res: RecipeResponse) => {
+  app.get('/api/v1/recipe/:id', param('id').isInt(), (req: RecipeRequest, res: RecipeResponse) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       res.status(400).json({ errors: errors.array() })
