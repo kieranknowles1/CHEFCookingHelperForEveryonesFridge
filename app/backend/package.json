@@ -37,6 +37,7 @@
     "cli-progress": "^3.12.0",
     "csv-parse": "^5.5.2",
     "express": "^4.18.2",
+    "express-validator": "^7.0.1",
     "fraction.js": "^4.3.4",
     "progress-stream": "^2.0.0",
     "winston": "^3.11.0"

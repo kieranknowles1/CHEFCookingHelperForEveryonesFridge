@@ -1,7 +1,7 @@
 import express from 'express'
 
 import type TypedResponse from './TypedResponse'
-import recipeEndpoint from './api/v1/recipeEndpoint'
+import installRecipeEndpoint from './api/v1/installRecipeEndpoint'
 
 const app = express()
 
@@ -18,7 +18,7 @@ app.get('/hello', (req, res: TypedResponse<{ message: string, to?: string }>) =>
 
 // TODO: API Exception handler
 
-app.get('/api/v1/recipe/:id', recipeEndpoint)
+installRecipeEndpoint(app)
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`)
