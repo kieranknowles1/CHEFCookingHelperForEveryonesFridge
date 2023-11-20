@@ -280,4 +280,28 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     }
     return map
   }
+
+  public getAvailableRecipes (fridgeId: types.RowId): types.RowId[] {
+    // Well this was easier than expected
+    const statement = this._connection.prepare<[types.RowId]>(`
+      SELECT
+        -- Number of ingredients that are available or unlimited
+        count(*) as available_count,
+        -- Total number of ingredients
+        (SELECT count(*) FROM recipe_ingredient WHERE recipe_id = outer_recipe_ingredient.recipe_id) AS total_count
+      -- outer_recipe_ingredient is used in the subquery below
+      FROM recipe_ingredient AS outer_recipe_ingredient
+      -- Need access to ingredient.assumeUnlimited for WHERE clause
+      JOIN ingredient ON ingredient.id = outer_recipe_ingredient.ingredient_id
+      -- Filter to available or unlimited ingredients
+      WHERE ingredient_id IN (SELECT ingredient_id FROM fridge_ingredient WHERE fridge_id = ?) OR ingredient.assumeUnlimited = true
+      -- Group for available_count
+      GROUP BY recipe_id
+      -- All ingredients were available
+      HAVING available_count = total_count
+    `)
+    const result = statement.all(fridgeId) as types.AllResult<{ recipe_id: types.RowId }>
+
+    return result.map(row => row.recipe_id)
+  }
 }

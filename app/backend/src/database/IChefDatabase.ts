@@ -69,5 +69,13 @@ export default interface IChefDatabase {
    */
   getIngredientAmount: (fridgeId: types.RowId, ingredientId: types.RowId) => number
 
+  /**
+   * Get the amounts of all ingredients in a fridge
+   */
   getAllIngredientAmounts: (fridgeId: types.RowId) => Map<types.RowId, IFridgeIngredientAmount>
+
+  /**
+   * Get the recipes that can be made with the current ingredients in the fridge
+   */
+  getAvailableRecipes: (fridgeId: types.RowId) => types.RowId[]
 }
