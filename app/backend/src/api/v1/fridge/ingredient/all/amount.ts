@@ -17,11 +17,10 @@ export default function installIngredientAllAmountEndpoint (app: Express): void 
       const fridgeId = Number.parseInt(req.params.fridgeId)
       const ingredients = getDatabase().getAllIngredientAmounts(fridgeId)
 
-      res.json(Array.from(ingredients, ([id, amount]) => {
-        const ingredient = getDatabase().getIngredient(id)
+      res.json(Array.from(ingredients, ([id, row]) => {
         return {
-          ingredient,
-          amount
+          ingredient: row.ingredient,
+          amount: row.amount
         }
       }))
     })

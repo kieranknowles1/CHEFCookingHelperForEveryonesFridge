@@ -7,6 +7,11 @@ import { type IngredientId } from '../IIngredient'
 
 import type * as types from './types'
 
+export interface IFridgeIngredientAmount {
+  ingredient: IIngredient
+  amount: number
+}
+
 /**
  * Writable interface to the database, passed to the callback of {@link IChefDatabase.wrapTransaction}
  * and is only valid for the duration of the callback.
@@ -64,5 +69,5 @@ export default interface IChefDatabase {
    */
   getIngredientAmount: (fridgeId: types.RowId, ingredientId: types.RowId) => number
 
-  getAllIngredientAmounts: (fridgeId: types.RowId) => Map<IngredientId, number>
+  getAllIngredientAmounts: (fridgeId: types.RowId) => Map<types.RowId, IFridgeIngredientAmount>
 }

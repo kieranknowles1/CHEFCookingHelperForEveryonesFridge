@@ -41,7 +41,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: { $ref: "#/components/schemas/IngredientEntry" }
+                items: { $ref: "#/components/schemas/FridgeIngredientEntry" }
 
   # TODO: Authentication
   /fridge/{fridgeId}/ingredient/{ingredientId}/amount:
@@ -148,3 +148,7 @@ components:
       allOf: [{ $ref: "#/components/schemas/IngredientEntry"}]
       properties:
         originalLine: { type: string, example: '250g of chicken' }
+
+    FridgeIngredientEntry:
+      allOf: [{ $ref: "#/components/schemas/IngredientEntry"}]
+      required: [amount]

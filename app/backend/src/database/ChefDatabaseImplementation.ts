@@ -10,8 +10,8 @@ import type IRecipe from '../IRecipe'
 import { type IRecipeNoId } from '../IRecipe'
 
 import type * as types from './types'
+import { type IFridgeIngredientAmount, type IWritableDatabase } from './IChefDatabase'
 import type IChefDatabase from './IChefDatabase'
-import { type IWritableDatabase } from './IChefDatabase'
 import InvalidIdError from './InvalidIdError'
 
 // TODO: Use environment variables and put this somewhere outside the container
@@ -261,14 +261,23 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
   /**
    * Get all ingredient amounts in a fridge
    */
-  public getAllIngredientAmounts (fridgeId: types.RowId): Map<types.RowId, number> {
+  public getAllIngredientAmounts (fridgeId: types.RowId): Map<types.RowId, IFridgeIngredientAmount> {
+    type IAllIngredientAmountsRow = types.IIngredientRow & types.IFridgeIngredientRow
     const statement = this._connection.prepare<[types.RowId]>(`
       SELECT *
       FROM fridge_ingredient
+      JOIN ingredient ON ingredient.id = fridge_ingredient.ingredient_id
       WHERE fridge_id = ?
     `)
-    const result = statement.all(fridgeId) as types.AllResult<types.IFridgeIngredientRow>
+    const result = statement.all(fridgeId) as types.AllResult<IAllIngredientAmountsRow>
 
-    return new Map(result.map(value => [value.ingredient_id, value.amount]))
+    const map = new Map<types.RowId, IFridgeIngredientAmount>()
+    for (const row of result) {
+      map.set(row.ingredient_id, {
+        amount: row.amount,
+        ingredient: this.ingredientFromRow(row)
+      })
+    }
+    return map
   }
 }

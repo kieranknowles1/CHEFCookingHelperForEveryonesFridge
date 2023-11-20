@@ -4,6 +4,9 @@
  */
 
 
+/** WithRequired type helpers */
+type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
+
 export interface paths {
   "/recipe/{id}": {
     /** Get a recipe by ID */
@@ -35,7 +38,7 @@ export interface paths {
         /** @description OK */
         200: {
           content: {
-            "application/json": components["schemas"]["IngredientEntry"][];
+            "application/json": components["schemas"]["FridgeIngredientEntry"][];
           };
         };
       };
@@ -141,6 +144,7 @@ export interface components {
       /** @example 250g of chicken */
       originalLine?: string;
     } & components["schemas"]["IngredientEntry"];
+    FridgeIngredientEntry: WithRequired<components["schemas"]["IngredientEntry"], "amount">;
   };
   responses: never;
   parameters: {
