@@ -28,7 +28,7 @@ paths:
             application/json:
               schema: { $ref: '#/components/schemas/Recipe' }
 
-  /fridge/{fridgeId}/ingredient/all:
+  /fridge/{fridgeId}/ingredient/all/amount:
     get:
       tags: [Fridge]
       summary: Get all ingredients in the fridge

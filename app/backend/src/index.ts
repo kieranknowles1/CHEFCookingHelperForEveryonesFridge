@@ -2,6 +2,7 @@ import express, { type NextFunction } from 'express'
 import bodyParser from 'body-parser'
 
 import CodedError from './CodedError'
+import installIngredientAllAmountEndpoint from './api/v1/fridge/ingredient/all/amount'
 import installIngredientEndpoint from './api/v1/fridge/ingredient/amount'
 import installRecipeEndpoint from './api/v1/recipe/recipe'
 
@@ -12,8 +13,9 @@ const PORT = 3000
 
 app.use(bodyParser.json())
 
-installRecipeEndpoint(app)
+installIngredientAllAmountEndpoint(app)
 installIngredientEndpoint(app)
+installRecipeEndpoint(app)
 
 app.use((err: Error, req: express.Request, res: express.Response, next: NextFunction) => {
   const code = err instanceof CodedError ? err.code : 500

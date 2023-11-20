@@ -23,7 +23,7 @@ export interface paths {
       };
     };
   };
-  "/fridge/{fridgeId}/ingredient/all": {
+  "/fridge/{fridgeId}/ingredient/all/amount": {
     /** Get all ingredients in the fridge */
     get: {
       parameters: {

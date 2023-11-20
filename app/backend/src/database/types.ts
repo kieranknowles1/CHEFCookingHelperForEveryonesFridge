@@ -26,3 +26,10 @@ export interface IRecipeIngredientRow {
   amount: number | null
   original_line: string
 }
+
+export interface IFridgeIngredientRow {
+  fridge_id: RowId
+  ingredient_id: RowId
+
+  amount: number
+}

@@ -1,10 +1,11 @@
 import { param, query, validationResult } from 'express-validator'
 import { type Express } from 'express'
 
-import { type TypedResponse } from '../../../../TypedEndpoint'
+import { type ParameterType, type TypedRequest, type TypedResponse } from '../../../../TypedEndpoint'
 import getDatabase from '../../../../database/getDatabase'
 
-import type IngredientRequest from './IngredientRequest'
+interface IngredientRequest<TQuery extends ParameterType, TBody>
+  extends TypedRequest<TQuery, { fridgeId: string, ingredientId: string }, TBody> {}
 
 type IngredientPostRequest = IngredientRequest<{ amount: string }, undefined>
 type IngredientGetRequest = IngredientRequest<undefined, undefined>

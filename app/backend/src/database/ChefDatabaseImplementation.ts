@@ -257,4 +257,18 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
 
     return result?.amount ?? 0
   }
+
+  /**
+   * Get all ingredient amounts in a fridge
+   */
+  public getAllIngredientAmounts (fridgeId: types.RowId): Map<types.RowId, number> {
+    const statement = this._connection.prepare<[types.RowId]>(`
+      SELECT *
+      FROM fridge_ingredient
+      WHERE fridge_id = ?
+    `)
+    const result = statement.all(fridgeId) as types.AllResult<types.IFridgeIngredientRow>
+
+    return new Map(result.map(value => [value.ingredient_id, value.amount]))
+  }
 }
