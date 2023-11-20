@@ -3,7 +3,7 @@ import { param, validationResult } from 'express-validator'
 
 import type { components } from '../../../types/api.generated'
 import type { TypedRequest, TypedResponse } from '../../../TypedEndpoint'
-import ChefDatabase from '../../../database/ChefDatabase'
+import getDatabase from '../../../database/getDatabase'
 
 type RecipeResponse = TypedResponse<components['schemas']['Recipe']>
 type IngredientEntry = components['schemas']['IngredientEntry']
@@ -23,11 +23,11 @@ export default function installRecipeEndpoint (app: Express): void {
 
     const id = Number.parseInt(req.params.id)
 
-    const recipe = ChefDatabase.Instance.getRecipe(id)
+    const recipe = getDatabase().getRecipe(id)
 
     const ingredients: IngredientEntry[] = []
     for (const entry of recipe.ingredients.entries()) {
-      const ingredient = ChefDatabase.Instance.getIngredient(entry[0])
+      const ingredient = getDatabase().getIngredient(entry[0])
       const amount = entry[1]
       ingredients.push({
         ingredient: {

@@ -13,7 +13,7 @@ import progressTracker from 'progress-stream'
 import { parseCsvRecipeRow } from './ICsvRecipeRow'
 import { type IngredientId } from './IIngredient'
 import { UnparsedIngredientError } from './parseIngredients'
-import ChefDatabase from './database/ChefDatabase'
+import getDatabase from './database/getDatabase'
 import logger, { logError } from './logger'
 import type ICsvRecipeRow from './ICsvRecipeRow'
 
@@ -57,12 +57,12 @@ interface ImportDataReturn { success: number, total: number }
 async function importData (): Promise<ImportDataReturn> {
   const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
 
-  const supportedIngredients = ChefDatabase.Instance.getIngredientIds()
+  const supportedIngredients = getDatabase().getIngredientIds()
 
   let total = 0
   let success = 0
 
-  return ChefDatabase.Instance.wrapTransactionAsync<ImportDataReturn>(async (writable) => {
+  return getDatabase().wrapTransactionAsync<ImportDataReturn>(async (writable) => {
     return new Promise<ImportDataReturn>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
       .pipe(progress)
       .pipe(csv.parse({ columns: true }))
@@ -97,7 +97,7 @@ async function importData (): Promise<ImportDataReturn> {
 
 async function main (): Promise<void> {
   logger.log('info', 'Setting up schema')
-  ChefDatabase.Instance.resetDatabase('IKnowWhatIAmDoing')
+  getDatabase().resetDatabase('IKnowWhatIAmDoing')
 
   logger.log('info', 'Importing data into the database')
   const dataInfo = await importData()

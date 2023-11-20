@@ -1,6 +1,6 @@
 import type IIngredient from './IIngredient'
 import { type IngredientMap, ingredientMapFactory, type IngredientAmount } from './IIngredient'
-import ChefDatabase from './database/ChefDatabase'
+import getDatabase from './database/getDatabase'
 import type ICsvRecipeRow from './ICsvRecipeRow'
 import Fraction from 'fraction.js'
 import getRegexGroups from './getRegexGroups'
@@ -71,7 +71,7 @@ export default function parseIngredients (row: ICsvRecipeRow): IngredientMap {
   const amounts = JSON.parse(row.ingredients) as string[]
 
   for (const originalName of names) {
-    const ingredient = ChefDatabase.Instance.findIngredientByName(originalName)
+    const ingredient = getDatabase().findIngredientByName(originalName)
     if (ingredient === null) {
       throw new Error(`Ingredient ${originalName} does not exist in database`)
     }

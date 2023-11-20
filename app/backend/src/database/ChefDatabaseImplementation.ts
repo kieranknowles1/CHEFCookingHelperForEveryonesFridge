@@ -4,33 +4,28 @@ import Database from 'better-sqlite3'
 import path from 'path'
 
 import { ingredientMapFactory, type IngredientId } from '../IIngredient'
+import InvalidIdError from './InvalidIdError'
 import type { IRecipeNoId } from '../IRecipe'
+import type { IWritableDatabase } from './IChefDatabase'
 import type * as types from './types'
+import type IChefDatabase from './IChefDatabase'
 import type IIngredient from '../IIngredient'
 import type IRecipe from '../IRecipe'
-import CodedError from '../CodedError'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'data/initialdata.sql')
 
-export class InvalidIdError extends CodedError {
-  public readonly code = 404
-  constructor (table: string, id: types.RowId) {
-    super(`Invalid ID ${id} for table ${table}`)
-  }
-}
-
 /**
- * Writable interface to the database, passed to the callback of {@link ChefDatabase.wrapTransaction}
+ * Writable interface to the database, passed to the callback of {@link ChefDatabaseImplementation.wrapTransaction}
  * and is only valid for the duration of the callback.
  */
-class WritableDatabase {
-  private readonly _db: ChefDatabase
+class WritableDatabaseImplementation implements IWritableDatabase {
+  private readonly _db: ChefDatabaseImplementation
   private readonly _connection: Database.Database
 
-  /** Whether the WritableDatabase is usable. Only true for the duration of {@link ChefDatabase.wrapTransaction} */
+  /** Whether the WritableDatabase is usable. Only true for the duration of {@link ChefDatabaseImplementation.wrapTransaction} */
   private _valid: boolean = true
   public close (): void {
     this._valid = false
@@ -42,7 +37,7 @@ class WritableDatabase {
     }
   }
 
-  public constructor (db: ChefDatabase, connection: Database.Database) {
+  public constructor (db: ChefDatabaseImplementation, connection: Database.Database) {
     this._db = db
     this._connection = connection
   }
@@ -97,18 +92,10 @@ class WritableDatabase {
   }
 }
 
-export default class ChefDatabase {
-  private static _instance: ChefDatabase | null = null
-  public static get Instance (): ChefDatabase {
-    if (this._instance == null) {
-      this._instance = new ChefDatabase()
-    }
-    return this._instance
-  }
-
+export default class ChefDatabaseImplementation implements IChefDatabase {
   private readonly _connection: Database.Database
 
-  private constructor () {
+  public constructor () {
     this._connection = new Database(DATABASE_PATH)
   }
 
@@ -128,8 +115,8 @@ export default class ChefDatabase {
    * Wrap `callback` within a transaction. Must be used for any operations that write to the database
    * The transaction will be rolled back if an uncaught exception occurs and the exception re-thrown
    */
-  public wrapTransaction<TReturn = void> (callback: (db: WritableDatabase) => TReturn): TReturn {
-    const writable = new WritableDatabase(this, this._connection)
+  public wrapTransaction<TReturn = void> (callback: (db: WritableDatabaseImplementation) => TReturn): TReturn {
+    const writable = new WritableDatabaseImplementation(this, this._connection)
     try {
       this._connection.exec('BEGIN TRANSACTION')
       const data = callback(writable)
@@ -148,9 +135,9 @@ export default class ChefDatabase {
    * settled before committing/rolling back
    * @returns The return value of `callback` or void if none
    */
-  public async wrapTransactionAsync<TReturn = void> (callback: (db: WritableDatabase) => Promise<TReturn>): Promise<TReturn> {
+  public async wrapTransactionAsync<TReturn = void> (callback: (db: WritableDatabaseImplementation) => Promise<TReturn>): Promise<TReturn> {
     return new Promise<TReturn>((resolve, reject) => {
-      const writable = new WritableDatabase(this, this._connection)
+      const writable = new WritableDatabaseImplementation(this, this._connection)
       this._connection.exec('BEGIN TRANSACTION')
       callback(writable).then(data => {
         this._connection.exec('COMMIT')

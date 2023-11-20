@@ -1,7 +1,7 @@
 import { param, query, validationResult } from 'express-validator'
 import type { Express } from 'express'
 
-import ChefDatabase from '../../../../database/ChefDatabase'
+import getDatabase from '../../../../database/getDatabase'
 import type { TypedResponse } from '../../../../TypedEndpoint'
 import type IngredientRequest from './IngredientRequest'
 
@@ -26,7 +26,7 @@ export default function installIngredientEndpoint (app: Express): void {
       const fridgeId = Number.parseFloat(req.params.fridgeId)
       const ingredientId = Number.parseFloat(req.params.ingredientId)
 
-      const amount = ChefDatabase.Instance.getIngredientAmount(fridgeId, ingredientId)
+      const amount = getDatabase().getIngredientAmount(fridgeId, ingredientId)
       res.json(amount)
     }
   )
@@ -47,7 +47,7 @@ export default function installIngredientEndpoint (app: Express): void {
       const ingredientId = Number.parseInt(req.params.ingredientId)
       const amount = Number.parseFloat(req.query.amount)
 
-      ChefDatabase.Instance.wrapTransaction(writable => {
+      getDatabase().wrapTransaction(writable => {
         writable.setIngredientAmount(fridgeId, ingredientId, amount)
       })
       res.status(204).send()
