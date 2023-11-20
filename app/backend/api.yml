@@ -59,6 +59,22 @@ paths:
         "204":
           description: No Content
 
+  /fridge/{fridgeId}/recipe/available:
+    get:
+      tags: [Fridge]
+      summary: Get a list of available recipes
+      description: Returns the IDs of all recipes that can be made with the available ingredients
+      parameters:
+        - $ref: "#/components/parameters/fridgeId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: number }
+
 
 components:
   parameters:

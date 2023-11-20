@@ -64,6 +64,27 @@ export interface paths {
       };
     };
   };
+  "/fridge/{fridgeId}/recipe/available": {
+    /**
+     * Get a list of available recipes
+     * @description Returns the IDs of all recipes that can be made with the available ingredients
+     */
+    get: {
+      parameters: {
+        path: {
+          fridgeId: components["parameters"]["fridgeId"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": number[];
+          };
+        };
+      };
+    };
+  };
 }
 
 export type webhooks = Record<string, never>;
