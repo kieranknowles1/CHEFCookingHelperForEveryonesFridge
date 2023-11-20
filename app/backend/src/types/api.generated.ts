@@ -23,6 +23,24 @@ export interface paths {
       };
     };
   };
+  "/fridge/{fridgeId}/ingredient/all": {
+    /** Get all ingredients in the fridge */
+    get: {
+      parameters: {
+        path: {
+          fridgeId: components["parameters"]["fridgeId"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["IngredientEntry"][];
+          };
+        };
+      };
+    };
+  };
   "/fridge/{fridgeId}/ingredient/{ingredientId}/amount": {
     /** Get the amount of an ingredient in the fridge */
     get: {
@@ -105,7 +123,7 @@ export interface components {
       directions: string;
       /** @example example.com */
       link: string;
-      ingredients: components["schemas"]["IngredientEntry"][];
+      ingredients: components["schemas"]["RecipeIngredientEntry"][];
     };
     Ingredient: {
       /** @example 12345 */
@@ -118,9 +136,11 @@ export interface components {
       ingredient: components["schemas"]["Ingredient"];
       /** @example 250 */
       amount?: number;
-      /** @example 250g of chicken */
-      originalLine: string;
     };
+    RecipeIngredientEntry: {
+      /** @example 250g of chicken */
+      originalLine?: string;
+    } & components["schemas"]["IngredientEntry"];
   };
   responses: never;
   parameters: {

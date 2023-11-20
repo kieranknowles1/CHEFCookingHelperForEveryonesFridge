@@ -28,6 +28,21 @@ paths:
             application/json:
               schema: { $ref: '#/components/schemas/Recipe' }
 
+  /fridge/{fridgeId}/ingredient/all:
+    get:
+      tags: [Fridge]
+      summary: Get all ingredients in the fridge
+      parameters:
+        - $ref: "#/components/parameters/fridgeId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/IngredientEntry" }
+
   # TODO: Authentication
   /fridge/{fridgeId}/ingredient/{ingredientId}/amount:
     get:
@@ -107,7 +122,7 @@ components:
         link: { type: string, example: 'example.com' }
         ingredients:
           type: array
-          items: { $ref: '#/components/schemas/IngredientEntry' }
+          items: { $ref: '#/components/schemas/RecipeIngredientEntry' }
       required: [id, name, directions, link, ingredients]
       additionalProperties: false
 
@@ -125,6 +140,11 @@ components:
       properties:
         ingredient: { $ref: '#/components/schemas/Ingredient' }
         amount: { type: number, example: 250 }
-        originalLine: { type: string, example: '250g of chicken' }
       required: [ingredient, originalLine]
       additionalProperties: false
+
+
+    RecipeIngredientEntry:
+      allOf: [{ $ref: "#/components/schemas/IngredientEntry"}]
+      properties:
+        originalLine: { type: string, example: '250g of chicken' }

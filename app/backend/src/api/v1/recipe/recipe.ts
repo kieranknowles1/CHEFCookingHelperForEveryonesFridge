@@ -6,7 +6,7 @@ import { type components } from '../../../types/api.generated'
 import getDatabase from '../../../database/getDatabase'
 
 type RecipeResponse = TypedResponse<components['schemas']['Recipe']>
-type IngredientEntry = components['schemas']['IngredientEntry']
+type IngredientEntry = components['schemas']['RecipeIngredientEntry']
 
 type RecipeRequest = TypedRequest<undefined, { id: string }, undefined>
 
