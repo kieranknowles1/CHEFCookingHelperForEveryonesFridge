@@ -20,11 +20,7 @@ export default function installIngredientAllAmountEndpoint (app: Express): void 
       res.json(Array.from(ingredients, ([id, amount]) => {
         const ingredient = getDatabase().getIngredient(id)
         return {
-          ingredient: {
-            id: id as number,
-            name: ingredient.name,
-            preferredUnit: ingredient.preferredUnit
-          },
+          ingredient,
           amount
         }
       }))

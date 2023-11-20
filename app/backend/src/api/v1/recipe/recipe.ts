@@ -30,18 +30,14 @@ export default function installRecipeEndpoint (app: Express): void {
       const ingredient = getDatabase().getIngredient(entry[0])
       const amount = entry[1]
       ingredients.push({
-        ingredient: {
-          id: ingredient.id as number,
-          name: ingredient.name,
-          preferredUnit: ingredient.preferredUnit
-        },
+        ingredient,
         amount: amount.amount ?? undefined,
         originalLine: amount.originalLine
       })
     }
 
     res.json({
-      id: recipe.id as number,
+      id: recipe.id,
       name: recipe.name,
       directions: recipe.directions,
       link: recipe.link,

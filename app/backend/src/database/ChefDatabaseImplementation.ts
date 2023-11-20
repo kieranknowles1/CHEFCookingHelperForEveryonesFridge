@@ -63,7 +63,7 @@ class WritableDatabaseImplementation implements IWritableDatabase {
       VALUES
         (?, ?, ?)
     `)
-    const id = statement.run(recipe.name, recipe.directions, recipe.link).lastInsertRowid
+    const id = statement.run(recipe.name, recipe.directions, recipe.link).lastInsertRowid as number
 
     const ingredientStatement = this._connection.prepare<[types.RowId, types.RowId, number | null, string]>(`
       INSERT INTO recipe_ingredient
