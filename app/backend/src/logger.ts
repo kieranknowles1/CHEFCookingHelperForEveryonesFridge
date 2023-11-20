@@ -1,5 +1,6 @@
-import winston from 'winston'
 import fs from 'fs'
+
+import winston from 'winston'
 
 // TODO: Env variables
 const MIN_LOG_LEVEL = 'info'

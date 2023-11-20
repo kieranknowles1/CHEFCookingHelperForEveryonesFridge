@@ -1,5 +1,6 @@
 import CodedError from '../CodedError'
-import type { RowId } from './types'
+
+import { type RowId } from './types'
 
 export default class InvalidIdError extends CodedError {
   public readonly code = 404

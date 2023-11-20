@@ -1,9 +1,9 @@
 import express, { type NextFunction } from 'express'
 import bodyParser from 'body-parser'
 
-import installRecipeEndpoint from './api/v1/recipe/recipe'
-import installIngredientEndpoint from './api/v1/fridge/ingredient/amount'
 import CodedError from './CodedError'
+import installIngredientEndpoint from './api/v1/fridge/ingredient/amount'
+import installRecipeEndpoint from './api/v1/recipe/recipe'
 
 const app = express()
 

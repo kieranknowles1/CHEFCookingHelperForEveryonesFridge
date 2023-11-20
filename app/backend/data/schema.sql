@@ -1,6 +1,6 @@
-PRAGMA foreign_keys = ON;
-
 PRAGMA user_version = 1;
+
+PRAGMA foreign_keys = OFF;
 
 DROP TABLE IF EXISTS recipe_ingredient;
 DROP TABLE IF EXISTS ingredient_alt_name;
@@ -12,6 +12,8 @@ DROP TABLE IF EXISTS fridge;
 DROP TABLE IF EXISTS user;
 
 DROP VIEW IF EXISTS view_ingredient_by_name;
+
+PRAGMA foreign_keys = ON;
 
 CREATE TABLE ingredient (
     id INTEGER NOT NULL PRIMARY KEY,

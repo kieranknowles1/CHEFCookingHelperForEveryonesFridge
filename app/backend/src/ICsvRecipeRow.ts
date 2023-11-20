@@ -1,4 +1,4 @@
-import type { IRecipeNoId } from './IRecipe'
+import { type IRecipeNoId } from './IRecipe'
 import parseIngredients from './parseIngredients'
 
 /**

@@ -1,4 +1,4 @@
-import type { DatabaseUnit } from '../Unit'
+import { type DatabaseUnit } from '../Unit'
 
 export type RowId = number | bigint
 export type GetResult<TRow> = TRow | undefined

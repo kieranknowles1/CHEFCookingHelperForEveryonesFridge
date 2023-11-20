@@ -1,5 +1,5 @@
+import { type ValidationError } from 'express-validator'
 import type express from 'express'
-import type { ValidationError } from 'express-validator'
 
 export type ParameterType = Record<string, string | undefined> | undefined
 

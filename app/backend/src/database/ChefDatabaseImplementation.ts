@@ -1,16 +1,18 @@
+import path from 'path'
 import { readFileSync } from 'fs'
+
 import CiMap from '@glossa-glo/case-insensitive-map'
 import Database from 'better-sqlite3'
-import path from 'path'
 
-import { ingredientMapFactory, type IngredientId } from '../IIngredient'
-import InvalidIdError from './InvalidIdError'
-import type { IRecipeNoId } from '../IRecipe'
-import type { IWritableDatabase } from './IChefDatabase'
-import type * as types from './types'
-import type IChefDatabase from './IChefDatabase'
+import { type IngredientId, ingredientMapFactory } from '../IIngredient'
 import type IIngredient from '../IIngredient'
 import type IRecipe from '../IRecipe'
+import { type IRecipeNoId } from '../IRecipe'
+
+import type * as types from './types'
+import type IChefDatabase from './IChefDatabase'
+import { type IWritableDatabase } from './IChefDatabase'
+import InvalidIdError from './InvalidIdError'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
@@ -136,7 +138,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
    * @returns The return value of `callback` or void if none
    */
   public async wrapTransactionAsync<TReturn = void> (callback: (db: WritableDatabaseImplementation) => Promise<TReturn>): Promise<TReturn> {
-    return new Promise<TReturn>((resolve, reject) => {
+    return await new Promise<TReturn>((resolve, reject) => {
       const writable = new WritableDatabaseImplementation(this, this._connection)
       this._connection.exec('BEGIN TRANSACTION')
       callback(writable).then(data => {

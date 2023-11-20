@@ -4,18 +4,19 @@
  */
 
 import { createReadStream, statSync } from 'fs'
+import path from 'path'
+
 import CiMap from '@glossa-glo/case-insensitive-map'
 import cliProgress from 'cli-progress'
 import csv from 'csv-parse'
-import path from 'path'
 import progressTracker from 'progress-stream'
 
-import { parseCsvRecipeRow } from './ICsvRecipeRow'
+import logger, { logError } from './logger'
+import type ICsvRecipeRow from './ICsvRecipeRow'
 import { type IngredientId } from './IIngredient'
 import { UnparsedIngredientError } from './parseIngredients'
 import getDatabase from './database/getDatabase'
-import logger, { logError } from './logger'
-import type ICsvRecipeRow from './ICsvRecipeRow'
+import { parseCsvRecipeRow } from './ICsvRecipeRow'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
@@ -62,8 +63,8 @@ async function importData (): Promise<ImportDataReturn> {
   let total = 0
   let success = 0
 
-  return getDatabase().wrapTransactionAsync<ImportDataReturn>(async (writable) => {
-    return new Promise<ImportDataReturn>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
+  return await getDatabase().wrapTransactionAsync<ImportDataReturn>(async (writable) => {
+    return await new Promise<ImportDataReturn>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
       .pipe(progress)
       .pipe(csv.parse({ columns: true }))
       .on('data', (row: ICsvRecipeRow) => {

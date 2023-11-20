@@ -1,11 +1,12 @@
-import type IIngredient from './IIngredient'
-import { type IngredientMap, ingredientMapFactory, type IngredientAmount } from './IIngredient'
-import getDatabase from './database/getDatabase'
-import type ICsvRecipeRow from './ICsvRecipeRow'
 import Fraction from 'fraction.js'
-import getRegexGroups from './getRegexGroups'
+
+import { type IngredientAmount, type IngredientMap, ingredientMapFactory } from './IIngredient'
 import { convertToPreferred, tryToMetric } from './Unit'
 import logger, { LogLevel } from './logger'
+import type ICsvRecipeRow from './ICsvRecipeRow'
+import type IIngredient from './IIngredient'
+import getDatabase from './database/getDatabase'
+import getRegexGroups from './getRegexGroups'
 
 export class UnparsedIngredientError extends Error {
   constructor (ingredient: IIngredient) {

@@ -1,8 +1,9 @@
 import { param, query, validationResult } from 'express-validator'
-import type { Express } from 'express'
+import { type Express } from 'express'
 
+import { type TypedResponse } from '../../../../TypedEndpoint'
 import getDatabase from '../../../../database/getDatabase'
-import type { TypedResponse } from '../../../../TypedEndpoint'
+
 import type IngredientRequest from './IngredientRequest'
 
 type IngredientPostRequest = IngredientRequest<{ amount: string }, undefined>

@@ -1,10 +1,11 @@
 import type CiMap from '@glossa-glo/case-insensitive-map'
 
-import type { IngredientId } from '../IIngredient'
-import type { IRecipeNoId } from '../IRecipe'
-import type * as types from './types'
 import type IIngredient from '../IIngredient'
 import type IRecipe from '../IRecipe'
+import { type IRecipeNoId } from '../IRecipe'
+import { type IngredientId } from '../IIngredient'
+
+import type * as types from './types'
 
 /**
  * Writable interface to the database, passed to the callback of {@link IChefDatabase.wrapTransaction}

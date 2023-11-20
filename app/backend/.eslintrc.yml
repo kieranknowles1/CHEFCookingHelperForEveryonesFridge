@@ -5,5 +5,15 @@ env:
 extends: standard-with-typescript
 parserOptions:
   ecmaVersion: latest
+ignorePatterns:
+  - "*.generated.ts"
 rules:
-  "@typescript-eslint/return-await": "off"
+  sort-imports:
+   - warn
+   - allowSeparatedGroups: true
+  import/order:
+   - warn
+   - newlines-between: always
+  import/consistent-type-specifier-style:
+   - warn
+   - prefer-inline
