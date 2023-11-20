@@ -23,22 +23,37 @@ export interface paths {
       };
     };
   };
-  "/ingredient/add": {
+  "/fridge/{fridgeId}/ingredient/{ingredientId}/amount": {
+    /** Get the amount of an ingredient in the fridge */
+    get: {
+      parameters: {
+        path: {
+          fridgeId: components["parameters"]["fridgeId"];
+          ingredientId: components["parameters"]["ingredientId"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": number;
+          };
+        };
+      };
+    };
     /**
-     * Add an ingredient to a virtual fridge
-     * @description Add `amount` of `ingredientId` to `fridgeId`.
+     * Update the amount of an ingredient in the fridge
+     * @description Set the amount of `ingredientId` in `fridgeId` to `amount`
      */
     post: {
-      requestBody: {
-        content: {
-          "application/json": {
-            /** @example 1234 */
-            fridgeId: number;
-            /** @example 1234 */
-            ingredientId: number;
-            /** @example 100 */
-            amount: number;
-          };
+      parameters: {
+        query: {
+          /** @description Amount to set the ingredient to */
+          amount: number;
+        };
+        path: {
+          fridgeId: components["parameters"]["fridgeId"];
+          ingredientId: components["parameters"]["ingredientId"];
         };
       };
       responses: {
@@ -87,7 +102,10 @@ export interface components {
     };
   };
   responses: never;
-  parameters: never;
+  parameters: {
+    fridgeId: number;
+    ingredientId: number;
+  };
   requestBodies: never;
   headers: never;
   pathItems: never;

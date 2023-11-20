@@ -30,20 +30,26 @@ paths:
 
   # TODO: Authentication
   /fridge/{fridgeId}/ingredient/{ingredientId}/amount:
+    get:
+      tags: [Fridge]
+      summary: Get the amount of an ingredient in the fridge
+      parameters:
+        - $ref: "#/components/parameters/fridgeId"
+        - $ref: "#/components/parameters/ingredientId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { type: number, example: 100 }
     post:
       tags: [Fridge]
       summary: Update the amount of an ingredient in the fridge
       description:
         Set the amount of `ingredientId` in `fridgeId` to `amount`
       parameters:
-        - in: path
-          name: fridgeId
-          schema: { type: integer, example: 1 }
-          required: true
-        - in: path
-          name: ingredientId
-          schema: { type: integer, example: 1 }
-          required: true
+        - $ref: "#/components/parameters/fridgeId"
+        - $ref: "#/components/parameters/ingredientId"
         - in: query
           name: amount
           description: Amount to set the ingredient to
@@ -55,6 +61,18 @@ paths:
 
 
 components:
+  parameters:
+    fridgeId:
+      in: path
+      name: fridgeId
+      schema: { type: integer, example: 1 }
+      required: true
+    ingredientId:
+      in: path
+      name: ingredientId
+      schema: { type: integer, example: 1 }
+      required: true
+
   schemas:
     Unit:
       enum:

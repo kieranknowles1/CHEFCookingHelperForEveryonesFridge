@@ -1,7 +1,6 @@
 import express, { type NextFunction } from 'express'
 import bodyParser from 'body-parser'
 
-import type { TypedResponse } from './TypedEndpoint'
 import installRecipeEndpoint from './api/v1/recipe/recipe'
 import installIngredientEndpoint from './api/v1/fridge/ingredient/amount'
 import CodedError from './CodedError'
@@ -12,14 +11,6 @@ const app = express()
 const PORT = 3000
 
 app.use(bodyParser.json())
-
-// TODO: Remove test endpoint
-app.get('/hello', (req, res: TypedResponse<{ message: string, to?: string }>) => {
-  res.status(200).json({
-    message: 'Hello World!',
-    to: req.ip
-  })
-})
 
 installRecipeEndpoint(app)
 installIngredientEndpoint(app)

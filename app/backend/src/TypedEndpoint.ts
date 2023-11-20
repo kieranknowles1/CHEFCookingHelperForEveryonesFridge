@@ -1,13 +1,15 @@
 import type express from 'express'
 import type { ValidationError } from 'express-validator'
 
+export type ParameterType = Record<string, string | undefined> | undefined
+
 /**
  * Strongly typed request for `express`
  * Based on https://plainenglish.io/blog/typed-express-request-and-response-with-typescript
  *
  * Note that this can not and does not validate the request. `express-validator` must be used instead.
  */
-export interface TypedRequest<TQuery extends Record<string, string> | undefined, TParams extends Record<string, string> | undefined, TBody> extends Express.Request {
+export interface TypedRequest<TQuery extends ParameterType, TParams extends ParameterType, TBody> extends Express.Request {
   body: TBody
   params: TParams
   query: TQuery
