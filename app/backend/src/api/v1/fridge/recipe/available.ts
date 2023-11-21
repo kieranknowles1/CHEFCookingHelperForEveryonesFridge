@@ -10,7 +10,7 @@ import { type paths } from '../../../../types/api.generated'
 type endpoint = paths['/fridge/{fridgeId}/recipe/available']['get']
 type AvailableRecipeResponse = TypedResponse<endpoint, 200>
 
-export default function installAvailableRecipeEndpoint (app: Express): void {
+export default function installFridgeAvailableRecipeEndpoint (app: Express): void {
   app.get('/api/v1/fridge/:fridgeId/recipe/available',
     param('fridgeId').isInt(),
     checkParameters,

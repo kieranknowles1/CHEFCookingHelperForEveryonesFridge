@@ -158,7 +158,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
       id: row.id,
       name: row.name,
       preferredUnit: row.preferredUnit,
-      density: row.density,
+      density: row.density ?? undefined,
       assumeUnlimited: row.assumeUnlimited !== 0
     }
   }
@@ -174,6 +174,18 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     }
 
     return this.ingredientFromRow(result)
+  }
+
+  public getAllIngredients (): Map<types.RowId, IIngredient> {
+    const statement = this._connection.prepare(`
+      SELECT * FROM ingredient
+    `)
+    const result = statement.all() as types.AllResult<types.IIngredientRow>
+
+    return new Map(result.map(row => [
+      row.id,
+      this.ingredientFromRow(row)
+    ]))
   }
 
   /**

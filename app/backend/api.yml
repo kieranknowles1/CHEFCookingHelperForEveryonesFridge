@@ -6,12 +6,26 @@ info:
 
 tags:
   - name: Fridge
+  - name: Ingredient
   - name: Recipe
 
 servers:
   - url: http://localhost/api/v1
 
 paths:
+  /ingredient/all:
+    get:
+      tags: [Ingredient]
+      summary: Get details of all ingredients
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Ingredient" }
+
   /recipe/{id}:
     get:
       tags: [Recipe]
@@ -132,7 +146,9 @@ components:
         id: { type: integer, example: 12345 }
         name: { type: string, example: 'Chicken' }
         preferredUnit: { $ref: '#/components/schemas/Unit' }
-      required: [name, id, preferredUnit]
+        density: { type: number, example: 0.5 }
+        assumeUnlimited: { type: boolean, example: false }
+      required: [name, id, preferredUnit, assumeUnlimited]
       additionalProperties: false
 
     IngredientEntry:

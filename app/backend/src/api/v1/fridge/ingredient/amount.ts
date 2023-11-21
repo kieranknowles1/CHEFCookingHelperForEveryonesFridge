@@ -14,7 +14,7 @@ type IngredientGetResponse = TypedResponse<paths['/fridge/{fridgeId}/ingredient/
 
 const PATH = '/api/v1/fridge/:fridgeId/ingredient/:ingredientId/amount'
 
-export default function installIngredientEndpoint (app: Express): void {
+export default function installFridgeIngredientEndpoint (app: Express): void {
   app.get(
     PATH,
     param('fridgeId').isInt(),

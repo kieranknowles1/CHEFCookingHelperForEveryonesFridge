@@ -8,6 +8,19 @@
 type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
 export interface paths {
+  "/ingredient/all": {
+    /** Get details of all ingredients */
+    get: {
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["Ingredient"][];
+          };
+        };
+      };
+    };
+  };
   "/recipe/{id}": {
     /** Get a recipe by ID */
     get: {
@@ -134,6 +147,10 @@ export interface components {
       /** @example Chicken */
       name: string;
       preferredUnit: components["schemas"]["Unit"];
+      /** @example 0.5 */
+      density?: number;
+      /** @example false */
+      assumeUnlimited: boolean;
     };
     IngredientEntry: {
       ingredient: components["schemas"]["Ingredient"];

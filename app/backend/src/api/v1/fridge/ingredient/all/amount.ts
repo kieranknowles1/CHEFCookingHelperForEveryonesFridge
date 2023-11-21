@@ -9,7 +9,7 @@ import { type paths } from '../../../../../types/api.generated'
 
 type endpoint = paths['/fridge/{fridgeId}/ingredient/all/amount']['get']
 
-export default function installIngredientAllAmountEndpoint (app: Express): void {
+export default function installFridgeIngredientAllAmountEndpoint (app: Express): void {
   app.get('/api/v1/fridge/:fridgeId/ingredient/all/amount',
     param('fridgeId').isInt(),
     checkParameters,
