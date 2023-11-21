@@ -30,6 +30,21 @@ interface JsonEndpoint {
   responses: Record<string, JsonResponse>
 }
 
+interface JsonEndpointWithParameters extends JsonEndpoint {
+  parameters: {
+    query?: Record<string, any>
+    path?: Record<string, any>
+    body?: Record<string, any>
+  }
+}
+
+/**
+ * Combine all query, path, and body parameters as returned by `matchedData`
+ */
+export type EndpointParameters<
+  endpoint extends JsonEndpointWithParameters
+> = endpoint['parameters']['query'] & endpoint['parameters']['path'] & endpoint['parameters']['body']
+
 /**
  * Strongly typed response for `express`
  * Based on https://plainenglish.io/blog/typed-express-request-and-response-with-typescript
