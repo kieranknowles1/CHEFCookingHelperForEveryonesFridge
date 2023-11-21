@@ -1,7 +1,7 @@
 import { param, query, validationResult } from 'express-validator'
 import { type Express } from 'express'
 
-import { type ParameterType, type TypedRequest, type TypedResponse } from '../../../../TypedEndpoint'
+import { TypedRequest, type ParameterType, type TypedResponse } from '../../../../TypedEndpoint'
 import getDatabase from '../../../../database/getDatabase'
 import { type paths } from '../../../../types/api.generated'
 

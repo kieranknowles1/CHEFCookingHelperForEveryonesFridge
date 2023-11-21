@@ -15,6 +15,7 @@ export interface TypedRequest<TQuery extends ParameterType, TParams extends Para
   query: TQuery
 }
 
+
 // https://stackoverflow.com/questions/62410684/constrain-keys-using-value-type
 // TODO: Reference list, use separate file
 type KeysOfType<T, P> = { [K in keyof T]: P extends T[K] ? K : never }[keyof T]
@@ -30,7 +31,7 @@ interface JsonEndpoint {
   responses: Record<string, JsonResponse>
 }
 
-interface JsonEndpointWithParameters extends JsonEndpoint {
+export interface JsonEndpointWithParameters extends JsonEndpoint {
   parameters: {
     query?: Record<string, any>
     path?: Record<string, any>
