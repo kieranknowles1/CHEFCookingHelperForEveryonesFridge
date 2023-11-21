@@ -2,13 +2,13 @@ import { param, validationResult } from 'express-validator'
 import { type Express } from 'express'
 
 import { type TypedRequest, type TypedResponse } from '../../../TypedEndpoint'
-import { type components } from '../../../types/api.generated'
+import { type components, type paths } from '../../../types/api.generated'
 import getDatabase from '../../../database/getDatabase'
 
 type IngredientEntry = components['schemas']['RecipeIngredientEntry']
 
 type RecipeRequest = TypedRequest<undefined, { id: string }, undefined>
-type RecipeResponse = TypedResponse<components['schemas']['Recipe']>
+type RecipeResponse = TypedResponse<paths['/recipe/{id}']['get'], 200>
 
 /**
  * Endpoint to get a specific recipe by its ID

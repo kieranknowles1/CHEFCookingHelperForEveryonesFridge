@@ -3,13 +3,14 @@ import { type Express } from 'express'
 
 import { type ParameterType, type TypedRequest, type TypedResponse } from '../../../../TypedEndpoint'
 import getDatabase from '../../../../database/getDatabase'
+import { type paths } from '../../../../types/api.generated'
 
 interface IngredientRequest<TQuery extends ParameterType, TBody>
   extends TypedRequest<TQuery, { fridgeId: string, ingredientId: string }, TBody> {}
 
 type IngredientPostRequest = IngredientRequest<{ amount: string }, undefined>
 type IngredientGetRequest = IngredientRequest<undefined, undefined>
-type IngredientGetResponse = TypedResponse<number>
+type IngredientGetResponse = TypedResponse<paths['/fridge/{fridgeId}/ingredient/{ingredientId}/amount']['get'], 200>
 
 const PATH = '/api/v1/fridge/:fridgeId/ingredient/:ingredientId/amount'
 

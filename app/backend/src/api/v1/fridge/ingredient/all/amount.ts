@@ -2,13 +2,11 @@ import { type Express } from 'express'
 import { param } from 'express-validator'
 
 import { type TypedRequest, type TypedResponse } from '../../../../../TypedEndpoint'
-import { type components } from '../../../../../types/api.generated'
 import getDatabase from '../../../../../database/getDatabase'
-
-type IngredientEntry = components['schemas']['IngredientEntry']
+import { type paths } from '../../../../../types/api.generated'
 
 type IngredientAllRequest = TypedRequest<undefined, { fridgeId: string }, undefined>
-type IngredientAllResponse = TypedResponse<IngredientEntry[]>
+type IngredientAllResponse = TypedResponse<paths['/fridge/{fridgeId}/ingredient/all/amount']['get'], 200>
 
 export default function installIngredientAllAmountEndpoint (app: Express): void {
   app.get('/api/v1/fridge/:fridgeId/ingredient/all/amount',
