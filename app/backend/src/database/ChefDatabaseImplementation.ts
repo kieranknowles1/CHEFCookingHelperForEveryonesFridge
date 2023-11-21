@@ -63,7 +63,10 @@ class WritableDatabaseImplementation implements IWritableDatabase {
       VALUES
         (?, ?, ?)
     `)
-    const id = statement.run(recipe.name, recipe.directions, recipe.link).lastInsertRowid as number
+    const id = statement.run(recipe.name, recipe.directions, recipe.link).lastInsertRowid
+    if (typeof id === 'bigint') {
+      throw new Error('Got bigint for lastInsertRowid')
+    }
 
     const ingredientStatement = this._connection.prepare<[types.RowId, types.RowId, number | null, string]>(`
       INSERT INTO recipe_ingredient

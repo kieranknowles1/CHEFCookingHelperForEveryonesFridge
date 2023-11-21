@@ -40,3 +40,10 @@ stating that \enquote*{The current file is a CommonJS module ... however, the re
 This issue had previously been reported by another user (\href{https://github.com/rawify/Fraction.js/issues/70}{https://github.com/rawify/Fraction.js/issues/70})
 and was worked around by downgrading to version 4.3.4 of \codelisting{fraction.js} while the latest version at the time
 of writing was 4.3.7.
+
+The \codelisting{better-sqlite3} package declares row IDs as being \codelisting{number | bigint}
+while \codelisting{openapi-typescript} generates \codelisting{number}, even if the type in the API
+declaration lists the type as \codelisting{integer}. This initially required additional casting in every endpoint
+that returns an ID. As a workaround, row IDs in the application were instead declared as \codelisting{number}
+and an error is thrown if an insert produces a \codelisting{bigint} ID. As the maximum integer that can be safely stored as a number is
+$(2^{53} - 1)$ \todo{source}, the chances of this happening were considered nonexistant.
