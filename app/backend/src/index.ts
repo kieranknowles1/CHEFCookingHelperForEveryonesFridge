@@ -5,6 +5,7 @@ import CodedError from './CodedError'
 import installFridgeAvailableRecipeEndpoint from './api/v1/fridge/recipe/available'
 import installFridgeIngredientAllAmountEndpoint from './api/v1/fridge/ingredient/all/amount'
 import installFridgeIngredientEndpoint from './api/v1/fridge/ingredient/amount'
+import installIngredientAllEndpoint from './api/v1/ingredient/all'
 import installRecipeEndpoint from './api/v1/recipe/recipe'
 
 const app = express()
@@ -17,6 +18,7 @@ app.use(bodyParser.json())
 installFridgeAvailableRecipeEndpoint(app)
 installFridgeIngredientAllAmountEndpoint(app)
 installFridgeIngredientEndpoint(app)
+installIngredientAllEndpoint(app)
 installRecipeEndpoint(app)
 
 app.use((err: Error, req: express.Request, res: express.Response, next: NextFunction) => {
