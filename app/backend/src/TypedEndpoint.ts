@@ -1,21 +1,6 @@
 import { type ValidationError } from 'express-validator'
 import type express from 'express'
 
-export type ParameterType = Record<string, string | undefined> | undefined
-
-/**
- * Strongly typed request for `express`
- * Based on https://plainenglish.io/blog/typed-express-request-and-response-with-typescript
- *
- * Note that this can not and does not validate the request. `express-validator` must be used instead.
- */
-export interface TypedRequest<TQuery extends ParameterType, TParams extends ParameterType, TBody> extends Express.Request {
-  body: TBody
-  params: TParams
-  query: TQuery
-}
-
-
 // https://stackoverflow.com/questions/62410684/constrain-keys-using-value-type
 // TODO: Reference list, use separate file
 type KeysOfType<T, P> = { [K in keyof T]: P extends T[K] ? K : never }[keyof T]

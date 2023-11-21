@@ -1,7 +1,5 @@
 import { type NextFunction, type Request, type Response } from 'express'
-import { matchedData, validationResult } from 'express-validator'
-
-import { type EndpointParameters, type JsonEndpointWithParameters } from './TypedEndpoint'
+import { validationResult } from 'express-validator'
 
 /**
  * Middleware function that checks the types of the paremeters,
@@ -16,8 +14,4 @@ export default function checkParameters (req: Request, res: Response, next: Next
   } else {
     next()
   }
-}
-
-export function getParameters<endpoint extends JsonEndpointWithParameters> (req: Request): EndpointParameters<endpoint> {
-  return matchedData(req) as EndpointParameters<endpoint>
 }
