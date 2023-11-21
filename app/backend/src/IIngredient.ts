@@ -12,7 +12,7 @@ export default interface IIngredient {
   id: IngredientId
   name: string
   preferredUnit: DatabaseUnit
-  density: number | null
+  density: number | undefined
   assumeUnlimited: boolean
 }
 

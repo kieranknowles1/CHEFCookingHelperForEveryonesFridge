@@ -1,21 +1,22 @@
 import { type Express } from 'express'
 import { param } from 'express-validator'
 
-import { type TypedRequest, type TypedResponse } from '../../../../../TypedEndpoint'
-import { type components } from '../../../../../types/api.generated'
+import { type TypedResponse } from '../../../../../TypedEndpoint'
+import checkParameters from '../../../../../checkParameters'
 import getDatabase from '../../../../../database/getDatabase'
+import getParameters from '../../../../../getParameters'
+import { type paths } from '../../../../../types/api.generated'
 
-type IngredientEntry = components['schemas']['IngredientEntry']
+type endpoint = paths['/fridge/{fridgeId}/ingredient/all/amount']['get']
 
-type IngredientAllRequest = TypedRequest<undefined, { fridgeId: string }, undefined>
-type IngredientAllResponse = TypedResponse<IngredientEntry[]>
-
-export default function installIngredientAllAmountEndpoint (app: Express): void {
+export default function installFridgeIngredientAllAmountEndpoint (app: Express): void {
   app.get('/api/v1/fridge/:fridgeId/ingredient/all/amount',
     param('fridgeId').isInt(),
-    (req: IngredientAllRequest, res: IngredientAllResponse) => {
-      const fridgeId = Number.parseInt(req.params.fridgeId)
-      const ingredients = getDatabase().getAllIngredientAmounts(fridgeId)
+    checkParameters,
+    (req, res: TypedResponse<endpoint, 200>) => {
+      const data = getParameters<endpoint>(req)
+
+      const ingredients = getDatabase().getAllIngredientAmounts(data.fridgeId)
 
       res.json(Array.from(ingredients, ([id, row]) => {
         return {

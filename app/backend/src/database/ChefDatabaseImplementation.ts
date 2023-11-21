@@ -161,7 +161,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
       id: row.id,
       name: row.name,
       preferredUnit: row.preferredUnit,
-      density: row.density,
+      density: row.density ?? undefined,
       assumeUnlimited: row.assumeUnlimited !== 0
     }
   }
@@ -177,6 +177,18 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     }
 
     return this.ingredientFromRow(result)
+  }
+
+  public getAllIngredients (): Map<types.RowId, IIngredient> {
+    const statement = this._connection.prepare(`
+      SELECT * FROM ingredient
+    `)
+    const result = statement.all() as types.AllResult<types.IIngredientRow>
+
+    return new Map(result.map(row => [
+      row.id,
+      this.ingredientFromRow(row)
+    ]))
   }
 
   /**
@@ -286,12 +298,15 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
 
   public getAvailableRecipes (fridgeId: types.RowId): types.RowId[] {
     // Well this was easier than expected
+    // TODO: Filter by amount and optionally allow missing ingredients
+    // TODO: Probably want to return more than just ID
     const statement = this._connection.prepare<[types.RowId]>(`
       SELECT
         -- Number of ingredients that are available or unlimited
         count(*) as available_count,
         -- Total number of ingredients
-        (SELECT count(*) FROM recipe_ingredient WHERE recipe_id = outer_recipe_ingredient.recipe_id) AS total_count
+        (SELECT count(*) FROM recipe_ingredient WHERE recipe_id = outer_recipe_ingredient.recipe_id) AS total_count,
+        recipe_id
       -- outer_recipe_ingredient is used in the subquery below
       FROM recipe_ingredient AS outer_recipe_ingredient
       -- Need access to ingredient.assumeUnlimited for WHERE clause

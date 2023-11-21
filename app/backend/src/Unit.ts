@@ -85,7 +85,7 @@ export function convertToPreferred (amount: number, unit: MetricUnit, ingredient
   if (unit === ingredient.preferredUnit) {
     return amount
   }
-  if (ingredient.density === null) {
+  if (ingredient.density === undefined) {
     throw new Error(`Ingredient '${ingredient.name}' does not have a density specified`)
   }
 

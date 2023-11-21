@@ -2,8 +2,10 @@ import express, { type NextFunction } from 'express'
 import bodyParser from 'body-parser'
 
 import CodedError from './CodedError'
-import installIngredientAllAmountEndpoint from './api/v1/fridge/ingredient/all/amount'
-import installIngredientEndpoint from './api/v1/fridge/ingredient/amount'
+import installFridgeAvailableRecipeEndpoint from './api/v1/fridge/recipe/available'
+import installFridgeIngredientAllAmountEndpoint from './api/v1/fridge/ingredient/all/amount'
+import installFridgeIngredientEndpoint from './api/v1/fridge/ingredient/amount'
+import installIngredientAllEndpoint from './api/v1/ingredient/all'
 import installRecipeEndpoint from './api/v1/recipe/recipe'
 
 const app = express()
@@ -13,8 +15,10 @@ const PORT = 3000
 
 app.use(bodyParser.json())
 
-installIngredientAllAmountEndpoint(app)
-installIngredientEndpoint(app)
+installFridgeAvailableRecipeEndpoint(app)
+installFridgeIngredientAllAmountEndpoint(app)
+installFridgeIngredientEndpoint(app)
+installIngredientAllEndpoint(app)
 installRecipeEndpoint(app)
 
 app.use((err: Error, req: express.Request, res: express.Response, next: NextFunction) => {

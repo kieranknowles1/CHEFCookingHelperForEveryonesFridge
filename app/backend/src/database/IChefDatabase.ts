@@ -47,6 +47,8 @@ export default interface IChefDatabase {
 
   getIngredient: (id: IngredientId) => IIngredient
 
+  getAllIngredients: () => Map<types.RowId, IIngredient>
+
   /**
    * @param name The name to search for
    * @returns The ingredient, or null if it is not found. May return
