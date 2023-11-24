@@ -2,14 +2,16 @@ PRAGMA user_version = 1;
 
 PRAGMA foreign_keys = OFF;
 
-DROP TABLE IF EXISTS recipe_ingredient;
-DROP TABLE IF EXISTS ingredient_alt_name;
 DROP TABLE IF EXISTS ingredient;
+DROP TABLE IF EXISTS ingredient_alt_name;
+DROP TABLE IF EXISTS ingredient_substitution_group;
+DROP TABLE IF EXISTS ingredient_substitution_entry;
 DROP TABLE IF EXISTS recipe;
+DROP TABLE IF EXISTS recipe_ingredient;
 
-DROP TABLE IF EXISTS fridge_ingredient;
-DROP TABLE IF EXISTS fridge;
 DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS fridge;
+DROP TABLE IF EXISTS fridge_ingredient;
 
 DROP VIEW IF EXISTS view_ingredient_by_name;
 
@@ -33,6 +35,16 @@ CREATE INDEX index_ingredient_by_name_nocase
 -- Alternate names for ingredients that are recognised by data import
 CREATE TABLE ingredient_alt_name (
     name TEXT NOT NULL UNIQUE,
+    ingredient_id INTEGER NOT NULL REFERENCES ingredient(id)
+);
+
+CREATE TABLE ingredient_substitution_group (
+    id INTEGER NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE ingredient_substitution_entry (
+    group_id INTEGER NOT NULL REFERENCES ingredient_substitution_group(id),
     ingredient_id INTEGER NOT NULL REFERENCES ingredient(id)
 );
 

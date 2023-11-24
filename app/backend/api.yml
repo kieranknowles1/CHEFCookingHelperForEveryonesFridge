@@ -148,6 +148,7 @@ components:
         preferredUnit: { $ref: '#/components/schemas/Unit' }
         density: { type: number, example: 0.5 }
         assumeUnlimited: { type: boolean, example: false }
+        # TODO: Substitutions
       required: [name, id, preferredUnit, assumeUnlimited]
       additionalProperties: false
 

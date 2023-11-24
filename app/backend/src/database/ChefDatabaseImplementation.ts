@@ -13,11 +13,13 @@ import type * as types from './types'
 import { type IFridgeIngredientAmount, type IWritableDatabase } from './IChefDatabase'
 import type IChefDatabase from './IChefDatabase'
 import InvalidIdError from './InvalidIdError'
+import logger, { LogLevel } from '../logger'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'data/initialdata.sql')
+const DUMMY_DATA_PATH = path.join(process.cwd(), 'data/dummydata.sql')
 
 /**
  * Writable interface to the database, passed to the callback of {@link ChefDatabaseImplementation.wrapTransaction}
@@ -110,10 +112,15 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
    * WARN: This will delete ALL data from the database.
    */
   public resetDatabase (_: 'IKnowWhatIAmDoing'): void {
+    logger.log(LogLevel.info, 'Running schema script')
     const schema = readFileSync(SCHEMA_PATH, 'utf-8')
     this._connection.exec(schema)
+    logger.log(LogLevel.info, 'Running initial data script')
     const initialData = readFileSync(INITIAL_DATA_PATH, 'utf-8')
     this._connection.exec(initialData)
+    logger.log(LogLevel.info, 'Running dummy data script')
+    const dummyData = readFileSync(DUMMY_DATA_PATH, 'utf-8')
+    this._connection.exec(dummyData)
   }
 
   /**
