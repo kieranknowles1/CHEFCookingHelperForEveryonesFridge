@@ -1,4 +1,6 @@
 import type IIngredient from 'IIngredient'
+import { UnparsedIngredientError } from './parseIngredients'
+import logger, { LogLevel } from './logger'
 
 // NOTE: Must match check constraint on ingredient table in schema.sql
 export type MetricUnit = 'ml' | 'g'
@@ -11,11 +13,12 @@ export type DatabaseUnit = MetricUnit | 'none' | 'whole'
  *
  * @returns The amount and the metric unit, or null on failure
  */
-export function tryToMetric (amount: number, unit: string): [number, MetricUnit] | null {
+export function tryToMetric (amount: number, unit: string): [number, DatabaseUnit] | null {
   switch (unit.toLowerCase()) {
     // Metric
     case 'g':
     case 'gm':
+    case 'gms':
     case 'gr':
     case 'grams':
       return [amount, 'g']
@@ -41,6 +44,9 @@ export function tryToMetric (amount: number, unit: string): [number, MetricUnit]
     case 'can': // Can of milk
     case 'cans':
       return [amount * 300, 'ml']
+    case 'doz':
+    case 'dozen':
+      return [amount * 12, 'whole']
     case 'gal': // Gallon
     case 'gallon':
     case 'gallons':
@@ -65,6 +71,7 @@ export function tryToMetric (amount: number, unit: string): [number, MetricUnit]
       return [amount * 950, 'ml']
     case 'stick': // Stick of butter
     case 'sticks':
+    case 'stk':
       return [amount * 110, 'g']
     case 'tablespoon':
     case 'tablespoons':
@@ -81,7 +88,7 @@ export function tryToMetric (amount: number, unit: string): [number, MetricUnit]
   return null
 }
 
-export function convertToPreferred (amount: number, unit: MetricUnit, ingredient: IIngredient): number {
+export function convertToPreferred (amount: number, unit: DatabaseUnit, ingredient: IIngredient): number {
   if (unit === ingredient.preferredUnit) {
     return amount
   }
@@ -95,5 +102,6 @@ export function convertToPreferred (amount: number, unit: MetricUnit, ingredient
     return amount / ingredient.density
   }
 
-  throw new Error(`Unhandled conversion ${unit} to ${ingredient.preferredUnit}`)
+  logger.log(LogLevel.warn, `Unhandled conversion ${unit} to ${ingredient.preferredUnit}`)
+  throw new UnparsedIngredientError(ingredient)
 }

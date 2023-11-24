@@ -9,8 +9,8 @@ import getDatabase from './database/getDatabase'
 import getRegexGroups from './getRegexGroups'
 
 export class UnparsedIngredientError extends Error {
-  constructor (ingredient: IIngredient) {
-    super(`Could not get amount for '${ingredient.name}'`)
+  constructor (ingredient: IIngredient, detail?: string) {
+    super(`Could not get amount for '${ingredient.name}' ${detail}`)
   }
 }
 

@@ -39,6 +39,7 @@ VALUES
     ('Cheddar Cheese', 'g', 0.4),
     ('Cheese', 'g', 0.4),
     ('Chicken', 'g', 0.5),
+    ('Cream Cheese', 'ml', 1.0),
     ('Flour', 'g', 0.6),
     ('Ground Beef', 'g', 1.0),
     ('Milk', 'ml', 1.0),
@@ -46,8 +47,10 @@ VALUES
     ('Mushrooms', 'g', 0.4),
     ('Nuts', 'g', 0.5),
     ('Oil', 'ml', 0.9),
+    ('Parmesan Cheese', 'g', 0.4),
     ('Potatoes', 'g', 0.9),
     ('Rice', 'g', 0.9),
+    ('Sour Cream', 'ml', 1.0),
     ('Sugar', 'g', 0.8),
     ('Vanilla', 'ml', 0.9),
     ('Vinegar', 'ml', 0.9);
@@ -73,15 +76,19 @@ VALUES
 INSERT INTO ingredient_substitution_group
     (name)
 VALUES
-    ('Peppers'),
-    ('Cheese');
+    ('Cheese'),
+    ('Cream'),
+    ('Peppers');
 
 INSERT INTO ingredient_substitution_entry
     (group_id, ingredient_id)
 VALUES
-    ((SELECT id FROM ingredient_substitution_group WHERE name = 'Peppers'), (SELECT id FROM ingredient WHERE name = 'Bell Pepper')),
-    ((SELECT id FROM ingredient_substitution_group WHERE name = 'Peppers'), (SELECT id FROM ingredient WHERE name = 'Green Pepper')),
-    ((SELECT id FROM ingredient_substitution_group WHERE name = 'Peppers'), (SELECT id FROM ingredient WHERE name = 'Red Pepper')),
     ((SELECT id FROM ingredient_substitution_group WHERE name = 'Cheese'), (SELECT id FROM ingredient WHERE name = 'Cheddar Cheese')),
     ((SELECT id FROM ingredient_substitution_group WHERE name = 'Cheese'), (SELECT id FROM ingredient WHERE name = 'Cheese')),
-    ((SELECT id FROM ingredient_substitution_group WHERE name = 'Cheese'), (SELECT id FROM ingredient WHERE name = 'Mozzarella Cheese'));
+    ((SELECT id FROM ingredient_substitution_group WHERE name = 'Cheese'), (SELECT id FROM ingredient WHERE name = 'Mozzarella Cheese')),
+    -- Parmesan cheese intentionally ommitted
+    ((SELECT id FROM ingredient_substitution_group WHERE name = 'Cream'), (SELECT id FROM ingredient WHERE name = 'Cream Cheese')),
+    ((SELECT id FROM ingredient_substitution_group WHERE name = 'Cream'), (SELECT id FROM ingredient WHERE name = 'Sour Cream')),
+    ((SELECT id FROM ingredient_substitution_group WHERE name = 'Peppers'), (SELECT id FROM ingredient WHERE name = 'Bell Pepper')),
+    ((SELECT id FROM ingredient_substitution_group WHERE name = 'Peppers'), (SELECT id FROM ingredient WHERE name = 'Green Pepper')),
+    ((SELECT id FROM ingredient_substitution_group WHERE name = 'Peppers'), (SELECT id FROM ingredient WHERE name = 'Red Pepper'));
