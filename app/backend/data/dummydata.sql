@@ -12,4 +12,7 @@ VALUES
 INSERT INTO fridge_ingredient
     (fridge_id, ingredient_id, amount)
 VALUES
-    (1, (SELECT id FROM ingredient WHERE name = 'Bananas'), 5);
+    (1, (SELECT id FROM ingredient WHERE name = 'Bananas'), 1),
+    (1, (SELECT id FROM ingredient WHERE name = 'Carrots'), 2),
+    (1, (SELECT id FROM ingredient WHERE name = 'Green Pepper'), 4),
+    (1, (SELECT id FROM ingredient WHERE name = 'Red Pepper'), 8);
