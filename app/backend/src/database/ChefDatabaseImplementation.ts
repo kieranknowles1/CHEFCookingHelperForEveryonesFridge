@@ -48,6 +48,8 @@ class WritableDatabaseImplementation implements IWritableDatabase {
 
   public addIngredient (ingredient: IIngredient): void {
     this.assertValid()
+    // TODO: Reuse prepared statements
+    // TODO: statement pack for writable to only prepare them once
     this._connection.prepare<string>(`
       INSERT INTO ingredient
         (name)
@@ -307,6 +309,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     // Well this was easier than expected
     // TODO: Filter by amount and optionally allow missing ingredients
     // TODO: Probably want to return more than just ID
+    // TODO: Optionally allow substitutions
     const statement = this._connection.prepare<[types.RowId]>(`
       SELECT
         -- Number of ingredients that are available or unlimited
