@@ -1,13 +1,13 @@
 import express, { type NextFunction } from 'express'
 import bodyParser from 'body-parser'
 
+import logger, { LogLevel } from './logger'
 import CodedError from './CodedError'
 import installFridgeAvailableRecipeEndpoint from './api/v1/fridge/recipe/available'
 import installFridgeIngredientAllAmountEndpoint from './api/v1/fridge/ingredient/all/amount'
 import installFridgeIngredientEndpoint from './api/v1/fridge/ingredient/amount'
 import installIngredientAllEndpoint from './api/v1/ingredient/all'
 import installRecipeEndpoint from './api/v1/recipe/recipe'
-import logger, { LogLevel } from './logger'
 
 const app = express()
 
