@@ -4,11 +4,11 @@ import { readFileSync } from 'fs'
 import CiMap from '@glossa-glo/case-insensitive-map'
 import Database from 'better-sqlite3'
 
-import { type IngredientId, ingredientMapFactory } from '../IIngredient'
+import { type IngredientId, ingredientMapFactory } from '../types/IIngredient'
 import logger, { LogLevel } from '../logger'
-import type IIngredient from '../IIngredient'
-import type IRecipe from '../IRecipe'
-import { type IRecipeNoId } from '../IRecipe'
+import type IIngredient from '../types/IIngredient'
+import type IRecipe from '../types/IRecipe'
+import { type IRecipeNoId } from '../types/IRecipe'
 
 import type * as types from './types'
 import { type IFridgeIngredientAmount, type IWritableDatabase } from './IChefDatabase'
@@ -20,6 +20,9 @@ const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'data/initialdata.sql')
 const DUMMY_DATA_PATH = path.join(process.cwd(), 'data/dummydata.sql')
+
+type GetResult<TRow> = TRow | undefined
+type AllResult<TRow> = TRow[]
 
 /**
  * Writable interface to the database, passed to the callback of {@link ChefDatabaseImplementation.wrapTransaction}
@@ -179,7 +182,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     const statement = this._connection.prepare<[types.RowId]>(`
       SELECT * FROM ingredient WHERE id = ?
     `)
-    const result = statement.get(id) as types.GetResult<types.IIngredientRow>
+    const result = statement.get(id) as GetResult<types.IIngredientRow>
 
     if (result === undefined) {
       throw new InvalidIdError('ingredient', id)
@@ -192,7 +195,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     const statement = this._connection.prepare(`
       SELECT * FROM ingredient
     `)
-    const result = statement.all() as types.AllResult<types.IIngredientRow>
+    const result = statement.all() as AllResult<types.IIngredientRow>
 
     return new Map(result.map(row => [
       row.id,
@@ -212,7 +215,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
         JOIN ingredient ON view_ingredient_by_name.id = ingredient.id
         WHERE view_ingredient_by_name.name = ? COLLATE NOCASE
     `)
-    const result = statement.get(name) as types.GetResult<types.IIngredientRow>
+    const result = statement.get(name) as GetResult<types.IIngredientRow>
     if (result === undefined) {
       return null
     }
@@ -227,7 +230,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     const statement = this._connection.prepare(`
       SELECT * FROM view_ingredient_by_name
     `)
-    const result = statement.all() as types.AllResult<types.IIngredientRow>
+    const result = statement.all() as AllResult<types.IIngredientRow>
     const map = new CiMap<string, IngredientId>()
     for (const pair of result) {
       map.set(pair.name, pair.id)
@@ -248,7 +251,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
         WHERE recipe.id = ?
     `)
 
-    const result = statement.all(id) as types.AllResult<Result>
+    const result = statement.all(id) as AllResult<Result>
     if (result.length === 0) { throw new InvalidIdError('recipe', id) }
 
     const ingredients = ingredientMapFactory()
@@ -277,7 +280,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
       FROM fridge_ingredient
       WHERE fridge_id = ? AND ingredient_id = ?
     `)
-    const result = statement.get(fridgeId, ingredientId) as types.GetResult<{ amount: number }>
+    const result = statement.get(fridgeId, ingredientId) as GetResult<{ amount: number }>
 
     return result?.amount ?? 0
   }
@@ -293,7 +296,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
       JOIN ingredient ON ingredient.id = fridge_ingredient.ingredient_id
       WHERE fridge_id = ?
     `)
-    const result = statement.all(fridgeId) as types.AllResult<IAllIngredientAmountsRow>
+    const result = statement.all(fridgeId) as AllResult<IAllIngredientAmountsRow>
 
     const map = new Map<types.RowId, IFridgeIngredientAmount>()
     for (const row of result) {
@@ -328,7 +331,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
       -- All ingredients were available
       HAVING available_count = total_count
     `)
-    const result = statement.all(fridgeId) as types.AllResult<{ recipe_id: types.RowId }>
+    const result = statement.all(fridgeId) as AllResult<{ recipe_id: types.RowId }>
 
     return result.map(row => row.recipe_id)
   }

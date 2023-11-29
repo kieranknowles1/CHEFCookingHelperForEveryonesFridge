@@ -6,11 +6,11 @@
   "scripts": {
     "generate-types": "openapi-typescript ./api.yml --output src/types/api.generated.ts",
     "lint": "eslint . --ext ts",
-    "setup": "node build/setup.js",
+    "setup": "node build/setup/index.js",
     "start": "node build/index.js",
     "build": "tsc -p .",
     "dev": "nodemon src/index.ts",
-    "dev-setup": "nodemon src/setup.ts",
+    "dev-setup": "nodemon src/setup/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Kieran Knowles",

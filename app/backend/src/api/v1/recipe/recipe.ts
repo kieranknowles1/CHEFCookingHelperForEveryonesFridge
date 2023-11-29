@@ -2,10 +2,10 @@ import { type Express } from 'express'
 import { param } from 'express-validator'
 
 import { type components, type paths } from '../../../types/api.generated'
-import { type TypedResponse } from '../../../TypedEndpoint'
-import checkParameters from '../../../checkParameters'
+import { type TypedResponse } from '../../TypedEndpoint'
+import checkParameters from '../../checkParameters'
 import getDatabase from '../../../database/getDatabase'
-import getParameters from '../../../getParameters'
+import getParameters from '../../getParameters'
 
 type endpoint = paths['/recipe/{id}']['get']
 type IngredientEntry = components['schemas']['RecipeIngredientEntry']

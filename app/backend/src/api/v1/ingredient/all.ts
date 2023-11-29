@@ -1,6 +1,6 @@
 import { type Express } from 'express'
 
-import { type TypedResponse } from '../../../TypedEndpoint'
+import { type TypedResponse } from '../../TypedEndpoint'
 import getDatabase from '../../../database/getDatabase'
 import { type paths } from '../../../types/api.generated'
 

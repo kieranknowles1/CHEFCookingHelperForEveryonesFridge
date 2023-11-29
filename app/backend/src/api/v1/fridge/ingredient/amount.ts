@@ -1,10 +1,10 @@
 import { param, query } from 'express-validator'
 import { type Express } from 'express'
 
-import { type TypedResponse } from '../../../../TypedEndpoint'
-import checkParameters from '../../../../checkParameters'
+import { type TypedResponse } from '../../../TypedEndpoint'
+import checkParameters from '../../../checkParameters'
 import getDatabase from '../../../../database/getDatabase'
-import getParameters from '../../../../getParameters'
+import getParameters from '../../../getParameters'
 import { type paths } from '../../../../types/api.generated'
 
 type ingredientGetEndpoint = paths['/fridge/{fridgeId}/ingredient/{ingredientId}/amount']['get']

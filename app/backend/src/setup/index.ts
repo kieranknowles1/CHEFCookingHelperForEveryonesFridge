@@ -11,12 +11,13 @@ import cliProgress from 'cli-progress'
 import csv from 'csv-parse'
 import progressTracker from 'progress-stream'
 
-import logger, { logError } from './logger'
+import logger, { logError } from '../logger'
+import { type IngredientId } from '../types/IIngredient'
+import getDatabase from '../database/getDatabase'
+
 import type ICsvRecipeRow from './ICsvRecipeRow'
-import { type IngredientId } from './IIngredient'
 import { UnparsedIngredientError } from './parseIngredients'
-import getDatabase from './database/getDatabase'
-import { parseCsvRecipeRow } from './ICsvRecipeRow'
+import parseCsvRecipeRow from './parseCsvRecipeRow'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')

@@ -1,5 +1,6 @@
+import { type RowId } from '../database/types'
+
 import { type IngredientMap } from './IIngredient'
-import { type RowId } from './database/types'
 
 export interface IRecipeNoId {
   name: string

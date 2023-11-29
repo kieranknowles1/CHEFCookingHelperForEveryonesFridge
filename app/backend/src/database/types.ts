@@ -1,10 +1,8 @@
-import { type DatabaseUnit } from '../Unit'
+import { type DatabaseUnit } from '../types/Unit'
 
 // NOTE: This should technically be `number | bigint`, but openapi-typescript generates `number` for `integer`
 // Using `number` here saves on casting
 export type RowId = number
-export type GetResult<TRow> = TRow | undefined
-export type AllResult<TRow> = TRow[]
 
 export interface IIngredientRow {
   id: RowId
