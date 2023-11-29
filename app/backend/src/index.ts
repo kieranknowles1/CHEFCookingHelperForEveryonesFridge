@@ -7,6 +7,7 @@ import installFridgeIngredientAllAmountEndpoint from './api/v1/fridge/ingredient
 import installFridgeIngredientEndpoint from './api/v1/fridge/ingredient/amount'
 import installIngredientAllEndpoint from './api/v1/ingredient/all'
 import installRecipeEndpoint from './api/v1/recipe/recipe'
+import logger, { LogLevel } from './logger'
 
 const app = express()
 
@@ -33,5 +34,5 @@ app.use((err: Error, req: express.Request, res: express.Response, next: NextFunc
 })
 
 app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`)
+  logger.log(LogLevel.info, `Backend listening on http://localhost:${PORT}`)
 })
