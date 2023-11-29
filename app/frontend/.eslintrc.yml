@@ -4,6 +4,7 @@ env:
 extends:
   - standard-with-typescript
   - plugin:react/recommended
+  - plugin:deprecation/recommended
 parserOptions:
   ecmaVersion: latest
   sourceType: module
