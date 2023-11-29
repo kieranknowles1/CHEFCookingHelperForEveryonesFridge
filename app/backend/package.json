@@ -4,7 +4,7 @@
   "description": "Backend for the CHEF system.",
   "main": "index.js",
   "scripts": {
-    "generate-types": "openapi-typescript ./api.yml --output src/types/api.generated.ts",
+    "generate-types": "openapi-typescript ./../openapi/api.yml --output src/types/api.generated.ts",
     "lint": "eslint . --ext ts",
     "setup": "node build/setup/index.js",
     "start": "node build/index.js",
