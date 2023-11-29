@@ -9,8 +9,6 @@ parserOptions:
   sourceType: module
 plugins:
   - react
-ignorePatterns:
-  - vite.config.ts
 rules:
   sort-imports:
    - warn
