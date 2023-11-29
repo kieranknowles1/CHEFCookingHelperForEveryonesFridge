@@ -5,6 +5,7 @@ import CiMap from '@glossa-glo/case-insensitive-map'
 import Database from 'better-sqlite3'
 
 import { type IngredientId, ingredientMapFactory } from '../IIngredient'
+import logger, { LogLevel } from '../logger'
 import type IIngredient from '../IIngredient'
 import type IRecipe from '../IRecipe'
 import { type IRecipeNoId } from '../IRecipe'
@@ -13,7 +14,6 @@ import type * as types from './types'
 import { type IFridgeIngredientAmount, type IWritableDatabase } from './IChefDatabase'
 import type IChefDatabase from './IChefDatabase'
 import InvalidIdError from './InvalidIdError'
-import logger, { LogLevel } from '../logger'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
