@@ -17,9 +17,12 @@ dictionaryDefinitions:
     path: cspell/latex.txt
   - name: Names
     path: cspell/names.txt
+  - name: Sql
+    path: cspell/sql.txt
 
 dictionaries:
   - Acronyms
   - English
   - Latex
   - Names
+  - Sql
