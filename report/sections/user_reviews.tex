@@ -1,31 +1,26 @@
+\newcommand\reviewapp{MyFridgeFood}
+\newcounter{reviewcounter}
+
 % Usage:
 %   #1: Caption
 %   #2: Label ID
-%   #3: Reviewer
-%   #4: Stars (use dings)
-%   #5: App
-%   #6: Review content
-\newcommand{\review}[6]{
+%   #3: Stars (use dings)
+%   #4: Review content
+\newcommand{\review}[4]{
     \begin{figure}[H]
         \caption{#1}
         \label{#2}
 
-        \textbf{#3} #4
-        \hfill\textbf{#5}
+        \textbf{\reviewapp{} reviewer \stepcounter{reviewcounter}\arabic{reviewcounter}} #3
 
-        #6
+        #4
     \end{figure}
 }
-\todo{How should I be including reviews?}
-
-\todo{Anonymise reviews}
 
 \review
     {A user review complaining about MyFridgeFood suggesting recipes they lacked ingredients for}
-    {fig:review_missing_ingredients}
-    {MyFridgeFood Reviewer 1}
+    {rev:review_missing_ingredients}
     {\dingstarfull \dingstarempty \dingstarempty \dingstarempty \dingstarempty}
-    {MyFridgeFood}
     {
         I tried the using the website first and I checked the ingredients I have on hand such as chicken,
         butter, etc. The first recipes it gave me is Spicy garlic steak - um garlic nor steak was on my list another was
@@ -36,10 +31,8 @@
 
 \review
     {A user review complaining about the lack of variety in suggested recipes}
-    {fig:review_lack_variety}
-    {MyFridgeFood Reviewer 2}
+    {rev:review_lack_variety}
     {\dingstarfull \dingstarfull \dingstarempty \dingstarempty \dingstarempty}
-    {MyFridgeFood}
     {
         Where are the recipes? I mean I like bacon, but not that much. I have tried many ingredients
         but outside of chicken eggs and bacon it seem no content is available. As an example,
