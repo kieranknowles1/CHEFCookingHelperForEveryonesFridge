@@ -7,6 +7,10 @@
 %   #3: Stars (use dings)
 %   #4: Review content
 \newcommand{\review}[4]{
+    % Put figures in a box
+    % https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions
+    \floatstyle{boxed}
+    \restylefloat{figure}
     \begin{figure}[H]
         \caption{#1}
         \label{#2}

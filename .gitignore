@@ -1,4 +1,5 @@
 # LaTeX generated files
+*_svg-tex.tex
 *.aux
 *.bbl
 *.bcf
@@ -15,6 +16,11 @@
 *.synctex(busy)
 *.toc
 *.wc
+
+svg-inkscape/
+
+*.drawio.bkp
+*.drawio.dtmp
 
 node_modules/
 working_data/

@@ -32,17 +32,14 @@
 
 \usepackage{codelisting}
 
+\usepackage[notransparent]{svg}
+\usepackage{float}
 \usepackage{makecell}
 \usepackage{pgfgantt}
 \usepackage{soul}
 \usepackage{subfiles}
 \usepackage{tabulary}
 
-% Put figures in a box
-% https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions
-\usepackage{float}
-\floatstyle{boxed}
-\restylefloat{figure}
 
 % //SECTION - Citations
 \usepackage[style=authoryear]{biblatex}
@@ -252,6 +249,12 @@
 \section{User Reviews}
 \subfile{sections/user_reviews.tex}
 
+\section{Interface Prototypes}
+\begin{figure}
+    \centering
+    \includesvg[height=0.9\textwidth,angle=90]{figures/InterfacePrototypes.drawio.svg}
+    \caption{The home screen for \chef{}, allowing the user to add/remove ingredients and scan items.}
+\end{figure}
 % Appendices
 
 
