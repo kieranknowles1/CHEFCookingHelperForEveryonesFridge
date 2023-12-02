@@ -8,6 +8,8 @@ extends:
 parserOptions:
   ecmaVersion: latest
   sourceType: module
+ignorePatterns:
+  - "*.generated.ts"
 plugins:
   - react
 rules:
