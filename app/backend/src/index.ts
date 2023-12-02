@@ -1,5 +1,6 @@
 import express, { type NextFunction } from 'express'
 import bodyParser from 'body-parser'
+import cors from 'cors'
 
 import logger, { LogLevel } from './logger'
 import CodedError from './CodedError'
@@ -15,6 +16,7 @@ const app = express()
 const PORT = 3000
 
 app.use(bodyParser.json())
+app.use(cors())
 
 installFridgeAvailableRecipeEndpoint(app)
 installFridgeIngredientAllAmountEndpoint(app)
