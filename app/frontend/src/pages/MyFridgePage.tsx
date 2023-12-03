@@ -25,7 +25,7 @@ export default function MyFridgePage (): React.JSX.Element {
       console.error(err)
       setStatus('error')
     })
-  })
+  }, [])
 
   return (
     <main>
