@@ -7,4 +7,8 @@
         @apply text-4xl;
         @apply text-center;
     }
+
+    h2 {
+        @apply text-xl;
+    }
 }
