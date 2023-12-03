@@ -295,6 +295,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
       FROM fridge_ingredient
       JOIN ingredient ON ingredient.id = fridge_ingredient.ingredient_id
       WHERE fridge_id = ?
+      ORDER BY ingredient.name
     `)
     const result = statement.all(fridgeId) as AllResult<IAllIngredientAmountsRow>
 

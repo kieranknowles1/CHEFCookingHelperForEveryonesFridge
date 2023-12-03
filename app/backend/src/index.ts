@@ -2,7 +2,7 @@ import express, { type NextFunction } from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 
-import logger, { LogLevel } from './logger'
+import logger, { LogLevel, logError } from './logger'
 import CodedError from './CodedError'
 import installFridgeAvailableRecipeEndpoint from './api/v1/fridge/recipe/available'
 import installFridgeIngredientAllAmountEndpoint from './api/v1/fridge/ingredient/all/amount'
@@ -26,6 +26,10 @@ installRecipeEndpoint(app)
 
 app.use((err: Error, req: express.Request, res: express.Response, next: NextFunction) => {
   const code = err instanceof CodedError ? err.code : 500
+
+  if (code === 500) {
+    logError(err)
+  }
 
   res.status(code).json({
     errors: {
