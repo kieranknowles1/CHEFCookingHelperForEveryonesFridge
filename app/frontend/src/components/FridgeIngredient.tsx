@@ -1,7 +1,10 @@
+import { Popover } from '@headlessui/react'
 import React from 'react'
 
 import { type components } from '../types/api.generated'
 import formatAmount from '../formatAmount'
+
+import EditIngredientAmount from './EditIngredientAmount'
 
 export type FridgeIngredientProps = components['schemas']['FridgeIngredientEntry']
 
@@ -10,14 +13,16 @@ export type FridgeIngredientProps = components['schemas']['FridgeIngredientEntry
  */
 export default function FridgeIngredient (props: FridgeIngredientProps): React.JSX.Element {
   return (
-    <li className='bg-raisin_black-400 text-center'>
-      <h2>{props.ingredient.name}</h2>
-      <p>{formatAmount(props.amount, props.ingredient.preferredUnit)}</p>
-      <div className='p-1'>
-        {/* TODO: OnClick bring up menu to specify amount and submit */}
-        <button className='w-1/2 bg-raisin_black-600 text-citron-700'>Add</button>
-        <button className='w-1/2 bg-raisin_black-700 text-citron-700'>Remove</button>
+    <Popover>
+      <div className='bg-raisin_black-400 text-center rounded-2xl'>
+        <h2>{props.ingredient.name}</h2>
+        <p>{formatAmount(props.amount, props.ingredient.preferredUnit)}</p>
+        <br />
+        <Popover.Button className='w-full bg-raisin_black-600 text-citron-700 rounded'>Add/Remove</Popover.Button>
       </div>
-    </li>
+      <Popover.Panel className='bg-raisin_black-700 text-citron rounded-xl'>
+        <EditIngredientAmount ingredientId={props.ingredient.id} />
+      </Popover.Panel>
+    </Popover>
   )
 }
