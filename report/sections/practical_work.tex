@@ -73,12 +73,23 @@
 
 \todo{Should I be explaining what TypeScript is or not?}
 The backend was the first component to be developed to have a data source for the frontend to connect to. This was
-implemented in TypeScript using the Node.js framework. TypeScript was chosen as it compiles into JavaScript while adding
-compile-time type checking similar to statically typed languages such as Java. This would allow for the same language
+implemented in TypeScript using the Node.js framework. TypeScript was chosen as it compiles into JavaScript which can run in web browsers
+while adding compile-time type checking similar to statically typed languages such as Java. This would allow for the same language
 to be used for both the front and back end.
+
+The API was declared and documented using the OpenAPI format and converted
+into TypeScript types using the \codelisting{openapi-typescript} package. These
+generated types were then used to check the return types from the API. Unfortunately,
+this was unable to check parameters automatically or the existence of endpoints
+as TypeScript types don't exist at runtime.
 
 \subsection{Frontend}
 \todo{Frontend}
+
+the \codelisting{openapi-fetch} package was used along with previously
+generated types to create a type-safe wrapper for the native \codelisting{fetch}
+function that automatically determines parameter and response types
+from the API declarations.
 
 \section{Testing}
 \todoinline{
