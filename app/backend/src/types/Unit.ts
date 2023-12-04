@@ -44,7 +44,7 @@ export function tryToMetric (amount: number, unit: string): [number, DatabaseUni
       return [amount * 250, 'ml']
     case 'can': // Can of milk
     case 'cans':
-      return [amount * 300, 'ml']
+      return [amount * 400, 'ml']
     case 'doz':
     case 'dozen':
       return [amount * 12, 'whole']
