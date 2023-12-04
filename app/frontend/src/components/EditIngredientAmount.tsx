@@ -1,22 +1,34 @@
 import React from 'react'
 
+import UserContext from '../UserContext'
 import apiClient from '../apiClient'
+import useSafeContext from '../useSafeContext'
 
 export interface EditIngredientAmountProps {
   ingredientId: number
+  currentAmount: number
+  setCurrentAmount: React.Dispatch<number>
 }
 
 export default function EditIngredientAmount (props: EditIngredientAmountProps): React.JSX.Element {
+  const context = useSafeContext(UserContext)
+
+  const [deltaAmount, setDeltaAmount] = React.useState(0)
+
   function onSubmit (event: React.FormEvent): void {
     event.preventDefault()
+    const newAmount = props.currentAmount + deltaAmount
+    const params = {
+      path: { fridgeId: context.fridgeId, ingredientId: props.ingredientId },
+      query: { amount: newAmount }
+    }
 
-    // TODO: Need a way to get fridge ID here
-    // TODO: Get new amount
-    // TODO: Update parent without refetching everything
     apiClient.POST(
       '/fridge/{fridgeId}/ingredient/{ingredientId}/amount',
-      { params: { path: { fridgeId: 1, ingredientId: props.ingredientId }, query: { amount: 1234 } } }
-    ).catch(err => {
+      { params }
+    ).then(() => {
+      props.setCurrentAmount(newAmount)
+    }).catch(err => {
       console.error(err)
       alert('Failed to update ingredient amount.')
     })
@@ -25,6 +37,8 @@ export default function EditIngredientAmount (props: EditIngredientAmountProps):
   return (
     <form onSubmit={onSubmit}>
       <label>Amount: <input
+        value={deltaAmount}
+        onChange={event => { setDeltaAmount(Number.parseFloat(event.target.value)) }}
         type='number'
         autoFocus
         className='w-1/2 bg-raisin_black-800 text-citron-100'
