@@ -4,6 +4,8 @@ import UserContext from '../UserContext'
 import apiClient from '../apiClient'
 import useSafeContext from '../useSafeContext'
 
+import NumberInput from './NumberInput'
+
 export interface EditIngredientAmountProps {
   ingredientId: number
   currentAmount: number
@@ -36,12 +38,11 @@ export default function EditIngredientAmount (props: EditIngredientAmountProps):
 
   return (
     <form onSubmit={onSubmit}>
-      <label>Amount: <input
-        value={deltaAmount}
+      <label>Amount: <NumberInput
         onChange={event => { setDeltaAmount(Number.parseFloat(event.target.value)) }}
-        type='number'
         autoFocus
         className='w-1/2 bg-raisin_black-800 text-citron-100'
+        required
       /></label>
       <button className='w-full bg-savoy_blue-500 rounded' type='submit'>Submit</button>
     </form>
