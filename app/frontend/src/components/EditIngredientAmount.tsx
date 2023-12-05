@@ -38,7 +38,9 @@ export default function EditIngredientAmount (props: EditIngredientAmountProps):
 
   return (
     <form onSubmit={onSubmit}>
-      <label>Amount: <NumberInput
+      <label>Amount: <input
+        type='number'
+        min={0}
         onChange={event => { setDeltaAmount(Number.parseFloat(event.target.value)) }}
         autoFocus
         className='w-1/2 bg-raisin_black-800 text-citron-100'
