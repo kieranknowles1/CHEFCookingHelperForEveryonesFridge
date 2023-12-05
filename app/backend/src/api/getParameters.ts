@@ -14,7 +14,6 @@ export type ParameterConverter<endpoint extends JsonEndpointWithParameters> = (m
  * Use `checkParameters` as middleware to validate that the data exists in the expected format.
  *
  * NOTE: Parameters will be strings, even if matched against other types
- * // FIXME: Returning `any` as matchedData doesn't work how I thought it did. It keeps matched numbers as strings
  */
 export default function getParameters<endpoint extends JsonEndpointWithParameters> (req: Request, converter: ParameterConverter<endpoint>): EndpointParameters<endpoint> {
   return converter(matchedData(req) as MatchedData<endpoint>)
