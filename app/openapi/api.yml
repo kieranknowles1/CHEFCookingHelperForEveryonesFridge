@@ -5,6 +5,7 @@ info:
   version: 1.0.0
 
 tags:
+  - name: Barcode
   - name: Fridge
   - name: Ingredient
   - name: Recipe
@@ -13,6 +14,52 @@ servers:
   - url: http://localhost:3000/api/v1
 
 paths:
+  /barcode/{code}:
+    get:
+      tags: [Barcode]
+      summary: Get the item associated with a given barcode
+      parameters:
+        - in: path
+          name: code
+          schema: { type: integer }
+          required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  productName: { type: string, example: GenericMart Chicken 1kg }
+                  ingredient:
+                    $ref: "#/components/schemas/Ingredient"
+                  amount: { type: number, example: 1000 }
+                required: [ingredient, amount]
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      tags: [Barcode]
+      # TODO: Require auth?
+      summary: Insert a new barcode into the database
+      parameters:
+        - in: path
+          name: code
+          schema: { type: integer }
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productName: { type: string, example: GenericMart Chicken 1kg}
+                ingredientId: { type: number, example: 12345 }
+                amount: { type: number, example: 1000 }
+      responses:
+        "204":
+          description: No Content
+
   /ingredient/all:
     get:
       tags: [Ingredient]
@@ -117,6 +164,16 @@ components:
       name: ingredientId
       schema: { type: integer, example: 1 }
       required: true
+
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message: { type: string, example: "The element was not found" }
 
   schemas:
     Unit:

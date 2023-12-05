@@ -17,6 +17,7 @@ export default function EditIngredientAmount (props: EditIngredientAmountProps):
 
   function onSubmit (event: React.FormEvent): void {
     event.preventDefault()
+    // TODO: Handle removing ingredients. Probably want 2 popovers 1 for each action
     const newAmount = props.currentAmount + deltaAmount
     const params = {
       path: { fridgeId: context.fridgeId, ingredientId: props.ingredientId },
