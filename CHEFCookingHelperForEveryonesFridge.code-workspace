@@ -7,7 +7,7 @@
 	"settings": {
 		"github.copilot.enable": { "*": false },
 
-		"todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.)|%)\\s*(TODO)|(\\\\todo(inline)?\\{)",
+		"todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.)|%)\\s*($TAGS)|(\\\\todo(inline)?\\{)",
 	},
 	"extensions": {
 		"recommendations": [
