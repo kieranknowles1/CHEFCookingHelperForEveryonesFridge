@@ -14,7 +14,9 @@ export default function installFridgeIngredientAllAmountEndpoint (app: Express):
     param('fridgeId').isInt(),
     checkParameters,
     (req, res: TypedResponse<endpoint, 200>) => {
-      const data = getParameters<endpoint>(req)
+      const data = getParameters<endpoint>(req, matched => ({
+        fridgeId: Number.parseInt(matched.fridgeId)
+      }))
 
       const ingredients = getDatabase().getAllIngredientAmounts(data.fridgeId)
 

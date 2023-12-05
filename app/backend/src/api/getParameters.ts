@@ -5,6 +5,9 @@ import { type EndpointParameters, type JsonEndpointWithParameters } from './Type
 
 type MatchedData<endpoint extends JsonEndpointWithParameters> = Record<keyof EndpointParameters<endpoint>, string>
 
+/** Function to convert an endpoint's parameters into the expected types */
+export type ParameterConverter<endpoint extends JsonEndpointWithParameters> = (matched: MatchedData<endpoint>) => EndpointParameters<endpoint>
+
 /**
  * Function to get strongly typed parameters from the matched data that was validated using `express-validator`.
  *
@@ -13,6 +16,6 @@ type MatchedData<endpoint extends JsonEndpointWithParameters> = Record<keyof End
  * NOTE: Parameters will be strings, even if matched against other types
  * // FIXME: Returning `any` as matchedData doesn't work how I thought it did. It keeps matched numbers as strings
  */
-export default function getParameters<endpoint extends JsonEndpointWithParameters> (req: Request): any {
-  return matchedData(req) as MatchedData<endpoint>
+export default function getParameters<endpoint extends JsonEndpointWithParameters> (req: Request, converter: ParameterConverter<endpoint>): EndpointParameters<endpoint> {
+  return converter(matchedData(req) as MatchedData<endpoint>)
 }

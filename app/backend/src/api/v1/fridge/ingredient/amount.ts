@@ -21,7 +21,10 @@ export default function installFridgeIngredientEndpoint (app: Express): void {
     param('ingredientId').isInt(),
     checkParameters,
     (req, res: IngredientGetResponse) => {
-      const params = getParameters<ingredientGetEndpoint>(req)
+      const params = getParameters<ingredientGetEndpoint>(req, matched => ({
+        fridgeId: Number.parseInt(matched.fridgeId),
+        ingredientId: Number.parseInt(matched.ingredientId)
+      }))
 
       const amount = getDatabase().getIngredientAmount(params.fridgeId, params.ingredientId)
       res.json(amount)
@@ -35,7 +38,11 @@ export default function installFridgeIngredientEndpoint (app: Express): void {
     query('amount').isFloat({ min: 0 }),
     checkParameters,
     (req, res) => {
-      const params = getParameters<ingredientPostEndpoint>(req)
+      const params = getParameters<ingredientPostEndpoint>(req, matched => ({
+        fridgeId: Number.parseInt(matched.fridgeId),
+        ingredientId: Number.parseInt(matched.ingredientId),
+        amount: Number.parseFloat(matched.amount)
+      }))
 
       getDatabase().wrapTransaction(writable => {
         writable.setIngredientAmount(params.fridgeId, params.ingredientId, params.amount)

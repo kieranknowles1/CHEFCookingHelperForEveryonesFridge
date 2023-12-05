@@ -20,7 +20,9 @@ export default function installRecipeEndpoint (app: Express): void {
     param('id').isInt(),
     checkParameters,
     (req, res: RecipeResponse) => {
-      const params = getParameters<endpoint>(req)
+      const params = getParameters<endpoint>(req, matched => ({
+        id: Number.parseInt(matched.id)
+      }))
       const recipe = getDatabase().getRecipe(params.id)
 
       const ingredients: IngredientEntry[] = []

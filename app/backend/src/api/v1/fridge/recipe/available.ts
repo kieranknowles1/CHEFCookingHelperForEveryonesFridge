@@ -15,7 +15,9 @@ export default function installFridgeAvailableRecipeEndpoint (app: Express): voi
     param('fridgeId').isInt(),
     checkParameters,
     (req, res: AvailableRecipeResponse) => {
-      const params = getParameters<endpoint>(req)
+      const params = getParameters<endpoint>(req, matched => ({
+        fridgeId: Number.parseInt(matched.fridgeId)
+      }))
       res.json(getDatabase().getAvailableRecipes(params.fridgeId))
     })
 }
