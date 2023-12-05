@@ -4,7 +4,7 @@ import React from 'react'
 import HomePage from './pages/HomePage'
 import MyFridgePage from './pages/MyFridgePage'
 import NavMenu from './components/NavMenu'
-import UserContext from './UserContext'
+import UserContext from './contexts/UserContext'
 
 function App (): React.JSX.Element {
   const routes = [

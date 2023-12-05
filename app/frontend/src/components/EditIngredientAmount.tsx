@@ -1,8 +1,8 @@
 import React from 'react'
 
-import UserContext from '../UserContext'
+import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
-import useSafeContext from '../useSafeContext'
+import useSafeContext from '../contexts/useSafeContext'
 
 import NumberInput from './NumberInput'
 
