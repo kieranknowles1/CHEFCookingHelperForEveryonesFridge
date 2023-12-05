@@ -4,8 +4,6 @@ import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import useSafeContext from '../contexts/useSafeContext'
 
-import NumberInput from './NumberInput'
-
 export interface EditIngredientAmountProps {
   ingredientId: number
   currentAmount: number
