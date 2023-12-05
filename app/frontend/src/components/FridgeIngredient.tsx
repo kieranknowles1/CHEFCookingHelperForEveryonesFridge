@@ -36,11 +36,14 @@ export default function FridgeIngredient (props: FridgeIngredientProps): React.J
         ref={popData.setPopperElement}
         {...popData.attributes.popper}
       >
-        <EditIngredientAmount
-          ingredientId={props.ingredient.id}
-          currentAmount={amount}
-          setCurrentAmount={setAmount}
-        />
+        {({ close }) => (
+          <EditIngredientAmount
+            ingredientId={props.ingredient.id}
+            currentAmount={amount}
+            setCurrentAmount={setAmount}
+            onSubmit={close}
+          />
+        )}
       </Popover.Panel>
     </Popover>
   )

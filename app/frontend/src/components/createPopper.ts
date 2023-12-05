@@ -23,8 +23,6 @@ export default function createPopper (): PopperData {
 
   const { styles, attributes } = usePopper(referenceElement, popperElement)
 
-  // TODO: Add an arrow
-
   return {
     setReferenceElement,
     setPopperElement,

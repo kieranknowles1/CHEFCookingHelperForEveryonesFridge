@@ -8,6 +8,8 @@ export interface EditIngredientAmountProps {
   ingredientId: number
   currentAmount: number
   setCurrentAmount: React.Dispatch<number>
+  // Callback for when the form has successfully been submitted
+  onSubmit: () => void
 }
 
 export default function EditIngredientAmount (props: EditIngredientAmountProps): React.JSX.Element {
@@ -29,6 +31,7 @@ export default function EditIngredientAmount (props: EditIngredientAmountProps):
       { params }
     ).then(() => {
       props.setCurrentAmount(newAmount)
+      props.onSubmit()
     }).catch(err => {
       console.error(err)
       alert('Failed to update ingredient amount.')
