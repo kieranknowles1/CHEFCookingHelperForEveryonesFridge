@@ -1,10 +1,11 @@
+import { Popover } from '@headlessui/react'
 import React from 'react'
 
 import FridgeIngredient, { type FridgeIngredientProps } from '../components/FridgeIngredient'
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
+import AddIngredient from '../components/AddIngredient'
+import ScanBarcode from '../components/ScanBarcode'
 import apiClient from '../apiClient'
-
-import { useZxing } from 'react-zxing'
 
 // TODO: Implement
 export default function MyFridgePage (): React.JSX.Element {
@@ -29,19 +30,12 @@ export default function MyFridgePage (): React.JSX.Element {
     })
   }, [])
 
-  // TODO: Move barcode to component. I've spent 2 hours looking for a library so cant be bothered to finish this
-  const [result, setResult] = React.useState('')
-  const { ref } = useZxing({
-    onDecodeResult (res) {
-      setResult(res.getText())
-    }
-  })
-
   return (
     <main>
-      <video ref={ref}/>
-      <p>{result}</p>
       <h1>My Fridge</h1>
+      {/* TODO: Buttons for these */}
+      <AddIngredient />
+      <ScanBarcode />
       <LoadingSpinner status={status} />
       <ul className='grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3'>
         {ingredients.map(ingredient =>
