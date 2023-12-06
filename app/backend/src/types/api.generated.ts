@@ -8,6 +8,57 @@
 type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
 export interface paths {
+  "/barcode/{code}": {
+    /** Get the item associated with a given barcode */
+    get: {
+      parameters: {
+        path: {
+          code: number;
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": {
+              /** @example GenericMart Chicken 1kg */
+              productName: string;
+              ingredient: components["schemas"]["Ingredient"];
+              /** @example 1000 */
+              amount: number;
+            };
+          };
+        };
+        404: components["responses"]["NotFound"];
+      };
+    };
+    /** Insert a new barcode into the database */
+    post: {
+      parameters: {
+        path: {
+          code: number;
+        };
+      };
+      requestBody?: {
+        content: {
+          "application/json": {
+            /** @example GenericMart Chicken 1kg */
+            productName?: string;
+            /** @example 12345 */
+            ingredientId?: number;
+            /** @example 1000 */
+            amount?: number;
+          };
+        };
+      };
+      responses: {
+        /** @description No Content */
+        204: {
+          content: never;
+        };
+      };
+    };
+  };
   "/ingredient/all": {
     /** Get details of all ingredients */
     get: {
@@ -125,6 +176,12 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    Error: {
+      /** @example Invalid ID 1 for table blah */
+      message: string;
+      /** @example InvalidIdError */
+      name: string;
+    };
     /**
      * @example g
      * @enum {unknown}
@@ -163,7 +220,14 @@ export interface components {
     } & components["schemas"]["IngredientEntry"];
     FridgeIngredientEntry: WithRequired<components["schemas"]["IngredientEntry"], "amount">;
   };
-  responses: never;
+  responses: {
+    /** @description Not Found */
+    NotFound: {
+      content: {
+        "application/json": components["schemas"]["Error"][];
+      };
+    };
+  };
   parameters: {
     fridgeId: number;
     ingredientId: number;

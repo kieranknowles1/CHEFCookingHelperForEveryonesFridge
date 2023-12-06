@@ -6,6 +6,7 @@ import Database from 'better-sqlite3'
 
 import { type IngredientId, ingredientMapFactory } from '../types/IIngredient'
 import logger, { LogLevel } from '../logger'
+import type IBarcode from '../types/IBarcode'
 import type IIngredient from '../types/IIngredient'
 import type IRecipe from '../types/IRecipe'
 import { type IRecipeNoId } from '../types/IRecipe'
@@ -16,7 +17,7 @@ import type IChefDatabase from './IChefDatabase'
 import InvalidIdError from './InvalidIdError'
 
 // TODO: Use environment variables and put this somewhere outside the container
-const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.sqlite')
+const DATABASE_PATH = path.join(process.cwd(), 'working_data/chefdatabase.db')
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'data/initialdata.sql')
 const DUMMY_DATA_PATH = path.join(process.cwd(), 'data/dummydata.sql')
@@ -108,6 +109,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
   private readonly _connection: Database.Database
 
   public constructor () {
+    logger.log(LogLevel.info, `Using database file '${DATABASE_PATH}'`)
     this._connection = new Database(DATABASE_PATH)
   }
 
@@ -335,5 +337,25 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     const result = statement.all(fridgeId) as AllResult<{ recipe_id: types.RowId }>
 
     return result.map(row => row.recipe_id)
+  }
+
+  public getBarcode (code: types.RowId): IBarcode {
+    const statement = this._connection.prepare<[types.RowId]>(`
+      SELECT * FROM barcode
+        JOIN ingredient ON ingredient.id = barcode.ingredient_id
+        WHERE barcode.code = ?
+    `)
+    const result = statement.get(code) as GetResult<types.IBarcodeRow & types.IIngredientRow>
+
+    if (result === undefined) {
+      throw new InvalidIdError('barcode', code)
+    }
+
+    return {
+      code: result.code,
+      ingredient: this.ingredientFromRow(result),
+      productName: result.product_name,
+      amount: result.amount
+    }
   }
 }

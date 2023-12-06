@@ -1,5 +1,6 @@
 import type CiMap from '@glossa-glo/case-insensitive-map'
 
+import type IBarcode from '../types/IBarcode'
 import type IIngredient from '../types/IIngredient'
 import type IRecipe from '../types/IRecipe'
 import { type IRecipeNoId } from '../types/IRecipe'
@@ -52,7 +53,7 @@ export default interface IChefDatabase {
   /**
    * @param name The name to search for
    * @returns The ingredient, or null if it is not found. May return
-   * an equipotent ingredient if an exact match is not found.
+   * an equivalent ingredient if an exact match is not found.
    */
   findIngredientByName: (name: string) => IIngredient | null
 
@@ -80,4 +81,9 @@ export default interface IChefDatabase {
    * Get the recipes that can be made with the current ingredients in the fridge
    */
   getAvailableRecipes: (fridgeId: types.RowId) => types.RowId[]
+
+  /**
+   * Get the data associated with a barcode, throws if code not found
+   */
+  getBarcode: (code: types.RowId) => IBarcode
 }

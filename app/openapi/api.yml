@@ -35,7 +35,7 @@ paths:
                   ingredient:
                     $ref: "#/components/schemas/Ingredient"
                   amount: { type: number, example: 1000 }
-                required: [ingredient, amount]
+                required: [productName, ingredient, amount]
         "404":
           $ref: "#/components/responses/NotFound"
     post:
@@ -171,11 +171,17 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              message: { type: string, example: "The element was not found" }
+            type: array
+            items: { $ref: "#/components/schemas/Error" }
 
   schemas:
+    Error:
+      type: object
+      properties:
+        message: { type: string, example: 'Invalid ID 1 for table blah'}
+        name: { type: string, example: 'InvalidIdError' }
+      required: [message, name]
+
     Unit:
       enum:
         - none

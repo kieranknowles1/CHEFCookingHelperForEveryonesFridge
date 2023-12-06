@@ -4,6 +4,7 @@ import cors from 'cors'
 
 import logger, { LogLevel, logError } from './logger'
 import CodedError from './CodedError'
+import installBarcodeEndpoint from './api/v1/barcode/barcode'
 import installFridgeAvailableRecipeEndpoint from './api/v1/fridge/recipe/available'
 import installFridgeIngredientAllAmountEndpoint from './api/v1/fridge/ingredient/all/amount'
 import installFridgeIngredientEndpoint from './api/v1/fridge/ingredient/amount'
@@ -18,6 +19,7 @@ const PORT = 3000
 app.use(bodyParser.json())
 app.use(cors())
 
+installBarcodeEndpoint(app)
 installFridgeAvailableRecipeEndpoint(app)
 installFridgeIngredientAllAmountEndpoint(app)
 installFridgeIngredientEndpoint(app)

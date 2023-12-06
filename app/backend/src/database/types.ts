@@ -33,3 +33,11 @@ export interface IFridgeIngredientRow {
 
   amount: number
 }
+
+export interface IBarcodeRow {
+  code: RowId
+  ingredient_id: RowId
+
+  product_name: string
+  amount: number
+}

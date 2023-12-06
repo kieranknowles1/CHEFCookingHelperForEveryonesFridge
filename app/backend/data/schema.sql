@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS recipe_ingredient;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS fridge;
 DROP TABLE IF EXISTS fridge_ingredient;
+DROP TABLE IF EXISTS barcode;
 
 DROP VIEW IF EXISTS view_ingredient_by_name;
 
@@ -101,3 +102,11 @@ CREATE TABLE fridge_ingredient (
 
 CREATE INDEX index_fridge_ingredient_by_fridge_id
     ON fridge_ingredient(fridge_id);
+
+CREATE TABLE barcode (
+    code INTEGER NOT NULL PRIMARY KEY,
+    ingredient_id INTEGER NOT NULL REFERENCES ingredient(id),
+
+    product_name TEXT NOT NULL,
+    amount REAL NOT NULL
+);
