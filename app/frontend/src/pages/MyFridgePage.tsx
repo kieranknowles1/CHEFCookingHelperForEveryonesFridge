@@ -4,6 +4,8 @@ import FridgeIngredient, { type FridgeIngredientProps } from '../components/Frid
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
 import apiClient from '../apiClient'
 
+import { useZxing } from 'react-zxing'
+
 // TODO: Implement
 export default function MyFridgePage (): React.JSX.Element {
   // TODO: Helper function to update status
@@ -27,8 +29,18 @@ export default function MyFridgePage (): React.JSX.Element {
     })
   }, [])
 
+  // TODO: Move barcode to component. I've spent 2 hours looking for a library so cant be bothered to finish this
+  const [result, setResult] = React.useState('')
+  const { ref } = useZxing({
+    onDecodeResult (res) {
+      setResult(res.getText())
+    }
+  })
+
   return (
     <main>
+      <video ref={ref}/>
+      <p>{result}</p>
       <h1>My Fridge</h1>
       <LoadingSpinner status={status} />
       <ul className='grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3'>
