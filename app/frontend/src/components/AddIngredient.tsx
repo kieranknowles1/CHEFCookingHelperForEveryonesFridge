@@ -108,7 +108,7 @@ export default function AddIngredient (props: AddIngredientProps): React.JSX.Ele
             type='number'
             min={0}
             onChange={event => { setAmount(Number.parseFloat(event.target.value)) }}
-            className='w-1/2 bg-raisin_black-800 text-citron-100'
+            className='w-1/2'
             required
           /></label><br />
 

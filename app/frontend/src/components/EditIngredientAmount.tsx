@@ -45,7 +45,7 @@ export default function EditIngredientAmount (props: EditIngredientAmountProps):
         min={0}
         onChange={event => { setDeltaAmount(Number.parseFloat(event.target.value)) }}
         autoFocus
-        className='w-1/2 bg-raisin_black-800 text-citron-100'
+        className='w-1/2'
         required
       /></label>
       <button className='w-full bg-savoy_blue-500 rounded' type='submit'>Submit</button>

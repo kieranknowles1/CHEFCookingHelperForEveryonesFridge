@@ -11,4 +11,9 @@
     h2 {
         @apply text-xl;
     }
+
+    input {
+        @apply bg-raisin_black-800;
+        @apply text-citron-100;
+    }
 }
