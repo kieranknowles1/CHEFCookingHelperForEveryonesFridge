@@ -31,7 +31,8 @@ export default function AddIngredient (props: AddIngredientProps): React.JSX.Ele
 
   React.useEffect(() => {
     apiClient.GET(
-      '/ingredient/all'
+      '/ingredient/all',
+      { }
     ).then(response => {
       if (response.data === undefined) {
         throw new Error(response.error)
