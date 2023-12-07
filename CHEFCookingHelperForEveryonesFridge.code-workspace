@@ -5,7 +5,11 @@
 		}
 	],
 	"settings": {
-		"github.copilot.enable": { "*": false },
+		"github.copilot.enable": {
+			"tex": false,
+			"sty": false,
+			"latex": false
+		},
 
 		"todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.)|%)\\s*($TAGS)|(\\\\todo(inline)?\\{)",
 	},

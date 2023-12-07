@@ -48,6 +48,7 @@ export default function EditIngredientAmount (props: EditIngredientAmountProps):
         className='w-1/2'
         required
       /></label>
+      {/* TODO: Remove item */}
       <button className='w-full bg-savoy_blue-500 rounded' type='submit'>Submit</button>
     </form>
   )
