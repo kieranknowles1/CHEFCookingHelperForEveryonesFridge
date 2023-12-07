@@ -1,5 +1,5 @@
-import { Popover } from '@headlessui/react'
 import React from 'react'
+import { Dialog, Popover } from '@headlessui/react'
 
 import FridgeIngredient, { type FridgeIngredientProps } from '../components/FridgeIngredient'
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
@@ -12,6 +12,8 @@ export default function MyFridgePage (): React.JSX.Element {
   // TODO: Helper function to update status
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
   const [ingredients, setIngredients] = React.useState<FridgeIngredientProps[]>([])
+
+  const [addIngredientOpen, setAddingredientOpen] = React.useState(false)
 
   React.useEffect(() => {
     apiClient.GET(
@@ -34,8 +36,23 @@ export default function MyFridgePage (): React.JSX.Element {
     <main>
       <h1>My Fridge</h1>
       {/* TODO: Buttons for these */}
-      <AddIngredient />
-      <ScanBarcode />
+      <button onClick={() => { setAddingredientOpen(true) } }>Add Ingredient</button>
+      <Dialog
+        open={addIngredientOpen}
+        onClose={() => { setAddingredientOpen(false) }}
+        className='relative z-50'
+      >
+        {/** Backdrop */}
+        <div className='fixed inset-0 bg-black/30' aria-hidden />
+        <div className='fixed inset-0 w-screen h-screen items-center justify-center p-4'>
+          <Dialog.Panel className='mx-auto max-w-lg rounded bg-raisin_black-700'>
+            <Dialog.Title>Add Ingredient</Dialog.Title>
+            <AddIngredient/>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
+
+      {/** <ScanBarcode/> */}
       <LoadingSpinner status={status} />
       <ul className='grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3'>
         {ingredients.map(ingredient =>
