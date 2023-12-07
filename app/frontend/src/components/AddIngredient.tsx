@@ -1,15 +1,25 @@
-import React from 'react'
 import { Combobox } from '@headlessui/react'
+import React from 'react'
 
+import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
+import useSafeContext from '../contexts/useSafeContext'
 
 import LoadingSpinner, { type LoadingStatus } from './LoadingSpinner'
 
 type Ingredient = components['schemas']['Ingredient']
 
-// TODO: Implement
-export default function AddIngredient (): React.JSX.Element {
+export interface AddIngredientProps {
+  currentIngredients: Ingredient[]
+  onSubmit: (newItem: Ingredient, amount: number) => void
+}
+
+export default function AddIngredient (props: AddIngredientProps): React.JSX.Element {
+  const currentIngredientIds = new Set(props.currentIngredients.map(i => i.id))
+
+  const context = useSafeContext(UserContext)
+
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
   const [ingredients, setIngredients] = React.useState<Ingredient[]>([])
 
@@ -27,7 +37,7 @@ export default function AddIngredient (): React.JSX.Element {
         throw new Error(response.error)
       }
       setIngredients(response.data.filter(
-        ingredient => !ingredient.assumeUnlimited
+        ingredient => !ingredient.assumeUnlimited && !currentIngredientIds.has(ingredient.id)
       ))
       setStatus('done')
     }).catch(err => {
@@ -54,7 +64,15 @@ export default function AddIngredient (): React.JSX.Element {
       return
     }
 
-    // TODO: Send request to server
+    apiClient.POST(
+      '/fridge/{fridgeId}/ingredient/{ingredientId}/amount',
+      { params: { path: { fridgeId: context.fridgeId, ingredientId: selected.id }, query: { amount } } }
+    ).then(() => {
+      props.onSubmit(selected, amount)
+    }).catch(err => {
+      console.error(err)
+      alert('Failed to add ingredient.')
+    })
   }
 
   return (

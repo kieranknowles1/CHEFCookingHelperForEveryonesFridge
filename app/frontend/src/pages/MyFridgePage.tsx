@@ -1,9 +1,10 @@
+import { Dialog } from '@headlessui/react'
 import React from 'react'
-import { Dialog, Popover } from '@headlessui/react'
 
 import FridgeIngredient, { type FridgeIngredientProps } from '../components/FridgeIngredient'
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
 import AddIngredient from '../components/AddIngredient'
+import ModalDialog from '../components/ModalDialog'
 import ScanBarcode from '../components/ScanBarcode'
 import apiClient from '../apiClient'
 
@@ -14,8 +15,10 @@ export default function MyFridgePage (): React.JSX.Element {
   const [ingredients, setIngredients] = React.useState<FridgeIngredientProps[]>([])
 
   const [addIngredientOpen, setAddingredientOpen] = React.useState(false)
+  const [scanBarcodeOpen, setScanBarcodeOpen] = React.useState(false)
 
-  React.useEffect(() => {
+  function fetchIngredients (): void {
+    setStatus('loading')
     apiClient.GET(
       '/fridge/{fridgeId}/ingredient/all/amount',
       // TODO: Set fridge ID from the logged in user
@@ -30,29 +33,37 @@ export default function MyFridgePage (): React.JSX.Element {
       console.error(err)
       setStatus('error')
     })
-  }, [])
+  }
+
+  React.useEffect(fetchIngredients, [])
 
   return (
     <main>
       <h1>My Fridge</h1>
-      {/* TODO: Buttons for these */}
       <button onClick={() => { setAddingredientOpen(true) } }>Add Ingredient</button>
-      <Dialog
+      <ModalDialog
         open={addIngredientOpen}
-        onClose={() => { setAddingredientOpen(false) }}
-        className='relative z-50'
+        setOpen={setAddingredientOpen}
       >
-        {/** Backdrop */}
-        <div className='fixed inset-0 bg-black/30' aria-hidden />
-        <div className='fixed inset-0 w-screen h-screen items-center justify-center p-4'>
-          <Dialog.Panel className='mx-auto max-w-lg rounded bg-raisin_black-700'>
-            <Dialog.Title>Add Ingredient</Dialog.Title>
-            <AddIngredient/>
-          </Dialog.Panel>
-        </div>
-      </Dialog>
+        <Dialog.Title>Add New Ingredient</Dialog.Title>
+        <AddIngredient
+          currentIngredients={ingredients.map(i => i.ingredient)}
+          onSubmit={() => {
+            fetchIngredients()
+            setAddingredientOpen(false)
+          }}
+        />
+      </ModalDialog>
 
-      {/** <ScanBarcode/> */}
+      <button onClick={() => { setScanBarcodeOpen(true) } }>Scan Barcode</button>
+      <ModalDialog
+        open={scanBarcodeOpen}
+        setOpen={setScanBarcodeOpen}
+      >
+        <Dialog.Title>Scan Barcode</Dialog.Title>
+        <ScanBarcode />
+      </ModalDialog>
+
       <LoadingSpinner status={status} />
       <ul className='grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3'>
         {ingredients.map(ingredient =>
