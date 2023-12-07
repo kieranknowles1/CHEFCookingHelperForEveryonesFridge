@@ -149,7 +149,12 @@ paths:
             application/json:
               schema:
                 type: array
-                items: { type: number }
+                items:
+                  type: object
+                  properties:
+                    name: { type: string, example: Just Soup }
+                    id: { type: integer, example: 1234 }
+                  required: [name, id]
 
 
 components:

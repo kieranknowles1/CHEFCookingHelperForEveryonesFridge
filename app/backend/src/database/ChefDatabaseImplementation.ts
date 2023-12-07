@@ -4,12 +4,12 @@ import { readFileSync } from 'fs'
 import CiMap from '@glossa-glo/case-insensitive-map'
 import Database from 'better-sqlite3'
 
+import { type IRecipeNameOnly, type IRecipeNoId } from '../types/IRecipe'
 import { type IngredientId, ingredientMapFactory } from '../types/IIngredient'
 import logger, { LogLevel } from '../logger'
 import type IBarcode from '../types/IBarcode'
 import type IIngredient from '../types/IIngredient'
 import type IRecipe from '../types/IRecipe'
-import { type IRecipeNoId } from '../types/IRecipe'
 
 import type * as types from './types'
 import { type IFridgeIngredientAmount, type IWritableDatabase } from './IChefDatabase'
@@ -311,7 +311,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     return map
   }
 
-  public getAvailableRecipes (fridgeId: types.RowId): types.RowId[] {
+  public getAvailableRecipes (fridgeId: types.RowId): IRecipeNameOnly[] {
     // Well this was easier than expected
     // TODO: Filter by amount and optionally allow missing ingredients
     // TODO: Probably want to return more than just ID
@@ -322,21 +322,27 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
         count(*) as available_count,
         -- Total number of ingredients
         (SELECT count(*) FROM recipe_ingredient WHERE recipe_id = outer_recipe_ingredient.recipe_id) AS total_count,
-        recipe_id
+        recipe_id,
+        recipe.name AS recipe_name
       -- outer_recipe_ingredient is used in the subquery below
       FROM recipe_ingredient AS outer_recipe_ingredient
       -- Need access to ingredient.assumeUnlimited for WHERE clause
       JOIN ingredient ON ingredient.id = outer_recipe_ingredient.ingredient_id
+      JOIN recipe ON recipe.id = outer_recipe_ingredient.recipe_id
       -- Filter to available or unlimited ingredients
       WHERE ingredient_id IN (SELECT ingredient_id FROM fridge_ingredient WHERE fridge_id = ?) OR ingredient.assumeUnlimited = true
       -- Group for available_count
       GROUP BY recipe_id
       -- All ingredients were available
       HAVING available_count = total_count
+      ORDER BY recipe.name
     `)
-    const result = statement.all(fridgeId) as AllResult<{ recipe_id: types.RowId }>
+    const result = statement.all(fridgeId) as AllResult<{ recipe_id: types.RowId, recipe_name: string }>
 
-    return result.map(row => row.recipe_id)
+    return result.map(row => ({
+      id: row.recipe_id,
+      name: row.recipe_name
+    }))
   }
 
   public getBarcode (code: types.RowId): IBarcode {

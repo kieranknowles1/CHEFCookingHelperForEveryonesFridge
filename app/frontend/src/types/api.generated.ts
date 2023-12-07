@@ -164,7 +164,12 @@ export interface paths {
         /** @description OK */
         200: {
           content: {
-            "application/json": number[];
+            "application/json": {
+                /** @example Just Soup */
+                name: string;
+                /** @example 1234 */
+                id: number;
+              }[];
           };
         };
       };

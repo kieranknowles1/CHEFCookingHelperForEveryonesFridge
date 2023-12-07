@@ -1,18 +1,16 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
+import Recipe, { type RecipeProps } from '../components/Recipe'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
-import { type components } from '../types/api.generated'
 import useSafeContext from '../contexts/useSafeContext'
-
-type Recipe = components['schemas']['Recipe']
 
 export default function FindRecipesPage (): React.JSX.Element {
   const context = useSafeContext(UserContext)
 
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
-  const [recipes, setRecipes] = React.useState<Recipe[]>([])
+  const [recipes, setRecipes] = React.useState<RecipeProps[]>([])
 
   React.useEffect(() => {
     apiClient.GET(
@@ -22,7 +20,7 @@ export default function FindRecipesPage (): React.JSX.Element {
       if (response.data === undefined) {
         throw new Error(response.error)
       }
-      // TODO: Set recipes. Need to return more data from API
+      setRecipes(response.data)
       setStatus('done')
     }).catch(err => {
       console.error(err)
@@ -33,10 +31,15 @@ export default function FindRecipesPage (): React.JSX.Element {
   return (
     <main>
       <h1>Find Recipes</h1>
+      <p>
+        These are all of the recipes you can make with you current ingredients.
+        <br />
+        Click any recipe to view details and/or mark it as have been made.
+      </p>
       <LoadingSpinner status={status} />
-      <ul>
+      <ul className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3'>
         {recipes.map(recipe => (
-          <li key={recipe.id}>{recipe.name}</li>
+          <Recipe key={recipe.id} {...recipe} />
         ))}
       </ul>
     </main>
