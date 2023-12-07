@@ -5,8 +5,9 @@ import FridgeIngredient, { type FridgeIngredientProps } from '../components/Frid
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
 import AddIngredient from '../components/AddIngredient'
 import ModalDialog from '../components/ModalDialog'
-import ScanBarcode from '../components/ScanBarcode'
 import apiClient from '../apiClient'
+
+const ScanBarcode = React.lazy(async () => await import('../components/ScanBarcode'))
 
 // TODO: Implement
 export default function MyFridgePage (): React.JSX.Element {
@@ -60,8 +61,10 @@ export default function MyFridgePage (): React.JSX.Element {
         open={scanBarcodeOpen}
         setOpen={setScanBarcodeOpen}
       >
-        <Dialog.Title>Scan Barcode</Dialog.Title>
-        <ScanBarcode />
+        <React.Suspense fallback={<LoadingSpinner status='loading' />}>
+          <Dialog.Title>Scan Barcode</Dialog.Title>
+          <ScanBarcode />
+        </React.Suspense>
       </ModalDialog>
 
       <LoadingSpinner status={status} />
