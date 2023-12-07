@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import React from 'react'
 
+import FindRecipesPage from './pages/FindRecipesPage'
 import HomePage from './pages/HomePage'
 import MyFridgePage from './pages/MyFridgePage'
 import NavMenu from './components/NavMenu'
@@ -9,7 +10,8 @@ import UserContext from './contexts/UserContext'
 function App (): React.JSX.Element {
   const routes = [
     { path: '/', element: <HomePage />, name: 'Home' },
-    { path: '/fridge', element: <MyFridgePage />, name: 'My Fridge' }
+    { path: '/fridge', element: <MyFridgePage />, name: 'My Fridge' },
+    { path: '/findrecipes', element: <FindRecipesPage />, name: 'Find Recipes' }
   ]
 
   // TODO: Login to set fridge ID
