@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import React from 'react'
 
+import NotFoundPage from './pages/NotFoundPage'
 import FindRecipesPage from './pages/FindRecipesPage'
 import HomePage from './pages/HomePage'
 import MyFridgePage from './pages/MyFridgePage'
@@ -24,7 +25,8 @@ function App (): React.JSX.Element {
     { path: '/findrecipes', element: <FindRecipesPage />, name: 'Find Recipes' }
   ]
   const nonNavRoutes = [
-    { path: '/recipe/:id', element: <RecipePage /> }
+    { path: '/recipe/:id', element: <RecipePage /> },
+    { path: '*', element: <NotFoundPage /> }
   ]
 
   // TODO: Login to set fridge ID

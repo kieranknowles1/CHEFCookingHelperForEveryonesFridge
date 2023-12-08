@@ -1,5 +1,6 @@
 import { Dialog } from '@headlessui/react'
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import FridgeIngredient, { type FridgeIngredientProps } from '../components/FridgeIngredient'
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
@@ -73,6 +74,8 @@ export default function MyFridgePage (): React.JSX.Element {
           <FridgeIngredient key={ingredient.ingredient.id} {...ingredient} />
         )}
       </ul>
+
+      <Link to='/findrecipes'>What can I make?</Link>
     </main>
   )
 }

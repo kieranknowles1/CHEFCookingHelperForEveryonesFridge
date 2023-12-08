@@ -6,6 +6,7 @@ export default function ScanBarcode (): React.JSX.Element {
   const { ref } = useZxing({
     onDecodeResult (res) {
       // TODO: Make request and close if sucess. Prompt to input otherwise
+      alert(res.getText())
     }
   })
 

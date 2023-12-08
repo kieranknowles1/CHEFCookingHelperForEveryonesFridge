@@ -6,7 +6,7 @@ import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
 
 type Recipe = components['schemas']['Recipe']
-
+// TODO: Probably want this to be a modal
 export default function RecipePage (): React.JSX.Element {
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
   const [recipe, setRecipe] = React.useState<Recipe>()
@@ -49,6 +49,8 @@ export default function RecipePage (): React.JSX.Element {
           </ul>
           {/* TODO: Put <br> between newlines */}
           <p>{recipe.directions}</p>
+          {/* TODO: Implement, deduct ingredients from fridge */ }
+          <button>Made it - Remove Ingredients From Fridge</button>
         </div>
       )}
     </main>

@@ -7,6 +7,7 @@
     "generate-types": "openapi-typescript ./../openapi/api.yml --output src/types/api.generated.ts",
     "dev": "vite",
     "build": "tsc && vite build",
+    "bundlesize": "vite-bundle-visualizer",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
