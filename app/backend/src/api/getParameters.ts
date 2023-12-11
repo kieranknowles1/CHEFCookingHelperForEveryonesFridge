@@ -3,6 +3,7 @@ import { matchedData } from 'express-validator'
 
 import { type EndpointParameters, type JsonEndpointWithParameters } from './TypedEndpoint'
 
+// FIXME: This doesn't work with optional parameters
 type MatchedData<endpoint extends JsonEndpointWithParameters> = Record<keyof EndpointParameters<endpoint>, string>
 
 /** Function to convert an endpoint's parameters into the expected types */

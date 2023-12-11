@@ -311,7 +311,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     return map
   }
 
-  public getAvailableRecipes (fridgeId: types.RowId): IRecipeNameOnly[] {
+  public getAvailableRecipes (fridgeId: types.RowId, checkAmount: boolean, maxMissingIngredients: number): IRecipeNameOnly[] {
     interface IResultRow {
       id: types.RowId
       name: string
@@ -322,8 +322,6 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     }
 
     // Well this was easier than expected
-    // TODO: Filter by amount and optionally allow missing ingredients
-    // TODO: Probably want to return more than just ID
     // TODO: Optionally allow substitutions
     const statement = this._connection.prepare<[types.RowId, types.RowId]>(`
       SELECT
@@ -341,7 +339,9 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
       -- COUNT excludes NULLs. Less than used to optionally allow missing ingredients
       HAVING missing_count <= ?
     `)
-    const result = statement.all(fridgeId, 0) as AllResult<IResultRow>
+    const result = statement.all(fridgeId, maxMissingIngredients) as AllResult<IResultRow>
+
+    // TODO: Implement checkAmount
 
     return result.map(row => ({
       id: row.id,

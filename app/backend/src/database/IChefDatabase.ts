@@ -80,7 +80,7 @@ export default interface IChefDatabase {
   /**
    * Get the recipes that can be made with the current ingredients in the fridge
    */
-  getAvailableRecipes: (fridgeId: types.RowId) => IRecipeNameOnly[]
+  getAvailableRecipes: (fridgeId: types.RowId, checkAmount: boolean, maxMissingIngredients: number) => IRecipeNameOnly[]
 
   /**
    * Get the data associated with a barcode, throws if code not found
