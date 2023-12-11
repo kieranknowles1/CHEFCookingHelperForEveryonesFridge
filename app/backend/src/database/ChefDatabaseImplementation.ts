@@ -312,36 +312,39 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
   }
 
   public getAvailableRecipes (fridgeId: types.RowId): IRecipeNameOnly[] {
+    interface IResultRow {
+      id: types.RowId
+      name: string
+      // JSON array -> number[]
+      recipe_amount: string
+      // JSON array -> number[]
+      fridge_amount: string
+    }
+
     // Well this was easier than expected
     // TODO: Filter by amount and optionally allow missing ingredients
     // TODO: Probably want to return more than just ID
     // TODO: Optionally allow substitutions
-    const statement = this._connection.prepare<[types.RowId]>(`
+    const statement = this._connection.prepare<[types.RowId, types.RowId]>(`
       SELECT
-        -- Number of ingredients that are available or unlimited
-        count(*) as available_count,
-        -- Total number of ingredients
-        (SELECT count(*) FROM recipe_ingredient WHERE recipe_id = outer_recipe_ingredient.recipe_id) AS total_count,
-        recipe_id,
-        recipe.name AS recipe_name
-      -- outer_recipe_ingredient is used in the subquery below
-      FROM recipe_ingredient AS outer_recipe_ingredient
-      -- Need access to ingredient.assumeUnlimited for WHERE clause
-      JOIN ingredient ON ingredient.id = outer_recipe_ingredient.ingredient_id
-      JOIN recipe ON recipe.id = outer_recipe_ingredient.recipe_id
-      -- Filter to available or unlimited ingredients
-      WHERE ingredient_id IN (SELECT ingredient_id FROM fridge_ingredient WHERE fridge_id = ?) OR ingredient.assumeUnlimited = true
-      -- Group for available_count
-      GROUP BY recipe_id
-      -- All ingredients were available
-      HAVING available_count = total_count
-      ORDER BY recipe.name
+        recipe.name, recipe.id,
+        -- Used to filter by available amount later
+        json_group_array(recipe_ingredient.amount) AS recipe_amount,
+        json_group_array(fridge_ingredient.amount) AS fridge_amount
+      FROM
+        recipe
+      LEFT JOIN recipe_ingredient ON recipe_ingredient.recipe_id = recipe.id
+      LEFT JOIN fridge_ingredient ON fridge_ingredient.ingredient_id = recipe_ingredient.ingredient_id AND fridge_ingredient.fridge_id = ?
+      JOIN ingredient ON ingredient.id = recipe_ingredient.ingredient_id AND NOT ingredient.assumeUnlimited
+      GROUP BY recipe.id
+      -- COUNT excludes NULLs. Less than used to optionally allow missing ingredients
+      HAVING (count(recipe_ingredient.recipe_id) - count(fridge_ingredient.ingredient_id)) <= ?
     `)
-    const result = statement.all(fridgeId) as AllResult<{ recipe_id: types.RowId, recipe_name: string }>
+    const result = statement.all(fridgeId, 0) as AllResult<IResultRow>
 
     return result.map(row => ({
-      id: row.recipe_id,
-      name: row.recipe_name
+      id: row.id,
+      name: row.name
     }))
   }
 
