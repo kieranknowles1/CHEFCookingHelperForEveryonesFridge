@@ -142,6 +142,16 @@ paths:
       description: Returns the IDs of all recipes that can be made with the available ingredients
       parameters:
         - $ref: "#/components/parameters/fridgeId"
+        - in: query
+          name: maxMissingIngredients
+          description: Maximum number of ingredients that can be missing. Defaults to 0.
+          schema: { type: integer, example: 1 }
+          required: false
+        - in: query
+          name: checkAmounts
+          description: Whether to check that there is enough of each ingredient. Defaults to true.
+          schema: { type: boolean, example: true }
+          required: false
       responses:
         "200":
           description: OK

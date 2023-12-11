@@ -156,6 +156,12 @@ export interface paths {
      */
     get: {
       parameters: {
+        query?: {
+          /** @description Maximum number of ingredients that can be missing. Defaults to 0. */
+          maxMissingIngredients?: number;
+          /** @description Whether to check that there is enough of each ingredient. Defaults to true. */
+          checkAmounts?: boolean;
+        };
         path: {
           fridgeId: components["parameters"]["fridgeId"];
         };

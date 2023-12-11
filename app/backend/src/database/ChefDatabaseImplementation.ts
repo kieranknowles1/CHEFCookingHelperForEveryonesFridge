@@ -330,7 +330,8 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
         recipe.name, recipe.id,
         -- Used to filter by available amount later
         json_group_array(recipe_ingredient.amount) AS recipe_amount,
-        json_group_array(fridge_ingredient.amount) AS fridge_amount
+        json_group_array(fridge_ingredient.amount) AS fridge_amount,
+        count(recipe_ingredient.recipe_id) - count(fridge_ingredient.ingredient_id) AS missing_count
       FROM
         recipe
       LEFT JOIN recipe_ingredient ON recipe_ingredient.recipe_id = recipe.id
@@ -338,7 +339,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
       JOIN ingredient ON ingredient.id = recipe_ingredient.ingredient_id AND NOT ingredient.assumeUnlimited
       GROUP BY recipe.id
       -- COUNT excludes NULLs. Less than used to optionally allow missing ingredients
-      HAVING (count(recipe_ingredient.recipe_id) - count(fridge_ingredient.ingredient_id)) <= ?
+      HAVING missing_count <= ?
     `)
     const result = statement.all(fridgeId, 0) as AllResult<IResultRow>
 
