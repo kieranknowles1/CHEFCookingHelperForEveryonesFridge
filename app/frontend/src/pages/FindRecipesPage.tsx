@@ -52,8 +52,9 @@ export default function FindRecipesPage (): React.JSX.Element {
         <br />
         Click any recipe to view details and/or mark it as have been made.
       </p>
-      <label>Check Available Amounts: <input type='checkbox' checked={checkAmounts} onChange={e => { setCheckAmounts(e.target.checked) }} /></label><br />
-      <label>Max Missing Ingredients: <input type='number' value={maxMissingIngredients} min={0} onChange={e => { setMaxMissingIngredients(e.target.value === '' ? 0 : parseInt(e.target.value)) }} /></label><br />
+      <label>Check I have enough of each ingredient: <input type='checkbox' checked={checkAmounts} onChange={e => { setCheckAmounts(e.target.checked) }} /></label><br />
+      {/* <label>Check Available Amounts: <input type='checkbox' checked={checkAmounts} onChange={e => { setCheckAmounts(e.target.checked) }} /></label><br /> */}
+      <label>Max missing or insufficient amount ingredients: <input type='number' value={maxMissingIngredients} min={0} onChange={e => { setMaxMissingIngredients(e.target.value === '' ? 0 : parseInt(e.target.value)) }} /></label><br />
       {status === 'done' && <p>{recipes.length} recipes found.</p>}
       <label>Search: <Search setQuery={setQuery} /></label>
       <LoadingSpinner status={status} />

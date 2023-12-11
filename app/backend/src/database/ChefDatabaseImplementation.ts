@@ -25,6 +25,16 @@ const DUMMY_DATA_PATH = path.join(process.cwd(), 'data/dummydata.sql')
 type GetResult<TRow> = TRow | undefined
 type AllResult<TRow> = TRow[]
 
+interface IAvailableRecipesResultRow {
+  id: types.RowId
+  name: string
+  // JSON array -> number[]
+  recipe_amount: string
+  // JSON array -> number[]
+  fridge_amount: string
+  missing_count: number
+}
+
 /**
  * Writable interface to the database, passed to the callback of {@link ChefDatabaseImplementation.wrapTransaction}
  * and is only valid for the duration of the callback.
@@ -311,16 +321,14 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     return map
   }
 
-  public getAvailableRecipes (fridgeId: types.RowId, checkAmount: boolean, maxMissingIngredients: number): IRecipeNameOnly[] {
-    interface IResultRow {
-      id: types.RowId
-      name: string
-      // JSON array -> number[]
-      recipe_amount: string
-      // JSON array -> number[]
-      fridge_amount: string
-    }
+  private getInsufficientAmountCount (row: IAvailableRecipesResultRow): number {
+    const neededAmounts = JSON.parse(row.recipe_amount) as number[]
+    const availableAmounts = JSON.parse(row.fridge_amount) as number[]
 
+    return neededAmounts.filter((needed, index) => availableAmounts[index] < needed).length
+  }
+
+  public getAvailableRecipes (fridgeId: types.RowId, checkAmount: boolean, maxMissingIngredients: number): IRecipeNameOnly[] {
     // Well this was easier than expected
     // TODO: Optionally allow substitutions
     const statement = this._connection.prepare<[types.RowId, types.RowId]>(`
@@ -339,14 +347,14 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
       -- COUNT excludes NULLs. Less than used to optionally allow missing ingredients
       HAVING missing_count <= ?
     `)
-    const result = statement.all(fridgeId, maxMissingIngredients) as AllResult<IResultRow>
+    const result = statement.all(fridgeId, maxMissingIngredients) as AllResult<IAvailableRecipesResultRow>
 
-    // TODO: Implement checkAmount
-
-    return result.map(row => ({
-      id: row.id,
-      name: row.name
-    }))
+    return result
+      .filter(row => !checkAmount || this.getInsufficientAmountCount(row) + row.missing_count <= maxMissingIngredients)
+      .map(row => ({
+        id: row.id,
+        name: row.name
+      }))
   }
 
   public getBarcode (code: types.RowId): IBarcode {
