@@ -8,6 +8,8 @@ import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import useSafeContext from '../contexts/useSafeContext'
 
+const PAGE_SIZE = 100
+
 export default function FindRecipesPage (): React.JSX.Element {
   const context = useSafeContext(UserContext)
 
@@ -20,6 +22,11 @@ export default function FindRecipesPage (): React.JSX.Element {
 
   const [query, setQuery] = React.useState('')
   const [filtered, setFiltered] = React.useState<RecipeProps[]>([])
+
+  const [page, setPage] = React.useState(0)
+  function getTotalPages (): number {
+    return Math.ceil(filtered.length / PAGE_SIZE)
+  }
 
   React.useEffect(() => {
     setStatus('loading')
@@ -43,6 +50,15 @@ export default function FindRecipesPage (): React.JSX.Element {
     setFiltered(recipes.filter(r => r.name.toLowerCase().includes(query.toLowerCase())))
   }, [recipes, query])
 
+
+  const pageButtons = (
+    <div className='flex justify-center'>
+      <button className='btn' onClick={() => { setPage(page - 1) }} disabled={page === 0}>Previous</button>
+      <span className='mx-3'>Page {page + 1} / {getTotalPages()}</span>
+      <button className='btn' onClick={() => { setPage(page + 1) }} disabled={page >= getTotalPages() - 1}>Next</button>
+    </div>
+  )
+
   // TODO: Lazy render recipes
   return (
     <main>
@@ -55,13 +71,17 @@ export default function FindRecipesPage (): React.JSX.Element {
       <label>Check I have enough of each ingredient: <input type='checkbox' checked={checkAmounts} onChange={e => { setCheckAmounts(e.target.checked) }} /></label><br />
       <label>Max missing or insufficient amount ingredients: <input type='number' value={maxMissingIngredients} min={0} onChange={e => { setMaxMissingIngredients(e.target.value === '' ? 0 : parseInt(e.target.value)) }} /></label><br />
       {status === 'done' && <p>{recipes.length} recipes found.</p>}
-      <label>Search: <Search setQuery={setQuery} /></label>
+      <label>Search: <Search setQuery={q => { setQuery(q); setPage(0) }} /></label>
       <LoadingSpinner status={status} />
+      {pageButtons}
       <ul className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3'>
-        {filtered.map(recipe => (
-          <Recipe key={recipe.id} {...recipe} />
-        ))}
+        {filtered
+          .slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
+          .map(recipe => (
+            <Recipe key={recipe.id} {...recipe} />
+          ))}
       </ul>
+      {pageButtons}
     </main>
   )
 }

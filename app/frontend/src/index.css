@@ -22,6 +22,8 @@
         @apply hover:bg-raisin_black-700;
         @apply rounded;
         @apply px-1;
+
+        @apply disabled:bg-raisin_black-400;
     }
 
     main a {
