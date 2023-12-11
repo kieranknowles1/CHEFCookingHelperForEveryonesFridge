@@ -50,7 +50,6 @@ export default function FindRecipesPage (): React.JSX.Element {
     setFiltered(recipes.filter(r => r.name.toLowerCase().includes(query.toLowerCase())))
   }, [recipes, query])
 
-
   const pageButtons = (
     <div className='flex justify-center'>
       <button className='btn' onClick={() => { setPage(page - 1) }} disabled={page === 0}>Previous</button>

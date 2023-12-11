@@ -4,7 +4,7 @@ import { readFileSync } from 'fs'
 import CiMap from '@glossa-glo/case-insensitive-map'
 import Database from 'better-sqlite3'
 
-import { type IRecipeNameOnly, type IRecipeNoId } from '../types/IRecipe'
+import { type IAvailableRecipe, type IRecipeNoId } from '../types/IRecipe'
 import { type IngredientId, ingredientMapFactory } from '../types/IIngredient'
 import logger, { LogLevel } from '../logger'
 import type IBarcode from '../types/IBarcode'
@@ -328,7 +328,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     return neededAmounts.filter((needed, index) => availableAmounts[index] < needed).length
   }
 
-  public getAvailableRecipes (fridgeId: types.RowId, checkAmount: boolean, maxMissingIngredients: number): IRecipeNameOnly[] {
+  public getAvailableRecipes (fridgeId: types.RowId, checkAmount: boolean, maxMissingIngredients: number): IAvailableRecipe[] {
     // Well this was easier than expected
     // TODO: Optionally allow substitutions
     const statement = this._connection.prepare<[types.RowId, types.RowId]>(`
@@ -353,7 +353,8 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
       .filter(row => !checkAmount || this.getInsufficientAmountCount(row) + row.missing_count <= maxMissingIngredients)
       .map(row => ({
         id: row.id,
-        name: row.name
+        name: row.name,
+        missingIngredientAmount: row.missing_count
       }))
   }
 

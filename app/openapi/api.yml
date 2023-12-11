@@ -164,7 +164,8 @@ paths:
                   properties:
                     name: { type: string, example: Just Soup }
                     id: { type: integer, example: 1234 }
-                  required: [name, id]
+                    missingIngredientAmount: { type: integer, example: 1, description: Number of ingredients missing or not enough of }
+                  required: [name, id, missingIngredientAmount]
 
 
 components:

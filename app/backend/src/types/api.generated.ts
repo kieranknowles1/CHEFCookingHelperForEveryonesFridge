@@ -175,6 +175,11 @@ export interface paths {
                 name: string;
                 /** @example 1234 */
                 id: number;
+                /**
+                 * @description Number of ingredients missing or not enough of
+                 * @example 1
+                 */
+                missingIngredientAmount: number;
               }[];
           };
         };

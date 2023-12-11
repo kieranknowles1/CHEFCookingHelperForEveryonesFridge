@@ -2,9 +2,10 @@ import { type RowId } from '../database/types'
 
 import { type IngredientMap } from './IIngredient'
 
-export interface IRecipeNameOnly {
+export interface IAvailableRecipe {
   id: RowId
   name: string
+  missingIngredientAmount: number
 }
 
 export interface IRecipeNoId {
