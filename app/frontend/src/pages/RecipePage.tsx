@@ -2,6 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
+import RecipeIngredient from '../components/RecipeIngredient'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
 
@@ -43,12 +44,15 @@ export default function RecipePage (): React.JSX.Element {
       {recipe !== undefined && (
         <div>
           <h1>{recipe.name}</h1>
-          <a href={`http://${recipe.link}`}>Source</a>
-          <ul>
-            {/* TODO: Ingredients */}
+          <a href={`http://${recipe.link}`} target='_blank' rel='noreferrer'>Source</a>
+          <h2>Ingredients</h2>
+          <ul className='list-inside list-disc'>
+            {recipe.ingredients.map(entry => <RecipeIngredient key={entry.ingredient.id} {...entry} />)}
           </ul>
-          {/* TODO: Put <br> between newlines */}
-          <p>{recipe.directions}</p>
+          <h2>Directions</h2>
+          <p>
+            {recipe.directions.split('\n').map(line => <>{line}<br /></>)}
+          </p>
           {/* TODO: Implement, deduct ingredients from fridge */ }
           <button>Made it - Remove Ingredients From Fridge</button>
         </div>

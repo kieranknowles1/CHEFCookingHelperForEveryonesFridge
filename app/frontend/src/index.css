@@ -16,4 +16,18 @@
         @apply bg-raisin_black-800;
         @apply text-citron-100;
     }
+
+    button {
+        @apply bg-raisin_black-600;
+        @apply hover:bg-raisin_black-700;
+        @apply rounded;
+        @apply px-1;
+    }
+
+    main a {
+        @apply bg-raisin_black-600;
+        @apply hover:bg-raisin_black-700;
+        @apply rounded;
+        @apply px-1;
+    }
 }
