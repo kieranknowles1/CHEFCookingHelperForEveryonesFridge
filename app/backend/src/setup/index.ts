@@ -16,7 +16,6 @@ import { type IngredientId } from '../types/IIngredient'
 import getDatabase from '../database/getDatabase'
 
 import type ICsvRecipeRow from './ICsvRecipeRow'
-import { UnparsedIngredientError } from './parseIngredients'
 import parseCsvRecipeRow from './parseCsvRecipeRow'
 
 // TODO: Use environment variables and put this somewhere outside the container
@@ -78,11 +77,7 @@ async function importData (): Promise<ImportDataReturn> {
             success++
           }
         } catch (err) {
-          if (err instanceof UnparsedIngredientError) {
-            logError(err, 'verbose')
-          } else {
-            throw err
-          }
+          logError(err, 'verbose')
         }
       })
       .on('end', () => {

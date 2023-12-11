@@ -8,12 +8,7 @@ import getDatabase from '../database/getDatabase'
 import getRegexGroups from '../getRegexGroups'
 
 import type ICsvRecipeRow from './ICsvRecipeRow'
-
-export class UnparsedIngredientError extends Error {
-  constructor (ingredient: IIngredient, detail?: string) {
-    super(`Could not get amount for '${ingredient.name}' ${detail}`)
-  }
-}
+import UnparsedIngredientError from './UnparsedIngredientError'
 
 const AMOUNT_PATTERN = /(?<amount>\d+\/\d+|\d+ \d+\/\d+|\d+)( (level|heaping|heaped|round|rounded))? (?<unit>\w+)/g
 
