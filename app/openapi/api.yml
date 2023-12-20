@@ -88,6 +88,8 @@ paths:
           content:
             application/json:
               schema: { $ref: '#/components/schemas/Recipe' }
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /fridge/{fridgeId}/ingredient/all/amount:
     get:

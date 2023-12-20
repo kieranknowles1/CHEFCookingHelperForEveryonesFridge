@@ -87,6 +87,7 @@ export interface paths {
             "application/json": components["schemas"]["Recipe"];
           };
         };
+        404: components["responses"]["NotFound"];
       };
     };
   };
