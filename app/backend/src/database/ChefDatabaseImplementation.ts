@@ -74,16 +74,33 @@ class WritableDatabaseImplementation implements IWritableDatabase {
       .run(ingredient.name)
   }
 
+  public async addEmbedding (sentence: string): Promise<void> {
+    const statement = this._connection.prepare<[string, Float32Array]>(`
+      INSERT INTO embedding
+        (sentence, embedding)
+      VALUES
+        (?, ?)
+    `)
+    const embedding = await getEmbedding(sentence)
+
+    statement.run(sentence, embedding)
+  }
+
   public async addRecipe (recipe: IRecipeNoId): Promise<void> {
     this.assertValid()
-    const statement = this._connection.prepare<[string, string, string, Float32Array]>(`
+    const statement = this._connection.prepare<[string, string, string]>(`
       INSERT INTO recipe
-        (name, directions, link, embedding)
+        (name, directions, link)
       VALUES
-        (?, ?, ?, ?)
+        (?, ?, ?)
     `)
-    const embedding = await getEmbedding(recipe.name)
-    const id = statement.run(recipe.name, recipe.directions, recipe.link, embedding).lastInsertRowid
+
+    // Add the embedding if it doesn't exist. Only do this once per sentence
+    if (this._db.getEmbedding(recipe.name) === null) {
+      await this.addEmbedding(recipe.name)
+    }
+
+    const id = statement.run(recipe.name, recipe.directions, recipe.link).lastInsertRowid
     if (typeof id === 'bigint') {
       throw new Error('Got bigint for lastInsertRowid')
     }
@@ -180,6 +197,19 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
         writable.close()
       })
     })
+  }
+
+  public getEmbedding (sentence: string): Float32Array | null {
+    const statement = this._connection.prepare<[string]>(`
+      SELECT embedding FROM embedding WHERE sentence = ?
+    `)
+    const result = statement.get(sentence) as GetResult<{ embedding: Buffer }>
+
+    if (result === undefined) {
+      return null
+    }
+
+    return Float32Array.from(result.embedding)
   }
 
   private ingredientFromRow (row: types.IIngredientRow): IIngredient {
