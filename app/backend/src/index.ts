@@ -1,4 +1,4 @@
-import express, { type NextFunction } from 'express'
+import express, { type NextFunction, type Request, type Response } from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 
@@ -29,7 +29,7 @@ installFridgeIngredientEndpoint(app)
 installIngredientAllEndpoint(app)
 installRecipeEndpoint(app)
 
-app.use((err: Error, req: express.Request, res: express.Response, next: NextFunction) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const code = err instanceof CodedError ? err.code : 500
 
   if (code === 500) {
@@ -37,10 +37,11 @@ app.use((err: Error, req: express.Request, res: express.Response, next: NextFunc
   }
 
   res.status(code).json({
-    errors: {
+    errors: [{
       message: err.message,
-      name: err.name
-    }
+      name: err.name,
+      code
+    }]
   })
 })
 

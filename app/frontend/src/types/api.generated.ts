@@ -198,6 +198,8 @@ export interface components {
       message: string;
       /** @example InvalidIdError */
       name: string;
+      /** @example 404 */
+      code?: number;
     };
     /**
      * @example g
