@@ -103,6 +103,6 @@ export function convertToPreferred (amount: number, unit: DatabaseUnit, ingredie
     return amount / ingredient.density
   }
 
-  logger.log(LogLevel.warn, `Unhandled conversion ${unit} to ${ingredient.preferredUnit}`)
+  logger.warning(`Unhandled conversion ${unit} to ${ingredient.preferredUnit}`)
   throw new UnparsedIngredientError(ingredient)
 }

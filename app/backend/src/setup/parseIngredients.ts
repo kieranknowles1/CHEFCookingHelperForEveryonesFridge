@@ -37,7 +37,7 @@ function convertUnit (ingredientLine: string, ingredient: IIngredient): number {
     }
     // No case was handled, throw error
     // This is a higher priority, so also log more detail
-    logger.log(LogLevel.warn, `Could not convert '${ingredientLine}' to metric.`)
+    logger.warning(`Could not convert '${ingredientLine}' to metric.`)
     throw new UnparsedIngredientError(ingredient)
   }
 }

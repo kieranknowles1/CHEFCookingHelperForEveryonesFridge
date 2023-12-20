@@ -119,7 +119,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
   private readonly _connection: Database.Database
 
   public constructor () {
-    logger.log(LogLevel.info, `Using database file '${DATABASE_PATH}'`)
+    logger.info(`Using database file '${DATABASE_PATH}'`)
     this._connection = new Database(DATABASE_PATH)
   }
 
@@ -129,13 +129,13 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
    * WARN: This will delete ALL data from the database.
    */
   public resetDatabase (_: 'IKnowWhatIAmDoing'): void {
-    logger.log(LogLevel.info, 'Running schema script')
+    logger.info('Running schema script')
     const schema = readFileSync(SCHEMA_PATH, 'utf-8')
     this._connection.exec(schema)
-    logger.log(LogLevel.info, 'Running initial data script')
+    logger.info('Running initial data script')
     const initialData = readFileSync(INITIAL_DATA_PATH, 'utf-8')
     this._connection.exec(initialData)
-    logger.log(LogLevel.info, 'Running dummy data script')
+    logger.info('Running dummy data script')
     const dummyData = readFileSync(DUMMY_DATA_PATH, 'utf-8')
     this._connection.exec(dummyData)
   }
