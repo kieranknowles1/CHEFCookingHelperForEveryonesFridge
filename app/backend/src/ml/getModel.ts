@@ -15,9 +15,7 @@ export default async function getModel (): Promise<use.UniversalSentenceEncoder>
 
   const release = await mutex.acquire()
   try {
-    logger.info('Acquired sentence encoder load lock')
     if (model !== undefined) {
-      logger.info('Sentence encoder loaded while waiting for lock')
       return model
     }
 
@@ -27,7 +25,6 @@ export default async function getModel (): Promise<use.UniversalSentenceEncoder>
     return model
   } finally {
     release()
-    logger.info('Released sentence encoder load lock')
   }
 }
 

@@ -20,7 +20,7 @@ export interface IFridgeIngredientAmount {
 export interface IWritableDatabase {
   addIngredient: (ingredient: IIngredient) => void
 
-  addRecipe: (recipe: IRecipeNoId) => void
+  addRecipe: (recipe: IRecipeNoId) => Promise<void>
 
   setIngredientAmount: (fridgeId: types.RowId, ingredientId: types.RowId, amount: number) => void
 }

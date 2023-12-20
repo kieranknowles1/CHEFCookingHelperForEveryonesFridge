@@ -12,21 +12,24 @@ import csv from 'csv-parse'
 import progressTracker from 'progress-stream'
 
 import logger, { LogLevel, logError } from '../logger'
+import { type IRecipeNoId } from '../types/IRecipe'
 import { type IngredientId } from '../types/IIngredient'
 import getDatabase from '../database/getDatabase'
+import { preloadModel } from '../ml/getModel'
 
 import type ICsvRecipeRow from './ICsvRecipeRow'
 import parseCsvRecipeRow from './parseCsvRecipeRow'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
+const PROGRESS_BAR_STYLE = cliProgress.Presets.shades_classic
 
 /**
  * Create a progress listener and bar and start the bar. The bar must be stopped once finished
  * @param path
  */
 function createTrackers (path: string): [progressTracker.ProgressStream, cliProgress.Bar] {
-  const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
+  const bar = new cliProgress.SingleBar({}, PROGRESS_BAR_STYLE)
   bar.start(100, 0)
 
   const progress = progressTracker({
@@ -54,45 +57,63 @@ function recipeValid (row: ICsvRecipeRow, commonIngredients: Map<string, Ingredi
   return valid
 }
 
-interface ImportDataReturn { success: number, total: number }
-async function importData (): Promise<ImportDataReturn> {
+async function getCsvData (): Promise<[IRecipeNoId[], number]> {
   const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
-
   const supportedIngredients = getDatabase().getIngredientIds()
 
-  let total = 0
-  let success = 0
+  let totalRows = 0
+  const recipes: IRecipeNoId[] = []
 
-  return await getDatabase().wrapTransactionAsync<ImportDataReturn>(async (writable) => {
-    return await new Promise<ImportDataReturn>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
-      .pipe(progress)
-      .pipe(csv.parse({ columns: true }))
-      .on('data', (row: ICsvRecipeRow) => {
-        total++
-        try {
-          // Filter to only the most common ingredients
-          if (recipeValid(row, supportedIngredients)) {
-            const recipe = parseCsvRecipeRow(row)
-            writable.addRecipe(recipe)
-            success++
-          }
-        } catch (err) {
-          logError(err, LogLevel.verbose)
+  await new Promise<void>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
+    .pipe(progress)
+    .pipe(csv.parse({ columns: true }))
+    .on('data', (row: ICsvRecipeRow) => {
+      totalRows++
+      try {
+        // Filter to only the most common ingredients
+        if (recipeValid(row, supportedIngredients)) {
+          const recipe = parseCsvRecipeRow(row)
+          recipes.push(recipe)
         }
-      })
-      .on('end', () => {
-        bar.stop()
-        resolve({
-          total,
-          success
-        })
-      })
-      .on('error', err => { reject(err) })
-    )
+      } catch (err) {
+        logError(err, LogLevel.verbose)
+      }
+    })
+    .on('end', () => {
+      bar.stop()
+      resolve()
+    })
+    .on('error', err => { reject(err) })
+  )
+
+  return [recipes, totalRows]
+}
+
+interface ImportDataReturn { success: number, total: number }
+async function importData (): Promise<ImportDataReturn> {
+  logger.info('Collecting data from CSV')
+  const [csvRecipes, csvTotalRows] = await getCsvData()
+
+  logger.info('Importing data into the database')
+  const bar = new cliProgress.SingleBar({}, PROGRESS_BAR_STYLE)
+  bar.start(csvRecipes.length, 0)
+  await getDatabase().wrapTransactionAsync(async (db) => {
+    for (const recipe of csvRecipes) {
+      bar.increment()
+      await db.addRecipe(recipe)
+    }
   })
+  bar.stop()
+
+  return {
+    success: csvRecipes.length,
+    total: csvTotalRows
+  }
 }
 
 async function main (): Promise<void> {
+  preloadModel()
+
   logger.info('Setting up schema')
   getDatabase().resetDatabase('IKnowWhatIAmDoing')
 

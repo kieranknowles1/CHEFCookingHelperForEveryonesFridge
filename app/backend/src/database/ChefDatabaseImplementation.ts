@@ -9,6 +9,7 @@ import { type IngredientId, ingredientMapFactory } from '../types/IIngredient'
 import type IBarcode from '../types/IBarcode'
 import type IIngredient from '../types/IIngredient'
 import type IRecipe from '../types/IRecipe'
+import getEmbedding from '../ml/getEmbedding'
 import logger from '../logger'
 
 import type * as types from './types'
@@ -73,15 +74,16 @@ class WritableDatabaseImplementation implements IWritableDatabase {
       .run(ingredient.name)
   }
 
-  public addRecipe (recipe: IRecipeNoId): void {
+  public async addRecipe (recipe: IRecipeNoId): Promise<void> {
     this.assertValid()
-    const statement = this._connection.prepare<[string, string, string]>(`
+    const statement = this._connection.prepare<[string, string, string, Float32Array]>(`
       INSERT INTO recipe
-        (name, directions, link)
+        (name, directions, link, embedding)
       VALUES
-        (?, ?, ?)
+        (?, ?, ?, ?)
     `)
-    const id = statement.run(recipe.name, recipe.directions, recipe.link).lastInsertRowid
+    const embedding = await getEmbedding(recipe.name)
+    const id = statement.run(recipe.name, recipe.directions, recipe.link, embedding).lastInsertRowid
     if (typeof id === 'bigint') {
       throw new Error('Got bigint for lastInsertRowid')
     }
