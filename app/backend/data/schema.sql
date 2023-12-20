@@ -24,8 +24,8 @@ CREATE TABLE embedding (
     sentence TEXT NOT NULL PRIMARY KEY,
     embedding BLOB NOT NULL
 );
-CREATE INDEX index_embedding_by_sentence_nocase
-    ON embedding(sentence COLLATE NOCASE);
+CREATE INDEX index_embedding_by_sentence
+    ON embedding(sentence);
 
 CREATE TABLE ingredient (
     id INTEGER NOT NULL PRIMARY KEY,
