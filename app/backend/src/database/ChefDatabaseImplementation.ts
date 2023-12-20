@@ -11,6 +11,7 @@ import type IIngredient from '../types/IIngredient'
 import type IRecipe from '../types/IRecipe'
 import getEmbedding from '../ml/getEmbedding'
 import logger from '../logger'
+import ml_extendDatabase from '../ml/extendDatabase'
 
 import type * as types from './types'
 import { type IFridgeIngredientAmount, type IWritableDatabase } from './IChefDatabase'
@@ -140,6 +141,8 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
   public constructor () {
     logger.info(`Using database file '${DATABASE_PATH}'`)
     this._connection = new Database(DATABASE_PATH)
+
+    ml_extendDatabase(this._connection)
   }
 
   /**
