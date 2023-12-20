@@ -199,7 +199,7 @@ components:
         message: { type: string, example: 'Invalid ID 1 for table blah'}
         name: { type: string, example: 'InvalidIdError' }
         code: { type: integer, example: 404 }
-      required: [message, name]
+      required: [message, name, code]
 
     Unit:
       enum:

@@ -199,7 +199,7 @@ export interface components {
       /** @example InvalidIdError */
       name: string;
       /** @example 404 */
-      code?: number;
+      code: number;
     };
     /**
      * @example g
