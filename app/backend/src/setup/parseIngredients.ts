@@ -2,10 +2,10 @@ import Fraction from 'fraction.js'
 
 import { type IngredientAmount, type IngredientMap, ingredientMapFactory } from '../types/IIngredient'
 import { convertToPreferred, tryToMetric } from '../types/Unit'
-import logger, { LogLevel } from '../logger'
 import type IIngredient from '../types/IIngredient'
 import getDatabase from '../database/getDatabase'
 import getRegexGroups from '../getRegexGroups'
+import logger from '../logger'
 
 import type ICsvRecipeRow from './ICsvRecipeRow'
 import UnparsedIngredientError from './UnparsedIngredientError'

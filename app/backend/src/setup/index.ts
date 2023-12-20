@@ -11,7 +11,7 @@ import cliProgress from 'cli-progress'
 import csv from 'csv-parse'
 import progressTracker from 'progress-stream'
 
-import logger, { logError } from '../logger'
+import logger, { LogLevel, logError } from '../logger'
 import { type IngredientId } from '../types/IIngredient'
 import getDatabase from '../database/getDatabase'
 
@@ -77,7 +77,7 @@ async function importData (): Promise<ImportDataReturn> {
             success++
           }
         } catch (err) {
-          logError(err, 'verbose')
+          logError(err, LogLevel.verbose)
         }
       })
       .on('end', () => {

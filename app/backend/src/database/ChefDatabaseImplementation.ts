@@ -6,10 +6,10 @@ import Database from 'better-sqlite3'
 
 import { type IAvailableRecipe, type IRecipeNoId } from '../types/IRecipe'
 import { type IngredientId, ingredientMapFactory } from '../types/IIngredient'
-import logger, { LogLevel } from '../logger'
 import type IBarcode from '../types/IBarcode'
 import type IIngredient from '../types/IIngredient'
 import type IRecipe from '../types/IRecipe'
+import logger from '../logger'
 
 import type * as types from './types'
 import { type IFridgeIngredientAmount, type IWritableDatabase } from './IChefDatabase'

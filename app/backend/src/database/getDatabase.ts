@@ -1,4 +1,4 @@
-import logger, { LogLevel } from '../logger'
+import logger from '../logger'
 
 import ChefDatabaseImplementation from './ChefDatabaseImplementation'
 import type IChefDatabase from './IChefDatabase'

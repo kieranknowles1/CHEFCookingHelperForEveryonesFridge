@@ -1,7 +1,7 @@
 import type IIngredient from 'types/IIngredient'
 
-import logger, { LogLevel } from '../logger'
 import UnparsedIngredientError from '../setup/UnparsedIngredientError'
+import logger from '../logger'
 
 // NOTE: Must match check constraint on ingredient table in schema.sql
 export type MetricUnit = 'ml' | 'g'
