@@ -86,8 +86,13 @@
 }
 
 \subsection{Recipe Similarity Evaluation}
-The Jaccard similarity metric has previously been found to be an effective model for recommendation generation based on similarity
-between data points \cite{jeswani_extent_2021}.
+The similarity of recipes can be evaluated using a sentence embedding model \todo{Source?}. For the \chef{} app,
+the pre-trained Universal Sentence Encoder \cite{cer_universal_2018} was decided upon. This can run in a Node.js
+environment via TensorFlow.js.
+
+% Jaccard doesnt make sense for embeddings
+% The Jaccard similarity metric has previously been found to be an effective model for recommendation generation based on similarity
+% between data points \cite{jeswani_extent_2021}.
 
 \section{Competitor Analysis}
 \label{sec:competitor_analysis}

@@ -8,7 +8,7 @@ import logger from '../logger'
 const mutex = new Mutex()
 let model: use.UniversalSentenceEncoder
 
-export async function getModel (): Promise<use.UniversalSentenceEncoder> {
+export default async function getModel (): Promise<use.UniversalSentenceEncoder> {
   if (model !== undefined) {
     return model
   }
@@ -32,5 +32,6 @@ export async function getModel (): Promise<use.UniversalSentenceEncoder> {
 }
 
 export function preloadModel (): void {
+  logger.info('Model preload requested')
   void getModel()
 }
