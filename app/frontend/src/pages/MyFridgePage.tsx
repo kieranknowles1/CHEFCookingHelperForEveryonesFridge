@@ -6,12 +6,16 @@ import FridgeIngredient, { type FridgeIngredientProps } from '../components/Frid
 import LoadingSpinner, { type LoadingStatus, getHighestStatus } from '../components/LoadingSpinner'
 import AddIngredient from '../components/AddIngredient'
 import ModalDialog from '../components/ModalDialog'
+import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
+import useSafeContext from '../contexts/useSafeContext'
 
 const ScanBarcode = React.lazy(async () => await import('../components/ScanBarcode'))
 
 // TODO: Implement
 export default function MyFridgePage (): React.JSX.Element {
+  const context = useSafeContext(UserContext)
+
   // TODO: Helper function to update status
   const [ingredientsStatus, setIngredientsStatus] = React.useState<LoadingStatus>('loading')
   const [ingredients, setIngredients] = React.useState<FridgeIngredientProps[]>([])
@@ -44,8 +48,7 @@ export default function MyFridgePage (): React.JSX.Element {
     setIngredientsStatus('loading')
     apiClient.GET(
       '/fridge/{fridgeId}/ingredient/all/amount',
-      // TODO: Set fridge ID from the logged in user
-      { params: { path: { fridgeId: 1 } } }
+      { params: { path: { fridgeId: context.fridgeId } } }
     ).then(response => {
       if (response.data === undefined) {
         throw new Error(response.error)
