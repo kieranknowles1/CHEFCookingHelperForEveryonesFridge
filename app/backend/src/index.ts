@@ -1,8 +1,8 @@
-import express, { type NextFunction } from 'express'
+import express, { type NextFunction, type Request, type Response } from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 
-import logger, { LogLevel, logError } from './logger'
+import logger, { logError } from './logger'
 import CodedError from './CodedError'
 import installBarcodeEndpoint from './api/v1/barcode/barcode'
 import installFridgeAvailableRecipeEndpoint from './api/v1/fridge/recipe/available'
@@ -10,6 +10,9 @@ import installFridgeIngredientAllAmountEndpoint from './api/v1/fridge/ingredient
 import installFridgeIngredientEndpoint from './api/v1/fridge/ingredient/amount'
 import installIngredientAllEndpoint from './api/v1/ingredient/all'
 import installRecipeEndpoint from './api/v1/recipe/recipe'
+import { preloadModel } from './ml/getModel'
+
+preloadModel()
 
 const app = express()
 
@@ -26,7 +29,7 @@ installFridgeIngredientEndpoint(app)
 installIngredientAllEndpoint(app)
 installRecipeEndpoint(app)
 
-app.use((err: Error, req: express.Request, res: express.Response, next: NextFunction) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const code = err instanceof CodedError ? err.code : 500
 
   if (code === 500) {
@@ -34,13 +37,14 @@ app.use((err: Error, req: express.Request, res: express.Response, next: NextFunc
   }
 
   res.status(code).json({
-    errors: {
+    errors: [{
       message: err.message,
-      name: err.name
-    }
+      name: err.name,
+      code
+    }]
   })
 })
 
 app.listen(PORT, () => {
-  logger.log(LogLevel.info, `Backend listening on http://localhost:${PORT}`)
+  logger.info(`Backend listening on http://localhost:${PORT}`)
 })

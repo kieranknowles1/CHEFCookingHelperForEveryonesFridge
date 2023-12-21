@@ -20,7 +20,12 @@ export interface IFridgeIngredientAmount {
 export interface IWritableDatabase {
   addIngredient: (ingredient: IIngredient) => void
 
-  addRecipe: (recipe: IRecipeNoId) => void
+  /**
+   * Calculate the embedding for a sentence and add it to the database to be referenced later
+   */
+  addEmbedding: (sentence: string) => void
+
+  addRecipe: (recipe: IRecipeNoId) => Promise<void>
 
   setIngredientAmount: (fridgeId: types.RowId, ingredientId: types.RowId, amount: number) => void
 }
@@ -45,6 +50,11 @@ export default interface IChefDatabase {
    * @returns The return value of `callback` or void if none
    */
   wrapTransactionAsync: <TReturn = void>(callback: (db: IWritableDatabase) => Promise<TReturn>) => Promise<TReturn>
+
+  /**
+   * Get the embedding for a sentence if it exists
+   */
+  getEmbedding: (sentence: string) => Float32Array | null
 
   getIngredient: (id: IngredientId) => IIngredient
 

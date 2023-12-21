@@ -88,6 +88,8 @@ paths:
           content:
             application/json:
               schema: { $ref: '#/components/schemas/Recipe' }
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /fridge/{fridgeId}/ingredient/all/amount:
     get:
@@ -196,7 +198,8 @@ components:
       properties:
         message: { type: string, example: 'Invalid ID 1 for table blah'}
         name: { type: string, example: 'InvalidIdError' }
-      required: [message, name]
+        code: { type: integer, example: 404 }
+      required: [message, name, code]
 
     Unit:
       enum:

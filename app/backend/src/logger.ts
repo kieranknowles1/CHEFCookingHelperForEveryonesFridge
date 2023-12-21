@@ -36,10 +36,10 @@ export default logger
  * If not, print at level `error` that the error was an unknown type
  * @param [level='error'] Log level to use, default `error`
  */
-export function logError (err: unknown, level: string = 'error'): void {
+export function logError (err: unknown, level: LogLevel = LogLevel.error): void {
   if (err instanceof Error) {
     logger.log(level, `${err.message} stack ${err.stack}`)
   } else {
-    logger.log('error', `Unknown error type ${typeof err}`)
+    logger.error(`Unknown error type ${typeof err}`)
   }
 }

@@ -1,7 +1,9 @@
 PRAGMA user_version = 1;
+PRAGMA journal_mode = WAL;
 
 PRAGMA foreign_keys = OFF;
 
+DROP TABLE IF EXISTS embedding;
 DROP TABLE IF EXISTS ingredient;
 DROP TABLE IF EXISTS ingredient_alt_name;
 DROP TABLE IF EXISTS ingredient_substitution_group;
@@ -17,6 +19,13 @@ DROP TABLE IF EXISTS barcode;
 DROP VIEW IF EXISTS view_ingredient_by_name;
 
 PRAGMA foreign_keys = ON;
+
+CREATE TABLE embedding (
+    sentence TEXT NOT NULL PRIMARY KEY,
+    embedding BLOB NOT NULL
+);
+CREATE INDEX index_embedding_by_sentence
+    ON embedding(sentence);
 
 CREATE TABLE ingredient (
     id INTEGER NOT NULL PRIMARY KEY,
@@ -59,7 +68,7 @@ CREATE VIEW view_ingredient_by_name AS
 
 CREATE TABLE recipe (
     id INTEGER NOT NULL PRIMARY KEY,
-    name TEXT NOT NULL,
+    name TEXT NOT NULL REFERENCES embedding(sentence),
     directions TEXT NOT NULL,
     link TEXT NOT NULL
 );

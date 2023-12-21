@@ -1,11 +1,11 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import React from 'react'
 
-import NotFoundPage from './pages/NotFoundPage'
 import FindRecipesPage from './pages/FindRecipesPage'
 import HomePage from './pages/HomePage'
 import MyFridgePage from './pages/MyFridgePage'
 import NavMenu from './components/NavMenu'
+import NotFoundMessage from './components/NotFoundMessage'
 import RecipePage from './pages/RecipePage'
 import UserContext from './contexts/UserContext'
 
@@ -26,7 +26,7 @@ function App (): React.JSX.Element {
   ]
   const nonNavRoutes = [
     { path: '/recipe/:id', element: <RecipePage /> },
-    { path: '*', element: <NotFoundPage /> }
+    { path: '*', element: <NotFoundMessage /> }
   ]
 
   // TODO: Login to set fridge ID

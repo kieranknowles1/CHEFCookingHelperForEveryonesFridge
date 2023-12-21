@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom'
 import React from 'react'
 
 /**
- * 404 page for the application
+ * 404 page that is displayed when a route is not found or requested data does not exist.
  */
-export default function NotFoundPage (): React.JSX.Element {
+export default function NotFoundMessage (): React.JSX.Element {
   return (
     <main>
       <h1>404: Page Not Found</h1>

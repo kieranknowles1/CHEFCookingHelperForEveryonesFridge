@@ -87,6 +87,7 @@ export interface paths {
             "application/json": components["schemas"]["Recipe"];
           };
         };
+        404: components["responses"]["NotFound"];
       };
     };
   };
@@ -197,6 +198,8 @@ export interface components {
       message: string;
       /** @example InvalidIdError */
       name: string;
+      /** @example 404 */
+      code: number;
     };
     /**
      * @example g

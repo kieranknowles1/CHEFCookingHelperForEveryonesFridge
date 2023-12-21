@@ -2,6 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
+import NotFoundMessage from '../components/NotFoundMessage'
 import RecipeIngredient from '../components/RecipeIngredient'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
@@ -9,17 +10,18 @@ import { type components } from '../types/api.generated'
 type Recipe = components['schemas']['Recipe']
 // TODO: Probably want this to be a modal
 export default function RecipePage (): React.JSX.Element {
-  const [status, setStatus] = React.useState<LoadingStatus>('loading')
+  const [status, setStatus] = React.useState<LoadingStatus | 'notfound'>('loading')
   const [recipe, setRecipe] = React.useState<Recipe>()
 
   // TODO: Is it right to throw an error here?
   const params = useParams<{ id: string }>()
+  // Invalid ID is treated as 404
   if (params.id === undefined) {
-    throw new Error('No recipe ID provided')
+    return <NotFoundMessage />
   }
   const id = Number.parseInt(params.id)
   if (Number.isNaN(id)) {
-    throw new Error('Invalid recipe ID')
+    return <NotFoundMessage />
   }
 
   React.useEffect(() => {
@@ -27,11 +29,12 @@ export default function RecipePage (): React.JSX.Element {
       '/recipe/{id}',
       { params: { path: { id } } }
     ).then(response => {
-      if (response.data === undefined) {
-        throw new Error(response.error)
+      if (response.data !== undefined) {
+        setRecipe(response.data)
+        setStatus('done')
+      } else {
+        setStatus('notfound')
       }
-      setRecipe(response.data)
-      setStatus('done')
     }).catch(err => {
       console.error(err)
       setStatus('error')
@@ -41,7 +44,7 @@ export default function RecipePage (): React.JSX.Element {
   // TODO: Show how much of each ingredient is available and highlight missing ones
   return (
     <main>
-      <LoadingSpinner status={status} />
+      {status === 'notfound' ? <NotFoundMessage /> : <LoadingSpinner status={status} />}
       {recipe !== undefined && (
         <div>
           <h1>{recipe.name}</h1>

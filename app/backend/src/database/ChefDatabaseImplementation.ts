@@ -6,10 +6,12 @@ import Database from 'better-sqlite3'
 
 import { type IAvailableRecipe, type IRecipeNoId } from '../types/IRecipe'
 import { type IngredientId, ingredientMapFactory } from '../types/IIngredient'
-import logger, { LogLevel } from '../logger'
 import type IBarcode from '../types/IBarcode'
 import type IIngredient from '../types/IIngredient'
 import type IRecipe from '../types/IRecipe'
+import getEmbedding from '../ml/getEmbedding'
+import logger from '../logger'
+import ml_extendDatabase from '../ml/extendDatabase'
 
 import type * as types from './types'
 import { type IFridgeIngredientAmount, type IWritableDatabase } from './IChefDatabase'
@@ -73,7 +75,19 @@ class WritableDatabaseImplementation implements IWritableDatabase {
       .run(ingredient.name)
   }
 
-  public addRecipe (recipe: IRecipeNoId): void {
+  public async addEmbedding (sentence: string): Promise<void> {
+    const statement = this._connection.prepare<[string, Float32Array]>(`
+      INSERT INTO embedding
+        (sentence, embedding)
+      VALUES
+        (?, ?)
+    `)
+    const embedding = await getEmbedding(sentence)
+
+    statement.run(sentence, embedding)
+  }
+
+  public async addRecipe (recipe: IRecipeNoId): Promise<void> {
     this.assertValid()
     const statement = this._connection.prepare<[string, string, string]>(`
       INSERT INTO recipe
@@ -81,6 +95,12 @@ class WritableDatabaseImplementation implements IWritableDatabase {
       VALUES
         (?, ?, ?)
     `)
+
+    // Add the embedding if it doesn't exist. Only do this once per sentence
+    if (this._db.getEmbedding(recipe.name) === null) {
+      await this.addEmbedding(recipe.name)
+    }
+
     const id = statement.run(recipe.name, recipe.directions, recipe.link).lastInsertRowid
     if (typeof id === 'bigint') {
       throw new Error('Got bigint for lastInsertRowid')
@@ -119,8 +139,10 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
   private readonly _connection: Database.Database
 
   public constructor () {
-    logger.log(LogLevel.info, `Using database file '${DATABASE_PATH}'`)
+    logger.info(`Using database file '${DATABASE_PATH}'`)
     this._connection = new Database(DATABASE_PATH)
+
+    ml_extendDatabase(this._connection)
   }
 
   /**
@@ -129,13 +151,13 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
    * WARN: This will delete ALL data from the database.
    */
   public resetDatabase (_: 'IKnowWhatIAmDoing'): void {
-    logger.log(LogLevel.info, 'Running schema script')
+    logger.info('Running schema script')
     const schema = readFileSync(SCHEMA_PATH, 'utf-8')
     this._connection.exec(schema)
-    logger.log(LogLevel.info, 'Running initial data script')
+    logger.info('Running initial data script')
     const initialData = readFileSync(INITIAL_DATA_PATH, 'utf-8')
     this._connection.exec(initialData)
-    logger.log(LogLevel.info, 'Running dummy data script')
+    logger.info('Running dummy data script')
     const dummyData = readFileSync(DUMMY_DATA_PATH, 'utf-8')
     this._connection.exec(dummyData)
   }
@@ -178,6 +200,19 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
         writable.close()
       })
     })
+  }
+
+  public getEmbedding (sentence: string): Float32Array | null {
+    const statement = this._connection.prepare<[string]>(`
+      SELECT embedding FROM embedding WHERE sentence = ?
+    `)
+    const result = statement.get(sentence) as GetResult<{ embedding: Buffer }>
+
+    if (result === undefined) {
+      return null
+    }
+
+    return Float32Array.from(result.embedding)
   }
 
   private ingredientFromRow (row: types.IIngredientRow): IIngredient {
