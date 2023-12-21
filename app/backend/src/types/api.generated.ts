@@ -77,7 +77,7 @@ export interface paths {
     get: {
       parameters: {
         path: {
-          id: number;
+          id: components["parameters"]["recipeId"];
         };
       };
       responses: {
@@ -88,6 +88,34 @@ export interface paths {
           };
         };
         404: components["responses"]["NotFound"];
+      };
+    };
+  };
+  "/recipe/{id}/similar": {
+    /**
+     * Get similar recipes
+     * @description Returns a list of recipes similar to the given recipe \ Items are sorted by similarity score, descending
+     */
+    get: {
+      parameters: {
+        query?: {
+          limit?: components["parameters"]["limit"];
+          minSimilarity?: components["parameters"]["minSimilarity"];
+        };
+        path: {
+          id: components["parameters"]["recipeId"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": ({
+                /** @example 0.5 */
+                similarity?: number;
+              } & components["schemas"]["Recipe"])[];
+          };
+        };
       };
     };
   };
@@ -193,6 +221,11 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    ErrorList: {
+      /** @example Parameter 'id' must be an integer */
+      message: string;
+      errors: components["schemas"]["Error"][];
+    };
     Error: {
       /** @example Invalid ID 1 for table blah */
       message: string;
@@ -243,13 +276,16 @@ export interface components {
     /** @description Not Found */
     NotFound: {
       content: {
-        "application/json": components["schemas"]["Error"][];
+        "application/json": components["schemas"]["ErrorList"];
       };
     };
   };
   parameters: {
     fridgeId: number;
     ingredientId: number;
+    recipeId: number;
+    limit?: number;
+    minSimilarity?: number;
   };
   requestBodies: never;
   headers: never;

@@ -227,11 +227,17 @@ components:
       description: Not Found
       content:
         application/json:
-          schema:
-            type: array
-            items: { $ref: "#/components/schemas/Error" }
+          schema: { $ref: "#/components/schemas/ErrorList" }
 
   schemas:
+    ErrorList:
+      type: object
+      properties:
+        message: { type: string, example: "Parameter 'id' must be an integer" }
+        errors:
+          type: array
+          items: { $ref: "#/components/schemas/Error" }
+      required: [message, errors]
     Error:
       type: object
       properties:
