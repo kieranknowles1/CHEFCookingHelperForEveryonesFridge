@@ -333,7 +333,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
       FROM (
         -- Remove duplicate names
         SELECT * FROM recipe
-        GROUP BY name
+        GROUP BY name COLLATE NOCASE
       ) AS recipe
       JOIN embedding ON recipe.name = embedding.sentence
       WHERE similarity >= ?
