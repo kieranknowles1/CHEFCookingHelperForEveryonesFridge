@@ -100,8 +100,11 @@ the embeddings are calculated during setup and stored in the database, organized
 
 At runtime, the \codelisting{/api/v1/recipe/\{id\}/similar} endpoint is used to find similar recipes ordered by their similarity score.
 This took a significant amount of time to execute at first. Despite initial assumptions that this was due to the large amount of copying
-created due to the implementation, was shown by profiling (see figure \ref{fig:similarity_flamegraph}) to instead be in the similarity
-calculation itself.
+created due to the implementation, was shown by profiling (see figure \ref{fig:similarity_flamegraph}) to instead be in TensorFlow's
+matrix maths functions.
+
+This could be accelerated using a hardware-accelerated build of TensorFlow, which was not done at first due to the difficulty of installing
+it on Windows. \todo{Update this and add benchmark for after hardware accel. Want to run initial benchmark on main PC}
 
 \section{Frontend Implementation}
 \todo{Frontend}
