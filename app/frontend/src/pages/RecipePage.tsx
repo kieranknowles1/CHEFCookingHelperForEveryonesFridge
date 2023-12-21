@@ -91,7 +91,7 @@ export default function RecipePage (): React.JSX.Element {
           <button>Made it - Remove Ingredients From Fridge</button>
         </div>
       )}
-      <h2>Similar Recipes</h2>
+      <h2>Similar recipes that you can make</h2>
       <LoadingSpinner status={similarStatus} />
       <ul className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3'>
         {similarRecipes.map(recipe => (

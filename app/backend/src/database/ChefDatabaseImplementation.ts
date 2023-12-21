@@ -324,15 +324,18 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     }
   }
 
-  // TODO: Exclude duplicate names
   public getSimilarRecipes (embedding: Float32Array, minSimilarity: number, limit: number): ISimilarRecipe[] {
     const statement = this._connection.prepare<[Float32Array, number, number]>(`
       SELECT
         recipe.id,
         recipe.name,
         ml_similarity(embedding.embedding, ?) AS similarity
-      FROM embedding
-      JOIN recipe ON recipe.name = embedding.sentence
+      FROM (
+        -- Remove duplicate names
+        SELECT * FROM recipe
+        GROUP BY name
+      ) AS recipe
+      JOIN embedding ON recipe.name = embedding.sentence
       WHERE similarity >= ?
       ORDER BY similarity DESC
       LIMIT ?

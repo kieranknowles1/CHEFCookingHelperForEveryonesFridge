@@ -14,6 +14,7 @@ type endpoint = paths['/recipe/{id}/similar']['get']
 /**
  * Endpoint to get similar recipes to a given recipe by its ID
  * // TODO: Look into ways of making this endpoint faster. Maybe have multithreading? Would require a microservice in another language
+ * // TODO: Filter by what is available in the fridge
  */
 export default function installSimilarRecipeEndpoint (app: Express): void {
   app.get('/api/v1/recipe/:id/similar',
@@ -40,6 +41,6 @@ export default function installSimilarRecipeEndpoint (app: Express): void {
       )
 
       // Filter out the prompt recipe
-      res.json(similar.filter(s => s.id !== params.id))
+      res.json(similar.filter(s => s.name !== recipe.name))
     }))
 }

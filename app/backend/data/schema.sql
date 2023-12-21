@@ -38,7 +38,6 @@ CREATE TABLE ingredient (
     -- g/ml
     density REAL
 );
-
 CREATE INDEX index_ingredient_by_name_nocase
     ON ingredient(name COLLATE NOCASE);
 
@@ -57,7 +56,6 @@ CREATE TABLE ingredient_substitution_entry (
     group_id INTEGER NOT NULL REFERENCES ingredient_substitution_group(id),
     ingredient_id INTEGER NOT NULL REFERENCES ingredient(id)
 );
-
 CREATE INDEX index_ingredient_alt_name_by_name_nocase
     ON ingredient_alt_name(name COLLATE NOCASE);
 
@@ -72,6 +70,8 @@ CREATE TABLE recipe (
     directions TEXT NOT NULL,
     link TEXT NOT NULL
 );
+CREATE INDEX index_recipe_by_name_nocase
+    ON recipe(name COLLATE NOCASE ASC);
 
 CREATE TABLE recipe_ingredient (
     recipe_id INTEGER NOT NULL REFERENCES recipe(id) ON DELETE CASCADE,
@@ -82,7 +82,6 @@ CREATE TABLE recipe_ingredient (
 
     PRIMARY KEY (recipe_id, ingredient_id)
 );
-
 CREATE INDEX index_recipe_ingredient_by_recipe_id
     ON recipe_ingredient(recipe_id);
 
@@ -91,7 +90,6 @@ CREATE TABLE user (
     username TEXT NOT NULL UNIQUE
     --// TODO: password
 );
-
 CREATE INDEX index_user_by_username
     ON user(username);
 
@@ -108,7 +106,6 @@ CREATE TABLE fridge_ingredient (
 
     PRIMARY KEY (fridge_id, ingredient_id)
 );
-
 CREATE INDEX index_fridge_ingredient_by_fridge_id
     ON fridge_ingredient(fridge_id);
 

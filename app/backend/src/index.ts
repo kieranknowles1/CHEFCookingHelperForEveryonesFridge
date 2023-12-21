@@ -16,8 +16,6 @@ import { preloadModel } from './ml/getModel'
 
 type ErrorList = components['schemas']['ErrorList']
 
-preloadModel()
-
 const app = express()
 
 // TODO: Use env variable
@@ -62,3 +60,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 app.listen(PORT, () => {
   logger.info(`Backend listening on http://localhost:${PORT}`)
 })
+
+preloadModel()
