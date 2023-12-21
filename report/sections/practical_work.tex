@@ -68,7 +68,7 @@
 
 \todo{Implementation}
 
-\subsection{Backend}
+\section{Backend Implementation}
 \todo{Backend}
 
 \todo{Should I be explaining what TypeScript is or not?}
@@ -83,7 +83,22 @@ generated types were then used to check the return types from the API. Unfortuna
 this was unable to check parameters automatically or the existence of endpoints
 as TypeScript types don't exist at runtime.
 
-\subsection{Frontend}
+\subsection{Machine Learning}
+The similarity of recipes is evaluated using the Universal Sentence Encoder model discussed in section \ref{sec:recipe_similarity} to
+compare the names of recipes. Due to the high runtime cost of embedding sentences at approximatively 100ms per string,
+the embeddings are calculated during setup and stored in the database, organized by their source strings as shown in table \ref{fig:embedding_table}.
+
+\begin{table}[h]
+    \centering
+    \caption{\label{fig:embedding_table}An example of the contents of the embedding table.}
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Original String} & \textbf{Embedding (format is an implementation detail)} \\\hline
+        Pasta & BLOB \\\hline
+    \end{tabular}
+\end{table}
+
+\section{Frontend Implementation}
 \todo{Frontend}
 
 the \codelisting{openapi-fetch} package was used along with previously
