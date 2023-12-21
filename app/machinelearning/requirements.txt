@@ -1,4 +1,2 @@
-ipykernel
-matplotlib
-numpy
-tensorflow
+tensorflowjs
+sentence_transformers
