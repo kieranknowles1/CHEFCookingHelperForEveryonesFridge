@@ -43,7 +43,6 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
   // TODO: Show how much of each ingredient is available and highlight missing ones
   return (
     <div>
-      <h2>Similar recipes that you can make</h2>
       <LoadingSpinner status={status} />
       {/* TODO: Recipe list component for here and available recipes page */}
       <ul className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
