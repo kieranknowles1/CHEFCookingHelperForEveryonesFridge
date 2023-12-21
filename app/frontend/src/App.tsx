@@ -31,8 +31,11 @@ function App (): React.JSX.Element {
     { path: '*', element: <NotFoundMessage /> }
   ]
 
-  // TODO: Login to set fridge ID
-  const [userState, setUserState] = React.useState({ fridgeId: 1 })
+  // TODO: Login to set state
+  const [userState, setUserState] = React.useState({
+    userId: 1,
+    fridgeId: 1
+  })
 
   return (
     <BrowserRouter>
