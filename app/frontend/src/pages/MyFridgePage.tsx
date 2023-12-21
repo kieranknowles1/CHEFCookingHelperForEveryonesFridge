@@ -31,7 +31,7 @@ export default function MyFridgePage (): React.JSX.Element {
     setFridgeNameStatus('loading')
     apiClient.GET(
       '/fridge/{fridgeId}',
-      { params: { path: { fridgeId: 1 } } }
+      { params: { path: { fridgeId: context.fridgeId } } }
     ).then(response => {
       if (response.data === undefined) {
         throw new Error(response.error.message)
@@ -42,7 +42,7 @@ export default function MyFridgePage (): React.JSX.Element {
       console.error(err)
       setFridgeNameStatus('error')
     })
-  }, [])
+  }, [context.fridgeId])
 
   function fetchIngredients (): void {
     setIngredientsStatus('loading')
@@ -61,7 +61,7 @@ export default function MyFridgePage (): React.JSX.Element {
     })
   }
 
-  React.useEffect(fetchIngredients, [])
+  React.useEffect(fetchIngredients, [context.fridgeId])
 
   return (
     <main>
