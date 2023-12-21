@@ -1,6 +1,7 @@
 import { createContext } from 'react'
 
 export interface UserState {
+  userId: number
   fridgeId: number
 }
 

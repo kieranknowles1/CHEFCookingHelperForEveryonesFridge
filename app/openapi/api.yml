@@ -9,6 +9,7 @@ tags:
   - name: Fridge
   - name: Ingredient
   - name: Recipe
+  - name: User
 
 servers:
   - url: http://localhost:3000/api/v1
@@ -111,6 +112,29 @@ paths:
                 items:
                   $ref: "#/components/schemas/SimilarRecipe"
 
+  # TODO: Authentication for all fridge endpoints
+  /fridge/{fridgeId}:
+    get:
+
+      tags: [Fridge]
+      summary: Get data about a fridge
+      parameters:
+        - $ref: "#/components/parameters/fridgeId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: { type: integer, example: 1 }
+                  name: { type: string, example: 'My Fridge' }
+                  owner: { $ref: '#/components/schemas/User' }
+                required: [id, name, owner]
+                additionalProperties: false
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /fridge/{fridgeId}/ingredient/all/amount:
     get:
@@ -190,6 +214,20 @@ paths:
                     missingIngredientAmount: { type: integer, example: 1, description: Number of ingredients missing or not enough of }
                   required: [name, id, missingIngredientAmount]
 
+  /user/{userId}:
+    get:
+      tags: [User]
+      summary: Get a user by ID
+      parameters:
+        - $ref: "#/components/parameters/userId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+        "404":
+          $ref: "#/components/responses/NotFound"
 
 components:
   parameters:
@@ -206,6 +244,11 @@ components:
     recipeId:
       in: path
       name: id
+      schema: { type: integer, example: 1 }
+      required: true
+    userId:
+      in: path
+      name: userId
       schema: { type: integer, example: 1 }
       required: true
 
@@ -236,6 +279,7 @@ components:
           type: array
           items: { $ref: "#/components/schemas/Error" }
       required: [message, errors]
+
     Error:
       type: object
       properties:
@@ -243,6 +287,7 @@ components:
         name: { type: string, example: 'InvalidIdError' }
         code: { type: integer, example: 404 }
       required: [message, name, code]
+
 
     Unit:
       enum:
@@ -295,6 +340,13 @@ components:
       required: [ingredient, originalLine]
       additionalProperties: false
 
+    User:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        name: { type: string, example: 'John Smith' }
+      required: [id, name]
+      additionalProperties: false
 
     RecipeIngredientEntry:
       allOf: [{ $ref: "#/components/schemas/IngredientEntry"}]

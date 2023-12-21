@@ -94,7 +94,7 @@ export interface paths {
   "/recipe/{id}/similar": {
     /**
      * Get similar recipes
-     * @description Returns a list of recipes similar to the given recipe \ Items are sorted by similarity score, descending
+     * @description Returns a list of recipes similar to the given recipe \ Items are sorted by similarity score, descending \ Note that if multiple recipes have the same name, only one will be returned
      */
     get: {
       parameters: {
@@ -113,6 +113,31 @@ export interface paths {
             "application/json": components["schemas"]["SimilarRecipe"][];
           };
         };
+      };
+    };
+  };
+  "/fridge/{fridgeId}": {
+    /** Get data about a fridge */
+    get: {
+      parameters: {
+        path: {
+          fridgeId: components["parameters"]["fridgeId"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": {
+              /** @example 1 */
+              id: number;
+              /** @example My Fridge */
+              name: string;
+              owner: components["schemas"]["User"];
+            };
+          };
+        };
+        404: components["responses"]["NotFound"];
       };
     };
   };
@@ -212,6 +237,25 @@ export interface paths {
       };
     };
   };
+  "/user/{userId}": {
+    /** Get a user by ID */
+    get: {
+      parameters: {
+        path: {
+          userId: components["parameters"]["userId"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["User"];
+          };
+        };
+        404: components["responses"]["NotFound"];
+      };
+    };
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -271,6 +315,12 @@ export interface components {
       /** @example 250 */
       amount?: number;
     };
+    User: {
+      /** @example 1 */
+      id: number;
+      /** @example John Smith */
+      name: string;
+    };
     RecipeIngredientEntry: {
       /** @example 250g of chicken */
       originalLine?: string;
@@ -289,6 +339,7 @@ export interface components {
     fridgeId: number;
     ingredientId: number;
     recipeId: number;
+    userId: number;
     limitRequired: number;
     minSimilarity?: number;
   };

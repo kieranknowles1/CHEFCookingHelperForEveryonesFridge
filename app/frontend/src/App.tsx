@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import React from 'react'
 
+import AccountPage from './pages/AccountPage'
 import FindRecipesPage from './pages/FindRecipesPage'
 import HomePage from './pages/HomePage'
 import MyFridgePage from './pages/MyFridgePage'
@@ -22,7 +23,8 @@ function App (): React.JSX.Element {
   const routes = [
     { path: '/', element: <HomePage />, name: 'Home' },
     { path: '/fridge', element: <MyFridgePage />, name: 'My Fridge' },
-    { path: '/findrecipes', element: <FindRecipesPage />, name: 'Find Recipes' }
+    { path: '/findrecipes', element: <FindRecipesPage />, name: 'Find Recipes' },
+    { path: '/account', element: <AccountPage />, name: 'Account' }
   ]
   const nonNavRoutes = [
     { path: '/recipe/:id', element: <RecipePage /> },

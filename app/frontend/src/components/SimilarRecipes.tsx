@@ -3,12 +3,11 @@ import React from 'react'
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
 import Recipe, { type RecipeProps } from '../components/Recipe'
 import apiClient from '../apiClient'
-import { type paths } from '../types/api.generated'
 
 export interface SimilarRecipeProps {
-  recipeId: number,
-  limit: number,
-  minSimilarity: number,
+  recipeId: number
+  limit: number
+  minSimilarity: number
 }
 
 export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.Element {

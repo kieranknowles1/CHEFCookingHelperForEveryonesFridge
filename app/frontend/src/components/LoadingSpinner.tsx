@@ -7,6 +7,20 @@ export interface LoadingSpinnerProps {
   status: LoadingStatus
 }
 
+/**
+ * Get the highest status from a list of statuses.
+ * Order of precedence: error > loading > done
+ */
+export function getHighestStatus (statuses: LoadingStatus[]): LoadingStatus {
+  if (statuses.includes('error')) {
+    return 'error'
+  } else if (statuses.includes('loading')) {
+    return 'loading'
+  } else {
+    return 'done'
+  }
+}
+
 function getSpinner (status: LoadingStatus): React.JSX.Element | null {
   switch (status) {
     case 'loading':
