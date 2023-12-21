@@ -8,6 +8,12 @@ export interface IAvailableRecipe {
   missingIngredientAmount: number
 }
 
+export interface ISimilarRecipe {
+  id: RowId
+  name: string
+  similarity: number
+}
+
 export interface IRecipeNoId {
   name: string
   directions: string

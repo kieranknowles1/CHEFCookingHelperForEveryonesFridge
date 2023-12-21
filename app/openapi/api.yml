@@ -97,7 +97,7 @@ paths:
         Items are sorted by similarity score, descending
       parameters:
         - $ref: "#/components/parameters/recipeId"
-        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/limitRequired"
         - $ref: "#/components/parameters/minSimilarity"
 
       responses:
@@ -109,9 +109,12 @@ paths:
                 type: array
                 items:
                   type: object
-                  allOf: [{ $ref: '#/components/schemas/Recipe' }]
                   properties:
+                    name: { type: string, example: Just Soup }
+                    id: { type: integer, example: 1234 }
                     similarity: { type: number, example: 0.5 }
+                  required: [name, id, similarity]
+                  additionalProperties: false
 
 
   /fridge/{fridgeId}/ingredient/all/amount:
@@ -211,11 +214,11 @@ components:
       schema: { type: integer, example: 1 }
       required: true
 
-    limit:
+    limitRequired:
       in: query
       name: limit
       schema: { type: integer, example: 10 }
-      required: false
+      required: true
     minSimilarity:
       in: query
       name: minSimilarity

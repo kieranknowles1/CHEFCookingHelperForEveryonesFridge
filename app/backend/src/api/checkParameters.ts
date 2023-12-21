@@ -1,6 +1,10 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { validationResult } from 'express-validator'
 
+import { type components } from '../types/api.generated'
+
+type ErrorList = components['schemas']['ErrorList']
+
 /**
  * Middleware function that checks the types of the paremeters,
  * extracts their values, and either forwards to the next function
@@ -10,7 +14,15 @@ import { validationResult } from 'express-validator'
 export default function checkParameters (req: Request, res: Response, next: NextFunction): void {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    res.status(400).json({ errors: errors.array() })
+    const response: ErrorList = {
+      message: 'Invalid parameters',
+      errors: errors.array().map(err => ({
+        message: err.msg,
+        name: 'InvalidParameter',
+        code: 400
+      }))
+    }
+    res.status(400).json(response)
   } else {
     next()
   }

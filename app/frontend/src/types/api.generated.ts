@@ -110,10 +110,14 @@ export interface paths {
         /** @description OK */
         200: {
           content: {
-            "application/json": ({
+            "application/json": {
+                /** @example Just Soup */
+                name: string;
+                /** @example 1234 */
+                id: number;
                 /** @example 0.5 */
-                similarity?: number;
-              } & components["schemas"]["Recipe"])[];
+                similarity: number;
+              }[];
           };
         };
       };

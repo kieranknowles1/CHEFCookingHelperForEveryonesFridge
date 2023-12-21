@@ -4,7 +4,7 @@ import { readFileSync } from 'fs'
 import CiMap from '@glossa-glo/case-insensitive-map'
 import Database from 'better-sqlite3'
 
-import { type IAvailableRecipe, type IRecipeNoId } from '../types/IRecipe'
+import { type IAvailableRecipe, type IRecipeNoId, type ISimilarRecipe } from '../types/IRecipe'
 import { type IngredientId, ingredientMapFactory } from '../types/IIngredient'
 import type IBarcode from '../types/IBarcode'
 import type IIngredient from '../types/IIngredient'
@@ -26,6 +26,12 @@ const DUMMY_DATA_PATH = path.join(process.cwd(), 'data/dummydata.sql')
 
 type GetResult<TRow> = TRow | undefined
 type AllResult<TRow> = TRow[]
+
+interface ISimilarRecipesResultRow {
+  id: types.RowId
+  name: string
+  similarity: number
+}
 
 interface IAvailableRecipesResultRow {
   id: types.RowId
@@ -316,6 +322,24 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
       ingredients,
       link: result[0].link
     }
+  }
+
+  public getSimilarRecipes (embedding: Float32Array, minSimilarity: number, limit: number): ISimilarRecipe[] {
+    const statement = this._connection.prepare<[Float32Array, number, number]>(`
+      SELECT
+        recipe.id,
+        recipe.name,
+        ml_similarity(embedding.embedding, ?) AS similarity
+      FROM embedding
+      JOIN recipe ON recipe.name = embedding.sentence
+      WHERE similarity >= ?
+      ORDER BY similarity DESC
+      LIMIT ?
+    `)
+
+    const result = statement.all(embedding, minSimilarity, limit) as AllResult<ISimilarRecipesResultRow>
+
+    return result
   }
 
   /**

@@ -1,6 +1,6 @@
 import type CiMap from '@glossa-glo/case-insensitive-map'
 
-import { type IAvailableRecipe, type IRecipeNoId } from '../types/IRecipe'
+import { type ISimilarRecipe, type IAvailableRecipe, type IRecipeNoId } from '../types/IRecipe'
 import type IBarcode from '../types/IBarcode'
 import type IIngredient from '../types/IIngredient'
 import type IRecipe from '../types/IRecipe'
@@ -76,6 +76,11 @@ export default interface IChefDatabase {
    * Get a recipe by its ID
    */
   getRecipe: (id: types.RowId) => IRecipe
+
+  /**
+   * Get similar recipes to the given embedding, ordered by similarity
+   */
+  getSimilarRecipes: (embedding: Float32Array, minSimilarity: number, limit: number) => ISimilarRecipe[]
 
   /**
    * Get the amount of an ingredient in a fridge
