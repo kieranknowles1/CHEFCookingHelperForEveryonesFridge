@@ -26,3 +26,5 @@ node_modules/
 working_data/
 build/
 dist/
+# Flamegraphs
+*0x/

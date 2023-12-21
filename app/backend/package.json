@@ -11,7 +11,8 @@
     "build": "tsc -p .",
     "dev": "nodemon src/index.ts",
     "dev-setup": "nodemon src/setup/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "flamegraph": "0x build/index.js"
   },
   "author": "Kieran Knowles",
   "license": "ISC",
@@ -23,6 +24,7 @@
     "@types/express": "^4.17.21",
     "@types/progress-stream": "^2.0.4",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
+    "0x": "^5.7.0",
     "eslint": "^8.53.0",
     "eslint-config-standard-with-typescript": "^39.1.1",
     "eslint-plugin-import": "^2.29.0",

@@ -3,23 +3,19 @@ import { useParams } from 'react-router-dom'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
 import NotFoundMessage from '../components/NotFoundMessage'
-import Recipe from '../components/Recipe'
 import RecipeIngredient from '../components/RecipeIngredient'
+import SimilarRecipes from '../components/SimilarRecipes'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
 
-type RecipeResponse = components['schemas']['Recipe']
-type SimilarRecipeResponse = components['schemas']['SimilarRecipe']
+type Recipe = components['schemas']['Recipe']
 
 const MAX_SIMILAR_RECIPES = 100
 const MIN_SIMILARIY = 0.5
 
 export default function RecipePage (): React.JSX.Element {
   const [status, setStatus] = React.useState<LoadingStatus | 'notfound'>('loading')
-  const [recipe, setRecipe] = React.useState<RecipeResponse>()
-
-  const [similarRecipes, setSimilarRecipes] = React.useState<SimilarRecipeResponse[]>([])
-  const [similarStatus, setSimilarStatus] = React.useState<LoadingStatus>('loading')
+  const [recipe, setRecipe] = React.useState<Recipe>()
 
   const { id } = useParams()
   const idNumber = Number.parseInt(id ?? 'NaN')
@@ -46,34 +42,6 @@ export default function RecipePage (): React.JSX.Element {
     })
   }, [idNumber])
 
-  // Depend on recipe so that this is called after the recipe is loaded
-  React.useEffect(() => {
-    if (recipe === undefined) {
-      return
-    }
-    setSimilarStatus('loading')
-    setSimilarRecipes([])
-    apiClient.GET(
-      '/recipe/{id}/similar',
-      {
-        params: {
-          path: { id: recipe.id },
-          query: { limit: MAX_SIMILAR_RECIPES, minSimilarity: MIN_SIMILARIY }
-        }
-      }
-    ).then(response => {
-      if (response.data === undefined) {
-        throw new Error(response.error)
-      }
-      setSimilarRecipes(response.data)
-      setSimilarStatus('done')
-    }).catch(err => {
-      console.error(err)
-      setSimilarStatus('error')
-    })
-  }, [recipe])
-
-  // TODO: Show how much of each ingredient is available and highlight missing ones
   return (
     <main>
       {status === 'notfound' ? <NotFoundMessage /> : <LoadingSpinner status={status} />}
@@ -94,12 +62,7 @@ export default function RecipePage (): React.JSX.Element {
         </div>
       )}
       <h2>Similar recipes that you can make</h2>
-      <LoadingSpinner status={similarStatus} />
-      <ul className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3'>
-        {similarRecipes.map(recipe => (
-          <Recipe key={recipe.id} {...recipe} />
-        ))}
-      </ul>
+      {recipe !== undefined && <SimilarRecipes recipeId={recipe.id} limit={MAX_SIMILAR_RECIPES} minSimilarity={MIN_SIMILARIY} />}
     </main>
   )
 }
