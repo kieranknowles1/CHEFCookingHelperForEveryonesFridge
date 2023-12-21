@@ -19,6 +19,8 @@ const app = express()
 // TODO: Use env variable
 const PORT = 3000
 
+// TODO: OpenApiValidator middleware
+
 app.use(bodyParser.json())
 app.use(cors())
 

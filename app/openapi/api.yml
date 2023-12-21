@@ -78,10 +78,7 @@ paths:
       tags: [Recipe]
       summary: Get a recipe by ID
       parameters:
-        - in: path
-          name: id
-          schema: { type: integer }
-          required: true
+        - $ref: "#/components/parameters/recipeId"
       responses:
         "200":
           description: OK
@@ -90,6 +87,32 @@ paths:
               schema: { $ref: '#/components/schemas/Recipe' }
         "404":
           $ref: "#/components/responses/NotFound"
+
+  /recipe/{id}/similar:
+    get:
+      tags: [Recipe]
+      summary: Get similar recipes
+      description:
+        Returns a list of recipes similar to the given recipe \
+        Items are sorted by similarity score, descending
+      parameters:
+        - $ref: "#/components/parameters/recipeId"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/minSimilarity"
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  allOf: [{ $ref: '#/components/schemas/Recipe' }]
+                  properties:
+                    similarity: { type: number, example: 0.5 }
+
 
   /fridge/{fridgeId}/ingredient/all/amount:
     get:
@@ -182,6 +205,22 @@ components:
       name: ingredientId
       schema: { type: integer, example: 1 }
       required: true
+    recipeId:
+      in: path
+      name: id
+      schema: { type: integer, example: 1 }
+      required: true
+
+    limit:
+      in: query
+      name: limit
+      schema: { type: integer, example: 10 }
+      required: false
+    minSimilarity:
+      in: query
+      name: minSimilarity
+      schema: { type: number, example: 0.5, minimum: 0, maximum: 1 }
+      required: false
 
   responses:
     NotFound:
