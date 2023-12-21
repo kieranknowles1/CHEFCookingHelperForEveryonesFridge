@@ -47,7 +47,7 @@ export default function RecipePage (): React.JSX.Element {
       console.error(err)
       setStatus('error')
     })
-  }, [])
+  }, [id])
 
   React.useEffect(() => {
     apiClient.GET(
@@ -68,7 +68,7 @@ export default function RecipePage (): React.JSX.Element {
       console.error(err)
       setSimilarStatus('error')
     })
-  }, [])
+  }, [id])
 
   // TODO: Show how much of each ingredient is available and highlight missing ones
   return (
