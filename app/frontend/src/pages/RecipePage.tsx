@@ -21,22 +21,18 @@ export default function RecipePage (): React.JSX.Element {
   const [similarRecipes, setSimilarRecipes] = React.useState<SimilarRecipeResponse[]>([])
   const [similarStatus, setSimilarStatus] = React.useState<LoadingStatus>('loading')
 
-  // TODO: Is it right to throw an error here?
-  const params = useParams<{ id: string }>()
-  // Invalid ID is treated as 404
-  if (params.id === undefined) {
-    return <NotFoundMessage />
-  }
-  // TODO: Update this when clicking a link to a recipe
-  const id = Number.parseInt(params.id)
-  if (Number.isNaN(id)) {
+  const { id } = useParams()
+  const idNumber = Number.parseInt(id ?? 'NaN')
+  if (Number.isNaN(idNumber)) {
     return <NotFoundMessage />
   }
 
   React.useEffect(() => {
+    setStatus('loading')
+    setRecipe(undefined)
     apiClient.GET(
       '/recipe/{id}',
-      { params: { path: { id } } }
+      { params: { path: { id: idNumber } } }
     ).then(response => {
       if (response.data !== undefined) {
         setRecipe(response.data)
@@ -48,14 +44,20 @@ export default function RecipePage (): React.JSX.Element {
       console.error(err)
       setStatus('error')
     })
-  }, [id])
+  }, [idNumber])
 
+  // Depend on recipe so that this is called after the recipe is loaded
   React.useEffect(() => {
+    if (recipe === undefined) {
+      return
+    }
+    setSimilarStatus('loading')
+    setSimilarRecipes([])
     apiClient.GET(
       '/recipe/{id}/similar',
       {
         params: {
-          path: { id },
+          path: { id: recipe.id },
           query: { limit: MAX_SIMILAR_RECIPES, minSimilarity: MIN_SIMILARIY }
         }
       }
@@ -69,7 +71,7 @@ export default function RecipePage (): React.JSX.Element {
       console.error(err)
       setSimilarStatus('error')
     })
-  }, [id])
+  }, [recipe])
 
   // TODO: Show how much of each ingredient is available and highlight missing ones
   return (
