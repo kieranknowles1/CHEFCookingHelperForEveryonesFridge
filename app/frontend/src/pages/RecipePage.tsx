@@ -27,6 +27,7 @@ export default function RecipePage (): React.JSX.Element {
   if (params.id === undefined) {
     return <NotFoundMessage />
   }
+  // TODO: Update this when clicking a link to a recipe
   const id = Number.parseInt(params.id)
   if (Number.isNaN(id)) {
     return <NotFoundMessage />
