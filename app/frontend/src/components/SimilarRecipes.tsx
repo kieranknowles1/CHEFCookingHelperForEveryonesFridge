@@ -50,4 +50,5 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
         {recipes.map(recipe => <Recipe key={recipe.id} {...recipe} />)}
       </ul>
     </div>
+  )
 }
