@@ -42,9 +42,13 @@ export default function RecipePage (): React.JSX.Element {
     })
   }, [idNumber])
 
+  if (status === 'notfound') {
+    return <NotFoundMessage />
+  }
+
   return (
     <main>
-      {status === 'notfound' ? <NotFoundMessage /> : <LoadingSpinner status={status} />}
+      <LoadingSpinner status={status} />
       {recipe !== undefined && (
         <div>
           <h1>{recipe.name}</h1>
@@ -55,7 +59,7 @@ export default function RecipePage (): React.JSX.Element {
           </ul>
           <h2>Directions</h2>
           <p>
-            {recipe.directions.split('\n').map(line => <>{line}<br /></>)}
+            {recipe.directions.split('\n').map((line, index) => <React.Fragment key={index}>{line}</React.Fragment>)}
           </p>
           {/* TODO: Implement, deduct ingredients from fridge */ }
           <button>Made it - Remove Ingredients From Fridge</button>
