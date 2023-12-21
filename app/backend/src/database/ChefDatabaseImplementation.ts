@@ -324,6 +324,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     }
   }
 
+  // TODO: Exclude duplicate names
   public getSimilarRecipes (embedding: Float32Array, minSimilarity: number, limit: number): ISimilarRecipe[] {
     const statement = this._connection.prepare<[Float32Array, number, number]>(`
       SELECT

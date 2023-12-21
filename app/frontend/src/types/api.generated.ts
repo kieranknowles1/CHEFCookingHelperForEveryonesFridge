@@ -98,8 +98,8 @@ export interface paths {
      */
     get: {
       parameters: {
-        query?: {
-          limit?: components["parameters"]["limit"];
+        query: {
+          limit: components["parameters"]["limitRequired"];
           minSimilarity?: components["parameters"]["minSimilarity"];
         };
         path: {
@@ -110,14 +110,7 @@ export interface paths {
         /** @description OK */
         200: {
           content: {
-            "application/json": {
-                /** @example Just Soup */
-                name: string;
-                /** @example 1234 */
-                id: number;
-                /** @example 0.5 */
-                similarity: number;
-              }[];
+            "application/json": components["schemas"]["SimilarRecipe"][];
           };
         };
       };
@@ -243,6 +236,14 @@ export interface components {
      * @enum {unknown}
      */
     Unit: "none" | "whole" | "ml" | "g";
+    SimilarRecipe: {
+      /** @example Just Soup */
+      name: string;
+      /** @example 1234 */
+      id: number;
+      /** @example 0.5 */
+      similarity: number;
+    };
     Recipe: {
       /** @example 12345 */
       id: number;
@@ -288,7 +289,7 @@ export interface components {
     fridgeId: number;
     ingredientId: number;
     recipeId: number;
-    limit?: number;
+    limitRequired: number;
     minSimilarity?: number;
   };
   requestBodies: never;

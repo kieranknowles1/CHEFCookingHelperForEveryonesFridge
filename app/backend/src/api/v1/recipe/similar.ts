@@ -13,6 +13,7 @@ type endpoint = paths['/recipe/{id}/similar']['get']
 
 /**
  * Endpoint to get similar recipes to a given recipe by its ID
+ * // TODO: Look into ways of making this endpoint faster. Maybe have multithreading? Would require a microservice in another language
  */
 export default function installSimilarRecipeEndpoint (app: Express): void {
   app.get('/api/v1/recipe/:id/similar',
@@ -21,7 +22,6 @@ export default function installSimilarRecipeEndpoint (app: Express): void {
     query('limit').isInt({ min: 1 }),
     checkParameters,
     asyncHandler(async (req: Request, res: TypedResponse<endpoint, 200>) => {
-      // TODO: Dont use any here
       const params = getParameters<endpoint>(req, matched => ({
         id: Number.parseInt(matched.id),
         minSimilarity: matched.minSimilarity !== undefined ? Number.parseFloat(matched.minSimilarity) : undefined,
