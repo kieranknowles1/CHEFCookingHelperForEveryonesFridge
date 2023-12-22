@@ -7,4 +7,6 @@ const client = createClient<paths>({
   baseUrl: 'http://localhost:3000/api/v1'
 })
 
+export type Client = typeof client
+
 export default client

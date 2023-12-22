@@ -5,6 +5,7 @@ import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
 import useSafeContext from '../contexts/useSafeContext'
+import monitorStatus from '../utils/monitorStatus'
 
 type User = components['schemas']['User']
 
@@ -15,18 +16,15 @@ export default function AccountPage (): React.JSX.Element {
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
 
   React.useEffect(() => {
-    setStatus('loading')
     apiClient.GET(
       '/user/{userId}',
       { params: { path: { userId: context.userId } } }
-    ).then(response => {
-      if (response.data === undefined) {
-        throw new Error(response.error.message)
-      }
-      setUser(response.data)
+    ).then(
+      monitorStatus(setStatus)
+    ).then(data => {
+      setUser(data)
     }).catch(err => {
       console.error(err)
-      setStatus('error')
     })
   }, [context.userId])
 

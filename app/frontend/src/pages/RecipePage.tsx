@@ -7,6 +7,7 @@ import RecipeIngredient from '../components/RecipeIngredient'
 import SimilarRecipes from '../components/SimilarRecipes'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
+import monitorStatus from '../utils/monitorStatus'
 
 type Recipe = components['schemas']['Recipe']
 
@@ -24,21 +25,18 @@ export default function RecipePage (): React.JSX.Element {
   }
 
   React.useEffect(() => {
-    setStatus('loading')
     setRecipe(undefined)
     apiClient.GET(
       '/recipe/{id}',
       { params: { path: { id: idNumber } } }
-    ).then(response => {
-      if (response.data !== undefined) {
-        setRecipe(response.data)
-        setStatus('done')
-      } else {
-        setStatus('notfound')
-      }
+    ).then(
+      monitorStatus(setStatus)
+    ).then(data => {
+      setRecipe(data)
     }).catch(err => {
       console.error(err)
-      setStatus('error')
+      // TODO: Check error code. Use notfound for 404, error for everything else.
+      // setStatus('notfound')
     })
   }, [idNumber])
 

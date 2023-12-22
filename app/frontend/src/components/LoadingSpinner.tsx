@@ -29,10 +29,17 @@ function getSpinner (status: LoadingStatus): React.JSX.Element | null {
       return null
     case 'error':
       // TODO: Better way to show error?
+      // TODO: Modal with error message and helper function to create modal or spinner based on status?
       return <p>An error occurred. Please check the console for details.</p>
   }
 }
 
+/**
+ * Component to visualize the loading status of a page.
+ * Shows a spinner while loading, nothing when done, and an error message when an error occurred.
+ *
+ * @see monitorStatus - Helper function to update a status that can be used with this component.
+ */
 export default function LoadingSpinner (props: LoadingSpinnerProps): React.JSX.Element {
   return <div className='flex justify-center'>{getSpinner(props.status)}</div>
 }
