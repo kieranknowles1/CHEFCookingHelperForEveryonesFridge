@@ -17,3 +17,10 @@ rules:
   import/consistent-type-specifier-style:
    - warn
    - prefer-inline
+  # Not sure how to handle this in TypedEndpoint. //TODO: Enable this if TypedEndpoint turns out to be unnecessary.
+  # "@typescript-eslint/no-explicit-any": warn
+  # Would like to enable this, but it's needed when working with JSON, CSVs, and the database.
+  # Limit its use where possible.
+  # "@typescript-eslint/consistent-type-assertions":
+  #  - warn
+  #  - { assertionStyle: never }

@@ -4,8 +4,8 @@ import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
-import useSafeContext from '../contexts/useSafeContext'
 import monitorStatus from '../utils/monitorStatus'
+import useSafeContext from '../contexts/useSafeContext'
 
 type User = components['schemas']['User']
 

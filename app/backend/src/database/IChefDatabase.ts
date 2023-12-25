@@ -1,6 +1,6 @@
 import type CiMap from '@glossa-glo/case-insensitive-map'
 
-import { type ISimilarRecipe, type IAvailableRecipe, type IRecipeNoId } from '../types/IRecipe'
+import { type IAvailableRecipe, type IRecipeNoId, type ISimilarRecipe } from '../types/IRecipe'
 import type IBarcode from '../types/IBarcode'
 import type IIngredient from '../types/IIngredient'
 import type IRecipe from '../types/IRecipe'
