@@ -1,6 +1,9 @@
 PRAGMA user_version = 1;
 PRAGMA journal_mode = WAL;
 
+-- Drop all existing tables
+-- Disable foreign keys while doing so
+-- so that we don't have to drop tables in a specific order
 PRAGMA foreign_keys = OFF;
 
 DROP TABLE IF EXISTS embedding;
@@ -20,12 +23,21 @@ DROP VIEW IF EXISTS view_ingredient_by_name;
 
 PRAGMA foreign_keys = ON;
 
+-- ==================
+--  Machine Learning
+-- ==================
+
 CREATE TABLE embedding (
     sentence TEXT NOT NULL PRIMARY KEY,
+    -- 512 float32s, 2048 bytes
     embedding BLOB NOT NULL
 );
 CREATE INDEX index_embedding_by_sentence
     ON embedding(sentence);
+
+-- =============
+--  Ingredients
+-- =============
 
 CREATE TABLE ingredient (
     id INTEGER NOT NULL PRIMARY KEY,
@@ -64,6 +76,18 @@ CREATE VIEW view_ingredient_by_name AS
         UNION ALL
     SELECT name, ingredient_id AS id FROM ingredient_alt_name;
 
+CREATE TABLE barcode (
+    code INTEGER NOT NULL PRIMARY KEY,
+    ingredient_id INTEGER NOT NULL REFERENCES ingredient(id),
+
+    product_name TEXT NOT NULL,
+    amount REAL NOT NULL
+);
+
+-- =========
+--  Recipes
+-- =========
+
 CREATE TABLE recipe (
     id INTEGER NOT NULL PRIMARY KEY,
     name TEXT NOT NULL REFERENCES embedding(sentence),
@@ -84,6 +108,10 @@ CREATE TABLE recipe_ingredient (
 );
 CREATE INDEX index_recipe_ingredient_by_recipe_id
     ON recipe_ingredient(recipe_id);
+
+-- =========
+--  Fridges
+-- =========
 
 CREATE TABLE user (
     id INTEGER NOT NULL PRIMARY KEY,
@@ -108,11 +136,3 @@ CREATE TABLE fridge_ingredient (
 );
 CREATE INDEX index_fridge_ingredient_by_fridge_id
     ON fridge_ingredient(fridge_id);
-
-CREATE TABLE barcode (
-    code INTEGER NOT NULL PRIMARY KEY,
-    ingredient_id INTEGER NOT NULL REFERENCES ingredient(id),
-
-    product_name TEXT NOT NULL,
-    amount REAL NOT NULL
-);
