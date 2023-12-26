@@ -27,6 +27,13 @@ const DUMMY_DATA_PATH = path.join(process.cwd(), 'data/dummydata.sql')
 type GetResult<TRow> = TRow | undefined
 type AllResult<TRow> = TRow[]
 
+interface IForeignKeyCheckRow {
+  table: string
+  rowid: types.RowId
+  parent: string
+  fkid: number
+}
+
 interface ISimilarRecipesResultRow {
   id: types.RowId
   name: string
@@ -166,6 +173,18 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     logger.info('Running dummy data script')
     const dummyData = readFileSync(DUMMY_DATA_PATH, 'utf-8')
     this._connection.exec(dummyData)
+  }
+
+  public checkIntegrity (): void {
+    const start = Date.now()
+    logger.info('Checking database integrity')
+    const foreignKeyCheck = this._connection.pragma('foreign_key_check') as AllResult<IForeignKeyCheckRow>
+    if (foreignKeyCheck.length > 0) {
+      throw new Error(`Foreign key check failed: ${JSON.stringify(foreignKeyCheck)}`)
+    }
+    const end = Date.now()
+
+    logger.info(`Database integrity check passed in ${end - start}ms`)
   }
 
   /**
@@ -329,8 +348,11 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
       SELECT
         recipe.id,
         recipe.name,
+        -- Very expensive, filter as much as possible before this
         ml_similarity(embedding.embedding, ?) AS similarity
       FROM (
+        -- Subquery is executed first. Put filtering that
+        -- can be done before the similarity check here
         -- Remove duplicate names
         SELECT * FROM recipe
         GROUP BY name COLLATE NOCASE

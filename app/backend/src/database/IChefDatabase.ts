@@ -39,6 +39,12 @@ export default interface IChefDatabase {
   resetDatabase: (_: 'IKnowWhatIAmDoing') => void
 
   /**
+   * Check the integrity of the database and all of its tables
+   * @throws {Error} If the integrity check fails
+   */
+  checkIntegrity: () => void
+
+  /**
    * Wrap `callback` within a transaction. Must be used for any operations that write to the database
    * The transaction will be rolled back if an uncaught exception occurs and the exception re-thrown
    */

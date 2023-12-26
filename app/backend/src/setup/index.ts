@@ -112,7 +112,7 @@ async function importData (): Promise<ImportDataReturn> {
 }
 
 async function main (): Promise<void> {
-  preloadModel()
+  void preloadModel()
 
   logger.info('Setting up schema')
   getDatabase().resetDatabase('IKnowWhatIAmDoing')
@@ -124,5 +124,8 @@ async function main (): Promise<void> {
 
   const missedFrequencies = Array.from(missedIngredients).sort((a, b) => b[1] - a[1])
   logger.info(`Missing ingredients by frequency: ${missedFrequencies.toString()}`)
+
+  // Make sure nothing went wrong with the database
+  getDatabase().checkIntegrity()
 }
 main().catch((err) => { logError(err) })
