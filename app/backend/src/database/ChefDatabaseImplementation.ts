@@ -27,6 +27,10 @@ const DUMMY_DATA_PATH = path.join(process.cwd(), 'data/dummydata.sql')
 type GetResult<TRow> = TRow | undefined
 type AllResult<TRow> = TRow[]
 
+interface IIntegrityCheckRow {
+  integrity_check: string
+}
+
 interface IForeignKeyCheckRow {
   table: string
   rowid: types.RowId
@@ -178,6 +182,14 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
   public checkIntegrity (): void {
     const start = Date.now()
     logger.info('Checking database integrity')
+
+    // Expecting this to return exactly one row with the value 'ok'
+    const integrityCheck = this._connection.pragma('integrity_check') as AllResult<IIntegrityCheckRow>
+    if (integrityCheck.length !== 1 || integrityCheck[0].integrity_check !== 'ok') {
+      throw new Error(`Integrity check failed: ${JSON.stringify(integrityCheck)}`)
+    }
+
+    // Expecting this to not return anything
     const foreignKeyCheck = this._connection.pragma('foreign_key_check') as AllResult<IForeignKeyCheckRow>
     if (foreignKeyCheck.length > 0) {
       throw new Error(`Foreign key check failed: ${JSON.stringify(foreignKeyCheck)}`)
