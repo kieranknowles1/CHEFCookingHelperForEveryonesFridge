@@ -93,4 +93,15 @@ VALUES
     ((SELECT id FROM ingredient_substitution_group WHERE name = 'Peppers'), (SELECT id FROM ingredient WHERE name = 'Green Pepper')),
     ((SELECT id FROM ingredient_substitution_group WHERE name = 'Peppers'), (SELECT id FROM ingredient WHERE name = 'Red Pepper'));
 
--- Meal types are added in ./setup/index.ts as we need to embed them first and async functions can't be called in a user-defined function
+-- Embeddings are added in ./setup/index.ts as we can't call async functions from here
+PRAGMA foreign_keys = OFF;
+INSERT INTO meal_type
+    (name)
+VALUES
+    ('Breakfast'),
+    ('Lunch'),
+    ('Dinner'),
+    ('Snack'),
+    ('Dessert');
+-- We run foreign_key_check after setup to ensure that these are embedded for when we run the app
+PRAGMA foreign_keys = ON;

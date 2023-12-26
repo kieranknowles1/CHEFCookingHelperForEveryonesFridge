@@ -12,6 +12,11 @@ export interface IIngredientRow {
   assumeUnlimited: number
 }
 
+export interface IMealTypeRow {
+  id: RowId
+  name: string
+}
+
 export interface IRecipeRow {
   id: RowId
   name: string

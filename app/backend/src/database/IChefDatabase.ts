@@ -18,14 +18,12 @@ export interface IFridgeIngredientAmount {
  * and is only valid for the duration of the callback.
  */
 export interface IWritableDatabase {
-  addMealType: (name: string) => Promise<void>
-
   addIngredient: (ingredient: IIngredient) => void
 
   /**
    * Calculate the embedding for a sentence and add it to the database to be referenced later
    */
-  addEmbedding: (sentence: string) => void
+  addEmbedding: (sentence: string) => Promise<void>
 
   addRecipe: (recipe: IRecipeNoId) => Promise<void>
 
@@ -74,6 +72,8 @@ export default interface IChefDatabase {
    * an equivalent ingredient if an exact match is not found.
    */
   findIngredientByName: (name: string) => IIngredient | null
+
+  getMealTypes: () => string[]
 
   /**
    * Get a map of ingredient names to IDs, including any alternate names

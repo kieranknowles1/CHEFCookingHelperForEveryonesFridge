@@ -24,14 +24,6 @@ import parseCsvRecipeRow from './parseCsvRecipeRow'
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
 const PROGRESS_BAR_STYLE = cliProgress.Presets.shades_classic
 
-const MEAL_TYPES = [
-  'Breakfast',
-  'Lunch',
-  'Dinner',
-  'Dessert',
-  'Snack'
-]
-
 /**
  * Create a progress listener and bar and start the bar. The bar must be stopped once finished
  * @param path
@@ -97,10 +89,12 @@ async function getCsvData (): Promise<[IRecipeNoId[], number]> {
   return [recipes, totalRows]
 }
 
-async function addMealTypes (): Promise<void> {
+// Add embeddings for the meal types
+// Can't be done in pure SQL as async functions are not supported
+async function embedMealTypes (): Promise<void> {
   await getDatabase().wrapTransactionAsync(async (db) => {
-    for (const mealType of MEAL_TYPES) {
-      await db.addMealType(mealType)
+    for (const mealType of getDatabase().getMealTypes()) {
+      await db.addEmbedding(mealType)
     }
   })
 }
@@ -134,7 +128,7 @@ async function main (): Promise<void> {
   getDatabase().resetDatabase('IKnowWhatIAmDoing')
 
   logger.info('Adding meal types')
-  await addMealTypes()
+  await embedMealTypes()
 
   logger.info('Importing data into the database')
   const dataInfo = await importData()
