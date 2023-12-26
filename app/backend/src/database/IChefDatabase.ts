@@ -18,6 +18,8 @@ export interface IFridgeIngredientAmount {
  * and is only valid for the duration of the callback.
  */
 export interface IWritableDatabase {
+  addMealType: (name: string) => Promise<void>
+
   addIngredient: (ingredient: IIngredient) => void
 
   /**

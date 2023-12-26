@@ -92,3 +92,5 @@ VALUES
     ((SELECT id FROM ingredient_substitution_group WHERE name = 'Peppers'), (SELECT id FROM ingredient WHERE name = 'Bell Pepper')),
     ((SELECT id FROM ingredient_substitution_group WHERE name = 'Peppers'), (SELECT id FROM ingredient WHERE name = 'Green Pepper')),
     ((SELECT id FROM ingredient_substitution_group WHERE name = 'Peppers'), (SELECT id FROM ingredient WHERE name = 'Red Pepper'));
+
+-- Meal types are added in ./setup/index.ts as we need to embed them first and async functions can't be called in a user-defined function

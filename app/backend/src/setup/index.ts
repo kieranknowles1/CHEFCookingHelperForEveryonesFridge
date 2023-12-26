@@ -24,6 +24,14 @@ import parseCsvRecipeRow from './parseCsvRecipeRow'
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
 const PROGRESS_BAR_STYLE = cliProgress.Presets.shades_classic
 
+const MEAL_TYPES = [
+  'Breakfast',
+  'Lunch',
+  'Dinner',
+  'Dessert',
+  'Snack'
+]
+
 /**
  * Create a progress listener and bar and start the bar. The bar must be stopped once finished
  * @param path
@@ -89,6 +97,14 @@ async function getCsvData (): Promise<[IRecipeNoId[], number]> {
   return [recipes, totalRows]
 }
 
+async function addMealTypes (): Promise<void> {
+  await getDatabase().wrapTransactionAsync(async (db) => {
+    for (const mealType of MEAL_TYPES) {
+      await db.addMealType(mealType)
+    }
+  })
+}
+
 interface ImportDataReturn { success: number, total: number }
 async function importData (): Promise<ImportDataReturn> {
   logger.info('Collecting data from CSV')
@@ -116,6 +132,9 @@ async function main (): Promise<void> {
 
   logger.info('Setting up schema')
   getDatabase().resetDatabase('IKnowWhatIAmDoing')
+
+  logger.info('Adding meal types')
+  await addMealTypes()
 
   logger.info('Importing data into the database')
   const dataInfo = await importData()

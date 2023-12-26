@@ -79,6 +79,20 @@ class WritableDatabaseImplementation implements IWritableDatabase {
     this._connection = connection
   }
 
+  public async addMealType (name: string): Promise<void> {
+    this.assertValid()
+
+    const statement = this._connection.prepare<string>(`
+      INSERT INTO meal_type (name) VALUES (?)
+    `)
+
+    if (this._db.getEmbedding(name) === null) {
+      await this.addEmbedding(name)
+    }
+
+    statement.run(name)
+  }
+
   public addIngredient (ingredient: IIngredient): void {
     this.assertValid()
     // TODO: Reuse prepared statements
@@ -93,6 +107,7 @@ class WritableDatabaseImplementation implements IWritableDatabase {
   }
 
   public async addEmbedding (sentence: string): Promise<void> {
+    this.assertValid()
     const statement = this._connection.prepare<[string, Float32Array]>(`
       INSERT INTO embedding
         (sentence, embedding)
