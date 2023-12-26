@@ -2,6 +2,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import express from 'express'
 
+import logger, { logError } from './logger'
 import errorHandler from './api/errorHandler'
 import getDatabase from './database/getDatabase'
 import installBarcodeEndpoint from './api/v1/barcode/barcode'
@@ -11,7 +12,6 @@ import installFridgeIngredientEndpoint from './api/v1/fridge/ingredient/amount'
 import installIngredientAllEndpoint from './api/v1/ingredient/all'
 import installRecipeEndpoint from './api/v1/recipe/recipe'
 import installSimilarRecipeEndpoint from './api/v1/recipe/similar'
-import logger, { logError } from './logger'
 import { preloadModel } from './ml/getModel'
 
 const app = express()
