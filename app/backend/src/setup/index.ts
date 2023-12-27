@@ -12,12 +12,12 @@ import csv from 'csv-parse'
 import progressTracker from 'progress-stream'
 
 import logger, { LogLevel, logError } from '../logger'
-import { type IRecipeNoId } from '../types/IRecipe'
 import { type IngredientId } from '../types/IIngredient'
 import getDatabase from '../database/getDatabase'
 import { preloadModel } from '../ml/getModel'
 
-import type ICsvRecipeRow from './ICsvRecipeRow'
+import type IParsedCsvRecipe from './IParsedCsvRecipe'
+import type IRawCsvRecipe from './IRawCsvRecipe'
 import parseCsvRecipeRow from './parseCsvRecipeRow'
 
 // TODO: Use environment variables and put this somewhere outside the container
@@ -45,7 +45,7 @@ function createTrackers (path: string): [progressTracker.ProgressStream, cliProg
 /** Map of missed ingredient => frequency */
 const missedIngredients = new CiMap<string, number>()
 
-function recipeValid (row: ICsvRecipeRow, commonIngredients: Map<string, IngredientId>): boolean {
+function recipeValid (row: IRawCsvRecipe, commonIngredients: Map<string, IngredientId>): boolean {
   let valid = true
   const ingredients = JSON.parse(row.NER) as string[]
   for (const ingredient of ingredients) {
@@ -57,17 +57,17 @@ function recipeValid (row: ICsvRecipeRow, commonIngredients: Map<string, Ingredi
   return valid
 }
 
-async function getCsvData (): Promise<[IRecipeNoId[], number]> {
+async function getCsvData (): Promise<[IParsedCsvRecipe[], number]> {
   const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
   const supportedIngredients = getDatabase().getIngredientIds()
 
   let totalRows = 0
-  const recipes: IRecipeNoId[] = []
+  const recipes: IParsedCsvRecipe[] = []
 
   await new Promise<void>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
     .pipe(progress)
     .pipe(csv.parse({ columns: true }))
-    .on('data', (row: ICsvRecipeRow) => {
+    .on('data', (row: IRawCsvRecipe) => {
       totalRows++
       try {
         // Filter to only the most common ingredients

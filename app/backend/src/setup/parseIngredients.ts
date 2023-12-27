@@ -7,7 +7,7 @@ import getDatabase from '../database/getDatabase'
 import getRegexGroups from '../getRegexGroups'
 import logger from '../logger'
 
-import type ICsvRecipeRow from './ICsvRecipeRow'
+import type IRawCsvRecipe from './IRawCsvRecipe'
 import UnparsedIngredientError from './UnparsedIngredientError'
 
 const AMOUNT_PATTERN = /(?<amount>\d+\/\d+|\d+ \d+\/\d+|\d+)( (level|heaping|heaped|round|rounded))? (?<unit>\w+)/g
@@ -60,7 +60,7 @@ function getAmount (originalName: string, ingredient: IIngredient, amounts: stri
   }
 }
 
-export default function parseIngredients (row: ICsvRecipeRow): IngredientMap {
+export default function parseIngredients (row: IRawCsvRecipe): IngredientMap {
   const map = ingredientMapFactory()
 
   // NER contains names, ingredients contains names and amounts

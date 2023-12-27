@@ -2,7 +2,7 @@
  * An unparsed row as it appears in full_dataset.csv
  * NOTE: Arrays are represented as strings here
  */
-export default interface ICsvRecipeRow {
+export default interface IRawCsvRecipe {
   title: string
   /** JSON array of ingredient names and amounts */
   ingredients: string

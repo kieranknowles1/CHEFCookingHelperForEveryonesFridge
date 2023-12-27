@@ -1,10 +1,10 @@
-import { type IRecipeNoId } from '../types/IRecipe'
 import getDatabase from '../database/getDatabase'
 
-import type ICsvRecipeRow from './ICsvRecipeRow'
+import type IParsedCsvRecipe from './IParsedCsvRecipe'
+import type IRawCsvRecipe from './IRawCsvRecipe'
 import parseIngredients from './parseIngredients'
 
-export default function parseCsvRecipeRow (row: ICsvRecipeRow): IRecipeNoId {
+export default function parseCsvRecipeRow (row: IRawCsvRecipe): IParsedCsvRecipe {
   const directionsArray = JSON.parse(row.directions) as string[]
   const directions = directionsArray.join('\n')
   const ingredients = parseIngredients(row)
