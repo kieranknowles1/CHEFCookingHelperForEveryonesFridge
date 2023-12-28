@@ -5,6 +5,9 @@ ignorePaths:
   # From external sources
   - "*.bib"
 
+  - "*.drawio"
+  - "*.svg"
+
 # LaTeX convention is to use lowercase for commands
 allowCompoundWords: true
 
@@ -17,12 +20,18 @@ dictionaryDefinitions:
     path: cspell/latex.txt
   - name: Names
     path: cspell/names.txt
+  - name: Python
+    path: cspell/python.txt
   - name: Sql
     path: cspell/sql.txt
+  - name: Typescript
+    path: cspell/typescript.txt
 
 dictionaries:
   - Acronyms
   - English
   - Latex
   - Names
+  - Python
   - Sql
+  - Typescript

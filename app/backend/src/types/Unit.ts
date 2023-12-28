@@ -3,6 +3,8 @@ import type IIngredient from 'types/IIngredient'
 import UnparsedIngredientError from '../setup/UnparsedIngredientError'
 import logger from '../logger'
 
+// cSpell: words milliliters liter tbls tbsb tbsp
+
 // NOTE: Must match check constraint on ingredient table in schema.sql
 export type MetricUnit = 'ml' | 'g'
 export type DatabaseUnit = MetricUnit | 'none' | 'whole'

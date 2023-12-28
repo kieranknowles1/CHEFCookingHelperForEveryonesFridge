@@ -1,0 +1,13 @@
+ipython
+ipywidgets
+lexer
+linalg
+mpnet
+nbconvert
+nbformat
+numpy
+ONEDNN
+pygments
+runpy
+tensorflowjs
+tqdm

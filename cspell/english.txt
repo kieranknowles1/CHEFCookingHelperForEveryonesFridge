@@ -1,5 +1,3 @@
-acomplished
-favorited
+analyzed
+favorite
 favourited
-schedulability
-waffly

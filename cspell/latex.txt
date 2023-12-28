@@ -1,4 +1,12 @@
+codelistingcolor
+colorbox
+definecolor
+dvipsnames
 ifstrequal
 pifont
+rowcolor
 tabulary
+textbf
+ttfamily
 unskip
+xcolor

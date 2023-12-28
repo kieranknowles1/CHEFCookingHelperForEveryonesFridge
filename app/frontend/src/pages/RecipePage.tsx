@@ -12,7 +12,7 @@ import monitorStatus from '../utils/monitorStatus'
 type Recipe = components['schemas']['Recipe']
 
 const MAX_SIMILAR_RECIPES = 100
-const MIN_SIMILARIY = 0.5
+const MIN_SIMILARITY = 0.5
 
 export default function RecipePage (): React.JSX.Element {
   const [status, setStatus] = React.useState<LoadingStatus | 'notfound'>('loading')
@@ -64,7 +64,7 @@ export default function RecipePage (): React.JSX.Element {
         </div>
       )}
       <h2>Similar recipes that you can make</h2>
-      {recipe !== undefined && <SimilarRecipes recipeId={recipe.id} limit={MAX_SIMILAR_RECIPES} minSimilarity={MIN_SIMILARIY} />}
+      {recipe !== undefined && <SimilarRecipes recipeId={recipe.id} limit={MAX_SIMILAR_RECIPES} minSimilarity={MIN_SIMILARITY} />}
     </main>
   )
 }

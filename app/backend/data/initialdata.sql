@@ -86,7 +86,7 @@ VALUES
     ((SELECT id FROM ingredient_substitution_group WHERE name = 'Cheese'), (SELECT id FROM ingredient WHERE name = 'Cheddar Cheese')),
     ((SELECT id FROM ingredient_substitution_group WHERE name = 'Cheese'), (SELECT id FROM ingredient WHERE name = 'Cheese')),
     ((SELECT id FROM ingredient_substitution_group WHERE name = 'Cheese'), (SELECT id FROM ingredient WHERE name = 'Mozzarella Cheese')),
-    -- Parmesan cheese intentionally ommitted
+    -- Parmesan cheese intentionally omitted
     ((SELECT id FROM ingredient_substitution_group WHERE name = 'Cream'), (SELECT id FROM ingredient WHERE name = 'Cream Cheese')),
     ((SELECT id FROM ingredient_substitution_group WHERE name = 'Cream'), (SELECT id FROM ingredient WHERE name = 'Sour Cream')),
     ((SELECT id FROM ingredient_substitution_group WHERE name = 'Peppers'), (SELECT id FROM ingredient WHERE name = 'Bell Pepper')),
