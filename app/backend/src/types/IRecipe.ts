@@ -20,6 +20,7 @@ export interface IRecipeNoId {
   directions: string
   link: string
   ingredients: IngredientMap
+  mealType: IEmbeddedSentence
 }
 
 export default interface IRecipe extends IRecipeNoId {

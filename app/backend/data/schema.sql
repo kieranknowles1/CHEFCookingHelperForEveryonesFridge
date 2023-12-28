@@ -98,7 +98,8 @@ CREATE TABLE recipe (
     id INTEGER NOT NULL PRIMARY KEY,
     name TEXT NOT NULL REFERENCES embedding(sentence),
     directions TEXT NOT NULL,
-    link TEXT NOT NULL
+    link TEXT NOT NULL,
+    meal_type_id INTEGER NOT NULL REFERENCES meal_type(id)
 );
 CREATE INDEX index_recipe_by_name_nocase
     ON recipe(name COLLATE NOCASE ASC);

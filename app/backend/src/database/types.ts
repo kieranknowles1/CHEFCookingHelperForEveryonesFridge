@@ -27,6 +27,7 @@ export interface IRecipeRow {
   name: string
   directions: string
   link: string
+  meal_type_id: RowId
 }
 
 export interface IRecipeIngredientRow {

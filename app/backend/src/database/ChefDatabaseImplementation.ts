@@ -118,11 +118,11 @@ class WritableDatabaseImplementation implements IWritableDatabase {
 
   public addRecipe (recipe: IRecipeNoId): void {
     this.assertValid()
-    const statement = this._connection.prepare<[string, string, string]>(`
+    const statement = this._connection.prepare<[string, string, string, string]>(`
       INSERT INTO recipe
-        (name, directions, link)
+        (name, directions, link, meal_type_id)
       VALUES
-        (?, ?, ?)
+        (?, ?, ?, (SELECT id FROM meal_type WHERE name = ?))
     `)
 
     // Add the embedding if it doesn't exist. Only do this once per sentence
@@ -130,7 +130,7 @@ class WritableDatabaseImplementation implements IWritableDatabase {
       this.addEmbedding(recipe.name)
     }
 
-    const id = statement.run(recipe.name.sentence, recipe.directions, recipe.link).lastInsertRowid
+    const id = statement.run(recipe.name.sentence, recipe.directions, recipe.link, recipe.mealType.sentence).lastInsertRowid
     if (typeof id === 'bigint') {
       throw new Error('Got bigint for lastInsertRowid')
     }
@@ -366,16 +366,20 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
    * Get a recipe by its ID
    */
   public getRecipe (id: types.RowId): IRecipe {
-    type Result = types.IRecipeRow & types.IRecipeIngredientRow & types.IEmbeddingRow
+    type Result = types.IRecipeRow & types.IRecipeIngredientRow & { mt_name: string, mt_embedding: Buffer, r_name_embedding: Buffer }
     const statement = this._connection.prepare<[types.RowId]>(`
       SELECT
         recipe.*,
         recipe_ingredient.*,
-        embedding.*
-        FROM recipe
+        r_embedding.embedding AS r_name_embedding,
+        meal_type.name AS mt_name,
+        mt_embedding.embedding AS mt_embedding
+      FROM recipe
         JOIN recipe_ingredient ON recipe_ingredient.recipe_id = recipe.id
-        JOIN embedding ON recipe.name = embedding.sentence
-        WHERE recipe.id = ?
+        JOIN embedding AS r_embedding ON recipe.name = r_embedding.sentence
+        JOIN meal_type ON meal_type.id = recipe.meal_type_id
+        JOIN embedding AS mt_embedding ON meal_type.name = mt_embedding.sentence
+      WHERE recipe.id = ?
     `)
 
     const result = statement.all(id) as AllResult<Result>
@@ -391,10 +395,11 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
 
     return {
       id: result[0].id,
-      name: { sentence: result[0].name, embedding: bufferToFloat32Array(result[0].embedding) },
+      name: { sentence: result[0].name, embedding: bufferToFloat32Array(result[0].r_name_embedding) },
       directions: result[0].directions,
       ingredients,
-      link: result[0].link
+      link: result[0].link,
+      mealType: { sentence: result[0].mt_name, embedding: bufferToFloat32Array(result[0].mt_embedding) }
     }
   }
 

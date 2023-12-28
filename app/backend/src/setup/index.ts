@@ -12,9 +12,11 @@ import csv from 'csv-parse'
 import progressTracker from 'progress-stream'
 
 import logger, { LogLevel, logError } from '../logger'
+import type IEmbeddedSentence from '../ml/IEmbeddedSentence'
 import { type IngredientId } from '../types/IIngredient'
 import getDatabase from '../database/getDatabase'
 import getEmbedding from '../ml/getEmbedding'
+import getSimilarity from '../ml/getSimilarity'
 import { preloadModel } from '../ml/getModel'
 
 import type IParsedCsvRecipe from './IParsedCsvRecipe'
@@ -90,6 +92,21 @@ async function getCsvData (): Promise<[IParsedCsvRecipe[], number]> {
   return [recipes, totalRows]
 }
 
+function predictMealType (recipeName: IEmbeddedSentence, mealTypes: IEmbeddedSentence[]): IEmbeddedSentence {
+  let best = mealTypes[0]
+  let bestSimilarity = getSimilarity(recipeName.embedding, best.embedding)
+
+  for (const mealType of mealTypes) {
+    const similarity = getSimilarity(recipeName.embedding, mealType.embedding)
+    if (similarity > bestSimilarity) {
+      best = mealType
+      bestSimilarity = similarity
+    }
+  }
+
+  return best
+}
+
 // Add embeddings for the meal types
 // Can't be done in pure SQL as async functions are not supported
 async function embedMealTypes (): Promise<void> {
@@ -106,15 +123,22 @@ async function importData (): Promise<ImportDataReturn> {
   const [csvRecipes, csvTotalRows] = await getCsvData()
 
   logger.info('Importing data into the database')
+  const mealTypes = getDatabase().getMealTypes()
+
   const bar = new cliProgress.SingleBar({}, PROGRESS_BAR_STYLE)
   bar.start(csvRecipes.length, 0)
+
   await getDatabase().wrapTransactionAsync(async (db) => {
     for (const recipe of csvRecipes) {
-      bar.increment()
+      const nameEmbedding = await getEmbedding(recipe.name)
+      db.addEmbedding(nameEmbedding)
       db.addRecipe({
         ...recipe,
-        name: await getEmbedding(recipe.name)
+        name: await getEmbedding(recipe.name),
+        mealType: predictMealType(nameEmbedding, mealTypes)
       })
+
+      bar.increment()
     }
   })
   bar.stop()
