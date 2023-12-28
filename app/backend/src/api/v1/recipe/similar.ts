@@ -1,10 +1,7 @@
-import { type Express, type Request } from 'express'
-import { param, query } from 'express-validator'
+import { type Express } from 'express'
 
-import { type TypedResponse } from '../../TypedEndpoint'
-import checkParameters from '../../checkParameters'
+import { type TypedRequest, type TypedResponse } from '../../TypedEndpoint'
 import getDatabase from '../../../database/getDatabase'
-import getParameters from '../../getParameters'
 import { type paths } from '../../../types/api.generated'
 
 type endpoint = paths['/recipe/{id}/similar']['get']
@@ -16,25 +13,19 @@ type endpoint = paths['/recipe/{id}/similar']['get']
  */
 export default function installSimilarRecipeEndpoint (app: Express): void {
   app.get('/api/v1/recipe/:id/similar',
-    param('id').isInt(),
-    query('minSimilarity').isFloat({ min: 0, max: 1 }).optional(),
-    query('limit').isInt({ min: 1 }),
-    checkParameters,
-    (req: Request, res: TypedResponse<endpoint, 200>) => {
-      const params = getParameters<endpoint>(req, matched => ({
-        id: Number.parseInt(matched.id),
-        minSimilarity: matched.minSimilarity !== undefined ? Number.parseFloat(matched.minSimilarity) : undefined,
-        limit: Number.parseInt(matched.limit)
-      }))
-
+    (req: TypedRequest<endpoint>, res: TypedResponse<endpoint, 200>) => {
       const db = getDatabase()
 
-      const recipe = db.getRecipe(params.id)
+      const recipeId = Number.parseInt(req.params.id)
+      const minSimilarity = Number.parseFloat(req.query.minSimilarity ?? '0.5')
+      const limit = Number.parseInt(req.query.limit)
+
+      const recipe = db.getRecipe(recipeId)
 
       const similar = db.getSimilarRecipes(
         recipe.name,
-        params.minSimilarity ?? 0.5,
-        params.limit
+        minSimilarity ?? 0.5,
+        limit
       )
 
       // Filter out the prompt recipe

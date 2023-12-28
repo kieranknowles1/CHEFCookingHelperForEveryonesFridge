@@ -12,6 +12,7 @@ type ErrorList = components['schemas']['ErrorList']
  * Use after validation chains
  *
  * @deprecated Use express-openapi-validator instead
+ * DO NOT USE. This exists only to make things compile and most likely does not work
  */
 export default function checkParameters (req: Request, res: Response, next: NextFunction): void {
   const errors = validationResult(req)
