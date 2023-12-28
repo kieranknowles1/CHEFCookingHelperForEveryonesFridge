@@ -113,6 +113,7 @@ paths:
                   $ref: "#/components/schemas/SimilarRecipe"
 
   # TODO: Authentication for all fridge endpoints
+  # TODO: Implement
   /fridge/{fridgeId}:
     get:
 
@@ -136,6 +137,7 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
+  # TODO: Authentication
   /fridge/{fridgeId}/ingredient/all/amount:
     get:
       tags: [Fridge]
@@ -182,6 +184,7 @@ paths:
         "204":
           description: No Content
 
+  # TODO: Authentication
   /fridge/{fridgeId}/recipe/available:
     get:
       tags: [Fridge]
@@ -213,7 +216,10 @@ paths:
                     id: { type: integer, example: 1234 }
                     missingIngredientAmount: { type: integer, example: 1, description: Number of ingredients missing or not enough of }
                   required: [name, id, missingIngredientAmount]
+        "403":
+          $ref: "#/components/responses/Forbidden"
 
+  # TODO: Authentication, implement
   /user/{userId}:
     get:
       tags: [User]
@@ -264,6 +270,12 @@ components:
       required: false
 
   responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorList" }
+
     NotFound:
       description: Not Found
       content:

@@ -234,6 +234,7 @@ export interface paths {
               }[];
           };
         };
+        403: components["responses"]["Forbidden"];
       };
     };
   };
@@ -328,6 +329,12 @@ export interface components {
     FridgeIngredientEntry: WithRequired<components["schemas"]["IngredientEntry"], "amount">;
   };
   responses: {
+    /** @description Forbidden */
+    Forbidden: {
+      content: {
+        "application/json": components["schemas"]["ErrorList"];
+      };
+    };
     /** @description Not Found */
     NotFound: {
       content: {

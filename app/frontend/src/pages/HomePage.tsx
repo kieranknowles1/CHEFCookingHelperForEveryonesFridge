@@ -4,7 +4,6 @@ const ICON_OPTIONS = ['👩‍🍳', '👩🏻‍🍳', '👩🏼‍🍳', '👩
 
 export default function HomePage (): React.JSX.Element {
   const [icon] = React.useState(ICON_OPTIONS[Math.floor(Math.random() * ICON_OPTIONS.length)])
-  console.log(icon)
 
   return (
     <main>

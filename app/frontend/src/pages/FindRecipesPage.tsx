@@ -7,13 +7,14 @@ import Search from '../components/Search'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import useSafeContext from '../contexts/useSafeContext'
+import monitorStatus from '../utils/monitorStatus'
 
 const PAGE_SIZE = 100
 
 export default function FindRecipesPage (): React.JSX.Element {
   const context = useSafeContext(UserContext)
 
-  const [status, setStatus] = React.useState<LoadingStatus>('loading')
+  const [recipesStatus, setRecipesStatus] = React.useState<LoadingStatus>('loading')
   const [recipes, setRecipes] = React.useState<RecipeProps[]>([])
 
   const [checkAmounts, setCheckAmounts] = React.useState<boolean>(true)
@@ -29,20 +30,17 @@ export default function FindRecipesPage (): React.JSX.Element {
   }
 
   React.useEffect(() => {
-    setStatus('loading')
+    setRecipesStatus('loading')
     setRecipes([])
     apiClient.GET(
       '/fridge/{fridgeId}/recipe/available',
       { params: { path: { fridgeId: context.fridgeId }, query: { checkAmounts, maxMissingIngredients: debouncedMaxMissingIngredients } } }
-    ).then(response => {
-      if (response.data === undefined) {
-        throw new Error(response.error)
-      }
-      setRecipes(response.data)
-      setStatus('done')
+    ).then(
+      monitorStatus(setRecipesStatus)
+    ).then(data => {
+      setRecipes(data)
     }).catch(err => {
       console.error(err)
-      setStatus('error')
     })
   }, [context.fridgeId, checkAmounts, debouncedMaxMissingIngredients])
 
@@ -58,7 +56,6 @@ export default function FindRecipesPage (): React.JSX.Element {
     </div>
   )
 
-  // TODO: Lazy render recipes
   return (
     <main>
       <h1>Find Recipes</h1>
@@ -69,9 +66,9 @@ export default function FindRecipesPage (): React.JSX.Element {
       </p>
       <label>Check I have enough of each ingredient: <input type='checkbox' checked={checkAmounts} onChange={e => { setCheckAmounts(e.target.checked) }} /></label><br />
       <label>Max missing or insufficient amount ingredients: <input type='number' value={maxMissingIngredients} min={0} onChange={e => { setMaxMissingIngredients(e.target.value === '' ? 0 : parseInt(e.target.value)) }} /></label><br />
-      {status === 'done' && <p>{recipes.length} recipes found.</p>}
+      {recipesStatus === 'done' && <p>{recipes.length} recipes found.</p>}
       <label>Search: <Search setQuery={q => { setQuery(q); setPage(0) }} /></label>
-      <LoadingSpinner status={status} />
+      <LoadingSpinner status={recipesStatus} />
       {pageButtons}
       <ul className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3'>
         {filtered
