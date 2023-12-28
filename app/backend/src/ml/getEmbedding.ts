@@ -1,8 +1,9 @@
 import * as tf from '@tensorflow/tfjs-core'
 
+import type IEmbeddedSentence from './IEmbeddedSentence'
 import getModel from './getModel'
 
-export default async function getEmbedding (sentence: string): Promise<Float32Array> {
+export default async function getEmbedding (sentence: string): Promise<IEmbeddedSentence> {
   const model = await getModel()
 
   let embeddings: tf.Tensor2D | undefined
@@ -13,7 +14,10 @@ export default async function getEmbedding (sentence: string): Promise<Float32Ar
     if (!(data instanceof Float32Array)) {
       throw new Error('Expected Float32Array')
     }
-    return data
+    return {
+      sentence,
+      embedding: data
+    }
   } finally {
     if (embeddings !== undefined) {
       embeddings.dispose()

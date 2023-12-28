@@ -7,9 +7,9 @@ import Database from 'better-sqlite3'
 import { type IAvailableRecipe, type IRecipeNoId, type ISimilarRecipe } from '../types/IRecipe'
 import { type IngredientId, ingredientMapFactory } from '../types/IIngredient'
 import type IBarcode from '../types/IBarcode'
+import type IEmbeddedSentence from '../ml/IEmbeddedSentence'
 import type IIngredient from '../types/IIngredient'
 import type IRecipe from '../types/IRecipe'
-import getEmbedding from '../ml/getEmbedding'
 import logger from '../logger'
 import ml_extendDatabase from '../ml/extendDatabase'
 
@@ -55,6 +55,18 @@ interface IAvailableRecipesResultRow {
 }
 
 /**
+ * Convert a Float32Array to a Buffer
+ * Required so that the buffer is correctly parsed as an array of raw bytes
+ */
+function bufferToFloat32Array (buffer: Buffer): Float32Array {
+  return new Float32Array(buffer.buffer, buffer.byteOffset, buffer.byteLength / Float32Array.BYTES_PER_ELEMENT)
+}
+
+function bufferFromFloat32Array (array: Float32Array): Buffer {
+  return Buffer.from(array.buffer, array.byteOffset, array.byteLength)
+}
+
+/**
  * Writable interface to the database, passed to the callback of {@link ChefDatabaseImplementation.wrapTransaction}
  * and is only valid for the duration of the callback.
  */
@@ -92,20 +104,19 @@ class WritableDatabaseImplementation implements IWritableDatabase {
       .run(ingredient.name)
   }
 
-  public async addEmbedding (sentence: string): Promise<void> {
+  public addEmbedding (sentence: IEmbeddedSentence): void {
     this.assertValid()
-    const statement = this._connection.prepare<[string, Float32Array]>(`
+    const statement = this._connection.prepare<[string, Buffer]>(`
       INSERT INTO embedding
         (sentence, embedding)
       VALUES
         (?, ?)
     `)
-    const embedding = await getEmbedding(sentence)
 
-    statement.run(sentence, embedding)
+    statement.run(sentence.sentence, bufferFromFloat32Array(sentence.embedding))
   }
 
-  public async addRecipe (recipe: IRecipeNoId): Promise<void> {
+  public addRecipe (recipe: IRecipeNoId): void {
     this.assertValid()
     const statement = this._connection.prepare<[string, string, string]>(`
       INSERT INTO recipe
@@ -115,11 +126,11 @@ class WritableDatabaseImplementation implements IWritableDatabase {
     `)
 
     // Add the embedding if it doesn't exist. Only do this once per sentence
-    if (this._db.getEmbedding(recipe.name) === null) {
-      await this.addEmbedding(recipe.name)
+    if (this._db.getEmbedding(recipe.name.sentence) === null) {
+      this.addEmbedding(recipe.name)
     }
 
-    const id = statement.run(recipe.name, recipe.directions, recipe.link).lastInsertRowid
+    const id = statement.run(recipe.name.sentence, recipe.directions, recipe.link).lastInsertRowid
     if (typeof id === 'bigint') {
       throw new Error('Got bigint for lastInsertRowid')
     }
@@ -240,7 +251,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     })
   }
 
-  public getEmbedding (sentence: string): Float32Array | null {
+  public getEmbedding (sentence: string): IEmbeddedSentence | null {
     const statement = this._connection.prepare<[string]>(`
       SELECT embedding FROM embedding WHERE sentence = ?
     `)
@@ -250,7 +261,10 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
       return null
     }
 
-    return Float32Array.from(result.embedding)
+    return {
+      embedding: bufferToFloat32Array(result.embedding),
+      sentence
+    }
   }
 
   private ingredientFromRow (row: types.IIngredientRow): IIngredient {
@@ -308,13 +322,28 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
     return this.ingredientFromRow(result)
   }
 
-  getMealTypes (): string[] {
+  getMealTypeNames (): string[] {
     const statement = this._connection.prepare(`
       SELECT name FROM meal_type
     `)
-    const result = statement.all() as AllResult<types.IMealTypeRow>
+    const result = statement.all() as AllResult<{ name: string }>
 
     return result.map(row => row.name)
+  }
+
+  getMealTypes (): IEmbeddedSentence[] {
+    const statement = this._connection.prepare(`
+      SELECT
+        name, embedding
+      FROM meal_type
+        JOIN embedding ON meal_type.name = embedding.sentence
+    `)
+    const result = statement.all() as AllResult<{ name: string, embedding: Buffer }>
+
+    return result.map(row => ({
+      sentence: row.name,
+      embedding: bufferToFloat32Array(row.embedding)
+    }))
   }
 
   /**
@@ -337,11 +366,15 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
    * Get a recipe by its ID
    */
   public getRecipe (id: types.RowId): IRecipe {
-    type Result = types.IRecipeRow & types.IRecipeIngredientRow
+    type Result = types.IRecipeRow & types.IRecipeIngredientRow & types.IEmbeddingRow
     const statement = this._connection.prepare<[types.RowId]>(`
-      SELECT *
+      SELECT
+        recipe.*,
+        recipe_ingredient.*,
+        embedding.*
         FROM recipe
         JOIN recipe_ingredient ON recipe_ingredient.recipe_id = recipe.id
+        JOIN embedding ON recipe.name = embedding.sentence
         WHERE recipe.id = ?
     `)
 
@@ -358,15 +391,15 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
 
     return {
       id: result[0].id,
-      name: result[0].name,
+      name: { sentence: result[0].name, embedding: bufferToFloat32Array(result[0].embedding) },
       directions: result[0].directions,
       ingredients,
       link: result[0].link
     }
   }
 
-  public getSimilarRecipes (embedding: Float32Array, minSimilarity: number, limit: number): ISimilarRecipe[] {
-    const statement = this._connection.prepare<[Float32Array, number, number]>(`
+  public getSimilarRecipes (embedding: IEmbeddedSentence, minSimilarity: number, limit: number): ISimilarRecipe[] {
+    const statement = this._connection.prepare<[Buffer, number, number]>(`
       SELECT
         recipe.id,
         recipe.name,
@@ -385,7 +418,7 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
       LIMIT ?
     `)
 
-    const result = statement.all(embedding, minSimilarity, limit) as AllResult<ISimilarRecipesResultRow>
+    const result = statement.all(bufferFromFloat32Array(embedding.embedding), minSimilarity, limit) as AllResult<ISimilarRecipesResultRow>
 
     return result
   }

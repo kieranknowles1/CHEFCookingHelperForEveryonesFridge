@@ -14,6 +14,7 @@ import progressTracker from 'progress-stream'
 import logger, { LogLevel, logError } from '../logger'
 import { type IngredientId } from '../types/IIngredient'
 import getDatabase from '../database/getDatabase'
+import getEmbedding from '../ml/getEmbedding'
 import { preloadModel } from '../ml/getModel'
 
 import type IParsedCsvRecipe from './IParsedCsvRecipe'
@@ -66,7 +67,7 @@ async function getCsvData (): Promise<[IParsedCsvRecipe[], number]> {
 
   await new Promise<void>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
     .pipe(progress)
-    .pipe(csv.parse({ columns: true }))
+    .pipe(csv.parse({ columns: true, to: 1000 }))
     .on('data', (row: IRawCsvRecipe) => {
       totalRows++
       try {
@@ -93,8 +94,8 @@ async function getCsvData (): Promise<[IParsedCsvRecipe[], number]> {
 // Can't be done in pure SQL as async functions are not supported
 async function embedMealTypes (): Promise<void> {
   await getDatabase().wrapTransactionAsync(async (db) => {
-    for (const mealType of getDatabase().getMealTypes()) {
-      await db.addEmbedding(mealType)
+    for (const mealType of getDatabase().getMealTypeNames()) {
+      db.addEmbedding(await getEmbedding(mealType))
     }
   })
 }
@@ -110,7 +111,10 @@ async function importData (): Promise<ImportDataReturn> {
   await getDatabase().wrapTransactionAsync(async (db) => {
     for (const recipe of csvRecipes) {
       bar.increment()
-      await db.addRecipe(recipe)
+      db.addRecipe({
+        ...recipe,
+        name: await getEmbedding(recipe.name)
+      })
     }
   })
   bar.stop()

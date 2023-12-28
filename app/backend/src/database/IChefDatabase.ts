@@ -2,6 +2,7 @@ import type CiMap from '@glossa-glo/case-insensitive-map'
 
 import { type IAvailableRecipe, type IRecipeNoId, type ISimilarRecipe } from '../types/IRecipe'
 import type IBarcode from '../types/IBarcode'
+import type IEmbeddedSentence from '../ml/IEmbeddedSentence'
 import type IIngredient from '../types/IIngredient'
 import type IRecipe from '../types/IRecipe'
 import { type IngredientId } from '../types/IIngredient'
@@ -21,11 +22,11 @@ export interface IWritableDatabase {
   addIngredient: (ingredient: IIngredient) => void
 
   /**
-   * Calculate the embedding for a sentence and add it to the database to be referenced later
+   * Add an embedding for a sentence to the database for future use
    */
-  addEmbedding: (sentence: string) => Promise<void>
+  addEmbedding: (sentence: IEmbeddedSentence) => void
 
-  addRecipe: (recipe: IRecipeNoId) => Promise<void>
+  addRecipe: (recipe: IRecipeNoId) => void
 
   setIngredientAmount: (fridgeId: types.RowId, ingredientId: types.RowId, amount: number) => void
 }
@@ -60,7 +61,7 @@ export default interface IChefDatabase {
   /**
    * Get the embedding for a sentence if it exists
    */
-  getEmbedding: (sentence: string) => Float32Array | null
+  getEmbedding: (sentence: string) => IEmbeddedSentence | null
 
   getIngredient: (id: IngredientId) => IIngredient
 
@@ -73,7 +74,8 @@ export default interface IChefDatabase {
    */
   findIngredientByName: (name: string) => IIngredient | null
 
-  getMealTypes: () => string[]
+  getMealTypeNames: () => string[]
+  getMealTypes: () => IEmbeddedSentence[]
 
   /**
    * Get a map of ingredient names to IDs, including any alternate names
@@ -88,7 +90,7 @@ export default interface IChefDatabase {
   /**
    * Get similar recipes to the given embedding, ordered by similarity
    */
-  getSimilarRecipes: (embedding: Float32Array, minSimilarity: number, limit: number) => ISimilarRecipe[]
+  getSimilarRecipes: (embedding: IEmbeddedSentence, minSimilarity: number, limit: number) => ISimilarRecipe[]
 
   /**
    * Get the amount of an ingredient in a fridge

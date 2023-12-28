@@ -1,3 +1,4 @@
+import type IEmbeddedSentence from '../ml/IEmbeddedSentence'
 import { type RowId } from '../database/types'
 
 import { type IngredientMap } from './IIngredient'
@@ -15,7 +16,7 @@ export interface ISimilarRecipe {
 }
 
 export interface IRecipeNoId {
-  name: string
+  name: IEmbeddedSentence
   directions: string
   link: string
   ingredients: IngredientMap

@@ -4,6 +4,11 @@ import { type DatabaseUnit } from '../types/Unit'
 // Using `number` here saves on casting
 export type RowId = number
 
+export interface IEmbeddingRow {
+  sentence: string
+  embedding: Buffer
+}
+
 export interface IIngredientRow {
   id: RowId
   name: string

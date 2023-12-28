@@ -1,2 +1,3 @@
+fkid
 nocase
 rowid

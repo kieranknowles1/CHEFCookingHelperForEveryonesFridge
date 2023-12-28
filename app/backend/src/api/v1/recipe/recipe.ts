@@ -38,7 +38,7 @@ export default function installRecipeEndpoint (app: Express): void {
 
       res.json({
         id: recipe.id,
-        name: recipe.name,
+        name: recipe.name.sentence,
         directions: recipe.directions,
         link: recipe.link,
         ingredients

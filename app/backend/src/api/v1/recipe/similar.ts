@@ -1,11 +1,9 @@
 import { type Express, type Request } from 'express'
 import { param, query } from 'express-validator'
-import asyncHandler from 'express-async-handler'
 
 import { type TypedResponse } from '../../TypedEndpoint'
 import checkParameters from '../../checkParameters'
 import getDatabase from '../../../database/getDatabase'
-import getEmbedding from '../../../ml/getEmbedding'
 import getParameters from '../../getParameters'
 import { type paths } from '../../../types/api.generated'
 
@@ -22,7 +20,7 @@ export default function installSimilarRecipeEndpoint (app: Express): void {
     query('minSimilarity').isFloat({ min: 0, max: 1 }).optional(),
     query('limit').isInt({ min: 1 }),
     checkParameters,
-    asyncHandler(async (req: Request, res: TypedResponse<endpoint, 200>) => {
+    (req: Request, res: TypedResponse<endpoint, 200>) => {
       const params = getParameters<endpoint>(req, matched => ({
         id: Number.parseInt(matched.id),
         minSimilarity: matched.minSimilarity !== undefined ? Number.parseFloat(matched.minSimilarity) : undefined,
@@ -32,15 +30,14 @@ export default function installSimilarRecipeEndpoint (app: Express): void {
       const db = getDatabase()
 
       const recipe = db.getRecipe(params.id)
-      const embedding = await getEmbedding(recipe.name)
 
       const similar = db.getSimilarRecipes(
-        embedding,
+        recipe.name,
         params.minSimilarity ?? 0.5,
         params.limit
       )
 
       // Filter out the prompt recipe
-      res.json(similar.filter(s => s.name !== recipe.name))
-    }))
+      res.json(similar.filter(s => s.name !== recipe.name.sentence))
+    })
 }
