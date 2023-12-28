@@ -69,7 +69,7 @@ async function getCsvData (): Promise<[IParsedCsvRecipe[], number]> {
 
   await new Promise<void>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
     .pipe(progress)
-    .pipe(csv.parse({ columns: true, to: 1000 }))
+    .pipe(csv.parse({ columns: true }))
     .on('data', (row: IRawCsvRecipe) => {
       totalRows++
       try {
