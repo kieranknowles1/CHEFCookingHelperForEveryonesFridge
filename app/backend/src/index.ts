@@ -28,9 +28,7 @@ const PORT = 3000
 app.use(cors())
 
 const spec = yaml.parse(fs.readFileSync('./api.yml', 'utf8'))
-app.use('/api/v1/spec', swaggerUi.serve, swaggerUi.setup(spec, {
-  customCss: '.swagger-ui .topbar { display: none }'
-}))
+app.use('/api-docs/v1', swaggerUi.serve, swaggerUi.setup(spec))
 
 app.use(OpenApiValidator.middleware({
   apiSpec: './api.yml',
