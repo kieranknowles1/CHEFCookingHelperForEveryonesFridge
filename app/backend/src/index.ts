@@ -1,3 +1,4 @@
+import * as OpenApiValidator from 'express-openapi-validator'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import express from 'express'
@@ -21,7 +22,13 @@ const app = express()
 const PORT = 3000
 
 // TODO: Serve spec file using swagger-ui-express
-// TODO: OpenApiValidator middleware
+
+app.use(OpenApiValidator.middleware({
+  apiSpec: './api.yml',
+  validateRequests: true,
+  // Using TypedResponse as validateResponses is a bit overzealous
+  validateResponses: true
+}))
 
 app.use(bodyParser.json())
 app.use(cors())

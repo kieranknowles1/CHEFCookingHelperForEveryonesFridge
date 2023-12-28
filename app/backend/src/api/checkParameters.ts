@@ -10,16 +10,19 @@ type ErrorList = components['schemas']['ErrorList']
  * extracts their values, and either forwards to the next function
  * or errors with `400` if they are invalid.
  * Use after validation chains
+ *
+ * @deprecated Use express-openapi-validator instead
  */
 export default function checkParameters (req: Request, res: Response, next: NextFunction): void {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const response: ErrorList = {
-      message: 'Invalid parameters',
+      path: req.path,
+      status: 400,
       errors: errors.array().map(err => ({
         message: err.msg,
-        name: 'InvalidParameter',
-        code: 400
+        path: 'InvalidParameter',
+        errorCode: '400'
       }))
     }
     res.status(400).json(response)

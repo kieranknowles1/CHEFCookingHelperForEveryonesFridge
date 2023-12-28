@@ -94,7 +94,7 @@ export interface paths {
   "/recipe/{id}/similar": {
     /**
      * Get similar recipes
-     * @description Returns a list of recipes similar to the given recipe \ Items are sorted by similarity score, descending
+     * @description Returns a list of recipes similar to the given recipe \ Items are sorted by similarity score, descending \ Note that if multiple recipes have the same name, only one will be returned
      */
     get: {
       parameters: {
@@ -110,16 +110,34 @@ export interface paths {
         /** @description OK */
         200: {
           content: {
-            "application/json": {
-                /** @example Just Soup */
-                name: string;
-                /** @example 1234 */
-                id: number;
-                /** @example 0.5 */
-                similarity: number;
-              }[];
+            "application/json": components["schemas"]["SimilarRecipe"][];
           };
         };
+      };
+    };
+  };
+  "/fridge/{fridgeId}": {
+    /** Get data about a fridge */
+    get: {
+      parameters: {
+        path: {
+          fridgeId: components["parameters"]["fridgeId"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": {
+              /** @example 1 */
+              id: number;
+              /** @example My Fridge */
+              name: string;
+              owner: components["schemas"]["User"];
+            };
+          };
+        };
+        404: components["responses"]["NotFound"];
       };
     };
   };
@@ -216,6 +234,26 @@ export interface paths {
               }[];
           };
         };
+        403: components["responses"]["Forbidden"];
+      };
+    };
+  };
+  "/user/{userId}": {
+    /** Get a user by ID */
+    get: {
+      parameters: {
+        path: {
+          userId: components["parameters"]["userId"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["User"];
+          };
+        };
+        404: components["responses"]["NotFound"];
       };
     };
   };
@@ -226,23 +264,33 @@ export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
     ErrorList: {
-      /** @example Parameter 'id' must be an integer */
-      message: string;
+      /** @example 404 */
+      status: number;
+      /** @example /api/v1/path/to/endpoint */
+      path: string;
       errors: components["schemas"]["Error"][];
     };
     Error: {
-      /** @example Invalid ID 1 for table blah */
+      /** @example /params/id */
+      path: string;
+      /** @example Must be integer */
       message: string;
-      /** @example InvalidIdError */
-      name: string;
-      /** @example 404 */
-      code: number;
+      /** @example type.openapi.validation */
+      errorCode?: string;
     };
     /**
      * @example g
      * @enum {unknown}
      */
     Unit: "none" | "whole" | "ml" | "g";
+    SimilarRecipe: {
+      /** @example Just Soup */
+      name: string;
+      /** @example 1234 */
+      id: number;
+      /** @example 0.5 */
+      similarity: number;
+    };
     Recipe: {
       /** @example 12345 */
       id: number;
@@ -270,13 +318,25 @@ export interface components {
       /** @example 250 */
       amount?: number;
     };
-    RecipeIngredientEntry: {
+    User: {
+      /** @example 1 */
+      id: number;
+      /** @example John Smith */
+      name: string;
+    };
+    RecipeIngredientEntry: WithRequired<{
       /** @example 250g of chicken */
-      originalLine?: string;
-    } & components["schemas"]["IngredientEntry"];
+      originalLine: string;
+    } & components["schemas"]["IngredientEntry"], "originalLine">;
     FridgeIngredientEntry: WithRequired<components["schemas"]["IngredientEntry"], "amount">;
   };
   responses: {
+    /** @description Forbidden */
+    Forbidden: {
+      content: {
+        "application/json": components["schemas"]["ErrorList"];
+      };
+    };
     /** @description Not Found */
     NotFound: {
       content: {
@@ -288,6 +348,7 @@ export interface components {
     fridgeId: number;
     ingredientId: number;
     recipeId: number;
+    userId: number;
     limitRequired: number;
     minSimilarity?: number;
   };

@@ -133,7 +133,6 @@ paths:
                   name: { type: string, example: 'My Fridge' }
                   owner: { $ref: '#/components/schemas/User' }
                 required: [id, name, owner]
-                additionalProperties: false
         "404":
           $ref: "#/components/responses/NotFound"
 
@@ -286,19 +285,20 @@ components:
     ErrorList:
       type: object
       properties:
-        message: { type: string, example: "Parameter 'id' must be an integer" }
+        status: { type: integer, example: 404 }
+        path: { type: string, example: "/api/v1/path/to/endpoint" }
         errors:
           type: array
           items: { $ref: "#/components/schemas/Error" }
-      required: [message, errors]
+      required: [status, path, errors]
 
     Error:
       type: object
       properties:
-        message: { type: string, example: 'Invalid ID 1 for table blah'}
-        name: { type: string, example: 'InvalidIdError' }
-        code: { type: integer, example: 404 }
-      required: [message, name, code]
+        path: { type: string, example: "/params/id" }
+        message: { type: string, example: "Must be integer" }
+        errorCode: { type: string, example: "type.openapi.validation" }
+      required: [path, message]
 
 
     Unit:
@@ -316,7 +316,6 @@ components:
         id: { type: integer, example: 1234 }
         similarity: { type: number, example: 0.5 }
       required: [name, id, similarity]
-      additionalProperties: false
 
     Recipe:
       type: object
@@ -329,7 +328,6 @@ components:
           type: array
           items: { $ref: '#/components/schemas/RecipeIngredientEntry' }
       required: [id, name, directions, link, ingredients]
-      additionalProperties: false
 
     Ingredient:
       type: object
@@ -342,15 +340,13 @@ components:
         # TODO: Substitutions
         # TODO: Weight
       required: [name, id, preferredUnit, assumeUnlimited]
-      additionalProperties: false
 
     IngredientEntry:
       type: object
       properties:
         ingredient: { $ref: '#/components/schemas/Ingredient' }
         amount: { type: number, example: 250 }
-      required: [ingredient, originalLine]
-      additionalProperties: false
+      required: [ingredient]
 
     User:
       type: object
@@ -358,12 +354,12 @@ components:
         id: { type: integer, example: 1 }
         name: { type: string, example: 'John Smith' }
       required: [id, name]
-      additionalProperties: false
 
     RecipeIngredientEntry:
       allOf: [{ $ref: "#/components/schemas/IngredientEntry"}]
       properties:
         originalLine: { type: string, example: '250g of chicken' }
+      required: [originalLine]
 
     FridgeIngredientEntry:
       allOf: [{ $ref: "#/components/schemas/IngredientEntry"}]

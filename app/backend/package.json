@@ -4,7 +4,7 @@
   "description": "Backend for the CHEF system.",
   "main": "index.js",
   "scripts": {
-    "generate-types": "openapi-typescript ./../openapi/api.yml --output src/types/api.generated.ts",
+    "generate-types": "openapi-typescript ./api.yml --output src/types/api.generated.ts",
     "lint": "eslint . --ext ts",
     "setup": "node build/setup/index.js",
     "start": "node build/index.js",
@@ -44,6 +44,7 @@
     "cors": "^2.8.5",
     "csv-parse": "^5.5.2",
     "express": "^4.18.2",
+    "express-openapi-validator": "^5.1.2",
     "express-validator": "^7.0.1",
     "fraction.js": "^4.3.4",
     "progress-stream": "^2.0.0",
