@@ -1,4 +1,3 @@
-import { type ValidationError } from 'express-validator'
 import type express from 'express'
 
 // https://stackoverflow.com/questions/62410684/constrain-keys-using-value-type
@@ -26,10 +25,19 @@ export interface JsonEndpointWithParameters extends JsonEndpoint {
 
 /**
  * Combine all query, path, and body parameters as returned by `matchedData`
+ * // TODO: Remove this
+ * @deprecated Use express-openapi-validator instead
  */
 export type EndpointParameters<
   endpoint extends JsonEndpointWithParameters
 > = endpoint['parameters']['query'] & endpoint['parameters']['path'] & endpoint['parameters']['body']
+
+export interface TypedRequest<
+  endpoint extends JsonEndpointWithParameters
+> extends express.Request {
+  params: Record<keyof endpoint['parameters']['path'], string>
+  query: Record<keyof endpoint['parameters']['query'], string>
+}
 
 /**
  * Strongly typed response for `express`
@@ -39,5 +47,5 @@ export interface TypedResponse<
   endpoint extends JsonEndpoint,
   code extends KeysOfType<endpoint['responses'], JsonResponse>
 > extends express.Response {
-  json: (body: endpoint['responses'][code]['content']['application/json'] | { errors: ValidationError[] }) => this
+  json: (body: endpoint['responses'][code]['content']['application/json']) => this
 }

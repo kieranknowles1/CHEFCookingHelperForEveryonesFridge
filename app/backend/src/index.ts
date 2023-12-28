@@ -22,6 +22,7 @@ const app = express()
 const PORT = 3000
 
 // TODO: Serve spec file using swagger-ui-express
+app.use(cors())
 
 app.use(OpenApiValidator.middleware({
   apiSpec: './api.yml',
@@ -31,7 +32,6 @@ app.use(OpenApiValidator.middleware({
 }))
 
 app.use(bodyParser.json())
-app.use(cors())
 
 installBarcodeEndpoint(app)
 installFridgeAvailableRecipeEndpoint(app)

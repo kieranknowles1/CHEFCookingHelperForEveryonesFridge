@@ -1,9 +1,7 @@
 import { type Express } from 'express'
-import { param } from 'express-validator'
 
 import { type components, type paths } from '../../../types/api.generated'
 import { type TypedResponse } from '../../TypedEndpoint'
-import checkParameters from '../../checkParameters'
 import getDatabase from '../../../database/getDatabase'
 import getParameters from '../../getParameters'
 
@@ -17,8 +15,6 @@ type RecipeResponse = TypedResponse<endpoint, 200>
  */
 export default function installRecipeEndpoint (app: Express): void {
   app.get('/api/v1/recipe/:id',
-    param('id').isInt(),
-    checkParameters,
     (req, res: RecipeResponse) => {
       const params = getParameters<endpoint>(req, matched => ({
         id: Number.parseInt(matched.id)
