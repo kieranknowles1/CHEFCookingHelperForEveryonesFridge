@@ -31,6 +31,7 @@ export interface IWritableDatabase {
   setIngredientAmount: (fridgeId: types.RowId, ingredientId: types.RowId, amount: number) => void
 }
 
+// TODO: This is a bit of a mess, should be split into multiple interfaces and each implemented in a separate file
 export default interface IChefDatabase {
   /**
    * Run the schema and initial script. Should only be used during setup

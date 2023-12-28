@@ -67,14 +67,14 @@ function bufferFromFloat32Array (array: Float32Array): Buffer {
 }
 
 /**
- * Writable interface to the database, passed to the callback of {@link ChefDatabaseImplementation.wrapTransaction}
+ * Writable interface to the database, passed to the callback of {@link ChefDatabaseImpl.wrapTransaction}
  * and is only valid for the duration of the callback.
  */
-class WritableDatabaseImplementation implements IWritableDatabase {
-  private readonly _db: ChefDatabaseImplementation
+class WritableDatabaseImpl implements IWritableDatabase {
+  private readonly _db: ChefDatabaseImpl
   private readonly _connection: Database.Database
 
-  /** Whether the WritableDatabase is usable. Only true for the duration of {@link ChefDatabaseImplementation.wrapTransaction} */
+  /** Whether the WritableDatabase is usable. Only true for the duration of {@link ChefDatabaseImpl.wrapTransaction} */
   private _valid: boolean = true
   public close (): void {
     this._valid = false
@@ -86,7 +86,7 @@ class WritableDatabaseImplementation implements IWritableDatabase {
     }
   }
 
-  public constructor (db: ChefDatabaseImplementation, connection: Database.Database) {
+  public constructor (db: ChefDatabaseImpl, connection: Database.Database) {
     this._db = db
     this._connection = connection
   }
@@ -164,7 +164,7 @@ class WritableDatabaseImplementation implements IWritableDatabase {
   }
 }
 
-export default class ChefDatabaseImplementation implements IChefDatabase {
+export default class ChefDatabaseImpl implements IChefDatabase {
   private readonly _connection: Database.Database
 
   public constructor () {
@@ -215,8 +215,8 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
    * Wrap `callback` within a transaction. Must be used for any operations that write to the database
    * The transaction will be rolled back if an uncaught exception occurs and the exception re-thrown
    */
-  public wrapTransaction<TReturn = void> (callback: (db: WritableDatabaseImplementation) => TReturn): TReturn {
-    const writable = new WritableDatabaseImplementation(this, this._connection)
+  public wrapTransaction<TReturn = void> (callback: (db: WritableDatabaseImpl) => TReturn): TReturn {
+    const writable = new WritableDatabaseImpl(this, this._connection)
     try {
       this._connection.exec('BEGIN TRANSACTION')
       const data = callback(writable)
@@ -235,9 +235,9 @@ export default class ChefDatabaseImplementation implements IChefDatabase {
    * settled before committing/rolling back
    * @returns The return value of `callback` or void if none
    */
-  public async wrapTransactionAsync<TReturn = void> (callback: (db: WritableDatabaseImplementation) => Promise<TReturn>): Promise<TReturn> {
+  public async wrapTransactionAsync<TReturn = void> (callback: (db: WritableDatabaseImpl) => Promise<TReturn>): Promise<TReturn> {
     return await new Promise<TReturn>((resolve, reject) => {
-      const writable = new WritableDatabaseImplementation(this, this._connection)
+      const writable = new WritableDatabaseImpl(this, this._connection)
       this._connection.exec('BEGIN TRANSACTION')
       callback(writable).then(data => {
         this._connection.exec('COMMIT')
