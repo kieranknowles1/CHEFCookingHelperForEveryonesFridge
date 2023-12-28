@@ -2,6 +2,7 @@ import type express from 'express'
 
 // https://stackoverflow.com/questions/62410684/constrain-keys-using-value-type
 // TODO: Reference list, use separate file
+// TODO: Am I even using this?
 type KeysOfType<T, P> = { [K in keyof T]: P extends T[K] ? K : never }[keyof T]
 
 interface JsonResponse {
@@ -34,9 +35,14 @@ export type EndpointParameters<
 
 export interface TypedRequest<
   endpoint extends JsonEndpointWithParameters
-> extends express.Request {
+> { // extends express.Request {
   params: Record<keyof endpoint['parameters']['path'], string>
-  query: Record<keyof endpoint['parameters']['query'], string>
+  query: {
+    [key in keyof Exclude<endpoint['parameters']['query'], undefined>]: (
+      // Map required to string, optional to string | undefined
+      Exclude<endpoint['parameters']['query'], undefined>[key] extends undefined ? string | undefined : string
+    )
+  }
 }
 
 /**
