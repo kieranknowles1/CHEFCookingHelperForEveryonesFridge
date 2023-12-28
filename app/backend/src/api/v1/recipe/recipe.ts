@@ -1,25 +1,20 @@
 import { type Express } from 'express'
 
+import { type TypedRequest, type TypedResponse } from '../../TypedEndpoint'
 import { type components, type paths } from '../../../types/api.generated'
-import { type TypedResponse } from '../../TypedEndpoint'
 import getDatabase from '../../../database/getDatabase'
-import getParameters from '../../getParameters'
 
 type endpoint = paths['/recipe/{id}']['get']
 type IngredientEntry = components['schemas']['RecipeIngredientEntry']
-
-type RecipeResponse = TypedResponse<endpoint, 200>
 
 /**
  * Endpoint to get a specific recipe by its ID
  */
 export default function installRecipeEndpoint (app: Express): void {
   app.get('/api/v1/recipe/:id',
-    (req, res: RecipeResponse) => {
-      const params = getParameters<endpoint>(req, matched => ({
-        id: Number.parseInt(matched.id)
-      }))
-      const recipe = getDatabase().getRecipe(params.id)
+    (req: TypedRequest<endpoint>, res: TypedResponse<endpoint, 200>) => {
+      const id = Number.parseInt(req.params.id)
+      const recipe = getDatabase().getRecipe(id)
 
       const ingredients: IngredientEntry[] = []
       for (const entry of recipe.ingredients.entries()) {
