@@ -107,10 +107,11 @@ class WritableDatabaseImpl implements IWritableDatabase {
   public addEmbedding (sentence: IEmbeddedSentence): void {
     this.assertValid()
     const statement = this._connection.prepare<[string, Buffer]>(`
-      INSERT OR REPLACE INTO embedding
+      INSERT INTO embedding
         (sentence, embedding)
       VALUES
         (?, ?)
+      ON CONFLICT DO NOTHING
     `)
 
     statement.run(sentence.sentence, bufferFromFloat32Array(sentence.embedding))
