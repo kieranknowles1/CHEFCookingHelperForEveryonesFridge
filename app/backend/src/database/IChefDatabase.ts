@@ -23,6 +23,7 @@ export interface IWritableDatabase {
 
   /**
    * Add an embedding for a sentence to the database for future use
+   * If the sentence already exists, it will be overwritten
    */
   addEmbedding: (sentence: IEmbeddedSentence) => void
 
