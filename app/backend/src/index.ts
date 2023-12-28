@@ -1,7 +1,11 @@
+import fs from 'fs'
+
 import * as OpenApiValidator from 'express-openapi-validator'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import express from 'express'
+import swaggerUi from 'swagger-ui-express'
+import yaml from 'yaml'
 
 import logger, { logError } from './logger'
 import errorHandler from './api/errorHandler'
@@ -21,8 +25,12 @@ const app = express()
 // TODO: Use env variable
 const PORT = 3000
 
-// TODO: Serve spec file using swagger-ui-express
 app.use(cors())
+
+const spec = yaml.parse(fs.readFileSync('./api.yml', 'utf8'))
+app.use('/api/v1/spec', swaggerUi.serve, swaggerUi.setup(spec, {
+  customCss: '.swagger-ui .topbar { display: none }'
+}))
 
 app.use(OpenApiValidator.middleware({
   apiSpec: './api.yml',
