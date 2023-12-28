@@ -12,6 +12,7 @@ import installFridgeIngredientEndpoint from './api/v1/fridge/ingredient/amount'
 import installIngredientAllEndpoint from './api/v1/ingredient/all'
 import installRecipeEndpoint from './api/v1/recipe/recipe'
 import installSimilarRecipeEndpoint from './api/v1/recipe/similar'
+import notFoundHandler from './api/notFoundHandler'
 import { preloadModel } from './ml/getModel'
 
 const app = express()
@@ -33,6 +34,7 @@ installIngredientAllEndpoint(app)
 installRecipeEndpoint(app)
 installSimilarRecipeEndpoint(app)
 
+app.use(notFoundHandler)
 app.use(errorHandler)
 
 app.listen(PORT, () => {

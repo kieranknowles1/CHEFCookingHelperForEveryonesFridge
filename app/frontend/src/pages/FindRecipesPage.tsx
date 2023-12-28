@@ -30,7 +30,6 @@ export default function FindRecipesPage (): React.JSX.Element {
   }
 
   React.useEffect(() => {
-    setRecipesStatus('loading')
     setRecipes([])
     apiClient.GET(
       '/fridge/{fridgeId}/recipe/available',
