@@ -52,7 +52,7 @@ $(2^{53} - 1)$ \todo{source}, the chances of this happening were considered none
 
 When passing embeddings through SQLite queries, they are converted to SQLite's BLOB type which is then passed to TypeScript as a \codelisting{Buffer}
 before being decoded as a \codelisting{Float32Array}.
-The initial implementation of the conversion had an issue where the Buffer would be parsed as an array of 2048 8-bit integers,
+The initial implementation of the conversion had an issue where the buffer would be parsed as an array of 2048 8-bit integers,
 rather than 512 32-bit floats. This issue greatly reduced both the effectiveness and performance of the similarity comparisons.
 The issue was fixed by correctly parsing the buffer and by adding a check to the \codelisting{getSimilarity} function to assert
 that both of the arrays passed had the expected 512 elements.
