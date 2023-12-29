@@ -15,6 +15,7 @@ import ml_extendDatabase from '../ml/extendDatabase'
 
 import type * as types from './types'
 import { type IFridgeIngredientAmount, type IWritableDatabase } from './IChefDatabase'
+import { bufferFromFloat32Array, bufferToFloat32Array } from './bufferFloat32Array'
 import type IChefDatabase from './IChefDatabase'
 import InvalidIdError from './InvalidIdError'
 
@@ -52,18 +53,6 @@ interface IAvailableRecipesResultRow {
   // JSON array -> number[]
   fridge_amount: string
   missing_count: number
-}
-
-/**
- * Convert a Float32Array to a Buffer
- * Required so that the buffer is correctly parsed as an array of raw bytes
- */
-function bufferToFloat32Array (buffer: Buffer): Float32Array {
-  return new Float32Array(buffer.buffer, buffer.byteOffset, buffer.byteLength / Float32Array.BYTES_PER_ELEMENT)
-}
-
-function bufferFromFloat32Array (array: Float32Array): Buffer {
-  return Buffer.from(array.buffer, array.byteOffset, array.byteLength)
 }
 
 /**
