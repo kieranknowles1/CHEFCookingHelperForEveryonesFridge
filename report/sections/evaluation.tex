@@ -31,6 +31,8 @@
 \section{Project Process}
 \todo{Project Process}
 
+\subsection{Issues Encountered}
+
 An unexpected issue during data import was the number of unique ingredients found which totalled ~200,000. This was worked
 around by instead only including a more limited list of ingredients that would suffice to import a target of \todo{Target} of
 the total dataset. This led to \todo{How many?} recipes being available for use.
@@ -47,3 +49,10 @@ declaration lists the type as \codelisting{integer}. This initially required add
 that returns an ID. As a workaround, row IDs in the application were instead declared as \codelisting{number}
 and an error is thrown if an insert produces a \codelisting{bigint} ID. As the maximum integer that can be safely stored as a number is
 $(2^{53} - 1)$ \todo{source}, the chances of this happening were considered nonexistent.
+
+When passing embeddings through SQLite queries, they are converted to SQLite's BLOB type which is then passed to TypeScript as a \codelisting{Buffer}
+before being decoded as a \codelisting{Float32Array}.
+The initial implementation of the conversion had an issue where the Buffer would be parsed as an array of 2048 8-bit integers,
+rather than 512 32-bit floats. This issue greatly reduced both the effectiveness and performance of the similarity comparisons.
+The issue was fixed by correctly parsing the buffer and by adding a check to the \codelisting{getSimilarity} function to assert
+that both of the arrays passed had the expected 512 elements.
