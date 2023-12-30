@@ -9,6 +9,11 @@ export default class CaseInsensitiveSet extends Set<string> {
     return super.add(value)
   }
 
+  delete(value: string): boolean {
+    value = value.toLowerCase()
+    return super.delete(value)
+  }
+
   has (key: string): boolean {
     key = key.toLowerCase()
 
