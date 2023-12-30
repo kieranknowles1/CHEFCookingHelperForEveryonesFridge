@@ -22,17 +22,21 @@ if [ ! -f "./backend/working_data/full_dataset.csv" ]; then
 fi
 
 echo "Setting up backend..."
-cd backend
-npm install --save-dev
-npm run build
-npm run setup
+(
+  cd backend || exit
+  npm install --save-dev
+  npm run build
+  npm run setup
+)
 
 cd ..
 
 echo "Setting up frontend..."
-cd frontend
-npm install --save-dev
-npm run build
+(
+  cd frontend || exit
+  npm install --save-dev
+  npm run build
+)
 
 # Run app
 # TODO

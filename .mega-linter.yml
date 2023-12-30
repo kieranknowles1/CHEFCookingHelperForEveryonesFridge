@@ -32,6 +32,7 @@ FILEIO_REPORTER: false
 
 # Uncomment if you want MegaLinter to detect errors but not block CI to pass
 # DISABLE_ERRORS: true
-# Ignore generated code in copy-paste linter
-COPYPASTE_FILTER_REGEX_EXCLUDE: |
-  \.generated\.
+
+# Ignore generated code in copy-paste linter.
+COPYPASTE_JSCPD_ARGUMENTS:
+  - "--ignore-pattern \\.generated\\."
