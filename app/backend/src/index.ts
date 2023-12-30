@@ -26,16 +26,19 @@ const app = express()
 // TODO: Use env variable
 const PORT = 3000
 
+const API_SPEC_PATH = './api.yml'
+
 app.use(cors())
 
-const spec = yaml.parse(fs.readFileSync('./api.yml', 'utf8'))
+const spec = yaml.parse(fs.readFileSync(API_SPEC_PATH, 'utf8'))
 if (!isJsonObject(spec)) {
-  throw new Error('Invalid api.yml file, expected a JSON object')
+  throw new Error(`API spec at ${API_SPEC_PATH} is not the expected format.`)
 }
 app.use('/api-docs/v1', swaggerUi.serve, swaggerUi.setup(spec))
 
+logger.info(`Validating against API spec at ${API_SPEC_PATH}`)
 app.use(OpenApiValidator.middleware({
-  apiSpec: './api.yml',
+  apiSpec: API_SPEC_PATH,
   validateRequests: true,
   // Using TypedResponse as validateResponses is a bit overzealous
   validateResponses: true
