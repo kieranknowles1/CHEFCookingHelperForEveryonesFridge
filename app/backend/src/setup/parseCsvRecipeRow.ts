@@ -1,20 +1,20 @@
-import getDatabase from '../database/getDatabase'
+import type CaseInsensitiveMap from '../types/CaseInsensitiveMap'
+import type IIngredient from '../types/IIngredient'
 
 import type IParsedCsvRecipe from './IParsedCsvRecipe'
 import type IRawCsvRecipe from './IRawCsvRecipe'
 import parseIngredients from './parseIngredients'
 
-export default function parseCsvRecipeRow (row: IRawCsvRecipe): IParsedCsvRecipe {
+export default function parseCsvRecipeRow (row: IRawCsvRecipe, allIngredients: CaseInsensitiveMap<IIngredient>): IParsedCsvRecipe {
   const directionsArray = JSON.parse(row.directions) as string[]
   const directions = directionsArray.join('\n')
-  const ingredients = parseIngredients(row)
+  const ingredients = parseIngredients(row, allIngredients)
 
-  if (ingredients.size === 0) throw new Error('No ingredients found')
+  if (ingredients.length === 0) throw new Error('No ingredients found')
   // All ingredients unlimited, probably an import error
   let foundFinite = false
-  for (const id of ingredients.keys()) {
-    const ingredient = getDatabase().getIngredient(id)
-    if (!ingredient.assumeUnlimited) foundFinite = true
+  for (const entry of ingredients.values()) {
+    if (!entry.ingredient.assumeUnlimited) foundFinite = true
   }
 
   if (!foundFinite) throw new Error('All ingredients unlimited, probably a scraping error')
@@ -23,6 +23,9 @@ export default function parseCsvRecipeRow (row: IRawCsvRecipe): IParsedCsvRecipe
     name: row.title,
     directions,
     link: row.link,
-    ingredients
+    ingredients: new Map(ingredients.map(e => [
+      e.ingredient.id,
+      { amount: e.amount, originalLine: e.originalLine }
+    ]))
   }
 }

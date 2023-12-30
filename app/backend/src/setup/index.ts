@@ -17,6 +17,7 @@ import ChefDatabaseImpl from '../database/ChefDatabaseImpl'
 import { DATABASE_PATH } from '../settings'
 import type IChefDatabase from '../database/IChefDatabase'
 import type IEmbeddedSentence from '../ml/IEmbeddedSentence'
+import type IIngredient from '../types/IIngredient'
 import getEmbedding from '../ml/getEmbedding'
 import getSimilarity from '../ml/getSimilarity'
 import { preloadModel } from '../ml/getModel'
@@ -62,12 +63,13 @@ function recipeValid (row: IRawCsvRecipe, ingredientNames: CaseInsensitiveSet): 
   return valid
 }
 
-async function getCsvData (ingredientNames: CaseInsensitiveSet): Promise<[IParsedCsvRecipe[], number]> {
-  const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
+async function getCsvData (ingredients: CaseInsensitiveMap<IIngredient>): Promise<[IParsedCsvRecipe[], number]> {
+  const ingredientNames = new CaseInsensitiveSet(ingredients.keys())
 
   let totalRows = 0
   const recipes: IParsedCsvRecipe[] = []
 
+  const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
   await new Promise<void>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
     .pipe(progress)
     .pipe(csv.parse({ columns: true }))
@@ -76,7 +78,7 @@ async function getCsvData (ingredientNames: CaseInsensitiveSet): Promise<[IParse
       try {
         // Filter to only the most common ingredients
         if (recipeValid(row, ingredientNames)) {
-          const recipe = parseCsvRecipeRow(row)
+          const recipe = parseCsvRecipeRow(row, ingredients)
           recipes.push(recipe)
         }
       } catch (err) {
@@ -121,8 +123,7 @@ async function embedMealTypes (db: IChefDatabase): Promise<void> {
 interface ImportDataReturn { success: number, total: number }
 async function importData (db: IChefDatabase): Promise<ImportDataReturn> {
   logger.info('Collecting data from CSV')
-  const ingredientNames = new CaseInsensitiveSet(db.getIngredientIds().keys())
-  const [csvRecipes, csvTotalRows] = await getCsvData(ingredientNames)
+  const [csvRecipes, csvTotalRows] = await getCsvData(db.getAllIngredientsByName())
 
   logger.info('Importing data into the database')
   const mealTypes = db.getMealTypes()

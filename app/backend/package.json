@@ -10,7 +10,7 @@
     "build": "tsc -p .",
     "dev": "nodemon src/index.ts",
     "dev-setup": "nodemon src/setup/index.ts",
-    "test": "mocha --require ts-node/register test/**/*.ts",
+    "test": "mocha --require ts-node/register tests/**/*.ts",
     "flamegraph": "0x build/index.js"
   },
   "author": "Kieran Knowles",

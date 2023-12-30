@@ -6,3 +6,7 @@ import path from 'path'
  */
 
 export const DATABASE_PATH = path.join(process.cwd(), 'working_data/database.db')
+
+export const PORT = 3000
+
+export const API_SPEC_PATH = './api.yml'

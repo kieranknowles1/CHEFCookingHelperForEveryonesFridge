@@ -42,15 +42,13 @@ export type StatusMonitor = <TData>(response: GenericFetchResponse<TData>) => Pr
  */
 export default function monitorStatus (setStatus: StatusSetter): StatusMonitor {
   setStatus('loading')
-  const monitor: StatusMonitor = async (response) => {
+  return async (response) => await new Promise((resolve, reject) => {
     if (response.error !== undefined) {
       setStatus('error')
-      throw new Error(response.error.message)
+      reject(response.error)
     } else {
       setStatus('done')
-      return response.data
+      resolve(response.data)
     }
-  }
-
-  return monitor
+  })
 }

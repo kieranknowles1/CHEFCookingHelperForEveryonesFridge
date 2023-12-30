@@ -6,8 +6,8 @@ import Recipe, { type RecipeProps } from '../components/Recipe'
 import Search from '../components/Search'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
-import useSafeContext from '../contexts/useSafeContext'
 import monitorStatus from '../utils/monitorStatus'
+import useSafeContext from '../contexts/useSafeContext'
 
 const PAGE_SIZE = 100
 

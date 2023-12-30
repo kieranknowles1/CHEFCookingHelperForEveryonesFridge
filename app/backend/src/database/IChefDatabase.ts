@@ -79,9 +79,9 @@ export default interface IChefDatabase {
   getMealTypes: () => IEmbeddedSentence[]
 
   /**
-   * Get a map of ingredient names to IDs, including any alternate names
+   * Get a map of ingredient names the ingredient, including any alternate names
    */
-  getIngredientIds: () => CaseInsensitiveMap<IngredientId>
+  getAllIngredientsByName: () => CaseInsensitiveMap<IIngredient>
 
   /**
    * Get a recipe by its ID
