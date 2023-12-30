@@ -1,0 +1,9 @@
+---
+extends: default
+rules:
+  new-lines: disable
+  truthy: disable
+  line-length:
+    max: 500
+  braces:
+    max-spaces-inside: 4
