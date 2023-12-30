@@ -6,6 +6,9 @@
 # all, none, or list of linter keys
 APPLY_FIXES: all
 
+# Consider errors non blocking to the CI
+DISABLE_ERRORS: true
+
 # If you use ENABLE variable, all other languages/formats/tooling-formats will
 # be disabled by default
 # ENABLE:
@@ -15,6 +18,7 @@ APPLY_FIXES: all
 # ENABLE_LINTERS:
 
 DISABLE_LINTERS:
+  # These are handled by the eslint workflow
   - JAVASCRIPT_ES
   - TYPESCRIPT_ES
   - JSX_ESLINT
