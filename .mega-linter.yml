@@ -14,6 +14,14 @@ APPLY_FIXES: all
 # default
 # ENABLE_LINTERS:
 
+DISABLE_LINTERS:
+  - JAVASCRIPT_ES
+  - TYPESCRIPT_ES
+  - JSX_ESLINT
+  - TSX_ESLINT
+  - JAVASCRIPT_STANDARD
+  - TYPESCRIPT_STANDARD
+
 # DISABLE:
   # - COPYPASTE # Uncomment to disable checks of excessive copy-pastes
   # - SPELL # Uncomment to disable checks of spelling mistakes
@@ -24,14 +32,6 @@ FILEIO_REPORTER: false
 
 # Uncomment if you want MegaLinter to detect errors but not block CI to pass
 # DISABLE_ERRORS: true
-
-# Install eslint plugins
-JAVASCRIPT_ES_PRE_COMMANDS:
-  - continue_if_failed: true
-    secured_env: true
-    command: |
-      npm install -g eslint-config-standard-with-typescript
-
 # Ignore generated code in copy-paste linter
 COPYPASTE_FILTER_REGEX_EXCLUDE: |
   \.generated\.
