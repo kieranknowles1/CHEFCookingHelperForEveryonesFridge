@@ -9,5 +9,13 @@ jobs:
                   ref: ${{ github.ref }}
             - name: Install Modules
               run: npm install --save-dev
+            - name: Install backend dependencies
+              run: |
+                cd app/backend
+                npm install --save-dev
+            - name: Install frontend dependencies
+              run: |
+                cd app/frontend
+                npm install --save-dev
             - name: Run ESLint
               run: npx eslint . --ext .js,.jsx,.ts,.tsx
