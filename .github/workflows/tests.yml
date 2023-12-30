@@ -1,0 +1,19 @@
+---
+# Test app on push
+name: Tests
+on: push
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - name: Install backend dependencies
+        run: |
+          cd app/backend
+          npm install --save-dev
+      - name: Run backend tests
+        run: |
+          cd app/backend
+          npm test
