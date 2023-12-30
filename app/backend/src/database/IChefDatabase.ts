@@ -1,6 +1,5 @@
-import type CiMap from '@glossa-glo/case-insensitive-map'
-
 import { type IAvailableRecipe, type IRecipeNoId, type ISimilarRecipe } from '../types/IRecipe'
+import type CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type IBarcode from '../types/IBarcode'
 import type IEmbeddedSentence from '../ml/IEmbeddedSentence'
 import type IIngredient from '../types/IIngredient'
@@ -82,7 +81,7 @@ export default interface IChefDatabase {
   /**
    * Get a map of ingredient names to IDs, including any alternate names
    */
-  getIngredientIds: () => CiMap<string, IngredientId>
+  getIngredientIds: () => CaseInsensitiveMap<IngredientId>
 
   /**
    * Get a recipe by its ID

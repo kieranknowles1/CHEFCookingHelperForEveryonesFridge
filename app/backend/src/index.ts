@@ -17,6 +17,7 @@ import installFridgeIngredientEndpoint from './api/v1/fridge/ingredient/amount'
 import installIngredientAllEndpoint from './api/v1/ingredient/all'
 import installRecipeEndpoint from './api/v1/recipe/recipe'
 import installSimilarRecipeEndpoint from './api/v1/recipe/similar'
+import { isJsonObject } from './types/isJsonObject'
 import notFoundHandler from './api/notFoundHandler'
 import { preloadModel } from './ml/getModel'
 
@@ -28,6 +29,9 @@ const PORT = 3000
 app.use(cors())
 
 const spec = yaml.parse(fs.readFileSync('./api.yml', 'utf8'))
+if (!isJsonObject(spec)) {
+  throw new Error('Invalid api.yml file, expected a JSON object')
+}
 app.use('/api-docs/v1', swaggerUi.serve, swaggerUi.setup(spec))
 
 app.use(OpenApiValidator.middleware({

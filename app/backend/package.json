@@ -32,7 +32,6 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@glossa-glo/case-insensitive-map": "^4.2.7-beta",
     "@tensorflow-models/universal-sentence-encoder": "^1.3.3",
     "@tensorflow/tfjs": "^4.15.0",
     "async-mutex": "^0.4.0",

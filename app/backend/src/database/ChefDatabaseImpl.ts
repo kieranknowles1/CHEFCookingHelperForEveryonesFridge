@@ -1,11 +1,11 @@
 import path from 'path'
 import { readFileSync } from 'fs'
 
-import CiMap from '@glossa-glo/case-insensitive-map'
 import Database from 'better-sqlite3'
 
 import { type IAvailableRecipe, type IRecipeNoId, type ISimilarRecipe } from '../types/IRecipe'
 import { type IngredientId, ingredientMapFactory } from '../types/IIngredient'
+import CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type IBarcode from '../types/IBarcode'
 import type IEmbeddedSentence from '../ml/IEmbeddedSentence'
 import type IIngredient from '../types/IIngredient'
@@ -339,12 +339,12 @@ export default class ChefDatabaseImpl implements IChefDatabase {
   /**
    * Get a map of ingredient names to IDs, including any alternate names
    */
-  public getIngredientIds (): CiMap<string, IngredientId> {
+  public getIngredientIds (): CaseInsensitiveMap<IngredientId> {
     const statement = this._connection.prepare(`
       SELECT * FROM view_ingredient_by_name
     `)
     const result = statement.all() as AllResult<types.IIngredientRow>
-    const map = new CiMap<string, IngredientId>()
+    const map = new CaseInsensitiveMap<IngredientId>()
     for (const pair of result) {
       map.set(pair.name, pair.id)
     }
