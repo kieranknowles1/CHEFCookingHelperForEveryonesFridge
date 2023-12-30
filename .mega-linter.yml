@@ -24,3 +24,10 @@ FILEIO_REPORTER: false
 
 # Uncomment if you want MegaLinter to detect errors but not block CI to pass
 # DISABLE_ERRORS: true
+
+# Install eslint plugins
+JAVASCRIPT_ES_PRE_COMMANDS:
+  - continue_if_failed: true
+    secured_env: true
+    command: |
+      npm install --save-dev
