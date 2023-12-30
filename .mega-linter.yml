@@ -4,7 +4,7 @@
 # linters documentation
 
 # all, none, or list of linter keys
-APPLY_FIXES: all
+APPLY_FIXES: none
 
 # Consider errors non blocking to the CI
 DISABLE_ERRORS: true
