@@ -30,7 +30,7 @@ JAVASCRIPT_ES_PRE_COMMANDS:
   - continue_if_failed: true
     secured_env: true
     command: |
-      npm install eslint-config-standard-with-typescript
+      npm install -g eslint-config-standard-with-typescript
 
 # Ignore generated code in copy-paste linter
 COPYPASTE_FILTER_REGEX_EXCLUDE: |
