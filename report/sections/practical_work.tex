@@ -147,11 +147,23 @@ from the API declarations.
 
 \todo{Testing}
 
+\subsection{Unit Testing}
+
+\subsection{Code Quality Evaluation}
+The MegaLinter tool \cite{vuillamy_megalinter_nodate} was configured to run on every commit to the application's Git repository. This includes a wide array
+of checks to ensure that style guides were adhered to and to catch potential issues, such as making potentially incorrect
+assumptions about the type of an object. This generates a report that is attached to each pull request detailing
+any issues that were found (figure \todo{figure})
+
+The configuration for MegaLinter and its individual linters can be found at the root directory of the repository.
+Certain issues, such as incorrect indentation, are fixed automatically when a pull request is created, while others
+must be corrected manually. Overall, MegaLinter aids to ensure code quality and prevent bad practices.
+
 \section{Investigation}
 \todoinline{
     You should also discuss the investigation process. This does not mean that you have to repeat what you have already said about the design of your investigation,
     but you should comment on what happened during the investigation, e.g. how you conducted the experiments, how you collected data, or anything new or interesting
-    that occurred, and perhaps add details that arose from events.  It’s possible that you had to adapt your approach in some way. If things when wrong, or in the event
+    that occurred, and perhaps add details that arose from events. You may have had to adapt your approach in some way. If things went wrong, or in the event
     you took an approach different from the one you planned, then you can explain what happened, what you did about it, and why. (It isn’t expected that everything will
     go according to the design: how you deal with situations that arise can be a very interesting part of your report.) If you have produced deliverables, you can present
     and discuss these. Anything that would impede the flow of your chapter can be provided in the appendices or, if large, on your disk.
