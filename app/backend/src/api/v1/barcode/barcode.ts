@@ -6,7 +6,7 @@ import { type paths } from '../../../types/api.generated'
 
 type endpoint = paths['/barcode/{code}']['get']
 
-export default function installBarcodeEndpoint (app: Express, db: IChefDatabase): void {
+export default function registerBarcodeEndpoint (app: Express, db: IChefDatabase): void {
   app.get('/api/v1/barcode/:code',
     (req: TypedRequest<endpoint>, res: TypedResponse<endpoint, 200>) => {
       const code = Number.parseInt(req.params.code)

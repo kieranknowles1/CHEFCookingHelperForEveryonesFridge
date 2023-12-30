@@ -11,7 +11,7 @@ type endpoint = paths['/recipe/{id}/similar']['get']
  * // TODO: Look into ways of making this endpoint faster. Maybe have multithreading? Would require a microservice in another language
  * // TODO: Filter by what is available in the fridge
  */
-export default function installSimilarRecipeEndpoint (app: Express, db: IChefDatabase): void {
+export default function registerSimilarRecipeEndpoint (app: Express, db: IChefDatabase): void {
   app.get('/api/v1/recipe/:id/similar',
     (req: TypedRequest<endpoint>, res: TypedResponse<endpoint, 200>) => {
       const recipeId = Number.parseInt(req.params.id)

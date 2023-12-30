@@ -9,7 +9,7 @@ type ingredientPostEndpoint = paths['/fridge/{fridgeId}/ingredient/{ingredientId
 
 const PATH = '/api/v1/fridge/:fridgeId/ingredient/:ingredientId/amount'
 
-export default function installFridgeIngredientEndpoint (app: Express, db: IChefDatabase): void {
+export default function registerFridgeIngredientEndpoint (app: Express, db: IChefDatabase): void {
   app.get(
     PATH,
     (req: TypedRequest<ingredientGetEndpoint>, res: TypedResponse<ingredientGetEndpoint, 200>) => {
