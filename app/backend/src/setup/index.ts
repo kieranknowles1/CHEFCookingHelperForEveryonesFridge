@@ -10,7 +10,7 @@ import cliProgress from 'cli-progress'
 import csv from 'csv-parse'
 import progressTracker from 'progress-stream'
 
-import logger, { LogLevel, logError } from '../logger'
+import logger, { LogLevel } from '../logger'
 import CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import CaseInsensitiveSet from '../types/CaseInsensitiveSet'
 import ChefDatabaseImpl from '../database/ChefDatabaseImpl'
@@ -82,7 +82,7 @@ async function getCsvData (ingredients: CaseInsensitiveMap<IIngredient>): Promis
           recipes.push(recipe)
         }
       } catch (err) {
-        logError(err, LogLevel.verbose)
+        logger.caughtError(err)
       }
     })
     .on('end', () => {
@@ -176,6 +176,6 @@ async function main (db: IChefDatabase): Promise<void> {
 const db = new ChefDatabaseImpl(DATABASE_PATH)
 
 main(db).catch(err => {
-  logError(err)
+  logger.caughtError(err)
   process.exit(1)
 })

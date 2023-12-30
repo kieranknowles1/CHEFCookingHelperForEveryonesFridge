@@ -4,7 +4,7 @@ import { convertToPreferred, tryToMetric } from '../types/Unit'
 import type CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type IIngredient from '../types/IIngredient'
 import { type IngredientAmount } from '../types/IIngredient'
-import getRegexGroups from '../getRegexGroups'
+import assertNotNull from '../assertNotNull'
 import logger from '../logger'
 
 import type IRawCsvRecipe from './IRawCsvRecipe'
@@ -13,7 +13,8 @@ import UnparsedIngredientError from './UnparsedIngredientError'
 const AMOUNT_PATTERN = /(?<amount>\d+\/\d+|\d+ \d+\/\d+|\d+)( (level|heaping|heaped|round|rounded))? (?<unit>\w+)/g
 
 function amountFromMatch (match: RegExpMatchArray): number {
-  return new Fraction(getRegexGroups(match).amount).valueOf()
+  assertNotNull(match.groups)
+  return new Fraction(match.groups.amount).valueOf()
 }
 
 function convertUnit (ingredientLine: string, ingredient: IIngredient): number {
@@ -29,7 +30,8 @@ function convertUnit (ingredientLine: string, ingredient: IIngredient): number {
     // Handle cases such as '1 to 2 tsp' by trying every match and using the first one that works
     for (const match of matches) {
       const amount = amountFromMatch(match)
-      const unit = getRegexGroups(match).unit
+      assertNotNull(match.groups)
+      const unit = match.groups.unit
       const converted = tryToMetric(amount, unit)
       if (converted !== null) {
         return convertToPreferred(converted[0], converted[1], ingredient)
@@ -37,7 +39,7 @@ function convertUnit (ingredientLine: string, ingredient: IIngredient): number {
     }
     // No case was handled, throw error
     // This is a higher priority, so also log more detail
-    logger.warning(`Could not convert '${ingredientLine}' to metric.`)
+    logger.warn(`Could not convert '${ingredientLine}' to metric.`)
     throw new UnparsedIngredientError(ingredient)
   }
 }
