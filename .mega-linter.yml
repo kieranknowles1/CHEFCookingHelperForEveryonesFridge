@@ -4,9 +4,10 @@
 # linters documentation
 
 # all, none, or list of linter keys
-APPLY_FIXES: none
+APPLY_FIXES: all
 
 # Consider errors non blocking to the CI
+# TODO: May want to disable this once we have a good handle on the errors
 DISABLE_ERRORS: true
 
 # If you use ENABLE variable, all other languages/formats/tooling-formats will
