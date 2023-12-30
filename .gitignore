@@ -28,3 +28,5 @@ build/
 dist/
 # Flamegraphs
 *0x/
+
+megalinter-reports/
