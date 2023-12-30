@@ -6,7 +6,7 @@ import { Mutex } from 'async-mutex'
 import logger from '../logger'
 
 const mutex = new Mutex()
-let model: use.UniversalSentenceEncoder
+let model: use.UniversalSentenceEncoder | undefined
 
 /**
  * Get the model singleton. Lazy loaded.
@@ -14,10 +14,6 @@ let model: use.UniversalSentenceEncoder
  * @throws {Error} If the model is not yet loaded and fails to load
  */
 export default async function getModel (): Promise<use.UniversalSentenceEncoder> {
-  if (model !== undefined) {
-    return model
-  }
-
   const release = await mutex.acquire()
   try {
     if (model !== undefined) {

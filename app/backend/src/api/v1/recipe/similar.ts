@@ -1,7 +1,7 @@
 import { type Express } from 'express'
 
 import { type TypedRequest, type TypedResponse } from '../../TypedEndpoint'
-import getDatabase from '../../../database/getDatabase'
+import type IChefDatabase from '../../../database/IChefDatabase'
 import { type paths } from '../../../types/api.generated'
 
 type endpoint = paths['/recipe/{id}/similar']['get']
@@ -11,11 +11,9 @@ type endpoint = paths['/recipe/{id}/similar']['get']
  * // TODO: Look into ways of making this endpoint faster. Maybe have multithreading? Would require a microservice in another language
  * // TODO: Filter by what is available in the fridge
  */
-export default function installSimilarRecipeEndpoint (app: Express): void {
+export default function installSimilarRecipeEndpoint (app: Express, db: IChefDatabase): void {
   app.get('/api/v1/recipe/:id/similar',
     (req: TypedRequest<endpoint>, res: TypedResponse<endpoint, 200>) => {
-      const db = getDatabase()
-
       const recipeId = Number.parseInt(req.params.id)
       const minSimilarity = Number.parseFloat(req.query.minSimilarity ?? '0.5')
       const limit = Number.parseInt(req.query.limit)
@@ -24,7 +22,7 @@ export default function installSimilarRecipeEndpoint (app: Express): void {
 
       const similar = db.getSimilarRecipes(
         recipe.name,
-        minSimilarity ?? 0.5,
+        minSimilarity,
         limit
       )
 

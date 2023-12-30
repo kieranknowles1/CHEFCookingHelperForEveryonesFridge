@@ -1,9 +1,9 @@
 import Fraction from 'fraction.js'
 
-import { type IngredientAmount, type IngredientMap, ingredientMapFactory } from '../types/IIngredient'
 import { convertToPreferred, tryToMetric } from '../types/Unit'
+import type CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type IIngredient from '../types/IIngredient'
-import getDatabase from '../database/getDatabase'
+import { type IngredientAmount } from '../types/IIngredient'
 import getRegexGroups from '../getRegexGroups'
 import logger from '../logger'
 
@@ -60,20 +60,30 @@ function getAmount (originalName: string, ingredient: IIngredient, amounts: stri
   }
 }
 
-export default function parseIngredients (row: IRawCsvRecipe): IngredientMap {
-  const map = ingredientMapFactory()
+interface IngredientEntry {
+  ingredient: IIngredient
+  amount: number | null
+  originalLine: string
+}
+
+export default function parseIngredients (row: IRawCsvRecipe, ingredients: CaseInsensitiveMap<IIngredient>): IngredientEntry[] {
+  const entries: IngredientEntry[] = []
 
   // NER contains names, ingredients contains names and amounts
   const names = JSON.parse(row.NER) as string[]
   const amounts = JSON.parse(row.ingredients) as string[]
 
   for (const originalName of names) {
-    const ingredient = getDatabase().findIngredientByName(originalName)
-    if (ingredient === null) {
+    const ingredient = ingredients.get(originalName)
+    if (ingredient === undefined) {
       throw new Error(`Ingredient ${originalName} does not exist in database`)
     }
-    map.set(ingredient.id, getAmount(originalName, ingredient, amounts))
+    entries.push({
+      ingredient,
+      amount: getAmount(originalName, ingredient, amounts).amount,
+      originalLine: originalName
+    })
   }
 
-  return map
+  return entries
 }

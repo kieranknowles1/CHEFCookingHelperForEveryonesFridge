@@ -28,5 +28,8 @@ build/
 dist/
 # Flamegraphs
 *0x/
+# Test output
+.nyc_output/
+coverage/
 
 megalinter-reports/
