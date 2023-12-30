@@ -26,7 +26,8 @@
     ],
     "reporter": [
       "text",
-      "text-summary"
+      "text-summary",
+      "html"
     ],
     "report-dir": "coverage"
   },

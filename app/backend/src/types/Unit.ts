@@ -1,7 +1,6 @@
 import type IIngredient from 'types/IIngredient'
 
 import UnparsedIngredientError from '../setup/UnparsedIngredientError'
-import logger from '../logger'
 
 // cSpell: words milliliters liter tbls tbsb tbsp
 
@@ -87,8 +86,9 @@ export function tryToMetric (amount: number, unit: string): [number, DatabaseUni
     case 'teaspoons':
     case 'tsp':
       return [amount * 5, 'ml']
+    default:
+      return null
   }
-  return null
 }
 
 export function convertToPreferred (amount: number, unit: DatabaseUnit, ingredient: IIngredient): number {
@@ -105,6 +105,5 @@ export function convertToPreferred (amount: number, unit: DatabaseUnit, ingredie
     return amount / ingredient.density
   }
 
-  logger.warning(`Unhandled conversion ${unit} to ${ingredient.preferredUnit}`)
   throw new UnparsedIngredientError(ingredient)
 }

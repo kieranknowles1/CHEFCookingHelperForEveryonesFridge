@@ -16,7 +16,3 @@ export default interface IIngredient {
   density: number | undefined
   assumeUnlimited: boolean
 }
-
-export function ingredientMapFactory (): IngredientMap {
-  return new Map<IngredientId, IngredientAmount>()
-}

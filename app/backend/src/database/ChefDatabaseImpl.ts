@@ -4,7 +4,7 @@ import { readFileSync } from 'fs'
 import Database from 'better-sqlite3'
 
 import { type IAvailableRecipe, type IRecipeNoId, type ISimilarRecipe } from '../types/IRecipe'
-import { type IngredientId, ingredientMapFactory } from '../types/IIngredient'
+import { type IngredientAmount, type IngredientId } from '../types/IIngredient'
 import CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type IBarcode from '../types/IBarcode'
 import type IEmbeddedSentence from '../ml/IEmbeddedSentence'
@@ -373,13 +373,10 @@ export default class ChefDatabaseImpl implements IChefDatabase {
     const result = statement.all(id) as AllResult<Result>
     if (result.length === 0) { throw new InvalidIdError('recipe', id) }
 
-    const ingredients = ingredientMapFactory()
-    for (const row of result) {
-      ingredients.set(row.ingredient_id, {
-        amount: row.amount,
-        originalLine: row.original_line
-      })
-    }
+    const ingredients = new Map<IngredientId, IngredientAmount>(result.map(row => [
+      row.ingredient_id,
+      { amount: row.amount, originalLine: row.original_line }
+    ]))
 
     return {
       id: result[0].id,
