@@ -11,6 +11,9 @@ parserOptions:
   sourceType: module
 plugins:
   - react
+settings:
+  react:
+    version: "18.2"
 ignorePatterns:
   - "**/*.generated.ts"
 rules:
