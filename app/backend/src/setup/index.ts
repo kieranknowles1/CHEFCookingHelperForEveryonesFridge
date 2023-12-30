@@ -12,9 +12,11 @@ import progressTracker from 'progress-stream'
 
 import logger, { LogLevel, logError } from '../logger'
 import CaseInsensitiveMap from '../types/CaseInsensitiveMap'
+import CaseInsensitiveSet from '../types/CaseInsensitiveSet'
+import ChefDatabaseImpl from '../database/ChefDatabaseImpl'
+import { DATABASE_PATH } from '../settings'
+import type IChefDatabase from '../database/IChefDatabase'
 import type IEmbeddedSentence from '../ml/IEmbeddedSentence'
-import { type IngredientId } from '../types/IIngredient'
-import getDatabase from '../database/getDatabase'
 import getEmbedding from '../ml/getEmbedding'
 import getSimilarity from '../ml/getSimilarity'
 import { preloadModel } from '../ml/getModel'
@@ -48,11 +50,11 @@ function createTrackers (path: string): [progressTracker.ProgressStream, cliProg
 /** Map of missed ingredient => frequency */
 const missedIngredients = new CaseInsensitiveMap<number>()
 
-function recipeValid (row: IRawCsvRecipe, commonIngredients: Map<string, IngredientId>): boolean {
+function recipeValid (row: IRawCsvRecipe, ingredientNames: CaseInsensitiveSet): boolean {
   let valid = true
   const ingredients = JSON.parse(row.NER) as string[]
   for (const ingredient of ingredients) {
-    if (!commonIngredients.has(ingredient)) {
+    if (!ingredientNames.has(ingredient)) {
       missedIngredients.set(ingredient, (missedIngredients.get(ingredient) ?? 0) + 1)
       valid = false
     }
@@ -60,9 +62,8 @@ function recipeValid (row: IRawCsvRecipe, commonIngredients: Map<string, Ingredi
   return valid
 }
 
-async function getCsvData (): Promise<[IParsedCsvRecipe[], number]> {
+async function getCsvData (ingredientNames: CaseInsensitiveSet): Promise<[IParsedCsvRecipe[], number]> {
   const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
-  const supportedIngredients = getDatabase().getIngredientIds()
 
   let totalRows = 0
   const recipes: IParsedCsvRecipe[] = []
@@ -74,7 +75,7 @@ async function getCsvData (): Promise<[IParsedCsvRecipe[], number]> {
       totalRows++
       try {
         // Filter to only the most common ingredients
-        if (recipeValid(row, supportedIngredients)) {
+        if (recipeValid(row, ingredientNames)) {
           const recipe = parseCsvRecipeRow(row)
           recipes.push(recipe)
         }
@@ -109,30 +110,31 @@ function predictMealType (recipeName: IEmbeddedSentence, mealTypes: IEmbeddedSen
 
 // Add embeddings for the meal types
 // Can't be done in pure SQL as async functions are not supported
-async function embedMealTypes (): Promise<void> {
-  await getDatabase().wrapTransactionAsync(async (db) => {
-    for (const mealType of getDatabase().getMealTypeNames()) {
-      db.addEmbedding(await getEmbedding(mealType))
+async function embedMealTypes (db: IChefDatabase): Promise<void> {
+  await db.wrapTransactionAsync(async (writable) => {
+    for (const mealType of db.getMealTypeNames()) {
+      writable.addEmbedding(await getEmbedding(mealType))
     }
   })
 }
 
 interface ImportDataReturn { success: number, total: number }
-async function importData (): Promise<ImportDataReturn> {
+async function importData (db: IChefDatabase): Promise<ImportDataReturn> {
   logger.info('Collecting data from CSV')
-  const [csvRecipes, csvTotalRows] = await getCsvData()
+  const ingredientNames = new CaseInsensitiveSet(db.getIngredientIds().keys())
+  const [csvRecipes, csvTotalRows] = await getCsvData(ingredientNames)
 
   logger.info('Importing data into the database')
-  const mealTypes = getDatabase().getMealTypes()
+  const mealTypes = db.getMealTypes()
 
   const bar = new cliProgress.SingleBar({}, PROGRESS_BAR_STYLE)
   bar.start(csvRecipes.length, 0)
 
-  await getDatabase().wrapTransactionAsync(async (db) => {
+  await db.wrapTransactionAsync(async (writable) => {
     for (const recipe of csvRecipes) {
       const nameEmbedding = await getEmbedding(recipe.name)
-      db.addEmbedding(nameEmbedding)
-      db.addRecipe({
+      writable.addEmbedding(nameEmbedding)
+      writable.addRecipe({
         ...recipe,
         name: await getEmbedding(recipe.name),
         mealType: predictMealType(nameEmbedding, mealTypes)
@@ -149,17 +151,17 @@ async function importData (): Promise<ImportDataReturn> {
   }
 }
 
-async function main (): Promise<void> {
+async function main (db: IChefDatabase): Promise<void> {
   void preloadModel()
 
   logger.info('Setting up schema')
-  getDatabase().resetDatabase('IKnowWhatIAmDoing')
+  db.resetDatabase('IKnowWhatIAmDoing')
 
   logger.info('Adding meal types')
-  await embedMealTypes()
+  await embedMealTypes(db)
 
   logger.info('Importing data into the database')
-  const dataInfo = await importData()
+  const dataInfo = await importData(db)
 
   logger.info(`Setup done, imported ${dataInfo.success} of ${dataInfo.total} recipes (${(dataInfo.success / dataInfo.total) * 100}%)`)
 
@@ -167,6 +169,12 @@ async function main (): Promise<void> {
   logger.info(`Missing ingredients by frequency: ${missedFrequencies.toString()}`)
 
   // Make sure nothing went wrong with the database
-  getDatabase().checkIntegrity()
+  db.checkIntegrity()
 }
-main().catch((err) => { logError(err) })
+
+const db = new ChefDatabaseImpl(DATABASE_PATH)
+
+main(db).catch(err => {
+  logError(err)
+  process.exit(1)
+})

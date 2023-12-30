@@ -19,8 +19,6 @@ import { bufferFromFloat32Array, bufferToFloat32Array } from './bufferFloat32Arr
 import type IChefDatabase from './IChefDatabase'
 import InvalidIdError from './InvalidIdError'
 
-// TODO: Use environment variables and put this somewhere outside the container
-const DATABASE_PATH = path.join(process.cwd(), 'working_data/chefdatabase.db')
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'data/initialdata.sql')
 const DUMMY_DATA_PATH = path.join(process.cwd(), 'data/dummydata.sql')
@@ -157,9 +155,9 @@ class WritableDatabaseImpl implements IWritableDatabase {
 export default class ChefDatabaseImpl implements IChefDatabase {
   private readonly _connection: Database.Database
 
-  public constructor () {
-    logger.info(`Using database file '${DATABASE_PATH}'`)
-    this._connection = new Database(DATABASE_PATH)
+  public constructor (path: string) {
+    logger.info(`Using database file '${path}'`)
+    this._connection = new Database(path)
 
     ml_extendDatabase(this._connection)
   }
