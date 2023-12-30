@@ -10,7 +10,7 @@
     "build": "tsc -p .",
     "dev": "nodemon src/index.ts",
     "dev-setup": "nodemon src/setup/index.ts",
-    "test": "mocha --require ts-node/register src/tests/**/*.ts",
+    "test": "mocha --reporter dot --require ts-node/register src/tests/**/*.ts",
     "test:coverage": "nyc npm run test",
     "flamegraph": "0x build/index.js"
   },

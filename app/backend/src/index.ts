@@ -1,3 +1,5 @@
+import { readFileSync } from 'fs'
+
 import * as OpenApiValidator from 'express-openapi-validator'
 import bodyParser from 'body-parser'
 import cors from 'cors'
@@ -39,7 +41,8 @@ preloadModel().catch((err) => {
 const app = express()
 app.use(cors())
 
-const spec = getApiSpec(API_SPEC_PATH)
+const specText = readFileSync(API_SPEC_PATH, 'utf8')
+const spec = getApiSpec(specText)
 app.use('/api-docs/v1', swaggerUi.serve, swaggerUi.setup(spec))
 
 logger.info(`Validating against API spec at ${API_SPEC_PATH}`)

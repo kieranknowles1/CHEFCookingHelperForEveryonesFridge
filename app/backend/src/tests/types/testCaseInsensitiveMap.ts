@@ -26,14 +26,18 @@ describe('CaseInsensitiveMap', () => {
       map = new CaseInsensitiveMap()
       map.set('a', 1)
     })
-    it('should get a value', () => {
-      assert.strictEqual(map.get('a'), 1)
+    context('with an existing key', () => {
+      it('should get a value', () => {
+        assert.strictEqual(map.get('a'), 1)
+      })
+      it('should get a value that differs only in case', () => {
+        assert.strictEqual(map.get('A'), 1)
+      })
     })
-    it('should get a value that differs only in case', () => {
-      assert.strictEqual(map.get('A'), 1)
-    })
-    it('should return undefined for a non-existent key', () => {
-      assert.strictEqual(map.get('b'), undefined)
+    context('with a non-existent key', () => {
+      it('should return undefined', () => {
+        assert.strictEqual(map.get('b'), undefined)
+      })
     })
   })
 
@@ -43,14 +47,18 @@ describe('CaseInsensitiveMap', () => {
       map = new CaseInsensitiveMap()
       map.set('a', 1)
     })
-    it('should return true for an existing key', () => {
-      assert.strictEqual(map.has('a'), true)
+    context('with an existing key', () => {
+      it('should return true', () => {
+        assert.strictEqual(map.has('a'), true)
+      })
+      it('should return true for a key that differs only in case', () => {
+        assert.strictEqual(map.has('A'), true)
+      })
     })
-    it('should return true for a key that differs only in case', () => {
-      assert.strictEqual(map.has('A'), true)
-    })
-    it('should return false for a non-existent key', () => {
-      assert.strictEqual(map.has('b'), false)
+    context('with a non-existent key', () => {
+      it('should return false for a non-existent key', () => {
+        assert.strictEqual(map.has('b'), false)
+      })
     })
   })
 })
