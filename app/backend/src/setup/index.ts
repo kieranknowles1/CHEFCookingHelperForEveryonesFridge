@@ -6,12 +6,12 @@
 import { createReadStream, statSync } from 'fs'
 import path from 'path'
 
-import CiMap from '@glossa-glo/case-insensitive-map'
 import cliProgress from 'cli-progress'
 import csv from 'csv-parse'
 import progressTracker from 'progress-stream'
 
 import logger, { LogLevel, logError } from '../logger'
+import CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type IEmbeddedSentence from '../ml/IEmbeddedSentence'
 import { type IngredientId } from '../types/IIngredient'
 import getDatabase from '../database/getDatabase'
@@ -46,7 +46,7 @@ function createTrackers (path: string): [progressTracker.ProgressStream, cliProg
 }
 
 /** Map of missed ingredient => frequency */
-const missedIngredients = new CiMap<string, number>()
+const missedIngredients = new CaseInsensitiveMap<number>()
 
 function recipeValid (row: IRawCsvRecipe, commonIngredients: Map<string, IngredientId>): boolean {
   let valid = true

@@ -32,7 +32,7 @@ function App (): React.JSX.Element {
   ]
 
   // TODO: Login to set state
-  const [userState, setUserState] = React.useState({
+  const [userState] = React.useState({
     userId: 1,
     fridgeId: 1
   })
