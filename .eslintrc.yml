@@ -18,16 +18,16 @@ ignorePatterns:
   - "**/*.generated.ts"
 rules:
   sort-imports:
-   - warn
-   - allowSeparatedGroups: true
-     memberSyntaxSortOrder: [all, multiple, single, none]
+    - warn
+    - allowSeparatedGroups: true
+      memberSyntaxSortOrder: [all, multiple, single, none]
   import/order:
-   - warn
-   - newlines-between: always
+    - warn
+    - newlines-between: always
   import/consistent-type-specifier-style:
-   - warn
-   - prefer-inline
+    - warn
+    - prefer-inline
   "@typescript-eslint/no-explicit-any": warn
   "@typescript-eslint/consistent-type-assertions":
-   - warn
-   - { assertionStyle: never }
+    - warn
+    - { assertionStyle: never }

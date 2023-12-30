@@ -33,7 +33,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  productName: { type: string, example: GenericMart Chicken 1kg }
+                  productName:
+                    { type: string, example: GenericMart Chicken 1kg }
                   ingredient:
                     $ref: "#/components/schemas/Ingredient"
                   amount: { type: number, example: 1000 }
@@ -55,7 +56,7 @@ paths:
             schema:
               type: object
               properties:
-                productName: { type: string, example: GenericMart Chicken 1kg}
+                productName: { type: string, example: GenericMart Chicken 1kg }
                 ingredientId: { type: number, example: 12345 }
                 amount: { type: number, example: 1000 }
       responses:
@@ -86,7 +87,7 @@ paths:
           description: OK
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/Recipe' }
+              schema: { $ref: "#/components/schemas/Recipe" }
         "404":
           $ref: "#/components/responses/NotFound"
 
@@ -94,8 +95,7 @@ paths:
     get:
       tags: [Recipe]
       summary: Get similar recipes
-      description:
-        Returns a list of recipes similar to the given recipe \
+      description: Returns a list of recipes similar to the given recipe \
         Items are sorted by similarity score, descending \
         Note that if multiple recipes have the same name, only one will be returned
       parameters:
@@ -117,7 +117,6 @@ paths:
   # TODO: Implement
   /fridge/{fridgeId}:
     get:
-
       tags: [Fridge]
       summary: Get data about a fridge
       parameters:
@@ -131,8 +130,8 @@ paths:
                 type: object
                 properties:
                   id: { type: integer, example: 1 }
-                  name: { type: string, example: 'My Fridge' }
-                  owner: { $ref: '#/components/schemas/User' }
+                  name: { type: string, example: "My Fridge" }
+                  owner: { $ref: "#/components/schemas/User" }
                 required: [id, name, owner]
         "404":
           $ref: "#/components/responses/NotFound"
@@ -170,8 +169,7 @@ paths:
     post:
       tags: [Fridge]
       summary: Update the amount of an ingredient in the fridge
-      description:
-        Set the amount of `ingredientId` in `fridgeId` to `amount`
+      description: Set the amount of `ingredientId` in `fridgeId` to `amount`
       parameters:
         - $ref: "#/components/parameters/fridgeId"
         - $ref: "#/components/parameters/ingredientId"
@@ -214,7 +212,12 @@ paths:
                   properties:
                     name: { type: string, example: Just Soup }
                     id: { type: integer, example: 1234 }
-                    missingIngredientAmount: { type: integer, example: 1, description: Number of ingredients missing or not enough of }
+                    missingIngredientAmount:
+                      {
+                        type: integer,
+                        example: 1,
+                        description: Number of ingredients missing or not enough of,
+                      }
                   required: [name, id, missingIngredientAmount]
         "403":
           $ref: "#/components/responses/Forbidden"
@@ -231,7 +234,7 @@ paths:
           description: OK
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/User' }
+              schema: { $ref: "#/components/schemas/User" }
         "404":
           $ref: "#/components/responses/NotFound"
 
@@ -301,7 +304,6 @@ components:
         errorCode: { type: string, example: "type.openapi.validation" }
       required: [path, message]
 
-
     Unit:
       enum:
         - none
@@ -322,20 +324,24 @@ components:
       type: object
       properties:
         id: { type: integer, example: 12345 }
-        name: { type: string, example: 'Chicken Pie' }
-        directions: { type: string, example: "The great thing about chicken pie is that you don't need to know how to make it, just get some chicken. And put it in a pie."}
-        link: { type: string, example: 'example.com' }
+        name: { type: string, example: "Chicken Pie" }
+        directions:
+          {
+            type: string,
+            example: "The great thing about chicken pie is that you don't need to know how to make it, just get some chicken. And put it in a pie.",
+          }
+        link: { type: string, example: "example.com" }
         ingredients:
           type: array
-          items: { $ref: '#/components/schemas/RecipeIngredientEntry' }
+          items: { $ref: "#/components/schemas/RecipeIngredientEntry" }
       required: [id, name, directions, link, ingredients]
 
     Ingredient:
       type: object
       properties:
         id: { type: integer, example: 12345 }
-        name: { type: string, example: 'Chicken' }
-        preferredUnit: { $ref: '#/components/schemas/Unit' }
+        name: { type: string, example: "Chicken" }
+        preferredUnit: { $ref: "#/components/schemas/Unit" }
         density: { type: number, example: 0.5 }
         assumeUnlimited: { type: boolean, example: false }
         # TODO: Substitutions
@@ -345,7 +351,7 @@ components:
     IngredientEntry:
       type: object
       properties:
-        ingredient: { $ref: '#/components/schemas/Ingredient' }
+        ingredient: { $ref: "#/components/schemas/Ingredient" }
         amount: { type: number, example: 250 }
       required: [ingredient]
 
@@ -353,15 +359,15 @@ components:
       type: object
       properties:
         id: { type: integer, example: 1 }
-        name: { type: string, example: 'John Smith' }
+        name: { type: string, example: "John Smith" }
       required: [id, name]
 
     RecipeIngredientEntry:
-      allOf: [{ $ref: "#/components/schemas/IngredientEntry"}]
+      allOf: [{ $ref: "#/components/schemas/IngredientEntry" }]
       properties:
-        originalLine: { type: string, example: '250g of chicken' }
+        originalLine: { type: string, example: "250g of chicken" }
       required: [originalLine]
 
     FridgeIngredientEntry:
-      allOf: [{ $ref: "#/components/schemas/IngredientEntry"}]
+      allOf: [{ $ref: "#/components/schemas/IngredientEntry" }]
       required: [amount]
