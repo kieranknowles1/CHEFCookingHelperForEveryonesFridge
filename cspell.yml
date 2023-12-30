@@ -5,11 +5,22 @@ ignorePaths:
   # From external sources
   - "*.bib"
 
+  - "**/node_modules/**"
+  - "**/vscode-extension/**"
+  - "**/.git/**"
+  - "**/.pnpm-lock.json"
+  - ".vscode"
+  - "megalinter"
+  - "package-lock.json"
+  - "report"
+
   - "*.drawio"
   - "*.svg"
 
 # LaTeX convention is to use lowercase for commands
 allowCompoundWords: true
+
+noConfigSearch: true
 
 dictionaryDefinitions:
   - name: Acronyms

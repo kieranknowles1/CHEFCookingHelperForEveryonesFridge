@@ -8,7 +8,7 @@
 \usepackage{fontspec}
 \setmainfont{Arial}
 \setmonofont{Consolas}
-\usepackage{setspace} \singlespace
+\usepackage{setspace} \singlespace{}
 
 \usepackage{parskip}
 
@@ -92,10 +92,10 @@
 
     \underline{Project Report}
 
-    \enquote*{\chef{} - Cooking Helper for Everyone's Fridge}
+    \enquote*{\chef{} {-} Cooking Helper for Everyone's Fridge}
 }
 \author{Kieran Knowles w2001300}
-\date{2023-2024}
+\date{2023~-~2024}
 \maketitle
 
 \chapter*{Authorship Declaration}
@@ -108,11 +108,11 @@
 
     You may wish to acknowledge help given from three different sources:
 
-    •	From people outside the department, e.g. industrial companies,
-
-    •	Your supervisor for general guidance,
-
-    •	Special help from staff inside the department other than the supervisor.
+    \begin{itemize}
+        \item From people outside the department, e.g.\ industrial companies,
+        \item Your supervisor for general guidance,
+        \item Special help from staff inside the department other than the supervisor.
+    \end{itemize}
 
     Acknowledgements should be kept simple.
 }
@@ -165,8 +165,7 @@
 
 % Print the bibliography as a chapter
 % From biblatex docs
-\renewcommand{\bibname}{References}
-\label{sec:reference_list}
+\renewcommand{\bibname}{References}\label{sec:reference_list}
 \todoinline{
     How should I be including these references?
     StackOverflow
@@ -177,7 +176,7 @@
     \chapter{#1}
     \markboth{#1}{#1}
 }
-\printbibliography
+\printbibliography{}
 \todoinline{
     References
     It should be clear from the text which of the material presented and opinions expressed are yours and which are those of other people. This includes showing clearly when
@@ -187,16 +186,16 @@
     are to be avoided and it is not acceptable to take someone else's work and simply change a few words.
     You should indicate in your work each point at which you have used one of your information sources, and provide a complete list of references after the last chapter of
     your report. Both of these are required: it is not sufficient only to provide a reference list. References should follow one of the approved referencing formats.
-    A common style is the Harvard system, which is used in this section. An authoritative definition of how to reference a wide variety of sources is given in 'Cite Them Right,'
+    A common style is the Harvard system, which is used in this section. An authoritative definition of how to reference a wide variety of sources is given in \enquote*{Cite Them Right,}
     (Pears \& Shields, 2013). You are strongly advised to use the online version or to buy a copy if needed (Palgrave Macmillan, 2014).
     Full details are:
     Pears, R. \& Shields, G. (2013) Cite Them Right: the essential referencing guide, 9th edn. Basingstoke: Palgrave Macmillan.
     Palgrave Macmillan (2014) Cite Them Right Online. Available at http://www.citethemrightonline.com/ (Accessed 03 September 2022)
     Increasingly, Internet sites are a source of reference material. These must be used with care, as many web sites are of poor quality and contain unreliable information.
     However, many excellent academic papers are also available online. When citing a Web source, you must include the name of the author or organisation, the source date,
-    the title of the page, the full URL and the date the site was visited. 'Cite them Right' gives fuller details. If you have written about software or other media, these
+    the title of the page, the full URL and the date the site was visited, \enquote*{Cite them Right} gives fuller details. If you have written about software or other media, these
     must also be referenced properly.
-    If you have made use of library software (other than standard language libraries) or other pre-existing software elements, media etc. in your product or deliverables,
+    If you have made use of library software (other than standard language libraries) or other pre-existing software elements, media etc.\ in your product or deliverables,
     appropriate credit must be given for these. You should indicate in your report that they have been used, and include the references in your list. Comments in your
     product code should indicate any code used that you have acquired from elsewhere.
 }
@@ -236,15 +235,14 @@
 \section{Terms of Reference}
 \subfile{appendicies/TermsOfReference.tex}
 
-\section{Ethics Approval}
-\label{sec:ethics_approval}
+\section{Ethics Approval}\label{sec:ethics_approval}
 \subfile{appendicies/EthicsApprovalForm.tex}
 
 \section{Weekly Logbook}
 % Enable \raggedbottom as \flushbottom doesn't work well for pages with only floats
-\raggedbottom
+\raggedbottom{}
 \subfile{appendicies/WeeklyLogbook.tex}
-\flushbottom
+\flushbottom{}
 
 \subfile{sections/user_reviews.tex}
 
@@ -265,7 +263,7 @@
 
 
 % TODO: Remove todo list once done
-\todos
+\todos{}
 
 %TC:endignore
 

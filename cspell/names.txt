@@ -2,4 +2,6 @@ Cecchinato
 drawio
 Grammarly
 Jaccard
+megalinter
+oxsecurity
 Rooksby
