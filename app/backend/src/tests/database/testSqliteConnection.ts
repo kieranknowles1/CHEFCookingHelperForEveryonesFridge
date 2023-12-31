@@ -35,4 +35,55 @@ describe('database/SqliteConnection', () => {
       assert.throws(() => { connection.checkIntegrity() }, ForeignKeyCheckError)
     })
   })
+
+  let testdatabase: SqliteConnection
+  beforeEach(() => {
+    testdatabase = new SqliteConnection(':memory:')
+    testdatabase.exec('CREATE TABLE test (id INTEGER PRIMARY KEY, name TEXT)')
+    testdatabase.exec("INSERT INTO test (id, name) VALUES (123, 'test')")
+  })
+  describe('exec', () => {
+    it('should execute a statement', () => {
+      testdatabase.exec("INSERT INTO test (id, name) VALUES (1234, 'test2')")
+      const result = testdatabase.prepare<[], { id: number }>("SELECT id FROM test WHERE name = 'test2'").get()
+      assert.strictEqual(result?.id, 1234)
+    })
+  })
+
+  describe('prepare', () => {
+    it('should prepare a statement', () => {
+      const statement = testdatabase.prepare<[], { id: number }>("SELECT id FROM test WHERE name = 'test'")
+      const result = statement.get()
+      assert.strictEqual(result?.id, 123)
+    })
+
+    it('should throw an error if the statement is invalid', () => {
+      assert.throws(() => { testdatabase.prepare<[], { id: number }>('SELECT id FROM test WHERE "') })
+    })
+
+    describe('run', () => {
+      it('should run a statement', () => {
+        const statement = testdatabase.prepare<[], { id: number }>("INSERT INTO test (name) VALUES ('test3')")
+        const result = statement.run()
+        assert.strictEqual(result.changes, 1)
+      })
+    })
+
+    describe('get', () => {
+      it('should get a row', () => {
+        const statement = testdatabase.prepare<[], { id: number }>("SELECT id FROM test WHERE name = 'test'")
+        const result = statement.get()
+        assert.strictEqual(result?.id, 123)
+      })
+    })
+
+    describe('all', () => {
+      it('should get all rows', () => {
+        testdatabase.exec("INSERT INTO test (id, name) VALUES (124, 'test2')")
+        const statement = testdatabase.prepare<[], { id: number }>('SELECT id FROM test ORDER BY id ASC')
+        const result = statement.all()
+        assert.deepStrictEqual(result, [{ id: 123 }, { id: 124 }])
+      })
+    })
+  })
 })
