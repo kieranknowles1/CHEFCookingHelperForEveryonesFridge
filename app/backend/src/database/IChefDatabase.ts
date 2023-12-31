@@ -26,7 +26,7 @@ export interface IWritableDatabase {
    */
   addEmbedding: (sentence: EmbeddedSentence) => void
 
-  addRecipe: (recipe: RecipeNoId) => void
+  addRecipe: (recipe: RecipeNoId) => types.RowId
 
   setIngredientAmount: (fridgeId: types.RowId, ingredientId: types.RowId, amount: number) => void
 }

@@ -83,7 +83,7 @@ class WritableDatabaseImpl implements IWritableDatabase {
     statement.run(sentence.sentence, bufferFromFloat32Array(sentence.embedding))
   }
 
-  public addRecipe (recipe: RecipeNoId): void {
+  public addRecipe (recipe: RecipeNoId): types.RowId {
     this.assertValid()
     const statement = this._connection.prepare<[string, string, string, string], undefined>(`
       INSERT INTO recipe
@@ -116,6 +116,8 @@ class WritableDatabaseImpl implements IWritableDatabase {
     for (const [ingredientId, amount] of recipe.ingredients) {
       ingredientStatement.run(id, ingredientId, amount.amount, amount.originalLine)
     }
+
+    return id
   }
 
   public setIngredientAmount (fridgeId: types.RowId, ingredientId: types.RowId, amount: number): void {
@@ -203,12 +205,12 @@ export default class ChefDatabaseImpl implements IChefDatabase {
       this._connection.exec('BEGIN TRANSACTION')
       callback(writable).then(data => {
         this._connection.exec('COMMIT')
+        writable.close()
         resolve(data)
       }).catch((ex) => {
         this._connection.exec('ROLLBACK')
-        reject(ex)
-      }).finally(() => {
         writable.close()
+        reject(ex)
       })
     })
   }

@@ -8,7 +8,7 @@ import { preloadModel } from '../../ml/getModel'
 
 describe('ml/getEmbedding', function () {
   before(async function () {
-    this.timeout(10000)
+    this.timeout(30000)
     await preloadModel()
   })
 
