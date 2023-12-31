@@ -3,8 +3,8 @@ import assert from 'assert'
 import { describe, it } from 'mocha'
 
 import getEmbedding from '../../ml/getEmbedding'
-import { preloadModel } from '../../ml/getModel'
 import getSimilarity from '../../ml/getSimilarity'
+import { preloadModel } from '../../ml/getModel'
 
 describe('ml/getEmbedding', function () {
   before(async function () {
@@ -12,7 +12,10 @@ describe('ml/getEmbedding', function () {
     await preloadModel()
   })
 
-  it('should return an embedding for a string', async function () {
+  // Embeddings are expected to be slow, so we increase the warning threshold
+  this.slow(500)
+
+  it('should return an embedding for a string', async () => {
     const sentence = 'Hello world'
     const embedding = await getEmbedding(sentence)
     assert.strictEqual(embedding.sentence, sentence)
@@ -20,20 +23,15 @@ describe('ml/getEmbedding', function () {
     assert(embedding.embedding.length > 0)
   })
 
-  it('should cache embeddings', function (done) {
-    async function run (): Promise<void> {
-      const sentence = 'Bonjour monde'
+  it('should cache embeddings', async () => {
+    const sentence = 'Bonjour monde'
 
-      await getEmbedding(sentence)
-      const start = Date.now()
-      await getEmbedding(sentence)
-      const end = Date.now()
+    await getEmbedding(sentence)
+    const start = Date.now()
+    await getEmbedding(sentence)
+    const end = Date.now()
 
-      assert(end - start < 5, 'second call should be fast')
-
-      done()
-    }
-    run().catch(done)
+    assert(end - start < 5, 'second call should be fast')
   })
 
   it('should return the same embedding for the same string', async function () {
@@ -51,13 +49,13 @@ describe('ml/getEmbedding', function () {
 
   it('should return similar embeddings for similar strings', async function () {
     const embedding1 = await getEmbedding('Hello world')
-    const embedding2 = await getEmbedding('Hello world!')
-    assert(getSimilarity(embedding1.embedding, embedding2.embedding) > 0.9, 'similarity should be high')
+    const embedding2 = await getEmbedding('Hello there')
+    assert(getSimilarity(embedding1.embedding, embedding2.embedding) > 0.8, 'similarity should be high')
   })
 
   it('should return dissimilar embeddings for dissimilar strings', async function () {
     const embedding1 = await getEmbedding('Hello world')
     const embedding2 = await getEmbedding('Did you ever hear the tragedy of Darth Plagueis the Wise?')
-    assert(getSimilarity(embedding1.embedding, embedding2.embedding) < 0.5, 'similarity should be low')
+    assert(getSimilarity(embedding1.embedding, embedding2.embedding) < 0.2, 'similarity should be low')
   })
 })

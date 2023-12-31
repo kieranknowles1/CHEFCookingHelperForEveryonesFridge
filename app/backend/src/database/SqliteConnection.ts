@@ -20,6 +20,22 @@ interface ForeignKeyCheckRow {
   fkid: number
 }
 
+export abstract class IntegrityCheckError extends Error {}
+
+export class CorruptDatabaseError extends IntegrityCheckError {
+  constructor (result: IntegrityCheckRow[]) {
+    super(`Database is corrupt: ${JSON.stringify(result)}`)
+    this.name = 'CorruptDatabaseError'
+  }
+}
+
+export class ForeignKeyCheckError extends IntegrityCheckError {
+  constructor (result: ForeignKeyCheckRow[]) {
+    super(`Foreign key check failed: ${JSON.stringify(result)}`)
+    this.name = 'ForeignKeyCheckError'
+  }
+}
+
 /**
  * A connection backed by a SQLite database
  */
@@ -38,13 +54,13 @@ export default class SqliteConnection implements IConnection {
     // Expecting this to return exactly one row with the value 'ok'
     const integrityCheck = this.db.pragma('integrity_check') as IntegrityCheckRow[]
     if (integrityCheck.length !== 1 || integrityCheck[0].integrity_check !== 'ok') {
-      throw new Error(`Integrity check failed: ${JSON.stringify(integrityCheck)}`)
+      throw new CorruptDatabaseError(integrityCheck)
     }
 
     // Expecting this to not return anything
     const foreignKeyCheck = this.db.pragma('foreign_key_check') as ForeignKeyCheckRow[]
     if (foreignKeyCheck.length > 0) {
-      throw new Error(`Foreign key check failed: ${JSON.stringify(foreignKeyCheck)}`)
+      throw new ForeignKeyCheckError(foreignKeyCheck)
     }
   }
 
