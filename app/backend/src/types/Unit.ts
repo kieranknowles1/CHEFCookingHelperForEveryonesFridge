@@ -1,4 +1,4 @@
-import type IIngredient from 'types/IIngredient'
+import type Ingredient from 'types/Ingredient'
 
 import UnparsedIngredientError from '../setup/UnparsedIngredientError'
 
@@ -91,7 +91,7 @@ export function tryToMetric (amount: number, unit: string): [number, DatabaseUni
   }
 }
 
-export function convertToPreferred (amount: number, unit: DatabaseUnit, ingredient: IIngredient): number {
+export function convertToPreferred (amount: number, unit: DatabaseUnit, ingredient: Ingredient): number {
   if (unit === ingredient.preferredUnit) {
     return amount
   }

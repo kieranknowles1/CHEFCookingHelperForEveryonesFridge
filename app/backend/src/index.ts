@@ -10,6 +10,7 @@ import winston from 'winston'
 import { API_SPEC_PATH, DATABASE_PATH, LOG_FILE, PORT } from './settings'
 import logger, { initializeLogger } from './logger'
 import ChefDatabaseImpl from './database/ChefDatabaseImpl'
+import SqliteConnection from './database/SqliteConnection'
 import errorHandler from './api/errorHandler'
 import getApiSpec from './getApiSpec'
 import notFoundHandler from './api/notFoundHandler'
@@ -32,7 +33,7 @@ initializeLogger(winston.createLogger({
   ]
 }))
 
-const db = new ChefDatabaseImpl(DATABASE_PATH)
+const db = new ChefDatabaseImpl(new SqliteConnection(DATABASE_PATH))
 
 logger.info('Sanity checking database.')
 // Make sure the database is in a good state.

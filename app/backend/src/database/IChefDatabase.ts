@@ -1,15 +1,15 @@
-import { type IAvailableRecipe, type IRecipeNoId, type ISimilarRecipe } from '../types/IRecipe'
+import { type AvailableRecipe, type RecipeNoId, type SimilarRecipe } from '../types/Recipe'
+import type Barcode from '../types/Barcode'
 import type CaseInsensitiveMap from '../types/CaseInsensitiveMap'
-import type IBarcode from '../types/IBarcode'
-import type IEmbeddedSentence from '../ml/IEmbeddedSentence'
-import type IIngredient from '../types/IIngredient'
-import type IRecipe from '../types/IRecipe'
-import { type IngredientId } from '../types/IIngredient'
+import type EmbeddedSentence from '../ml/EmbeddedSentence'
+import type Ingredient from '../types/Ingredient'
+import { type IngredientId } from '../types/Ingredient'
+import type Recipe from '../types/Recipe'
 
 import type * as types from './types'
 
-export interface IFridgeIngredientAmount {
-  ingredient: IIngredient
+export interface FridgeIngredientAmount {
+  ingredient: Ingredient
   amount: number
 }
 
@@ -18,15 +18,15 @@ export interface IFridgeIngredientAmount {
  * and is only valid for the duration of the callback.
  */
 export interface IWritableDatabase {
-  addIngredient: (ingredient: IIngredient) => void
+  addIngredient: (ingredient: Ingredient) => void
 
   /**
    * Add an embedding for a sentence to the database for future use
    * If the sentence already exists, nothing will be done
    */
-  addEmbedding: (sentence: IEmbeddedSentence) => void
+  addEmbedding: (sentence: EmbeddedSentence) => void
 
-  addRecipe: (recipe: IRecipeNoId) => void
+  addRecipe: (recipe: RecipeNoId) => void
 
   setIngredientAmount: (fridgeId: types.RowId, ingredientId: types.RowId, amount: number) => void
 }
@@ -62,36 +62,36 @@ export default interface IChefDatabase {
   /**
    * Get the embedding for a sentence if it exists
    */
-  getEmbedding: (sentence: string) => IEmbeddedSentence | null
+  getEmbedding: (sentence: string) => EmbeddedSentence | null
 
-  getIngredient: (id: IngredientId) => IIngredient
+  getIngredient: (id: IngredientId) => Ingredient
 
-  getAllIngredients: () => Map<types.RowId, IIngredient>
+  getAllIngredients: () => Map<types.RowId, Ingredient>
 
   /**
    * @param name The name to search for
    * @returns The ingredient, or null if it is not found. May return
    * an equivalent ingredient if an exact match is not found.
    */
-  findIngredientByName: (name: string) => IIngredient | null
+  findIngredientByName: (name: string) => Ingredient | null
 
   getMealTypeNames: () => string[]
-  getMealTypes: () => IEmbeddedSentence[]
+  getMealTypes: () => EmbeddedSentence[]
 
   /**
    * Get a map of ingredient names the ingredient, including any alternate names
    */
-  getAllIngredientsByName: () => CaseInsensitiveMap<IIngredient>
+  getAllIngredientsByName: () => CaseInsensitiveMap<Ingredient>
 
   /**
    * Get a recipe by its ID
    */
-  getRecipe: (id: types.RowId) => IRecipe
+  getRecipe: (id: types.RowId) => Recipe
 
   /**
    * Get similar recipes to the given embedding, ordered by similarity
    */
-  getSimilarRecipes: (embedding: IEmbeddedSentence, minSimilarity: number, limit: number) => ISimilarRecipe[]
+  getSimilarRecipes: (embedding: EmbeddedSentence, minSimilarity: number, limit: number) => SimilarRecipe[]
 
   /**
    * Get the amount of an ingredient in a fridge
@@ -101,15 +101,15 @@ export default interface IChefDatabase {
   /**
    * Get the amounts of all ingredients in a fridge
    */
-  getAllIngredientAmounts: (fridgeId: types.RowId) => Map<types.RowId, IFridgeIngredientAmount>
+  getAllIngredientAmounts: (fridgeId: types.RowId) => Map<types.RowId, FridgeIngredientAmount>
 
   /**
    * Get the recipes that can be made with the current ingredients in the fridge
    */
-  getAvailableRecipes: (fridgeId: types.RowId, checkAmount: boolean, maxMissingIngredients: number) => IAvailableRecipe[]
+  getAvailableRecipes: (fridgeId: types.RowId, checkAmount: boolean, maxMissingIngredients: number) => AvailableRecipe[]
 
   /**
    * Get the data associated with a barcode, throws if code not found
    */
-  getBarcode: (code: types.RowId) => IBarcode
+  getBarcode: (code: types.RowId) => Barcode
 }

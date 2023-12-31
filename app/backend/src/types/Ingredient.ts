@@ -9,7 +9,7 @@ export interface IngredientAmount {
 }
 export type IngredientMap = Map<IngredientId, IngredientAmount>
 
-export default interface IIngredient {
+export default interface Ingredient {
   id: IngredientId
   name: string
   preferredUnit: DatabaseUnit

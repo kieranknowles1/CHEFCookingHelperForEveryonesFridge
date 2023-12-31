@@ -4,12 +4,12 @@ import { type DatabaseUnit } from '../types/Unit'
 // Using `number` here saves on casting
 export type RowId = number
 
-export interface IEmbeddingRow {
+export interface EmbeddingRow {
   sentence: string
   embedding: Buffer
 }
 
-export interface IIngredientRow {
+export interface IngredientRow {
   id: RowId
   name: string
   preferredUnit: DatabaseUnit
@@ -17,12 +17,12 @@ export interface IIngredientRow {
   assumeUnlimited: number
 }
 
-export interface IMealTypeRow {
+export interface MealTypeRow {
   id: RowId
   name: string
 }
 
-export interface IRecipeRow {
+export interface RecipeRow {
   id: RowId
   name: string
   directions: string
@@ -30,7 +30,7 @@ export interface IRecipeRow {
   meal_type_id: RowId
 }
 
-export interface IRecipeIngredientRow {
+export interface RecipeIngredientRow {
   recipe_id: RowId
   ingredient_id: RowId
 
@@ -38,14 +38,14 @@ export interface IRecipeIngredientRow {
   original_line: string
 }
 
-export interface IFridgeIngredientRow {
+export interface FridgeIngredientRow {
   fridge_id: RowId
   ingredient_id: RowId
 
   amount: number
 }
 
-export interface IBarcodeRow {
+export interface BarcodeRow {
   code: RowId
   ingredient_id: RowId
 

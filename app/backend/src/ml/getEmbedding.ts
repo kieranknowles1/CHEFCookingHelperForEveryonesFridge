@@ -1,11 +1,11 @@
 import * as tf from '@tensorflow/tfjs-core'
 
-import type IEmbeddedSentence from './IEmbeddedSentence'
+import type EmbeddedSentence from './EmbeddedSentence'
 import getModel from './getModel'
 
-const embeddingCache = new Map<string, IEmbeddedSentence>()
+const embeddingCache = new Map<string, EmbeddedSentence>()
 
-export default async function getEmbedding (sentence: string): Promise<IEmbeddedSentence> {
+export default async function getEmbedding (sentence: string): Promise<EmbeddedSentence> {
   const cached = embeddingCache.get(sentence)
   if (cached !== undefined) {
     return cached

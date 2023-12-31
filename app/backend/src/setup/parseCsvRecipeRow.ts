@@ -1,11 +1,11 @@
 import type CaseInsensitiveMap from '../types/CaseInsensitiveMap'
-import type IIngredient from '../types/IIngredient'
+import type Ingredient from '../types/Ingredient'
 
-import type IParsedCsvRecipe from './IParsedCsvRecipe'
-import type IRawCsvRecipe from './IRawCsvRecipe'
+import type ParsedCsvRecipe from './ParsedCsvRecipe'
+import type RawCsvRecipe from './RawCsvRecipe'
 import parseIngredients from './parseIngredients'
 
-export default function parseCsvRecipeRow (row: IRawCsvRecipe, allIngredients: CaseInsensitiveMap<IIngredient>): IParsedCsvRecipe {
+export default function parseCsvRecipeRow (row: RawCsvRecipe, allIngredients: CaseInsensitiveMap<Ingredient>): ParsedCsvRecipe {
   const directionsArray = JSON.parse(row.directions) as string[]
   const directions = directionsArray.join('\n')
   const ingredients = parseIngredients(row, allIngredients)

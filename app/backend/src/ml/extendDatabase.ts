@@ -1,5 +1,4 @@
-import { type Database } from 'better-sqlite3'
-
+import type IConnection from '../database/IConnection'
 import { bufferToFloat32Array } from '../database/bufferFloat32Array'
 import logger from '../logger'
 
@@ -8,7 +7,7 @@ import getSimilarity from './getSimilarity'
 /**
  * Adds functions for use in database queries related to sentence encoding.
  */
-export default function extendDatabase (db: Database): void {
+export default function extendDatabase (db: IConnection): void {
   logger.info('Extending database with ML functions')
   /**
    * ml_similarity (embedding, embedding) -> float

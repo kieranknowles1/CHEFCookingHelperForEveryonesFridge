@@ -2,12 +2,12 @@ import Fraction from 'fraction.js'
 
 import { convertToPreferred, tryToMetric } from '../types/Unit'
 import type CaseInsensitiveMap from '../types/CaseInsensitiveMap'
-import type IIngredient from '../types/IIngredient'
-import { type IngredientAmount } from '../types/IIngredient'
+import type Ingredient from '../types/Ingredient'
+import { type IngredientAmount } from '../types/Ingredient'
 import assertNotNull from '../assertNotNull'
 import logger from '../logger'
 
-import type IRawCsvRecipe from './IRawCsvRecipe'
+import type RawCsvRecipe from './RawCsvRecipe'
 import UnparsedIngredientError from './UnparsedIngredientError'
 
 const AMOUNT_PATTERN = /(?<amount>\d+\/\d+|\d+ \d+\/\d+|\d+)( (level|heaping|heaped|round|rounded))? (?<unit>\w+)/g
@@ -17,7 +17,7 @@ function amountFromMatch (match: RegExpMatchArray): number {
   return new Fraction(match.groups.amount).valueOf()
 }
 
-function convertUnit (ingredientLine: string, ingredient: IIngredient): number {
+function convertUnit (ingredientLine: string, ingredient: Ingredient): number {
   const matches = Array.from(ingredientLine.matchAll(AMOUNT_PATTERN))
 
   if (matches.length === 0) { throw new UnparsedIngredientError(ingredient) }
@@ -44,7 +44,7 @@ function convertUnit (ingredientLine: string, ingredient: IIngredient): number {
   }
 }
 
-function getAmount (originalName: string, ingredient: IIngredient, amounts: string[]): IngredientAmount {
+function getAmount (originalName: string, ingredient: Ingredient, amounts: string[]): IngredientAmount {
   if (ingredient.preferredUnit === 'none') {
     return {
       amount: null,
@@ -63,12 +63,12 @@ function getAmount (originalName: string, ingredient: IIngredient, amounts: stri
 }
 
 interface IngredientEntry {
-  ingredient: IIngredient
+  ingredient: Ingredient
   amount: number | null
   originalLine: string
 }
 
-export default function parseIngredients (row: IRawCsvRecipe, ingredients: CaseInsensitiveMap<IIngredient>): IngredientEntry[] {
+export default function parseIngredients (row: RawCsvRecipe, ingredients: CaseInsensitiveMap<Ingredient>): IngredientEntry[] {
   const entries: IngredientEntry[] = []
 
   // NER contains names, ingredients contains names and amounts

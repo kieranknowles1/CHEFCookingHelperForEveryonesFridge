@@ -10,20 +10,21 @@ import cliProgress from 'cli-progress'
 import csv from 'csv-parse'
 import progressTracker from 'progress-stream'
 
-import logger, { LogLevel } from '../logger'
 import CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import CaseInsensitiveSet from '../types/CaseInsensitiveSet'
 import ChefDatabaseImpl from '../database/ChefDatabaseImpl'
 import { DATABASE_PATH } from '../settings'
+import type EmbeddedSentence from '../ml/EmbeddedSentence'
 import type IChefDatabase from '../database/IChefDatabase'
-import type IEmbeddedSentence from '../ml/IEmbeddedSentence'
-import type IIngredient from '../types/IIngredient'
+import type Ingredient from '../types/Ingredient'
+import SqliteConnection from '../database/SqliteConnection'
 import getEmbedding from '../ml/getEmbedding'
 import getSimilarity from '../ml/getSimilarity'
+import logger from '../logger'
 import { preloadModel } from '../ml/getModel'
 
-import type IParsedCsvRecipe from './IParsedCsvRecipe'
-import type IRawCsvRecipe from './IRawCsvRecipe'
+import type ParsedCsvRecipe from './ParsedCsvRecipe'
+import type RawCsvRecipe from './RawCsvRecipe'
 import parseCsvRecipeRow from './parseCsvRecipeRow'
 
 // TODO: Use environment variables and put this somewhere outside the container
@@ -51,7 +52,7 @@ function createTrackers (path: string): [progressTracker.ProgressStream, cliProg
 /** Map of missed ingredient => frequency */
 const missedIngredients = new CaseInsensitiveMap<number>()
 
-function recipeValid (row: IRawCsvRecipe, ingredientNames: CaseInsensitiveSet): boolean {
+function recipeValid (row: RawCsvRecipe, ingredientNames: CaseInsensitiveSet): boolean {
   let valid = true
   const ingredients = JSON.parse(row.NER) as string[]
   for (const ingredient of ingredients) {
@@ -63,17 +64,17 @@ function recipeValid (row: IRawCsvRecipe, ingredientNames: CaseInsensitiveSet): 
   return valid
 }
 
-async function getCsvData (ingredients: CaseInsensitiveMap<IIngredient>): Promise<[IParsedCsvRecipe[], number]> {
+async function getCsvData (ingredients: CaseInsensitiveMap<Ingredient>): Promise<[ParsedCsvRecipe[], number]> {
   const ingredientNames = new CaseInsensitiveSet(ingredients.keys())
 
   let totalRows = 0
-  const recipes: IParsedCsvRecipe[] = []
+  const recipes: ParsedCsvRecipe[] = []
 
   const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
   await new Promise<void>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
     .pipe(progress)
     .pipe(csv.parse({ columns: true }))
-    .on('data', (row: IRawCsvRecipe) => {
+    .on('data', (row: RawCsvRecipe) => {
       totalRows++
       try {
         // Filter to only the most common ingredients
@@ -95,7 +96,7 @@ async function getCsvData (ingredients: CaseInsensitiveMap<IIngredient>): Promis
   return [recipes, totalRows]
 }
 
-function predictMealType (recipeName: IEmbeddedSentence, mealTypes: IEmbeddedSentence[]): IEmbeddedSentence {
+function predictMealType (recipeName: EmbeddedSentence, mealTypes: EmbeddedSentence[]): EmbeddedSentence {
   let best = mealTypes[0]
   let bestSimilarity = getSimilarity(recipeName.embedding, best.embedding)
 
@@ -173,7 +174,7 @@ async function main (db: IChefDatabase): Promise<void> {
   db.checkIntegrity()
 }
 
-const db = new ChefDatabaseImpl(DATABASE_PATH)
+const db = new ChefDatabaseImpl(new SqliteConnection(DATABASE_PATH))
 
 main(db).catch(err => {
   logger.caughtError(err)

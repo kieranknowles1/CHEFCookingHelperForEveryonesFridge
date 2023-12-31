@@ -3,7 +3,7 @@ import assert from 'assert'
 import { describe, it } from 'mocha'
 
 import { convertToPreferred, tryToMetric } from '../../types/Unit'
-import type IIngredient from '../../types/IIngredient'
+import type Ingredient from '../../types/Ingredient'
 import UnparsedIngredientError from '../../setup/UnparsedIngredientError'
 
 describe('Unit', () => {
@@ -103,7 +103,7 @@ describe('Unit', () => {
   })
 
   describe('convertToPreferred', () => {
-    let ingredient: IIngredient
+    let ingredient: Ingredient
     beforeEach(() => {
       ingredient = {
         id: 1,

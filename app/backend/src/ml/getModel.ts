@@ -1,5 +1,6 @@
 // Register the tfjs backend.
 import '@tensorflow/tfjs'
+
 import * as use from '@tensorflow-models/universal-sentence-encoder'
 import { Mutex } from 'async-mutex'
 
