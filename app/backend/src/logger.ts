@@ -1,5 +1,3 @@
-import assertNotNull from './assertNotNull'
-
 export interface ILogger {
   log: (level: string, message: string) => void
 }
@@ -14,23 +12,29 @@ export enum LogLevel {
   silly = 'silly',
 }
 
-let instance: ILogger | undefined
+let instance: ILogger = {
+  log: (): void => {
+    // Do nothing
+  }
+}
 
-export function initializeLogger (logger: ILogger): void {
+export function setLogger (logger: ILogger): void {
   instance = logger
 }
 
+/**
+ * Logging interface for the backend
+ * Does nothing by default, must be set with `setLogger` first.
+ * ILogger is a subset of the winston logger interface
+ */
 export default {
   warn: (message: string): void => {
-    assertNotNull(instance)
     instance.log(LogLevel.warn, message)
   },
   info: (message: string): void => {
-    assertNotNull(instance)
     instance.log(LogLevel.info, message)
   },
   error: (message: string): void => {
-    assertNotNull(instance)
     instance.log(LogLevel.error, message)
   },
   /**
@@ -39,7 +43,6 @@ export default {
    * If not, print at level `error` that the error was an unknown type
    */
   caughtError: (err: unknown): void => {
-    assertNotNull(instance)
     if (err instanceof Error) {
       instance.log(LogLevel.error, `${err.message} stack ${err.stack}`)
     } else {

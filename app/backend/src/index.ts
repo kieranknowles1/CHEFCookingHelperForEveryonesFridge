@@ -8,7 +8,7 @@ import swaggerUi from 'swagger-ui-express'
 import winston from 'winston'
 
 import { API_SPEC_PATH, DATABASE_PATH, LOG_FILE, PORT } from './settings'
-import logger, { initializeLogger } from './logger'
+import logger, { setLogger } from './logger'
 import ChefDatabaseImpl from './database/ChefDatabaseImpl'
 import SqliteConnection from './database/SqliteConnection'
 import errorHandler from './api/errorHandler'
@@ -20,7 +20,7 @@ import registerEndpoints from './api/registerEndpoints'
 if (fs.existsSync(LOG_FILE)) {
   fs.unlinkSync(LOG_FILE)
 }
-initializeLogger(winston.createLogger({
+setLogger(winston.createLogger({
   level: 'info',
   format: winston.format.simple(),
   transports: [
