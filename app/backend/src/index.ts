@@ -5,10 +5,9 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import express from 'express'
 import swaggerUi from 'swagger-ui-express'
-import winston from 'winston'
 
-import { API_SPEC_PATH, DATABASE_PATH, LOG_FILE, PORT } from './settings'
-import logger, { setLogger } from './logger'
+import { API_SPEC_PATH, DATABASE_PATH, PORT } from './settings'
+import logger, { createDefaultLogger, setLogger } from './logger'
 import ChefDatabaseImpl from './database/ChefDatabaseImpl'
 import SqliteConnection from './database/SqliteConnection'
 import errorHandler from './api/errorHandler'
@@ -17,21 +16,7 @@ import notFoundHandler from './api/notFoundHandler'
 import { preloadModel } from './ml/getModel'
 import registerEndpoints from './api/registerEndpoints'
 
-if (fs.existsSync(LOG_FILE)) {
-  fs.unlinkSync(LOG_FILE)
-}
-setLogger(winston.createLogger({
-  level: 'info',
-  format: winston.format.simple(),
-  transports: [
-    new winston.transports.Console({
-      format: winston.format.colorize({ all: true })
-    }),
-    new winston.transports.File({
-      filename: LOG_FILE
-    })
-  ]
-}))
+setLogger(createDefaultLogger())
 
 const db = new ChefDatabaseImpl(new SqliteConnection(DATABASE_PATH))
 
