@@ -320,13 +320,18 @@ export default class ChefDatabaseImpl implements IChefDatabase {
    * Get a map of ingredient names to IDs, including any alternate names
    */
   public getAllIngredientsByName (): CaseInsensitiveMap<Ingredient> {
-    const statement = this._connection.prepare<[], types.IngredientRow>(`
-      SELECT * FROM view_ingredient_by_name
+    type Result = types.IngredientRow & { alt_name: string }
+    const statement = this._connection.prepare<[], Result>(`
+      SELECT
+        view_ingredient_by_name.name AS alt_name,
+        ingredient.*
+      FROM view_ingredient_by_name
+        JOIN ingredient ON ingredient.id = view_ingredient_by_name.id
     `)
     const result = statement.all()
     const map = new CaseInsensitiveMap<Ingredient>()
     for (const pair of result) {
-      map.set(pair.name, this.ingredientFromRow(pair))
+      map.set(pair.alt_name, this.ingredientFromRow(pair))
     }
 
     return map

@@ -1,15 +1,17 @@
 import assert from 'assert'
+import fs from 'fs'
+import path from 'path'
 
 import { describe, it } from 'mocha'
 
+import { type IngredientAmount, type IngredientId, type IngredientNoId } from '../../types/Ingredient'
 import ChefDatabaseImpl from '../../database/ChefDatabaseImpl'
 import type IChefDatabase from '../../database/IChefDatabase'
 import type IConnection from '../../database/IConnection'
-import SqliteConnection from '../../database/SqliteConnection'
 import { type IWritableDatabase } from '../../database/IChefDatabase'
-import { type IngredientAmount, type IngredientId, type IngredientNoId } from '../../types/Ingredient'
 import type Ingredient from '../../types/Ingredient'
 import { type RecipeNoId } from '../../types/Recipe'
+import SqliteConnection from '../../database/SqliteConnection'
 
 const embedded = { sentence: 'test', embedding: Float32Array.from([1, 2, 3]) }
 
@@ -20,6 +22,9 @@ describe('database/ChefDatabaseImpl', () => {
     connection = new SqliteConnection(':memory:')
     database = new ChefDatabaseImpl(connection)
     database.resetDatabase('IKnowWhatIAmDoing')
+
+    const dummyData = fs.readFileSync(path.join(process.cwd(), 'data/dummydata.sql'), 'utf-8')
+    connection.exec(dummyData)
   })
 
   describe('checkIntegrity', () => {
@@ -120,6 +125,29 @@ describe('database/ChefDatabaseImpl', () => {
       const rowCount = connection.prepare<[], { count: number }>('SELECT COUNT(*) AS count FROM ingredient').get()?.count
 
       assert.strictEqual(ingredients.size, rowCount)
+    })
+
+    it('should return the same ingredient properties as getIngredient', () => {
+      const ingredients = database.getAllIngredients()
+      for (const ingredient of ingredients.values()) {
+        assert.deepStrictEqual(ingredient, database.getIngredient(ingredient.id))
+      }
+    })
+  })
+
+  describe('getAllIngredientsByName', () => {
+    it('should get all ingredients by name', () => {
+      const ingredients = database.getAllIngredientsByName()
+      const rowCount = connection.prepare<[], { count: number }>('SELECT COUNT(*) AS count FROM view_ingredient_by_name').get()?.count
+
+      assert.strictEqual(ingredients.size, rowCount)
+    })
+
+    it('should return the same ingredient properties as getIngredient', () => {
+      const ingredients = database.getAllIngredientsByName()
+      for (const ingredient of ingredients.values()) {
+        assert.deepStrictEqual(ingredient, database.getIngredient(ingredient.id))
+      }
     })
   })
 

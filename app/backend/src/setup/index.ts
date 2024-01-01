@@ -72,6 +72,9 @@ async function getCsvData (ingredients: CaseInsensitiveMap<Ingredient>): Promise
   let totalRows = 0
   const recipes: ParsedCsvRecipe[] = []
 
+  console.log(ingredients)
+  process.exit(0)
+
   const [progress, bar] = createTrackers(CSV_DATA_PATH)
   await new Promise<void>((resolve, reject) => createReadStream(CSV_DATA_PATH)
     .pipe(progress)
