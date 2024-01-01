@@ -20,7 +20,7 @@ function amountFromMatch (match: RegExpMatchArray): number {
 function convertUnit (ingredientLine: string, ingredient: Ingredient): number {
   const matches = Array.from(ingredientLine.matchAll(AMOUNT_PATTERN))
 
-  if (matches.length === 0) { throw new UnparsedIngredientError(ingredient) }
+  if (matches.length === 0) { throw new UnparsedIngredientError(ingredient, ingredientLine) }
 
   if (ingredient.preferredUnit === 'whole') {
     // Nothing to do

@@ -25,6 +25,14 @@ describe('database/ChefDatabaseImpl', () => {
 
     const dummyData = fs.readFileSync(path.join(process.cwd(), 'data/dummydata.sql'), 'utf-8')
     connection.exec(dummyData)
+
+    // Add dummy values for meal type embeddings. Testing the embedding logic is not the point of this test
+    database.wrapTransaction(writable => {
+      for (const mealType of database.getMealTypeNames()) {
+        writable.addEmbedding({ sentence: mealType, embedding: Float32Array.from([1, 2, 3]) })
+      }
+    })
+    database.checkIntegrity()
   })
 
   describe('checkIntegrity', () => {
