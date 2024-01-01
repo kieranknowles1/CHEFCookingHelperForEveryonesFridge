@@ -159,6 +159,19 @@ describe('database/ChefDatabaseImpl', () => {
     })
   })
 
+  describe('findIngredientByName', () => {
+    it('should get an ingredient by its name', () => {
+      const byId = database.getIngredient(1)
+      const byName = database.findIngredientByName(byId.name)
+
+      assert.deepStrictEqual(byName, byId)
+    })
+
+    it('should return null if the ingredient does not exist', () => {
+      assert.deepStrictEqual(database.findIngredientByName('does not exist'), null)
+    })
+  })
+
   describe('WritableDatabase', () => {
     describe('addEmbedding', () => {
       it('should add an embedding', () => {
