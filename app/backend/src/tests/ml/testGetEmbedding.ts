@@ -2,7 +2,7 @@ import assert from 'assert'
 
 import { describe, it } from 'mocha'
 
-import getEmbedding from '../../ml/getEmbedding'
+import getEmbedding, { clearCache } from '../../ml/getEmbedding'
 import getSimilarity from '../../ml/getSimilarity'
 import { preloadModel } from '../../ml/getModel'
 
@@ -10,6 +10,11 @@ describe('ml/getEmbedding', function () {
   before(async function () {
     this.timeout(30000)
     await preloadModel()
+  })
+
+  this.afterEach(() => {
+    // Timing related tests may depend on the cache being empty
+    clearCache()
   })
 
   // Embeddings are expected to be slow, so we increase the warning threshold

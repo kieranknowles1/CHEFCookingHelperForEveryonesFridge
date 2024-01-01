@@ -5,6 +5,10 @@ import getModel from './getModel'
 
 const embeddingCache = new Map<string, EmbeddedSentence>()
 
+export function clearCache (): void {
+  embeddingCache.clear()
+}
+
 export default async function getEmbedding (sentence: string): Promise<EmbeddedSentence> {
   const cached = embeddingCache.get(sentence)
   if (cached !== undefined) {
