@@ -1,9 +1,9 @@
 import { type AvailableRecipe, type RecipeNoId, type SimilarRecipe } from '../types/Recipe'
+import { type IngredientId, type IngredientNoId } from '../types/Ingredient'
 import type Barcode from '../types/Barcode'
 import type CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type EmbeddedSentence from '../ml/EmbeddedSentence'
 import type Ingredient from '../types/Ingredient'
-import { type IngredientId } from '../types/Ingredient'
 import type Recipe from '../types/Recipe'
 
 import type * as types from './types'
@@ -18,7 +18,7 @@ export interface FridgeIngredientAmount {
  * and is only valid for the duration of the callback.
  */
 export interface IWritableDatabase {
-  addIngredient: (ingredient: Ingredient) => void
+  addIngredient: (ingredient: IngredientNoId) => types.RowId
 
   /**
    * Add an embedding for a sentence to the database for future use

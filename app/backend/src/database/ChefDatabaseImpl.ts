@@ -2,7 +2,7 @@ import path from 'path'
 import { readFileSync } from 'fs'
 
 import { type AvailableRecipe, type RecipeNoId, type SimilarRecipe } from '../types/Recipe'
-import { type IngredientAmount, type IngredientId } from '../types/Ingredient'
+import { type IngredientAmount, type IngredientId, type IngredientNoId } from '../types/Ingredient'
 import type Barcode from '../types/Barcode'
 import CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type EmbeddedSentence from '../ml/EmbeddedSentence'
@@ -57,17 +57,27 @@ class WritableDatabaseImpl implements IWritableDatabase {
     this._connection = connection
   }
 
-  public addIngredient (ingredient: Ingredient): void {
+  // Check that the ID is not a bigint. Used to areas that work with IDs under the assumption that they are numbers as JSON does not support bigints
+  private assertNotBigint (id: number | bigint): asserts id is number {
+    if (typeof id === 'bigint') {
+      throw new Error('ID returned from database is a bigint')
+    }
+  }
+
+  public addIngredient (ingredient: IngredientNoId): types.RowId {
     this.assertValid()
     // TODO: Reuse prepared statements
     // TODO: statement pack for writable to only prepare them once
-    this._connection.prepare<[string], undefined>(`
+    const statement = this._connection.prepare<[string, number, string, number | null], undefined>(`
       INSERT INTO ingredient
-        (name)
+        (name, assumeUnlimited, preferredUnit, density)
       VALUES
-        (?)
+        (?, ?, ?, ?)
     `)
-      .run(ingredient.name)
+    const id = statement.run(ingredient.name, ingredient.assumeUnlimited ? 1 : 0, ingredient.preferredUnit, ingredient.density ?? null).lastInsertRowid
+    this.assertNotBigint(id)
+
+    return id
   }
 
   public addEmbedding (sentence: EmbeddedSentence): void {
@@ -103,9 +113,7 @@ class WritableDatabaseImpl implements IWritableDatabase {
       recipe.link,
       recipe.mealType.sentence
     ).lastInsertRowid
-    if (typeof id === 'bigint') {
-      throw new Error('Got bigint for lastInsertRowid')
-    }
+    this.assertNotBigint(id)
 
     const ingredientStatement = this._connection.prepare<[types.RowId, types.RowId, number | null, string], undefined>(`
       INSERT INTO recipe_ingredient
@@ -269,7 +277,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
   /**
    * @param name The name to search for
    * @returns The ingredient, or null if it is not found. May return
-   * an equipotent ingredient if an exact match is not found.
+   * an equivalent ingredient if an exact match is not found.
    */
   public findIngredientByName (name: string): Ingredient | null {
     const statement = this._connection.prepare<[string], types.IngredientRow>(`

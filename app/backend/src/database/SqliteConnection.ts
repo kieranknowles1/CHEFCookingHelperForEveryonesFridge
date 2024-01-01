@@ -6,7 +6,7 @@ import sqlite from 'better-sqlite3'
 
 import logger from '../logger'
 
-import { type FunctionOptions, type IPreparedStatement } from './IConnection'
+import { type FunctionOptions, type IPreparedStatement, type SqliteValue } from './IConnection'
 import type IConnection from './IConnection'
 
 interface IntegrityCheckRow {
@@ -72,7 +72,7 @@ export default class SqliteConnection implements IConnection {
     this.db.function(name, options, callback)
   }
 
-  public prepare<TParams extends unknown[], TRow> (sql: string): IPreparedStatement<TParams, TRow> {
+  public prepare<TParams extends SqliteValue[], TRow> (sql: string): IPreparedStatement<TParams, TRow> {
     const stmt = this.db.prepare(sql)
     return {
       run: (...params: TParams) => stmt.run(...params),

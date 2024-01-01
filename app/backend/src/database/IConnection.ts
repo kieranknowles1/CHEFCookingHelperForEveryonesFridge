@@ -14,11 +14,13 @@ export interface RunResult {
   lastInsertRowid: number | bigint
 }
 
+export type SqliteValue = number | string | bigint | Buffer | null
+
 /**
  * A prepared statement that can be executed multiple times with different parameters
  * NOTE: It is the responsibility of the caller to ensure that type parameters match the SQL statement
  */
-export interface IPreparedStatement<TParams extends unknown[], TRow> {
+export interface IPreparedStatement<TParams extends SqliteValue[], TRow> {
   /**
    * Execute the statement with the given parameters
    * Returns the number of rows that were changed by the statement (INSERT, UPDATE or DELETE)
@@ -54,7 +56,7 @@ export default interface IConnection {
   /**
    * Prepare a statement that can be executed multiple times with different parameters
    */
-  prepare: <TParams extends unknown[], TRow>(sql: string) => IPreparedStatement<TParams, TRow>
+  prepare: <TParams extends SqliteValue[], TRow>(sql: string) => IPreparedStatement<TParams, TRow>
 
   /**
    * Register a function that can be called from SQL statements
