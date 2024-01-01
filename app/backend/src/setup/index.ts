@@ -3,7 +3,7 @@
  * This script should be run using `npm run setup` before running the main script.
  */
 
-import { createReadStream, statSync } from 'fs'
+import { createReadStream, readFileSync, statSync } from 'fs'
 import path from 'path'
 
 import cliProgress from 'cli-progress'
@@ -22,13 +22,15 @@ import getEmbedding from '../ml/getEmbedding'
 import getSimilarity from '../ml/getSimilarity'
 import logger from '../logger'
 import { preloadModel } from '../ml/getModel'
+import type IConnection from '../database/IConnection'
 
 import type ParsedCsvRecipe from './ParsedCsvRecipe'
 import type RawCsvRecipe from './RawCsvRecipe'
 import parseCsvRecipeRow from './parseCsvRecipeRow'
 
 // TODO: Use environment variables and put this somewhere outside the container
-const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
+const SQL_DUMMY_DATA_PATH = path.join(process.cwd(), 'data/dummydata.sql')
+const CSV_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
 const PROGRESS_BAR_STYLE = cliProgress.Presets.shades_classic
 
 /**
@@ -70,8 +72,8 @@ async function getCsvData (ingredients: CaseInsensitiveMap<Ingredient>): Promise
   let totalRows = 0
   const recipes: ParsedCsvRecipe[] = []
 
-  const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
-  await new Promise<void>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
+  const [progress, bar] = createTrackers(CSV_DATA_PATH)
+  await new Promise<void>((resolve, reject) => createReadStream(CSV_DATA_PATH)
     .pipe(progress)
     .pipe(csv.parse({ columns: true }))
     .on('data', (row: RawCsvRecipe) => {
@@ -153,11 +155,17 @@ async function importData (db: IChefDatabase): Promise<ImportDataReturn> {
   }
 }
 
-async function main (db: IChefDatabase): Promise<void> {
+async function main (connection: IConnection, db: IChefDatabase): Promise<void> {
   void preloadModel()
 
   logger.info('Setting up schema')
   db.resetDatabase('IKnowWhatIAmDoing')
+
+  logger.info('Adding dummy data')
+  const dummyData = readFileSync(SQL_DUMMY_DATA_PATH, 'utf-8')
+  db.wrapTransaction(() => {
+    connection.exec(dummyData)
+  })
 
   logger.info('Adding meal types')
   await embedMealTypes(db)
@@ -174,9 +182,10 @@ async function main (db: IChefDatabase): Promise<void> {
   db.checkIntegrity()
 }
 
-const db = new ChefDatabaseImpl(new SqliteConnection(DATABASE_PATH))
+const connection = new SqliteConnection(DATABASE_PATH)
+const db = new ChefDatabaseImpl(connection)
 
-main(db).catch(err => {
+main(connection, db).catch(err => {
   logger.caughtError(err)
   process.exit(1)
 })

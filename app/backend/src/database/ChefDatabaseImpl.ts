@@ -20,7 +20,6 @@ import InvalidIdError from './InvalidIdError'
 
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'data/initialdata.sql')
-const DUMMY_DATA_PATH = path.join(process.cwd(), 'data/dummydata.sql')
 
 interface AvailableRecipesResultRow {
   id: types.RowId
@@ -167,9 +166,6 @@ export default class ChefDatabaseImpl implements IChefDatabase {
     logger.info('Running initial data script')
     const initialData = readFileSync(INITIAL_DATA_PATH, 'utf-8')
     this._connection.exec(initialData)
-    logger.info('Running dummy data script')
-    const dummyData = readFileSync(DUMMY_DATA_PATH, 'utf-8')
-    this._connection.exec(dummyData)
   }
 
   public checkIntegrity (): void {
