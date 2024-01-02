@@ -2,8 +2,6 @@ import fs from 'fs'
 
 import winston from 'winston'
 
-import { LOG_FILE } from './settings'
-
 export interface ILogger {
   log: (level: string, message: string) => void
 }
@@ -24,11 +22,11 @@ let instance: ILogger = {
   }
 }
 
-export function createDefaultLogger (): ILogger {
-  if (fs.existsSync(LOG_FILE)) {
-    fs.unlinkSync(LOG_FILE)
+export function createDefaultLogger (path: string): ILogger {
+  if (fs.existsSync(path)) {
+    fs.unlinkSync(path)
   }
-  return winston.createLogger({
+  const logger = winston.createLogger({
     level: 'info',
     format: winston.format.simple(),
     transports: [
@@ -36,10 +34,12 @@ export function createDefaultLogger (): ILogger {
         format: winston.format.colorize({ all: true })
       }),
       new winston.transports.File({
-        filename: LOG_FILE
+        filename: path
       })
     ]
   })
+  logger.info(`Log opened at ${path}`)
+  return logger
 }
 
 export function setLogger (logger: ILogger): void {

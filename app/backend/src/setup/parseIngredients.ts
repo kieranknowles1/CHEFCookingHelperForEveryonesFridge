@@ -7,7 +7,6 @@ import type Ingredient from '../types/Ingredient'
 import { type IngredientAmount } from '../types/Ingredient'
 import assertNotNull from '../assertNotNull'
 import decodeObject from '../decodeObject'
-import logger from '../logger'
 
 import type RawCsvRecipe from './RawCsvRecipe'
 import UnparsedIngredientError from './UnparsedIngredientError'
@@ -41,8 +40,7 @@ function convertUnit (ingredientLine: string, ingredient: Ingredient): number {
     }
     // No case was handled, throw error
     // This is a higher priority, so also log more detail
-    logger.warn(`Could not convert '${ingredientLine}' to metric.`)
-    throw new UnparsedIngredientError(ingredient)
+    throw new UnparsedIngredientError(ingredient, `Could not convert '${ingredientLine}' to metric.`)
   }
 }
 

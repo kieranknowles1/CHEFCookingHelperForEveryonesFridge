@@ -6,7 +6,7 @@ import cors from 'cors'
 import express from 'express'
 import swaggerUi from 'swagger-ui-express'
 
-import { API_SPEC_PATH, DATABASE_PATH, PORT } from './settings'
+import { API_SPEC_PATH, DATABASE_PATH, PORT, RUNTIME_LOG_FILE } from './settings'
 import logger, { createDefaultLogger, setLogger } from './logger'
 import ChefDatabaseImpl from './database/ChefDatabaseImpl'
 import SqliteConnection from './database/SqliteConnection'
@@ -16,7 +16,7 @@ import notFoundHandler from './api/notFoundHandler'
 import { preloadModel } from './ml/getModel'
 import registerEndpoints from './api/registerEndpoints'
 
-setLogger(createDefaultLogger())
+setLogger(createDefaultLogger(RUNTIME_LOG_FILE))
 
 const db = new ChefDatabaseImpl(new SqliteConnection(DATABASE_PATH))
 

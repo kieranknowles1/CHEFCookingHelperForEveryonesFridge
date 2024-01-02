@@ -11,11 +11,11 @@ import cliProgress from 'cli-progress'
 import csv from 'csv-parse'
 import progressTracker from 'progress-stream'
 
+import { DATABASE_PATH, SETUP_LOG_FILE } from '../settings'
 import logger, { createDefaultLogger, setLogger } from '../logger'
 import CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import CaseInsensitiveSet from '../types/CaseInsensitiveSet'
 import ChefDatabaseImpl from '../database/ChefDatabaseImpl'
-import { DATABASE_PATH } from '../settings'
 import type EmbeddedSentence from '../ml/EmbeddedSentence'
 import type IChefDatabase from '../database/IChefDatabase'
 import type IConnection from '../database/IConnection'
@@ -26,6 +26,7 @@ import getEmbedding from '../ml/getEmbedding'
 import getSimilarity from '../ml/getSimilarity'
 import { preloadModel } from '../ml/getModel'
 
+import DataImportError from './DataImportError'
 import type ParsedCsvRecipe from './ParsedCsvRecipe'
 import type RawCsvRecipe from './RawCsvRecipe'
 import parseCsvRecipeRow from './parseCsvRecipeRow'
@@ -87,7 +88,11 @@ async function getCsvData (ingredients: CaseInsensitiveMap<Ingredient>): Promise
           recipes.push(recipe)
         }
       } catch (err) {
-        logger.caughtError(err)
+        if (err instanceof DataImportError) {
+          logger.warn(err.message)
+        } else {
+          logger.caughtError(err)
+        }
       }
     })
     .on('end', () => {
@@ -125,10 +130,19 @@ async function embedMealTypes (db: IChefDatabase): Promise<void> {
   })
 }
 
-interface ImportDataReturn { success: number, total: number }
-async function importData (db: IChefDatabase): Promise<ImportDataReturn> {
+async function importData (db: IChefDatabase): Promise<void> {
   logger.info('Collecting data from CSV')
   const [csvRecipes, csvTotalRows] = await getCsvData(db.getAllIngredientsByName())
+
+  logger.info(`Imported ${csvRecipes.length} recipes from ${csvTotalRows} rows (${(csvRecipes.length / csvTotalRows) * 100}%) of CSV data`)
+
+  // Log the missed ingredients
+  // Skip entries with exactly 1 occurrence, these are probably typos or too specific to be useful
+  const missedFrequencies = Array.from(missedIngredients)
+    .filter(([, count]) => count > 1)
+    .sort((a, b) => b[1] - a[1])
+
+  logger.info(`Missing ingredients by frequency: ${missedFrequencies.toString()}`)
 
   logger.info('Importing data into the database')
   const mealTypes = db.getMealTypes()
@@ -150,11 +164,6 @@ async function importData (db: IChefDatabase): Promise<ImportDataReturn> {
     }
   })
   bar.stop()
-
-  return {
-    success: csvRecipes.length,
-    total: csvTotalRows
-  }
 }
 
 async function main (connection: IConnection, db: IChefDatabase): Promise<void> {
@@ -173,18 +182,15 @@ async function main (connection: IConnection, db: IChefDatabase): Promise<void> 
   await embedMealTypes(db)
 
   logger.info('Importing data into the database')
-  const dataInfo = await importData(db)
+  await importData(db)
 
-  logger.info(`Setup done, imported ${dataInfo.success} of ${dataInfo.total} recipes (${(dataInfo.success / dataInfo.total) * 100}%)`)
-
-  const missedFrequencies = Array.from(missedIngredients).sort((a, b) => b[1] - a[1])
-  logger.info(`Missing ingredients by frequency: ${missedFrequencies.toString()}`)
+  logger.info('Setup done')
 
   // Make sure nothing went wrong with the database
   db.checkIntegrity()
 }
 
-setLogger(createDefaultLogger())
+setLogger(createDefaultLogger(SETUP_LOG_FILE))
 
 const connection = new SqliteConnection(DATABASE_PATH)
 const db = new ChefDatabaseImpl(connection)

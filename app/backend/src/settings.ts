@@ -6,7 +6,8 @@ import path from 'path'
  */
 
 export const DATABASE_PATH = path.join(process.cwd(), 'working_data/chefdatabase.db')
-export const LOG_FILE = 'working_data/chefbackend.log'
+export const SETUP_LOG_FILE = 'working_data/chefsetup.log'
+export const RUNTIME_LOG_FILE = 'working_data/chefbackend.log'
 
 export const PORT = 3000
 
