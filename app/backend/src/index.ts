@@ -54,9 +54,6 @@ app.use(bodyParser.json())
 logger.info('Registering endpoints.')
 registerEndpoints(app, db)
 
-app.use(notFoundHandler)
-app.use(errorHandler)
-
 app.listen(PORT, () => {
   logger.info(`Backend listening on http://localhost:${PORT}`)
 })
