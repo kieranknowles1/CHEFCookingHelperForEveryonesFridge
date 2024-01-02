@@ -10,9 +10,7 @@ import { API_SPEC_PATH, DATABASE_PATH, PORT, RUNTIME_LOG_FILE } from './settings
 import logger, { createDefaultLogger, setLogger } from './logger'
 import ChefDatabaseImpl from './database/ChefDatabaseImpl'
 import SqliteConnection from './database/SqliteConnection'
-import errorHandler from './api/errorHandler'
 import getApiSpec from './getApiSpec'
-import notFoundHandler from './api/notFoundHandler'
 import { preloadModel } from './ml/getModel'
 import registerEndpoints from './api/registerEndpoints'
 
