@@ -1,5 +1,8 @@
 // Allow type assertions here because the user of this class is expected to provide the correct types
 // for the statement results
+
+// TODO: See if io-ts can be used to validate the results of the statements
+// Not sure how to handle buffer results though
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 
 import sqlite from 'better-sqlite3'

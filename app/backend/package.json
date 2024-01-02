@@ -63,6 +63,7 @@
     "express": "^4.18.2",
     "express-openapi-validator": "^5.1.2",
     "fraction.js": "^4.3.4",
+    "io-ts": "^2.2.21",
     "progress-stream": "^2.0.0",
     "swagger-ui-express": "^5.0.0",
     "winston": "^3.11.0",

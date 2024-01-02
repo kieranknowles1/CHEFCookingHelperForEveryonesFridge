@@ -82,6 +82,7 @@ export function tryToMetric (amount: number, unit: string): [number, DatabaseUni
     case 'tbsb':
     case 'tbsp':
       return [amount * 15, 'ml']
+    case 't.': // Teaspoon
     case 'teaspoon':
     case 'teaspoons':
     case 'tsp':

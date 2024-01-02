@@ -42,6 +42,7 @@ VALUES
     ('Cream Cheese', 'ml', 1.0),
     ('Flour', 'g', 0.6),
     ('Ground Beef', 'g', 1.0),
+    ('Lemon Juice', 'ml', 1.0),
     ('Milk', 'ml', 1.0),
     ('Mozzarella Cheese', 'g', 0.4),
     ('Mushrooms', 'g', 0.4),
