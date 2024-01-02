@@ -1,3 +1,4 @@
+import * as t from 'io-ts'
 import Fraction from 'fraction.js'
 
 import { convertToPreferred, tryToMetric } from '../types/Unit'
@@ -5,6 +6,7 @@ import type CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type Ingredient from '../types/Ingredient'
 import { type IngredientAmount } from '../types/Ingredient'
 import assertNotNull from '../assertNotNull'
+import decodeObject from '../decodeObject'
 import logger from '../logger'
 
 import type RawCsvRecipe from './RawCsvRecipe'
@@ -72,8 +74,8 @@ export default function parseIngredients (row: RawCsvRecipe, ingredients: CaseIn
   const entries: IngredientEntry[] = []
 
   // NER contains names, ingredients contains names and amounts
-  const names = JSON.parse(row.NER) as string[]
-  const amounts = JSON.parse(row.ingredients) as string[]
+  const names = decodeObject(t.array(t.string), JSON.parse(row.NER))
+  const amounts = decodeObject(t.array(t.string), JSON.parse(row.ingredients))
 
   for (const originalName of names) {
     const ingredient = ingredients.get(originalName)

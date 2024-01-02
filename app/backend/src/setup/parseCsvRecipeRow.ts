@@ -1,12 +1,15 @@
+import * as t from 'io-ts'
+
 import type CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type Ingredient from '../types/Ingredient'
+import decodeObject from '../decodeObject'
 
 import type ParsedCsvRecipe from './ParsedCsvRecipe'
 import type RawCsvRecipe from './RawCsvRecipe'
 import parseIngredients from './parseIngredients'
 
 export default function parseCsvRecipeRow (row: RawCsvRecipe, allIngredients: CaseInsensitiveMap<Ingredient>): ParsedCsvRecipe {
-  const directionsArray = JSON.parse(row.directions) as string[]
+  const directionsArray = decodeObject(t.array(t.string), JSON.parse(row.directions))
   const directions = directionsArray.join('\n')
   const ingredients = parseIngredients(row, allIngredients)
 

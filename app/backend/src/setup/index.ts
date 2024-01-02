@@ -6,6 +6,7 @@
 import { createReadStream, readFileSync, statSync } from 'fs'
 import path from 'path'
 
+import * as t from 'io-ts'
 import cliProgress from 'cli-progress'
 import csv from 'csv-parse'
 import progressTracker from 'progress-stream'
@@ -20,6 +21,7 @@ import type IChefDatabase from '../database/IChefDatabase'
 import type IConnection from '../database/IConnection'
 import type Ingredient from '../types/Ingredient'
 import SqliteConnection from '../database/SqliteConnection'
+import decodeObject from '../decodeObject'
 import getEmbedding from '../ml/getEmbedding'
 import getSimilarity from '../ml/getSimilarity'
 import { preloadModel } from '../ml/getModel'
@@ -56,7 +58,7 @@ const missedIngredients = new CaseInsensitiveMap<number>()
 
 function recipeValid (row: RawCsvRecipe, ingredientNames: CaseInsensitiveSet): boolean {
   let valid = true
-  const ingredients = JSON.parse(row.NER) as string[]
+  const ingredients = decodeObject(t.array(t.string), JSON.parse(row.NER))
   for (const ingredient of ingredients) {
     if (!ingredientNames.has(ingredient)) {
       missedIngredients.set(ingredient, (missedIngredients.get(ingredient) ?? 0) + 1)
