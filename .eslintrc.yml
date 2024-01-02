@@ -28,6 +28,7 @@ rules:
   import/consistent-type-specifier-style:
     - warn
     - prefer-inline
+  # This rule is only to be disabled in database code. All other places should use io-ts
   "@typescript-eslint/consistent-type-assertions":
     - warn
     - { assertionStyle: never }

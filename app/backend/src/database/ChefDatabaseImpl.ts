@@ -1,8 +1,6 @@
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
 import path from 'path'
 import { readFileSync } from 'fs'
-
-import * as t from 'io-ts'
-import { isLeft } from 'fp-ts/Either'
 
 import { type AvailableRecipe, type RecipeNoId, type SimilarRecipe } from '../types/Recipe'
 import { type IngredientAmount, type IngredientId, type IngredientNoId } from '../types/Ingredient'
@@ -447,16 +445,10 @@ export default class ChefDatabaseImpl implements IChefDatabase {
   }
 
   private getInsufficientAmountCount (row: AvailableRecipesResultRow): number {
-    const numberArrayCodec = t.array(t.number)
+    const neededAmounts = JSON.parse(row.recipe_amount) as number[]
+    const availableAmounts = JSON.parse(row.fridge_amount) as number[]
 
-    const neededAmounts = numberArrayCodec.decode(JSON.parse(row.recipe_amount))
-    const availableAmounts = numberArrayCodec.decode(JSON.parse(row.fridge_amount))
-
-    if (isLeft(neededAmounts) || isLeft(availableAmounts)) {
-      throw new Error('Expected neededAmounts and availableAmounts to be arrays of numbers')
-    }
-
-    return neededAmounts.right.filter((needed, index) => availableAmounts.right[index] < needed).length
+    return neededAmounts.filter((needed, index) => availableAmounts[index] < needed).length
   }
 
   public getAvailableRecipes (fridgeId: types.RowId, checkAmount: boolean, maxMissingIngredients: number): AvailableRecipe[] {

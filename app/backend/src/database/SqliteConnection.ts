@@ -1,43 +1,36 @@
 // Allow type assertions here because the user of this class is expected to provide the correct types
 // for the statement results
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
 
-// TODO: See if io-ts can be used to validate the results of the statements
-// Not sure how to handle buffer results though
-
-import * as t from 'io-ts'
-import { isLeft } from 'fp-ts/Either'
 import sqlite from 'better-sqlite3'
 
 import logger from '../logger'
 
 import { type FunctionOptions, type IPreparedStatement, type SqliteValue } from './IConnection'
 import type IConnection from './IConnection'
-import decodeObject from '../decodeObject'
 
-const IntegrityCheckRow = t.type({
-  integrity_check: t.string
-})
-type IntegrityCheckRowT = t.TypeOf<typeof IntegrityCheckRow>
+interface IntegrityCheckRow {
+  integrity_check: 'ok' | string
+}
 
-const ForeignKeyCheckRow = t.type({
-  table: t.string,
-  rowid: t.number,
-  parent: t.string,
-  fkid: t.number
-})
-type ForeignKeyCheckRowT = t.TypeOf<typeof ForeignKeyCheckRow>
+interface ForeignKeyCheckRow {
+  table: string
+  rowid: number
+  parent: string
+  parent_rowid: number
+}
 
 export abstract class IntegrityCheckError extends Error {}
 
 export class CorruptDatabaseError extends IntegrityCheckError {
-  constructor (result: IntegrityCheckRowT[]) {
+  constructor (result: IntegrityCheckRow[]) {
     super(`Database is corrupt: ${JSON.stringify(result)}`)
     this.name = 'CorruptDatabaseError'
   }
 }
 
 export class ForeignKeyCheckError extends IntegrityCheckError {
-  constructor (result: ForeignKeyCheckRowT[]) {
+  constructor (result: ForeignKeyCheckRow[]) {
     super(`Foreign key check failed: ${JSON.stringify(result)}`)
     this.name = 'ForeignKeyCheckError'
   }
@@ -59,13 +52,13 @@ export default class SqliteConnection implements IConnection {
 
   public checkIntegrity (): void {
     // Expecting this to return exactly one row with the value 'ok'
-    const integrityCheck = decodeObject(t.array(IntegrityCheckRow), this.db.pragma('integrity_check'))
+    const integrityCheck = this.db.pragma('integrity_check') as IntegrityCheckRow[]
     if (integrityCheck.length !== 1 || integrityCheck[0].integrity_check !== 'ok') {
       throw new CorruptDatabaseError(integrityCheck)
     }
 
     // Expecting this to not return anything
-    const foreignKeyCheck = decodeObject(t.array(ForeignKeyCheckRow), this.db.pragma('foreign_key_check'))
+    const foreignKeyCheck = this.db.pragma('foreign_key_check') as ForeignKeyCheckRow[]
     if (foreignKeyCheck.length > 0) {
       throw new ForeignKeyCheckError(foreignKeyCheck)
     }
