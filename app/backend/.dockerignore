@@ -1,0 +1,10 @@
+# Files to ignore when building the Docker image
+# Same as .gitignore
+.nyc_output/
+build/
+coverage/
+node_modules/
+working_data/
+
+# Extra files that are only needed during development
+nodemon.json

@@ -24,6 +24,7 @@ svg-inkscape/
 
 node_modules/
 working_data/
+containerdata/
 build/
 dist/
 # Flamegraphs

@@ -1,17 +1,14 @@
 #!/bin/bash
 
-DEPS="npm"
+# Exit if any command fails (returns non-zero exit code)
+set -e
 
-# Require root
-# https://stackoverflow.com/questions/18215973/how-to-check-if-running-as-root-in-a-bash-script
-if [ "$EUID" -ne 0 ]; then
-	echo "Please run as root"
-	exit
-fi
+DEPS="docker docker-compose"
 
-# Install dependencies
-apt-get update
-apt-get install $DEPS
+echo "Checking and installing dependencies $DEPS"
+echo "This may ask for your password"
+sudo apt-get update
+sudo apt-get install $DEPS
 
 # Setup app
 
@@ -21,22 +18,24 @@ if [ ! -f "./backend/working_data/full_dataset.csv" ]; then
 	exit
 fi
 
-echo "Setting up backend..."
+echo "Building backend container. Hope you have a SSD, because Node creates a ridiculous amount of files"
 (
-	cd backend || exit
-	npm install --save-dev
-	npm run build
-	npm run setup
-)
-
-cd ..
-
-echo "Setting up frontend..."
-(
-	cd frontend || exit
-	npm install --save-dev
-	npm run build
+	cd backend
+	docker-compose build
 )
 
 # Run app
-# TODO
+
+echo "Setting up backend. Grab a cuppa, this will take a while"
+(
+	cd backend
+	docker-compose --env-file docker-compose.env run chef npm run setup
+)
+
+# TODO: Build and run the frontend
+
+echo "Starting backend"
+(
+	cd backend
+	docker-compose up -d
+)

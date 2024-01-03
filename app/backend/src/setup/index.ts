@@ -33,7 +33,6 @@ import parseCsvRecipeRow from './parseCsvRecipeRow'
 
 // TODO: Use environment variables and put this somewhere outside the container
 const SQL_DUMMY_DATA_PATH = path.join(process.cwd(), 'data/dummydata.sql')
-const CSV_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
 const PROGRESS_BAR_STYLE = cliProgress.Presets.shades_classic
 
 /**
@@ -75,8 +74,11 @@ async function getCsvData (ingredients: CaseInsensitiveMap<Ingredient>): Promise
   let totalRows = 0
   const recipes: ParsedCsvRecipe[] = []
 
-  const [progress, bar] = createTrackers(CSV_DATA_PATH)
-  await new Promise<void>((resolve, reject) => createReadStream(CSV_DATA_PATH)
+  const file = environment.SETUP_CSV_FILE
+  logger.info(`Reading CSV file ${file}`)
+
+  const [progress, bar] = createTrackers(file)
+  await new Promise<void>((resolve, reject) => createReadStream(file)
     .pipe(progress)
     .pipe(csv.parse({ columns: true }))
     .on('data', (row: RawCsvRecipe) => {
@@ -89,7 +91,9 @@ async function getCsvData (ingredients: CaseInsensitiveMap<Ingredient>): Promise
         }
       } catch (err) {
         if (err instanceof DataImportError) {
-          logger.warn(err.message)
+          // These errors are expected and would just spam the log
+          // Set the log level to silly if you need to debug these
+          logger.silly(err.message)
         } else {
           logger.caughtError(err)
         }

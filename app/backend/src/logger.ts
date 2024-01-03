@@ -27,6 +27,7 @@ export function createDefaultLogger (path: string): ILogger {
     fs.unlinkSync(path)
   }
   const logger = winston.createLogger({
+    // TODO: Environment variable for log level
     level: 'info',
     format: winston.format.simple(),
     transports: [
@@ -52,14 +53,17 @@ export function setLogger (logger: ILogger): void {
  * ILogger is a subset of the winston logger interface
  */
 export default {
+  error: (message: string): void => {
+    instance.log(LogLevel.error, message)
+  },
   warn: (message: string): void => {
     instance.log(LogLevel.warn, message)
   },
   info: (message: string): void => {
     instance.log(LogLevel.info, message)
   },
-  error: (message: string): void => {
-    instance.log(LogLevel.error, message)
+  silly: (message: string): void => {
+    instance.log(LogLevel.silly, message)
   },
   /**
    * Helper function for logging from a catch block

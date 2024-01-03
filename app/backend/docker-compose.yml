@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  chef:
+    build: .
+    volumes:
+      - ./containerdata:/data
+      - ./working_data:/setupdata:ro
+    ports:
+      - 3000:3000
+    env_file: docker-compose.env
