@@ -3,31 +3,37 @@
  * This script should be run using `npm run setup` before running the main script.
  */
 
-import { createReadStream, statSync } from 'fs'
+import { createReadStream, readFileSync, statSync } from 'fs'
 import path from 'path'
 
+import * as t from 'io-ts'
 import cliProgress from 'cli-progress'
 import csv from 'csv-parse'
 import progressTracker from 'progress-stream'
 
-import logger, { LogLevel, logError } from '../logger'
+import { DATABASE_PATH, SETUP_LOG_FILE } from '../settings'
+import logger, { createDefaultLogger, setLogger } from '../logger'
 import CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import CaseInsensitiveSet from '../types/CaseInsensitiveSet'
 import ChefDatabaseImpl from '../database/ChefDatabaseImpl'
-import { DATABASE_PATH } from '../settings'
+import type EmbeddedSentence from '../ml/EmbeddedSentence'
 import type IChefDatabase from '../database/IChefDatabase'
-import type IEmbeddedSentence from '../ml/IEmbeddedSentence'
-import type IIngredient from '../types/IIngredient'
+import type IConnection from '../database/IConnection'
+import type Ingredient from '../types/Ingredient'
+import SqliteConnection from '../database/SqliteConnection'
+import decodeObject from '../decodeObject'
 import getEmbedding from '../ml/getEmbedding'
 import getSimilarity from '../ml/getSimilarity'
 import { preloadModel } from '../ml/getModel'
 
-import type IParsedCsvRecipe from './IParsedCsvRecipe'
-import type IRawCsvRecipe from './IRawCsvRecipe'
+import DataImportError from './DataImportError'
+import type ParsedCsvRecipe from './ParsedCsvRecipe'
+import type RawCsvRecipe from './RawCsvRecipe'
 import parseCsvRecipeRow from './parseCsvRecipeRow'
 
 // TODO: Use environment variables and put this somewhere outside the container
-const INITIAL_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
+const SQL_DUMMY_DATA_PATH = path.join(process.cwd(), 'data/dummydata.sql')
+const CSV_DATA_PATH = path.join(process.cwd(), 'working_data/full_dataset.csv')
 const PROGRESS_BAR_STYLE = cliProgress.Presets.shades_classic
 
 /**
@@ -51,9 +57,9 @@ function createTrackers (path: string): [progressTracker.ProgressStream, cliProg
 /** Map of missed ingredient => frequency */
 const missedIngredients = new CaseInsensitiveMap<number>()
 
-function recipeValid (row: IRawCsvRecipe, ingredientNames: CaseInsensitiveSet): boolean {
+function recipeValid (row: RawCsvRecipe, ingredientNames: CaseInsensitiveSet): boolean {
   let valid = true
-  const ingredients = JSON.parse(row.NER) as string[]
+  const ingredients = decodeObject(t.array(t.string), JSON.parse(row.NER))
   for (const ingredient of ingredients) {
     if (!ingredientNames.has(ingredient)) {
       missedIngredients.set(ingredient, (missedIngredients.get(ingredient) ?? 0) + 1)
@@ -63,17 +69,17 @@ function recipeValid (row: IRawCsvRecipe, ingredientNames: CaseInsensitiveSet): 
   return valid
 }
 
-async function getCsvData (ingredients: CaseInsensitiveMap<IIngredient>): Promise<[IParsedCsvRecipe[], number]> {
+async function getCsvData (ingredients: CaseInsensitiveMap<Ingredient>): Promise<[ParsedCsvRecipe[], number]> {
   const ingredientNames = new CaseInsensitiveSet(ingredients.keys())
 
   let totalRows = 0
-  const recipes: IParsedCsvRecipe[] = []
+  const recipes: ParsedCsvRecipe[] = []
 
-  const [progress, bar] = createTrackers(INITIAL_DATA_PATH)
-  await new Promise<void>((resolve, reject) => createReadStream(INITIAL_DATA_PATH)
+  const [progress, bar] = createTrackers(CSV_DATA_PATH)
+  await new Promise<void>((resolve, reject) => createReadStream(CSV_DATA_PATH)
     .pipe(progress)
     .pipe(csv.parse({ columns: true }))
-    .on('data', (row: IRawCsvRecipe) => {
+    .on('data', (row: RawCsvRecipe) => {
       totalRows++
       try {
         // Filter to only the most common ingredients
@@ -82,7 +88,11 @@ async function getCsvData (ingredients: CaseInsensitiveMap<IIngredient>): Promis
           recipes.push(recipe)
         }
       } catch (err) {
-        logError(err, LogLevel.verbose)
+        if (err instanceof DataImportError) {
+          logger.warn(err.message)
+        } else {
+          logger.caughtError(err)
+        }
       }
     })
     .on('end', () => {
@@ -95,7 +105,7 @@ async function getCsvData (ingredients: CaseInsensitiveMap<IIngredient>): Promis
   return [recipes, totalRows]
 }
 
-function predictMealType (recipeName: IEmbeddedSentence, mealTypes: IEmbeddedSentence[]): IEmbeddedSentence {
+function predictMealType (recipeName: EmbeddedSentence, mealTypes: EmbeddedSentence[]): EmbeddedSentence {
   let best = mealTypes[0]
   let bestSimilarity = getSimilarity(recipeName.embedding, best.embedding)
 
@@ -120,10 +130,19 @@ async function embedMealTypes (db: IChefDatabase): Promise<void> {
   })
 }
 
-interface ImportDataReturn { success: number, total: number }
-async function importData (db: IChefDatabase): Promise<ImportDataReturn> {
+async function importData (db: IChefDatabase): Promise<void> {
   logger.info('Collecting data from CSV')
   const [csvRecipes, csvTotalRows] = await getCsvData(db.getAllIngredientsByName())
+
+  logger.info(`Imported ${csvRecipes.length} recipes from ${csvTotalRows} rows (${(csvRecipes.length / csvTotalRows) * 100}%) of CSV data`)
+
+  // Log the missed ingredients
+  // Skip entries with exactly 1 occurrence, these are probably typos or too specific to be useful
+  const missedFrequencies = Array.from(missedIngredients)
+    .filter(([, count]) => count > 1)
+    .sort((a, b) => b[1] - a[1])
+
+  logger.info(`Missing ingredients by frequency: ${missedFrequencies.toString()}`)
 
   logger.info('Importing data into the database')
   const mealTypes = db.getMealTypes()
@@ -145,37 +164,38 @@ async function importData (db: IChefDatabase): Promise<ImportDataReturn> {
     }
   })
   bar.stop()
-
-  return {
-    success: csvRecipes.length,
-    total: csvTotalRows
-  }
 }
 
-async function main (db: IChefDatabase): Promise<void> {
+async function main (connection: IConnection, db: IChefDatabase): Promise<void> {
   void preloadModel()
 
   logger.info('Setting up schema')
   db.resetDatabase('IKnowWhatIAmDoing')
 
+  logger.info('Adding dummy data')
+  const dummyData = readFileSync(SQL_DUMMY_DATA_PATH, 'utf-8')
+  db.wrapTransaction(() => {
+    connection.exec(dummyData)
+  })
+
   logger.info('Adding meal types')
   await embedMealTypes(db)
 
   logger.info('Importing data into the database')
-  const dataInfo = await importData(db)
+  await importData(db)
 
-  logger.info(`Setup done, imported ${dataInfo.success} of ${dataInfo.total} recipes (${(dataInfo.success / dataInfo.total) * 100}%)`)
-
-  const missedFrequencies = Array.from(missedIngredients).sort((a, b) => b[1] - a[1])
-  logger.info(`Missing ingredients by frequency: ${missedFrequencies.toString()}`)
+  logger.info('Setup done')
 
   // Make sure nothing went wrong with the database
   db.checkIntegrity()
 }
 
-const db = new ChefDatabaseImpl(DATABASE_PATH)
+setLogger(createDefaultLogger(SETUP_LOG_FILE))
 
-main(db).catch(err => {
-  logError(err)
+const connection = new SqliteConnection(DATABASE_PATH)
+const db = new ChefDatabaseImpl(connection)
+
+main(connection, db).catch(err => {
+  logger.caughtError(err)
   process.exit(1)
 })

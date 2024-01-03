@@ -8,6 +8,7 @@ import AddIngredient from '../components/AddIngredient'
 import ModalDialog from '../components/ModalDialog'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
+import monitorStatus from '../utils/monitorStatus'
 import useSafeContext from '../contexts/useSafeContext'
 
 const ScanBarcode = React.lazy(async () => await import('../components/ScanBarcode'))
@@ -28,36 +29,28 @@ export default function MyFridgePage (): React.JSX.Element {
   const [scanBarcodeOpen, setScanBarcodeOpen] = React.useState(false)
 
   React.useEffect(() => {
-    setFridgeNameStatus('loading')
     apiClient.GET(
       '/fridge/{fridgeId}',
       { params: { path: { fridgeId: context.fridgeId } } }
-    ).then(response => {
-      if (response.data === undefined) {
-        throw new Error(response.error.message)
-      }
-      setFridgeName(response.data.name)
-      setFridgeNameStatus('done')
+    ).then(
+      monitorStatus(setFridgeNameStatus)
+    ).then(data => {
+      setFridgeName(data.name)
     }).catch(err => {
       console.error(err)
-      setFridgeNameStatus('error')
     })
   }, [context.fridgeId])
 
   function fetchIngredients (): void {
-    setIngredientsStatus('loading')
     apiClient.GET(
       '/fridge/{fridgeId}/ingredient/all/amount',
       { params: { path: { fridgeId: context.fridgeId } } }
-    ).then(response => {
-      if (response.data === undefined) {
-        throw new Error(response.error)
-      }
-      setIngredients(response.data)
-      setIngredientsStatus('done')
+    ).then(
+      monitorStatus(setIngredientsStatus)
+    ).then(data => {
+      setIngredients(data)
     }).catch(err => {
       console.error(err)
-      setIngredientsStatus('error')
     })
   }
 

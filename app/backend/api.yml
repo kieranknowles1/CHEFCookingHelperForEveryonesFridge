@@ -6,6 +6,7 @@ info:
   version: 1.0.0
 
 tags:
+  - name: Metadata
   - name: Barcode
   - name: Fridge
   - name: Ingredient
@@ -16,6 +17,21 @@ servers:
   - url: http://localhost:3000/api/v1
 
 paths:
+  /mealtype/list:
+    get:
+      tags: [Metadata]
+      summary: Get a list of all meal types, ordered by typical meal time
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: string, example: "Dinner" }
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+
   /barcode/{code}:
     get:
       tags: [Barcode]
@@ -97,6 +113,7 @@ paths:
       summary: Get similar recipes
       description: Returns a list of recipes similar to the given recipe \
         Items are sorted by similarity score, descending \
+        Only recipes of the same type are returned
         Note that if multiple recipes have the same name, only one will be returned
       parameters:
         - $ref: "#/components/parameters/recipeId"
@@ -151,6 +168,8 @@ paths:
               schema:
                 type: array
                 items: { $ref: "#/components/schemas/FridgeIngredientEntry" }
+        "403":
+          $ref: "#/components/responses/Forbidden"
 
   # TODO: Authentication
   /fridge/{fridgeId}/ingredient/{ingredientId}/amount:
@@ -199,6 +218,11 @@ paths:
           name: checkAmounts
           description: Whether to check that there is enough of each ingredient. Defaults to true.
           schema: { type: boolean, example: true }
+          required: false
+        - in: query
+          name: mealType
+          description: If specified, only return recipes of this type
+          schema: { type: string, example: "Dinner" }
           required: false
       responses:
         "200":
@@ -285,6 +309,12 @@ components:
         application/json:
           schema: { $ref: "#/components/schemas/ErrorList" }
 
+    TooManyRequests:
+      description: Too Many Requests
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorList" }
+
   schemas:
     ErrorList:
       type: object
@@ -334,7 +364,8 @@ components:
         ingredients:
           type: array
           items: { $ref: "#/components/schemas/RecipeIngredientEntry" }
-      required: [id, name, directions, link, ingredients]
+        mealType: { type: string, example: "Dinner" }
+      required: [id, name, directions, link, ingredients, mealType]
 
     Ingredient:
       type: object

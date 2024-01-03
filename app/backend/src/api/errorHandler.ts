@@ -4,7 +4,7 @@ import { error } from 'express-openapi-validator'
 
 import CodedError from '../CodedError'
 import { type components } from '../types/api.generated'
-import { logError } from '../logger'
+import logger from '../logger'
 
 type ErrorList = components['schemas']['ErrorList']
 
@@ -30,7 +30,7 @@ export default function errorHandler (err: Error, req: Request, res: Response, n
 
   // Only log internal server errors. Other errors are considered to be the user's fault.
   if (code === 500) {
-    logError(err)
+    logger.caughtError(err)
   }
 
   let errors: ErrorList['errors']

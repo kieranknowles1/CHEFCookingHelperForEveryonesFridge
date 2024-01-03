@@ -3,6 +3,7 @@ INSERT INTO ingredient
 VALUES
     ('Apples', 'whole'),
     ('Bananas', 'whole'),
+    ('Bacon', 'whole'),
     ('Bell Pepper', 'whole'),
     ('Carrots', 'whole'),
     ('Chicken Breasts', 'whole'),
@@ -10,8 +11,10 @@ VALUES
     ('Garlic', 'whole'),
     ('Green Pepper', 'whole'),
     ('Hamburger', 'whole'),
+    ('Lemon', 'whole'),
     ('Onions', 'whole'),
     ('Pepper', 'none'),
+    ('Potatoes', 'whole'),
     ('Red Pepper', 'whole'),
     ('Salt', 'none'),
     ('Tomatoes', 'whole');
@@ -26,7 +29,6 @@ VALUES
 -- Sources:
 -- https://annaolson.ca/baking-conversions/
 -- https://www.cookitsimply.com/measurements/cups/chicken/
--- https://www.cookitsimply.com/measurements/cups/potatoes/
 -- https://www.cookitsimply.com/measurements/cups/rice/
 -- https://coolconversion.com/cooking-volume-weight/
 INSERT INTO ingredient
@@ -42,17 +44,19 @@ VALUES
     ('Cream Cheese', 'ml', 1.0),
     ('Flour', 'g', 0.6),
     ('Ground Beef', 'g', 1.0),
+    ('Lemon Juice', 'ml', 1.0),
     ('Milk', 'ml', 1.0),
     ('Mozzarella Cheese', 'g', 0.4),
     ('Mushrooms', 'g', 0.4),
     ('Nuts', 'g', 0.5),
     ('Oil', 'ml', 0.9),
+    ('Paprika', 'g', 0.4),
     ('Parmesan Cheese', 'g', 0.4),
-    ('Potatoes', 'g', 0.9),
     ('Rice', 'g', 0.9),
     ('Sour Cream', 'ml', 1.0),
     ('Sugar', 'g', 0.8),
     ('Vanilla', 'ml', 0.9),
+    ('Vegetable Oil', 'ml', 0.9),
     ('Vinegar', 'ml', 0.9);
 
 INSERT INTO ingredient_alt_name
@@ -64,6 +68,7 @@ VALUES
     ('Egg Yolks', (SELECT id FROM ingredient WHERE name = 'Eggs')),
     ('Egg', (SELECT id FROM ingredient WHERE name = 'Eggs')),
     ('Freshly Ground Black Pepper', (SELECT id FROM ingredient WHERE name = 'Pepper')),
+    ('Kosher Salt', (SELECT id FROM ingredient WHERE name = 'Salt')),
     ('Margarine', (SELECT id FROM ingredient WHERE name = 'Butter')),
     ('Olive Oil', (SELECT id FROM ingredient WHERE name = 'Oil')),
     ('Onion', (SELECT id FROM ingredient WHERE name = 'Onions')),

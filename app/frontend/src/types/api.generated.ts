@@ -8,6 +8,20 @@
 type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
 export interface paths {
+  "/mealtype/list": {
+    /** Get a list of all meal types, ordered by typical meal time */
+    get: {
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": string[];
+          };
+        };
+        429: components["responses"]["TooManyRequests"];
+      };
+    };
+  };
   "/barcode/{code}": {
     /** Get the item associated with a given barcode */
     get: {
@@ -94,7 +108,7 @@ export interface paths {
   "/recipe/{id}/similar": {
     /**
      * Get similar recipes
-     * @description Returns a list of recipes similar to the given recipe \ Items are sorted by similarity score, descending \ Note that if multiple recipes have the same name, only one will be returned
+     * @description Returns a list of recipes similar to the given recipe \ Items are sorted by similarity score, descending \ Only recipes of the same type are returned Note that if multiple recipes have the same name, only one will be returned
      */
     get: {
       parameters: {
@@ -156,6 +170,7 @@ export interface paths {
             "application/json": components["schemas"]["FridgeIngredientEntry"][];
           };
         };
+        403: components["responses"]["Forbidden"];
       };
     };
   };
@@ -212,6 +227,8 @@ export interface paths {
           maxMissingIngredients?: number;
           /** @description Whether to check that there is enough of each ingredient. Defaults to true. */
           checkAmounts?: boolean;
+          /** @description If specified, only return recipes of this type */
+          mealType?: string;
         };
         path: {
           fridgeId: components["parameters"]["fridgeId"];
@@ -264,17 +281,19 @@ export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
     ErrorList: {
-      /** @example Parameter 'id' must be an integer */
-      message: string;
+      /** @example 404 */
+      status: number;
+      /** @example /api/v1/path/to/endpoint */
+      path: string;
       errors: components["schemas"]["Error"][];
     };
     Error: {
-      /** @example Invalid ID 1 for table blah */
+      /** @example /params/id */
+      path: string;
+      /** @example Must be integer */
       message: string;
-      /** @example InvalidIdError */
-      name: string;
-      /** @example 404 */
-      code: number;
+      /** @example type.openapi.validation */
+      errorCode?: string;
     };
     /**
      * @example g
@@ -299,6 +318,8 @@ export interface components {
       /** @example example.com */
       link: string;
       ingredients: components["schemas"]["RecipeIngredientEntry"][];
+      /** @example Dinner */
+      mealType: string;
     };
     Ingredient: {
       /** @example 12345 */
@@ -322,10 +343,10 @@ export interface components {
       /** @example John Smith */
       name: string;
     };
-    RecipeIngredientEntry: {
+    RecipeIngredientEntry: WithRequired<{
       /** @example 250g of chicken */
-      originalLine?: string;
-    } & components["schemas"]["IngredientEntry"];
+      originalLine: string;
+    } & components["schemas"]["IngredientEntry"], "originalLine">;
     FridgeIngredientEntry: WithRequired<components["schemas"]["IngredientEntry"], "amount">;
   };
   responses: {
@@ -337,6 +358,12 @@ export interface components {
     };
     /** @description Not Found */
     NotFound: {
+      content: {
+        "application/json": components["schemas"]["ErrorList"];
+      };
+    };
+    /** @description Too Many Requests */
+    TooManyRequests: {
       content: {
         "application/json": components["schemas"]["ErrorList"];
       };

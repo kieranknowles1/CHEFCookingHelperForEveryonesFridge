@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDebounce } from 'use-debounce'
 
-import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
+import LoadingSpinner, { type LoadingStatus, getHighestStatus } from '../components/LoadingSpinner'
 import Recipe, { type RecipeProps } from '../components/Recipe'
 import Search from '../components/Search'
 import UserContext from '../contexts/UserContext'
@@ -16,6 +16,10 @@ export default function FindRecipesPage (): React.JSX.Element {
 
   const [recipesStatus, setRecipesStatus] = React.useState<LoadingStatus>('loading')
   const [recipes, setRecipes] = React.useState<RecipeProps[]>([])
+
+  const [mealTypesStatus, setMealTypesStatus] = React.useState<LoadingStatus>('loading')
+  const [mealTypes, setMealTypes] = React.useState<string[]>([])
+  const [selectedMealType, setSelectedMealType] = React.useState<string | undefined>(undefined)
 
   const [checkAmounts, setCheckAmounts] = React.useState<boolean>(true)
   const [maxMissingIngredients, setMaxMissingIngredients] = React.useState<number>(0)
@@ -33,7 +37,16 @@ export default function FindRecipesPage (): React.JSX.Element {
     setRecipes([])
     apiClient.GET(
       '/fridge/{fridgeId}/recipe/available',
-      { params: { path: { fridgeId: context.fridgeId }, query: { checkAmounts, maxMissingIngredients: debouncedMaxMissingIngredients } } }
+      {
+        params: {
+          path: { fridgeId: context.fridgeId },
+          query: {
+            checkAmounts,
+            maxMissingIngredients: debouncedMaxMissingIngredients,
+            mealType: selectedMealType
+          }
+        }
+      }
     ).then(
       monitorStatus(setRecipesStatus)
     ).then(data => {
@@ -41,7 +54,19 @@ export default function FindRecipesPage (): React.JSX.Element {
     }).catch(err => {
       console.error(err)
     })
-  }, [context.fridgeId, checkAmounts, debouncedMaxMissingIngredients])
+  }, [context.fridgeId, checkAmounts, debouncedMaxMissingIngredients, selectedMealType])
+
+  React.useEffect(() => {
+    apiClient.GET(
+      '/mealtype/list'
+    ).then(
+      monitorStatus(setMealTypesStatus)
+    ).then(data => {
+      setMealTypes(data)
+    }).catch(err => {
+      console.error(err)
+    })
+  }, [])
 
   React.useEffect(() => {
     setFiltered(recipes.filter(r => r.name.toLowerCase().includes(query.toLowerCase())))
@@ -63,11 +88,18 @@ export default function FindRecipesPage (): React.JSX.Element {
         <br />
         Click any recipe to view details and/or mark it as have been made.
       </p>
+
       <label>Check I have enough of each ingredient: <input type='checkbox' checked={checkAmounts} onChange={e => { setCheckAmounts(e.target.checked) }} /></label><br />
       <label>Max missing or insufficient amount ingredients: <input type='number' value={maxMissingIngredients} min={0} onChange={e => { setMaxMissingIngredients(e.target.value === '' ? 0 : parseInt(e.target.value)) }} /></label><br />
+      <label>Meal Type: <select value={selectedMealType ?? ''} onChange={e => { setSelectedMealType(e.target.value === '' ? undefined : e.target.value) }}>
+        <option value=''>Any</option>
+        {mealTypes.map(mt => <option key={mt} value={mt}>{mt}</option>)}
+      </select></label>
+      <hr className='my-2 mx-2' />
       {recipesStatus === 'done' && <p>{recipes.length} recipes found.</p>}
       <label>Search: <Search setQuery={q => { setQuery(q); setPage(0) }} /></label>
-      <LoadingSpinner status={recipesStatus} />
+
+      <LoadingSpinner status={getHighestStatus([recipesStatus, mealTypesStatus])} />
       {pageButtons}
       <ul className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3'>
         {filtered

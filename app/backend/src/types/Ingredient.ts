@@ -9,14 +9,13 @@ export interface IngredientAmount {
 }
 export type IngredientMap = Map<IngredientId, IngredientAmount>
 
-export default interface IIngredient {
-  id: IngredientId
+export interface IngredientNoId {
   name: string
   preferredUnit: DatabaseUnit
   density: number | undefined
   assumeUnlimited: boolean
 }
 
-export function ingredientMapFactory (): IngredientMap {
-  return new Map<IngredientId, IngredientAmount>()
+export default interface Ingredient extends IngredientNoId {
+  id: IngredientId
 }

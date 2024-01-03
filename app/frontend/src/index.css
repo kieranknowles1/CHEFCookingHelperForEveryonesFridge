@@ -17,6 +17,11 @@
         @apply text-citron-100;
     }
 
+    select {
+        @apply bg-raisin_black-800;
+        @apply text-citron-100;
+    }
+
     button {
         @apply bg-raisin_black-600;
         @apply hover:bg-raisin_black-700;

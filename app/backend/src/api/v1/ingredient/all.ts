@@ -6,7 +6,7 @@ import { type paths } from '../../../types/api.generated'
 
 type endpoint = paths['/ingredient/all']['get']
 
-export default function installIngredientAllEndpoint (app: Express, db: IChefDatabase): void {
+export default function registerIngredientAllEndpoint (app: Express, db: IChefDatabase): void {
   app.get('/api/v1/ingredient/all',
     (_, res: TypedResponse<endpoint, 200>) => {
       const data = db.getAllIngredients()

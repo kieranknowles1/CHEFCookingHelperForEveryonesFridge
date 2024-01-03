@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "generate-types": "openapi-typescript ./../openapi/api.yml --output src/types/api.generated.ts",
+    "generate-types": "openapi-typescript ./../backend/api.yml --output src/types/api.generated.ts",
     "dev": "vite",
     "build": "tsc && vite build",
     "bundlesize": "vite-bundle-visualizer",

@@ -1,25 +1,27 @@
+import * as t from 'io-ts'
 import Fraction from 'fraction.js'
 
 import { convertToPreferred, tryToMetric } from '../types/Unit'
 import type CaseInsensitiveMap from '../types/CaseInsensitiveMap'
-import type IIngredient from '../types/IIngredient'
-import { type IngredientAmount } from '../types/IIngredient'
-import getRegexGroups from '../getRegexGroups'
-import logger from '../logger'
+import type Ingredient from '../types/Ingredient'
+import { type IngredientAmount } from '../types/Ingredient'
+import assertNotNull from '../assertNotNull'
+import decodeObject from '../decodeObject'
 
-import type IRawCsvRecipe from './IRawCsvRecipe'
+import type RawCsvRecipe from './RawCsvRecipe'
 import UnparsedIngredientError from './UnparsedIngredientError'
 
 const AMOUNT_PATTERN = /(?<amount>\d+\/\d+|\d+ \d+\/\d+|\d+)( (level|heaping|heaped|round|rounded))? (?<unit>\w+)/g
 
 function amountFromMatch (match: RegExpMatchArray): number {
-  return new Fraction(getRegexGroups(match).amount).valueOf()
+  assertNotNull(match.groups)
+  return new Fraction(match.groups.amount).valueOf()
 }
 
-function convertUnit (ingredientLine: string, ingredient: IIngredient): number {
+function convertUnit (ingredientLine: string, ingredient: Ingredient): number {
   const matches = Array.from(ingredientLine.matchAll(AMOUNT_PATTERN))
 
-  if (matches.length === 0) { throw new UnparsedIngredientError(ingredient) }
+  if (matches.length === 0) { throw new UnparsedIngredientError(ingredient, ingredientLine) }
 
   if (ingredient.preferredUnit === 'whole') {
     // Nothing to do
@@ -29,7 +31,8 @@ function convertUnit (ingredientLine: string, ingredient: IIngredient): number {
     // Handle cases such as '1 to 2 tsp' by trying every match and using the first one that works
     for (const match of matches) {
       const amount = amountFromMatch(match)
-      const unit = getRegexGroups(match).unit
+      assertNotNull(match.groups)
+      const unit = match.groups.unit
       const converted = tryToMetric(amount, unit)
       if (converted !== null) {
         return convertToPreferred(converted[0], converted[1], ingredient)
@@ -37,12 +40,11 @@ function convertUnit (ingredientLine: string, ingredient: IIngredient): number {
     }
     // No case was handled, throw error
     // This is a higher priority, so also log more detail
-    logger.warning(`Could not convert '${ingredientLine}' to metric.`)
-    throw new UnparsedIngredientError(ingredient)
+    throw new UnparsedIngredientError(ingredient, `Could not convert '${ingredientLine}' to metric.`)
   }
 }
 
-function getAmount (originalName: string, ingredient: IIngredient, amounts: string[]): IngredientAmount {
+function getAmount (originalName: string, ingredient: Ingredient, amounts: string[]): IngredientAmount {
   if (ingredient.preferredUnit === 'none') {
     return {
       amount: null,
@@ -61,17 +63,17 @@ function getAmount (originalName: string, ingredient: IIngredient, amounts: stri
 }
 
 interface IngredientEntry {
-  ingredient: IIngredient
+  ingredient: Ingredient
   amount: number | null
   originalLine: string
 }
 
-export default function parseIngredients (row: IRawCsvRecipe, ingredients: CaseInsensitiveMap<IIngredient>): IngredientEntry[] {
+export default function parseIngredients (row: RawCsvRecipe, ingredients: CaseInsensitiveMap<Ingredient>): IngredientEntry[] {
   const entries: IngredientEntry[] = []
 
   // NER contains names, ingredients contains names and amounts
-  const names = JSON.parse(row.NER) as string[]
-  const amounts = JSON.parse(row.ingredients) as string[]
+  const names = decodeObject(t.array(t.string), JSON.parse(row.NER))
+  const amounts = decodeObject(t.array(t.string), JSON.parse(row.ingredients))
 
   for (const originalName of names) {
     const ingredient = ingredients.get(originalName)
