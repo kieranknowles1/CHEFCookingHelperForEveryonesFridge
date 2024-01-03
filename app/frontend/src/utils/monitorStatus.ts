@@ -29,6 +29,9 @@ export type StatusMonitor = <TData>(response: GenericFetchResponse<TData>) => Pr
  * Note that the endpoint must be declared as returning an ErrorList on failure
  * in the OpenAPI spec.
  *
+ * The endpoint must also have at least one error response defined, otherwise TypeScript will
+ * incorrectly infer that this function can return undefined.
+ *
  * Use in a promise chain/async function like this:
  * ```js
  * apiClient.get('/some/path', { params: { foo: 'bar' } })

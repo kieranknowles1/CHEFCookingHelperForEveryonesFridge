@@ -398,7 +398,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
         -- can be done before the similarity check here
         -- Remove duplicate names
         SELECT * FROM recipe
-        WHERE meal_type_id = (SELECT id FROM meal_type WHERE name = ?) OR 1
+        WHERE meal_type_id = (SELECT id FROM meal_type WHERE name = ?)
         GROUP BY name COLLATE NOCASE
       ) AS recipe
       JOIN embedding ON recipe.name = embedding.sentence
@@ -457,10 +457,14 @@ export default class ChefDatabaseImpl implements IChefDatabase {
     return neededAmounts.filter((needed, index) => availableAmounts[index] < needed).length
   }
 
-  public getAvailableRecipes (fridgeId: types.RowId, checkAmount: boolean, maxMissingIngredients: number): AvailableRecipe[] {
+  public getAvailableRecipes (fridgeId: types.RowId, checkAmount: boolean, maxMissingIngredients: number, mealType: string | null): AvailableRecipe[] {
     // Well this was easier than expected
     // TODO: Optionally allow substitutions
-    const statement = this._connection.prepare<[types.RowId, types.RowId], AvailableRecipesResultRow>(`
+    const statement = this._connection.prepare<[
+      /* fridgeId */ types.RowId,
+      /* mealType */ string | null, string | null,
+      /* maxMissingIngredients */ number
+    ], AvailableRecipesResultRow>(`
       SELECT
         recipe.name, recipe.id,
         -- Used to filter by available amount later
@@ -472,11 +476,12 @@ export default class ChefDatabaseImpl implements IChefDatabase {
       LEFT JOIN recipe_ingredient ON recipe_ingredient.recipe_id = recipe.id
       LEFT JOIN fridge_ingredient ON fridge_ingredient.ingredient_id = recipe_ingredient.ingredient_id AND fridge_ingredient.fridge_id = ?
       JOIN ingredient ON ingredient.id = recipe_ingredient.ingredient_id AND NOT ingredient.assumeUnlimited
+      WHERE recipe.meal_type_id = (SELECT id FROM meal_type WHERE name = ?) OR ? IS NULL
       GROUP BY recipe.id
       -- COUNT excludes NULLs. Less than used to optionally allow missing ingredients
       HAVING missing_count <= ?
     `)
-    const result = statement.all(fridgeId, maxMissingIngredients)
+    const result = statement.all(fridgeId, mealType, mealType, maxMissingIngredients)
 
     return result
       .filter(row => !checkAmount || this.getInsufficientAmountCount(row) + row.missing_count <= maxMissingIngredients)

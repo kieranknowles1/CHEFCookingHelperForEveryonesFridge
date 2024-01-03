@@ -8,6 +8,20 @@
 type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
 export interface paths {
+  "/mealtype/list": {
+    /** Get a list of all meal types, ordered by typical meal time */
+    get: {
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": string[];
+          };
+        };
+        429: components["responses"]["TooManyRequests"];
+      };
+    };
+  };
   "/barcode/{code}": {
     /** Get the item associated with a given barcode */
     get: {
@@ -156,6 +170,7 @@ export interface paths {
             "application/json": components["schemas"]["FridgeIngredientEntry"][];
           };
         };
+        403: components["responses"]["Forbidden"];
       };
     };
   };
@@ -212,6 +227,8 @@ export interface paths {
           maxMissingIngredients?: number;
           /** @description Whether to check that there is enough of each ingredient. Defaults to true. */
           checkAmounts?: boolean;
+          /** @description If specified, only return recipes of this type */
+          mealType?: string;
         };
         path: {
           fridgeId: components["parameters"]["fridgeId"];
@@ -341,6 +358,12 @@ export interface components {
     };
     /** @description Not Found */
     NotFound: {
+      content: {
+        "application/json": components["schemas"]["ErrorList"];
+      };
+    };
+    /** @description Too Many Requests */
+    TooManyRequests: {
       content: {
         "application/json": components["schemas"]["ErrorList"];
       };
