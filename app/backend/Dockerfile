@@ -5,15 +5,15 @@ FROM node:20
 
 # Make a directory for the app and use it as the working directory for the rest of the RUN commands
 RUN mkdir --parents /usr/app /data
-WORKDIR /usr/app
+WORKDIR /usr/app/
 
 # Copy the package and package-lock files to the working directory and install dependencies
 # We need dev dependencies for the TypeScript compiler and type declarations
-COPY package*.json /usr/app
+COPY package*.json /usr/app/
 RUN npm ci --save-dev
 
 # Copy the rest of the source. Do this last so that the packages will be cached if the dependencies haven't changed
-COPY . /usr/app
+COPY . /usr/app/
 
 # Make sure all the tests pass
 RUN npm test
