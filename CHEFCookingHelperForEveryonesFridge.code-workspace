@@ -33,7 +33,6 @@
 	"tasks": {
 		"version": "2.0.0",
 
-		// % TODO: Add a grammer checker for the full report
 		"tasks": [
 			{
 				"label": "Tests: Spell Check Workspace",

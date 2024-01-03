@@ -11,7 +11,6 @@ import cliProgress from 'cli-progress'
 import csv from 'csv-parse'
 import progressTracker from 'progress-stream'
 
-import { DATABASE_PATH, SETUP_LOG_FILE } from '../settings'
 import logger, { createDefaultLogger, setLogger } from '../logger'
 import CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import CaseInsensitiveSet from '../types/CaseInsensitiveSet'
@@ -22,6 +21,7 @@ import type IConnection from '../database/IConnection'
 import type Ingredient from '../types/Ingredient'
 import SqliteConnection from '../database/SqliteConnection'
 import decodeObject from '../decodeObject'
+import environment from '../environment'
 import getEmbedding from '../ml/getEmbedding'
 import getSimilarity from '../ml/getSimilarity'
 import { preloadModel } from '../ml/getModel'
@@ -190,9 +190,9 @@ async function main (connection: IConnection, db: IChefDatabase): Promise<void> 
   db.checkIntegrity()
 }
 
-setLogger(createDefaultLogger(SETUP_LOG_FILE))
+setLogger(createDefaultLogger(environment.SETUP_LOG_FILE))
 
-const connection = new SqliteConnection(DATABASE_PATH)
+const connection = new SqliteConnection(environment.DATABASE_PATH)
 const db = new ChefDatabaseImpl(connection)
 
 main(connection, db).catch(err => {
