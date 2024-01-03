@@ -166,19 +166,19 @@ See figure \todo{Figure} for an example of a test report.
 
 \todo{Unit testing}
 \todo{Include an example test report}
+\todo{Include an example coverage report}
 
 \subsection{Code Quality Evaluation}
 The MegaLinter tool \cite{vuillamy_megalinter_nodate} was configured to run on every pull request on the application's Git repository. This includes a wide array
 of checks to ensure that style guides were adhered to and to catch potential issues, such as making potentially incorrect
 assumptions about the type of an object. This generates a report that is attached to each pull request detailing
-any issues that were found (figure \todo{figure})
+any issues that were found (figure \ref{fig:metalinter_report}).
 
 The configuration for MegaLinter and its linters can be found in the root directory of the repository.
 Certain issues, such as incorrect indentation, are fixed automatically when a pull request is created, while others
 must be corrected manually. Overall, MegaLinter aids in ensuring code quality and preventing the use of bad practices.
 
 \todo{May want more here}
-\todo{Include an example coverage report}
 
 \section{Investigation}
 \todoinline{
