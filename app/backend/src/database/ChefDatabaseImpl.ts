@@ -376,13 +376,18 @@ export default class ChefDatabaseImpl implements IChefDatabase {
     }
   }
 
-  public getSimilarRecipes (embedding: EmbeddedSentence, minSimilarity: number, limit: number): SimilarRecipe[] {
+  public getSimilarRecipes (embedding: EmbeddedSentence, minSimilarity: number, limit: number, mealType: string): SimilarRecipe[] {
     interface SimilarRecipesResultRow {
       id: types.RowId
       name: string
       similarity: number
     }
-    const statement = this._connection.prepare<[Buffer, number, number], SimilarRecipesResultRow>(`
+    const statement = this._connection.prepare<[
+      /* embedding */ Buffer,
+      /* mealType */ string,
+      /* minSimilarity */ number,
+      /* limit */ number
+    ], SimilarRecipesResultRow>(`
       SELECT
         recipe.id,
         recipe.name,
@@ -393,6 +398,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
         -- can be done before the similarity check here
         -- Remove duplicate names
         SELECT * FROM recipe
+        WHERE meal_type_id = (SELECT id FROM meal_type WHERE name = ?) OR 1
         GROUP BY name COLLATE NOCASE
       ) AS recipe
       JOIN embedding ON recipe.name = embedding.sentence
@@ -401,7 +407,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
       LIMIT ?
     `)
 
-    const result = statement.all(bufferFromFloat32Array(embedding.embedding), minSimilarity, limit)
+    const result = statement.all(bufferFromFloat32Array(embedding.embedding), mealType, minSimilarity, limit)
 
     return result
   }

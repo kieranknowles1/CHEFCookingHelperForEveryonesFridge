@@ -93,6 +93,8 @@ CREATE TABLE meal_type (
     id INTEGER NOT NULL PRIMARY KEY,
     name TEXT NOT NULL UNIQUE REFERENCES embedding(sentence)
 );
+CREATE INDEX index_meal_type_by_name
+    ON meal_type(name);
 
 CREATE TABLE recipe (
     id INTEGER NOT NULL PRIMARY KEY,
@@ -103,6 +105,8 @@ CREATE TABLE recipe (
 );
 CREATE INDEX index_recipe_by_name_nocase
     ON recipe(name COLLATE NOCASE ASC);
+CREATE INDEX index_recipe_by_meal_type_id
+    ON recipe(meal_type_id);
 
 CREATE TABLE recipe_ingredient (
     recipe_id INTEGER NOT NULL REFERENCES recipe(id) ON DELETE CASCADE,

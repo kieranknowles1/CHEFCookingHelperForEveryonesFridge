@@ -91,7 +91,7 @@ export default interface IChefDatabase {
   /**
    * Get similar recipes to the given embedding, ordered by similarity
    */
-  getSimilarRecipes: (embedding: EmbeddedSentence, minSimilarity: number, limit: number) => SimilarRecipe[]
+  getSimilarRecipes: (embedding: EmbeddedSentence, minSimilarity: number, limit: number, mealType: string) => SimilarRecipe[]
 
   /**
    * Get the amount of an ingredient in a fridge
