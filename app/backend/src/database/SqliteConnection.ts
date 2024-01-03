@@ -6,7 +6,7 @@ import sqlite from 'better-sqlite3'
 
 import logger from '../logger'
 
-import { type FunctionOptions, type IPreparedStatement, type SqliteValue } from './IConnection'
+import { type BindParams, type FunctionOptions, type IPreparedStatement } from './IConnection'
 import type IConnection from './IConnection'
 
 interface IntegrityCheckRow {
@@ -72,12 +72,13 @@ export default class SqliteConnection implements IConnection {
     this.db.function(name, options, callback)
   }
 
-  public prepare<TParams extends SqliteValue[], TRow> (sql: string): IPreparedStatement<TParams, TRow> {
+  public prepare<TRow> (sql: string): IPreparedStatement<TRow> {
     const stmt = this.db.prepare(sql)
     return {
-      run: (...params: TParams) => stmt.run(...params),
-      get: (...params: TParams) => stmt.get(...params) as TRow | undefined,
-      all: (...params: TParams) => stmt.all(...params) as TRow[]
+      // Need to check for undefined because better-sqlite3 parses an explicit undefined as providing 1 parameter
+      run: (params?: BindParams) => params === undefined ? stmt.run() : stmt.run(params),
+      get: (params?: BindParams) => (params === undefined ? stmt.get() : stmt.get(params)) as TRow | undefined,
+      all: (params?: BindParams) => (params === undefined ? stmt.all() : stmt.all(params)) as TRow[]
     }
   }
 }

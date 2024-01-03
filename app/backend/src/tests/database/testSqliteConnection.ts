@@ -45,25 +45,25 @@ describe('database/SqliteConnection', () => {
   describe('exec', () => {
     it('should execute a statement', () => {
       testDatabase.exec("INSERT INTO test (id, name) VALUES (1234, 'test2')")
-      const result = testDatabase.prepare<[], { id: number }>("SELECT id FROM test WHERE name = 'test2'").get()
+      const result = testDatabase.prepare<{ id: number }>("SELECT id FROM test WHERE name = 'test2'").get()
       assert.strictEqual(result?.id, 1234)
     })
   })
 
   describe('prepare', () => {
     it('should prepare a statement', () => {
-      const statement = testDatabase.prepare<[], { id: number }>("SELECT id FROM test WHERE name = 'test'")
+      const statement = testDatabase.prepare<{ id: number }>("SELECT id FROM test WHERE name = 'test'")
       const result = statement.get()
       assert.strictEqual(result?.id, 123)
     })
 
     it('should throw an error if the statement is invalid', () => {
-      assert.throws(() => { testDatabase.prepare<[], { id: number }>('SELECT id FROM test WHERE "') })
+      assert.throws(() => { testDatabase.prepare<{ id: number }>('SELECT id FROM test WHERE "') })
     })
 
     describe('run', () => {
       it('should run a statement', () => {
-        const statement = testDatabase.prepare<[], { id: number }>("INSERT INTO test (name) VALUES ('test3')")
+        const statement = testDatabase.prepare<{ id: number }>("INSERT INTO test (name) VALUES ('test3')")
         const result = statement.run()
         assert.strictEqual(result.changes, 1)
       })
@@ -71,7 +71,7 @@ describe('database/SqliteConnection', () => {
 
     describe('get', () => {
       it('should get a row', () => {
-        const statement = testDatabase.prepare<[], { id: number }>("SELECT id FROM test WHERE name = 'test'")
+        const statement = testDatabase.prepare<{ id: number }>("SELECT id FROM test WHERE name = 'test'")
         const result = statement.get()
         assert.strictEqual(result?.id, 123)
       })
@@ -80,7 +80,7 @@ describe('database/SqliteConnection', () => {
     describe('all', () => {
       it('should get all rows', () => {
         testDatabase.exec("INSERT INTO test (id, name) VALUES (124, 'test2')")
-        const statement = testDatabase.prepare<[], { id: number }>('SELECT id FROM test ORDER BY id ASC')
+        const statement = testDatabase.prepare<{ id: number }>('SELECT id FROM test ORDER BY id ASC')
         const result = statement.all()
         assert.deepStrictEqual(result, [{ id: 123 }, { id: 124 }])
       })

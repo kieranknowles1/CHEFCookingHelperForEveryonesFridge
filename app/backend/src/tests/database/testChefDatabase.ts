@@ -130,7 +130,7 @@ describe('database/ChefDatabaseImpl', () => {
   describe('getAllIngredients', () => {
     it('should get all ingredients', () => {
       const ingredients = database.getAllIngredients()
-      const rowCount = connection.prepare<[], { count: number }>('SELECT COUNT(*) AS count FROM ingredient').get()?.count
+      const rowCount = connection.prepare<{ count: number }>('SELECT COUNT(*) AS count FROM ingredient').get()?.count
 
       assert.strictEqual(ingredients.size, rowCount)
     })
@@ -146,7 +146,7 @@ describe('database/ChefDatabaseImpl', () => {
   describe('getAllIngredientsByName', () => {
     it('should get all ingredients by name', () => {
       const ingredients = database.getAllIngredientsByName()
-      const rowCount = connection.prepare<[], { count: number }>('SELECT COUNT(*) AS count FROM view_ingredient_by_name').get()?.count
+      const rowCount = connection.prepare<{ count: number }>('SELECT COUNT(*) AS count FROM view_ingredient_by_name').get()?.count
 
       assert.strictEqual(ingredients.size, rowCount)
     })

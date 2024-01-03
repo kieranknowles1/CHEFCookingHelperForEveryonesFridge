@@ -32,32 +32,32 @@ describe('ml/extendDatabase', function () {
   describe('ml_similarity', function () {
     it('should return 1 for identical embeddings', function () {
       const buffer = fakeEmbedding()
-      const statement = db.prepare<[Buffer, Buffer], { sim: number }>('SELECT ml_similarity(?, ?) AS sim')
-      const result = statement.get(buffer, buffer)?.sim
+      const statement = db.prepare<{ sim: number }>('SELECT ml_similarity(:b1, :b2) AS sim')
+      const result = statement.get({ b1: buffer, b2: buffer })?.sim
 
       assert(result !== undefined)
       assert(fuzzyEqual(result, 1))
     })
 
     it('should fail if the embeddings are not blobs', function () {
-      const statement = db.prepare<[string, string], { sim: number }>('SELECT ml_similarity(?, ?) AS sim')
-      assert.throws(() => statement.get('a', 'b'), Error)
+      const statement = db.prepare<{ sim: number }>('SELECT ml_similarity(:b1, :b2) AS sim')
+      assert.throws(() => statement.get({ b1: 'a', b2: 'b' }))
     })
 
     it('should fail if the embeddings are not the same length', function () {
-      const statement = db.prepare<[Buffer, Buffer], { sim: number }>('SELECT ml_similarity(?, ?) AS sim')
+      const statement = db.prepare<{ sim: number }>('SELECT ml_similarity(:b1, :b2) AS sim')
       const buffer1 = fakeEmbedding()
       const buffer2 = fakeEmbedding().subarray(0, 123)
-      assert.throws(() => statement.get(buffer1, buffer2), Error)
+      assert.throws(() => statement.get({ b1: buffer1, b2: buffer2 }))
     })
 
     it('should be symmetric', function () {
       const buffer1 = fakeEmbedding()
       const buffer2 = fakeEmbedding()
-      const statement = db.prepare<[Buffer, Buffer], { sim: number }>('SELECT ml_similarity(?, ?) AS sim')
+      const statement = db.prepare<{ sim: number }>('SELECT ml_similarity(:b1, :b2) AS sim')
 
-      const result1 = statement.get(buffer1, buffer2)?.sim
-      const result2 = statement.get(buffer2, buffer1)?.sim
+      const result1 = statement.get({ b1: buffer1, b2: buffer2 })?.sim
+      const result2 = statement.get({ b1: buffer2, b2: buffer1 })?.sim
 
       assert(result1 !== undefined)
       assert(result2 !== undefined)

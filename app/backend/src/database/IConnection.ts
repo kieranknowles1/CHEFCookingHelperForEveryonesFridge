@@ -15,30 +15,35 @@ export interface RunResult {
 }
 
 export type SqliteValue = number | string | bigint | Buffer | null
+/**
+ * Bind parameters in the format { name: value }
+ * Note that the @, $, or : should be omitted.
+ */
+export type BindParams = Record<string, SqliteValue>
 
 /**
  * A prepared statement that can be executed multiple times with different parameters
  * NOTE: It is the responsibility of the caller to ensure that type parameters match the SQL statement
  */
-export interface IPreparedStatement<TParams extends SqliteValue[], TRow> {
+export interface IPreparedStatement<TRow> {
   /**
    * Execute the statement with the given parameters
    * Returns the number of rows that were changed by the statement (INSERT, UPDATE or DELETE)
    * and the rowid of the last row inserted into the database
    */
-  run: (...params: TParams) => RunResult
+  run: (params?: BindParams) => RunResult
 
   /**
    * Execute the statement with the given parameters
    * Returns the first row of the result set, or undefined if there are no rows
    */
-  get: (...params: TParams) => TRow | undefined
+  get: (params?: BindParams) => TRow | undefined
 
   /**
    * Execute the statement with the given parameters
    * Returns all rows of the result set, or an empty array if there are no rows
    */
-  all: (...params: TParams) => TRow[]
+  all: (params?: BindParams) => TRow[]
 }
 
 export default interface IConnection {
@@ -55,8 +60,9 @@ export default interface IConnection {
 
   /**
    * Prepare a statement that can be executed multiple times with different parameters
+   * NOTE: For consistency, bind parameters should be named with a leading colon (:)
    */
-  prepare: <TParams extends SqliteValue[], TRow>(sql: string) => IPreparedStatement<TParams, TRow>
+  prepare: <TRow>(sql: string) => IPreparedStatement<TRow>
 
   /**
    * Register a function that can be called from SQL statements

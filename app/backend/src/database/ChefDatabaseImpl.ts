@@ -68,13 +68,18 @@ class WritableDatabaseImpl implements IWritableDatabase {
     this.assertValid()
     // TODO: Reuse prepared statements
     // TODO: statement pack for writable to only prepare them once
-    const statement = this._connection.prepare<[string, number, string, number | null], undefined>(`
+    const statement = this._connection.prepare<undefined>(`
       INSERT INTO ingredient
         (name, assumeUnlimited, preferredUnit, density)
       VALUES
-        (?, ?, ?, ?)
+        (:name, :assumeUnlimited, :preferredUnit, :density)
     `)
-    const id = statement.run(ingredient.name, ingredient.assumeUnlimited ? 1 : 0, ingredient.preferredUnit, ingredient.density ?? null).lastInsertRowid
+    const id = statement.run({
+      name: ingredient.name,
+      assumeUnlimited: ingredient.assumeUnlimited ? 1 : 0,
+      preferredUnit: ingredient.preferredUnit,
+      density: ingredient.density ?? null
+    }).lastInsertRowid
     this.assertNotBigint(id)
 
     return id
@@ -82,24 +87,27 @@ class WritableDatabaseImpl implements IWritableDatabase {
 
   public addEmbedding (sentence: EmbeddedSentence): void {
     this.assertValid()
-    const statement = this._connection.prepare<[string, Buffer], undefined>(`
+    const statement = this._connection.prepare<undefined>(`
       INSERT INTO embedding
         (sentence, embedding)
       VALUES
-        (?, ?)
+        (:sentence, :embedding)
       ON CONFLICT DO NOTHING
     `)
 
-    statement.run(sentence.sentence, bufferFromFloat32Array(sentence.embedding))
+    statement.run({
+      sentence: sentence.sentence,
+      embedding: bufferFromFloat32Array(sentence.embedding)
+    })
   }
 
   public addRecipe (recipe: RecipeNoId): types.RowId {
     this.assertValid()
-    const statement = this._connection.prepare<[string, string, string, string], undefined>(`
+    const statement = this._connection.prepare<undefined>(`
       INSERT INTO recipe
         (name, directions, link, meal_type_id)
       VALUES
-        (?, ?, ?, (SELECT id FROM meal_type WHERE name = ?))
+        (:name, :directions, :link, (SELECT id FROM meal_type WHERE name = :mealType))
     `)
 
     // Add the embedding if it doesn't exist. Only do this once per sentence
@@ -107,22 +115,27 @@ class WritableDatabaseImpl implements IWritableDatabase {
       this.addEmbedding(recipe.name)
     }
 
-    const id = statement.run(
-      recipe.name.sentence,
-      recipe.directions,
-      recipe.link,
-      recipe.mealType.sentence
-    ).lastInsertRowid
+    const id = statement.run({
+      name: recipe.name.sentence,
+      directions: recipe.directions,
+      link: recipe.link,
+      mealType: recipe.mealType.sentence
+    }).lastInsertRowid
     this.assertNotBigint(id)
 
-    const ingredientStatement = this._connection.prepare<[types.RowId, types.RowId, number | null, string], undefined>(`
+    const ingredientStatement = this._connection.prepare<undefined>(`
       INSERT INTO recipe_ingredient
         (recipe_id, ingredient_id, amount, original_line)
       VALUES
-        (?, ?, ?, ?)
+        (:recipeId, :ingredientId, :amount, :originalLine)
     `)
     for (const [ingredientId, amount] of recipe.ingredients) {
-      ingredientStatement.run(id, ingredientId, amount.amount, amount.originalLine)
+      ingredientStatement.run({
+        recipeId: id,
+        ingredientId,
+        amount: amount.amount,
+        originalLine: amount.originalLine
+      })
     }
 
     return id
@@ -130,18 +143,18 @@ class WritableDatabaseImpl implements IWritableDatabase {
 
   public setIngredientAmount (fridgeId: types.RowId, ingredientId: types.RowId, amount: number): void {
     if (amount === 0) {
-      const statement = this._connection.prepare<[types.RowId, types.RowId], undefined>(`
-        DELETE FROM fridge_ingredient WHERE fridge_id = ? AND ingredient_id = ?
+      const statement = this._connection.prepare<undefined>(`
+        DELETE FROM fridge_ingredient WHERE fridge_id = :fridgeId AND ingredient_id = :ingredientId
       `)
-      statement.run(fridgeId, ingredientId)
+      statement.run({ fridgeId, ingredientId })
     } else {
-      const statement = this._connection.prepare<[types.RowId, types.RowId, types.RowId], undefined>(`
+      const statement = this._connection.prepare<undefined>(`
         INSERT OR REPLACE INTO fridge_ingredient
           (fridge_id, ingredient_id, amount)
         VALUES
-          (?, ?, ?)
+          (:fridgeId, :ingredientId, :amount)
       `)
-      statement.run(fridgeId, ingredientId, amount)
+      statement.run({ fridgeId, ingredientId, amount })
     }
   }
 }
@@ -221,10 +234,10 @@ export default class ChefDatabaseImpl implements IChefDatabase {
   }
 
   public getEmbedding (sentence: string): EmbeddedSentence | null {
-    const statement = this._connection.prepare<[string], { embedding: Buffer }>(`
-      SELECT embedding FROM embedding WHERE sentence = ?
+    const statement = this._connection.prepare<{ embedding: Buffer }>(`
+      SELECT embedding FROM embedding WHERE sentence = :sentence
     `)
-    const result = statement.get(sentence)
+    const result = statement.get({ sentence })
 
     if (result === undefined) {
       return null
@@ -247,10 +260,10 @@ export default class ChefDatabaseImpl implements IChefDatabase {
   }
 
   public getIngredient (id: IngredientId): Ingredient {
-    const statement = this._connection.prepare<[types.RowId], types.IngredientRow>(`
-      SELECT * FROM ingredient WHERE id = ?
+    const statement = this._connection.prepare<types.IngredientRow>(`
+      SELECT * FROM ingredient WHERE id = :id
     `)
-    const result = statement.get(id)
+    const result = statement.get({ id })
 
     if (result === undefined) {
       throw new InvalidIdError('ingredient', id)
@@ -260,7 +273,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
   }
 
   public getAllIngredients (): Map<types.RowId, Ingredient> {
-    const statement = this._connection.prepare<[], types.IngredientRow>(`
+    const statement = this._connection.prepare<types.IngredientRow>(`
       SELECT * FROM ingredient
     `)
     const result = statement.all()
@@ -277,13 +290,13 @@ export default class ChefDatabaseImpl implements IChefDatabase {
    * an equivalent ingredient if an exact match is not found.
    */
   public findIngredientByName (name: string): Ingredient | null {
-    const statement = this._connection.prepare<[string], types.IngredientRow>(`
+    const statement = this._connection.prepare<types.IngredientRow>(`
       SELECT ingredient.*
         FROM view_ingredient_by_name
         JOIN ingredient ON view_ingredient_by_name.id = ingredient.id
-        WHERE view_ingredient_by_name.name = ? COLLATE NOCASE
+        WHERE view_ingredient_by_name.name = :name COLLATE NOCASE
     `)
-    const result = statement.get(name)
+    const result = statement.get({ name })
     if (result === undefined) {
       return null
     }
@@ -293,7 +306,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
 
   getMealTypeNames (): string[] {
     interface Result { name: string }
-    const statement = this._connection.prepare<[], Result>(`
+    const statement = this._connection.prepare<Result>(`
       SELECT name FROM meal_type
     `)
     const result = statement.all()
@@ -303,7 +316,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
 
   getMealTypes (): EmbeddedSentence[] {
     interface Result { name: string, embedding: Buffer }
-    const statement = this._connection.prepare<[], Result>(`
+    const statement = this._connection.prepare<Result>(`
       SELECT
         name, embedding
       FROM meal_type
@@ -322,7 +335,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
    */
   public getAllIngredientsByName (): CaseInsensitiveMap<Ingredient> {
     type Result = types.IngredientRow & { alt_name: string }
-    const statement = this._connection.prepare<[], Result>(`
+    const statement = this._connection.prepare<Result>(`
       SELECT
         view_ingredient_by_name.name AS alt_name,
         ingredient.*
@@ -343,7 +356,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
    */
   public getRecipe (id: types.RowId): Recipe {
     type Result = types.RecipeRow & types.RecipeIngredientRow & { mt_name: string, mt_embedding: Buffer, r_name_embedding: Buffer }
-    const statement = this._connection.prepare<[types.RowId], Result>(`
+    const statement = this._connection.prepare<Result>(`
       SELECT
         recipe.*,
         recipe_ingredient.*,
@@ -355,10 +368,10 @@ export default class ChefDatabaseImpl implements IChefDatabase {
         JOIN embedding AS r_embedding ON recipe.name = r_embedding.sentence
         JOIN meal_type ON meal_type.id = recipe.meal_type_id
         JOIN embedding AS mt_embedding ON meal_type.name = mt_embedding.sentence
-      WHERE recipe.id = ?
+      WHERE recipe.id = :id
     `)
 
-    const result = statement.all(id)
+    const result = statement.all({ id })
     if (result.length === 0) { throw new InvalidIdError('recipe', id) }
 
     const ingredients = new Map<IngredientId, IngredientAmount>(result.map(row => [
@@ -382,46 +395,44 @@ export default class ChefDatabaseImpl implements IChefDatabase {
       name: string
       similarity: number
     }
-    const statement = this._connection.prepare<[
-      /* embedding */ Buffer,
-      /* mealType */ string,
-      /* minSimilarity */ number,
-      /* limit */ number
-    ], SimilarRecipesResultRow>(`
+    const statement = this._connection.prepare<SimilarRecipesResultRow>(`
       SELECT
         recipe.id,
         recipe.name,
         -- Very expensive, filter as much as possible before this
-        ml_similarity(embedding.embedding, ?) AS similarity
+        ml_similarity(embedding.embedding, :embedding) AS similarity
       FROM (
         -- Subquery is executed first. Put filtering that
         -- can be done before the similarity check here
         -- Remove duplicate names
         SELECT * FROM recipe
-        WHERE meal_type_id = (SELECT id FROM meal_type WHERE name = ?)
+        WHERE meal_type_id = (SELECT id FROM meal_type WHERE name = :mealType)
         GROUP BY name COLLATE NOCASE
       ) AS recipe
       JOIN embedding ON recipe.name = embedding.sentence
-      WHERE similarity >= ?
+      WHERE similarity >= :minSimilarity
       ORDER BY similarity DESC
-      LIMIT ?
+      LIMIT :limit
     `)
 
-    const result = statement.all(bufferFromFloat32Array(embedding.embedding), mealType, minSimilarity, limit)
-
-    return result
+    return statement.all({
+      embedding: bufferFromFloat32Array(embedding.embedding),
+      mealType,
+      minSimilarity,
+      limit
+    })
   }
 
   /**
    * Get the amount of an ingredient in a fridge
    */
   public getIngredientAmount (fridgeId: types.RowId, ingredientId: types.RowId): number {
-    const statement = this._connection.prepare<[types.RowId, types.RowId], { amount: number }>(`
+    const statement = this._connection.prepare<{ amount: number }>(`
       SELECT amount
       FROM fridge_ingredient
-      WHERE fridge_id = ? AND ingredient_id = ?
+      WHERE fridge_id = :fridgeId AND ingredient_id = :ingredientId
     `)
-    const result = statement.get(fridgeId, ingredientId)
+    const result = statement.get({ fridgeId, ingredientId })
 
     return result?.amount ?? 0
   }
@@ -431,14 +442,14 @@ export default class ChefDatabaseImpl implements IChefDatabase {
    */
   public getAllIngredientAmounts (fridgeId: types.RowId): Map<types.RowId, FridgeIngredientAmount> {
     type IAllIngredientAmountsRow = types.IngredientRow & types.FridgeIngredientRow
-    const statement = this._connection.prepare<[types.RowId], IAllIngredientAmountsRow>(`
+    const statement = this._connection.prepare<IAllIngredientAmountsRow>(`
       SELECT *
       FROM fridge_ingredient
       JOIN ingredient ON ingredient.id = fridge_ingredient.ingredient_id
-      WHERE fridge_id = ?
+      WHERE fridge_id = :fridgeId
       ORDER BY ingredient.name
     `)
-    const result = statement.all(fridgeId)
+    const result = statement.all({ fridgeId })
 
     const map = new Map<types.RowId, FridgeIngredientAmount>()
     for (const row of result) {
@@ -460,11 +471,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
   public getAvailableRecipes (fridgeId: types.RowId, checkAmount: boolean, maxMissingIngredients: number, mealType: string | null): AvailableRecipe[] {
     // Well this was easier than expected
     // TODO: Optionally allow substitutions
-    const statement = this._connection.prepare<[
-      /* fridgeId */ types.RowId,
-      /* mealType */ string | null, string | null,
-      /* maxMissingIngredients */ number
-    ], AvailableRecipesResultRow>(`
+    const statement = this._connection.prepare<AvailableRecipesResultRow>(`
       SELECT
         recipe.name, recipe.id,
         -- Used to filter by available amount later
@@ -474,14 +481,14 @@ export default class ChefDatabaseImpl implements IChefDatabase {
       FROM
         recipe
       LEFT JOIN recipe_ingredient ON recipe_ingredient.recipe_id = recipe.id
-      LEFT JOIN fridge_ingredient ON fridge_ingredient.ingredient_id = recipe_ingredient.ingredient_id AND fridge_ingredient.fridge_id = ?
+      LEFT JOIN fridge_ingredient ON fridge_ingredient.ingredient_id = recipe_ingredient.ingredient_id AND fridge_ingredient.fridge_id = :fridgeId
       JOIN ingredient ON ingredient.id = recipe_ingredient.ingredient_id AND NOT ingredient.assumeUnlimited
-      WHERE recipe.meal_type_id = (SELECT id FROM meal_type WHERE name = ?) OR ? IS NULL
+      WHERE recipe.meal_type_id = (SELECT id FROM meal_type WHERE name = :mealType) OR :mealType IS NULL
       GROUP BY recipe.id
       -- COUNT excludes NULLs. Less than used to optionally allow missing ingredients
-      HAVING missing_count <= ?
+      HAVING missing_count <= :maxMissingIngredients
     `)
-    const result = statement.all(fridgeId, mealType, mealType, maxMissingIngredients)
+    const result = statement.all({ fridgeId, mealType, maxMissingIngredients })
 
     return result
       .filter(row => !checkAmount || this.getInsufficientAmountCount(row) + row.missing_count <= maxMissingIngredients)
@@ -494,12 +501,12 @@ export default class ChefDatabaseImpl implements IChefDatabase {
 
   public getBarcode (code: types.RowId): Barcode {
     type Result = types.BarcodeRow & types.IngredientRow
-    const statement = this._connection.prepare<[types.RowId], Result>(`
+    const statement = this._connection.prepare<Result>(`
       SELECT * FROM barcode
         JOIN ingredient ON ingredient.id = barcode.ingredient_id
-        WHERE barcode.code = ?
+        WHERE barcode.code = :code
     `)
-    const result = statement.get(code)
+    const result = statement.get({ code })
 
     if (result === undefined) {
       throw new InvalidIdError('barcode', code)
