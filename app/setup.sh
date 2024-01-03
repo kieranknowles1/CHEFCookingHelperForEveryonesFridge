@@ -29,7 +29,7 @@ echo "Building backend container. Hope you have a SSD, because Node creates a ri
 echo "Setting up backend. Grab a cuppa, this will take a while"
 (
 	cd backend
-	docker-compose --env-file docker-compose.env run chef npm run setup
+	docker-compose --env-file docker-compose.env --rm run chef npm run setup
 )
 
 # TODO: Build and run the frontend
