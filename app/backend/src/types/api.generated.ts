@@ -94,7 +94,7 @@ export interface paths {
   "/recipe/{id}/similar": {
     /**
      * Get similar recipes
-     * @description Returns a list of recipes similar to the given recipe \ Items are sorted by similarity score, descending \ Note that if multiple recipes have the same name, only one will be returned
+     * @description Returns a list of recipes similar to the given recipe \ Items are sorted by similarity score, descending \ Only recipes of the same type are returned Note that if multiple recipes have the same name, only one will be returned
      */
     get: {
       parameters: {
@@ -301,6 +301,8 @@ export interface components {
       /** @example example.com */
       link: string;
       ingredients: components["schemas"]["RecipeIngredientEntry"][];
+      /** @example Dinner */
+      mealType: string;
     };
     Ingredient: {
       /** @example 12345 */

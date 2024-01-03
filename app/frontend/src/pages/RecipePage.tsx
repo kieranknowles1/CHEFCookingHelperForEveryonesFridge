@@ -51,6 +51,7 @@ export default function RecipePage (): React.JSX.Element {
         <div>
           <h1>{recipe.name}</h1>
           <a href={`http://${recipe.link}`} target='_blank' rel='noreferrer'>Source</a>
+          <p>Meal Type: {recipe.mealType}</p>
           <h2>Ingredients</h2>
           <ul className='list-inside list-disc'>
             {recipe.ingredients.map(entry => <RecipeIngredient key={entry.ingredient.id} {...entry} />)}

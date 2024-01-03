@@ -38,7 +38,8 @@ export default function registerRecipeEndpoint (app: Express, db: IChefDatabase)
         name: recipe.name.sentence,
         directions: recipe.directions,
         link: recipe.link,
-        ingredients
+        ingredients,
+        mealType: recipe.mealType.sentence
       })
     })
 }

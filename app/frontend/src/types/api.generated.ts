@@ -94,7 +94,7 @@ export interface paths {
   "/recipe/{id}/similar": {
     /**
      * Get similar recipes
-     * @description Returns a list of recipes similar to the given recipe \ Items are sorted by similarity score, descending \ Note that if multiple recipes have the same name, only one will be returned
+     * @description Returns a list of recipes similar to the given recipe \ Items are sorted by similarity score, descending \ Only recipes of the same type are returned Note that if multiple recipes have the same name, only one will be returned
      */
     get: {
       parameters: {
@@ -264,17 +264,19 @@ export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
     ErrorList: {
-      /** @example Parameter 'id' must be an integer */
-      message: string;
+      /** @example 404 */
+      status: number;
+      /** @example /api/v1/path/to/endpoint */
+      path: string;
       errors: components["schemas"]["Error"][];
     };
     Error: {
-      /** @example Invalid ID 1 for table blah */
+      /** @example /params/id */
+      path: string;
+      /** @example Must be integer */
       message: string;
-      /** @example InvalidIdError */
-      name: string;
-      /** @example 404 */
-      code: number;
+      /** @example type.openapi.validation */
+      errorCode?: string;
     };
     /**
      * @example g
@@ -299,6 +301,8 @@ export interface components {
       /** @example example.com */
       link: string;
       ingredients: components["schemas"]["RecipeIngredientEntry"][];
+      /** @example Dinner */
+      mealType: string;
     };
     Ingredient: {
       /** @example 12345 */
@@ -322,10 +326,10 @@ export interface components {
       /** @example John Smith */
       name: string;
     };
-    RecipeIngredientEntry: {
+    RecipeIngredientEntry: WithRequired<{
       /** @example 250g of chicken */
-      originalLine?: string;
-    } & components["schemas"]["IngredientEntry"];
+      originalLine: string;
+    } & components["schemas"]["IngredientEntry"], "originalLine">;
     FridgeIngredientEntry: WithRequired<components["schemas"]["IngredientEntry"], "amount">;
   };
   responses: {

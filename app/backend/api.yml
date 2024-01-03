@@ -97,6 +97,7 @@ paths:
       summary: Get similar recipes
       description: Returns a list of recipes similar to the given recipe \
         Items are sorted by similarity score, descending \
+        Only recipes of the same type are returned
         Note that if multiple recipes have the same name, only one will be returned
       parameters:
         - $ref: "#/components/parameters/recipeId"
@@ -334,7 +335,8 @@ components:
         ingredients:
           type: array
           items: { $ref: "#/components/schemas/RecipeIngredientEntry" }
-      required: [id, name, directions, link, ingredients]
+        mealType: { type: string, example: "Dinner" }
+      required: [id, name, directions, link, ingredients, mealType]
 
     Ingredient:
       type: object
