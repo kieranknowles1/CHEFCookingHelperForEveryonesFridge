@@ -26,10 +26,9 @@ RUN npm run build
 # Remove all dev dependencies and source files
 RUN npm prune --omit=dev && rm -rf src tsconfig.json build/tests
 
-# Give the node user ownership of everything in the working directory
-RUN chown -R node:node /usr/app /data
-# Switch to the node user, this is more secure than running as root
-USER node
+# For whatever reason, the data volume is owned by root, even after chowning it
+# Unless that's fixed, we need to run the app as root
+# I've spent hours trying to fix this, and just giving up for now
 
 # Expose the port that the app will listen on. This environment variable is exposed to the app in environment.ts
 EXPOSE ${CHEF_PORT}
