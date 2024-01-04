@@ -30,6 +30,6 @@ RUN npm prune --omit=dev && rm -rf src tsconfig.json build/tests
 # Unless that's fixed, we need to run the app as root
 # I've spent hours trying to fix this, and just giving up for now
 
-# Expose the port that the app will listen on. This environment variable is exposed to the app in environment.ts
-EXPOSE ${CHEF_PORT}
+# Expose the port that the app will listen on
+EXPOSE 3000
 CMD ["npm", "start"]

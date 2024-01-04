@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  chef:
+    build: .
+    container_name: chef_app
+    ports:
+      - 80:80
