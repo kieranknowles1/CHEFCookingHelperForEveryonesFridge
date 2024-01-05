@@ -1,10 +1,4 @@
 {
   "extends": "stylelint-config-standard",
-  "ignoreAtRules": [
-    "tailwind",
-    "apply",
-    "variants",
-    "responsive",
-    "screen"
-  ]
+  "ignoreAtRules": ["tailwind", "apply", "variants", "responsive", "screen"]
 }
