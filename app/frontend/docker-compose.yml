@@ -3,5 +3,7 @@ services:
   chef:
     build: .
     container_name: chef_app
+    volumes:
+      - ./config.js:/usr/share/nginx/html/config.js:ro
     ports:
       - 80:80
