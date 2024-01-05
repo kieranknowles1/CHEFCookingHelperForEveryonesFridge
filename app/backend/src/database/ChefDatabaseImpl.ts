@@ -7,8 +7,10 @@ import { type IngredientAmount, type IngredientId, type IngredientNoId } from '.
 import type Barcode from '../types/Barcode'
 import CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type EmbeddedSentence from '../ml/EmbeddedSentence'
+import type Fridge from '../types/Fridge'
 import type Ingredient from '../types/Ingredient'
 import type Recipe from '../types/Recipe'
+import type User from '../types/User'
 import logger from '../logger'
 import ml_extendDatabase from '../ml/extendDatabase'
 
@@ -517,6 +519,39 @@ export default class ChefDatabaseImpl implements IChefDatabase {
       ingredient: this.ingredientFromRow(result),
       productName: result.product_name,
       amount: result.amount
+    }
+  }
+
+  public getUser (id: types.RowId): User {
+    const statement = this._connection.prepare<types.UserRow>(`
+      SELECT * FROM user WHERE id = :id
+    `)
+    const result = statement.get({ id })
+
+    if (result === undefined) {
+      throw new InvalidIdError('user', id)
+    }
+
+    return {
+      id: result.id,
+      name: result.username
+    }
+  }
+
+  public getFridge (id: types.RowId): Fridge {
+    const statement = this._connection.prepare<types.FridgeRow>(`
+      SELECT * FROM fridge WHERE id = :id
+    `)
+    const result = statement.get({ id })
+
+    if (result === undefined) {
+      throw new InvalidIdError('fridge', id)
+    }
+
+    return {
+      id: result.id,
+      name: result.name,
+      ownerId: result.owner_id
     }
   }
 }

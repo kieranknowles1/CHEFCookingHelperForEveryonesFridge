@@ -3,8 +3,10 @@ import { type IngredientId, type IngredientNoId } from '../types/Ingredient'
 import type Barcode from '../types/Barcode'
 import type CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type EmbeddedSentence from '../ml/EmbeddedSentence'
+import type Fridge from '../types/Fridge'
 import type Ingredient from '../types/Ingredient'
 import type Recipe from '../types/Recipe'
+import type User from '../types/User'
 
 import type * as types from './types'
 
@@ -112,4 +114,7 @@ export default interface IChefDatabase {
    * Get the data associated with a barcode, throws if code not found
    */
   getBarcode: (code: types.RowId) => Barcode
+
+  getUser: (id: types.RowId) => User
+  getFridge: (id: types.RowId) => Fridge
 }
