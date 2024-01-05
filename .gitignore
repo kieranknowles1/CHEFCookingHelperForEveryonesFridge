@@ -34,3 +34,5 @@ dist/
 coverage/
 
 megalinter-reports/
+dataset/
+backend_data/

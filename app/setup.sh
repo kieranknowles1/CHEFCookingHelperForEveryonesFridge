@@ -3,39 +3,24 @@
 # Exit if any command fails (returns non-zero exit code)
 set -e
 
-DEPS="docker docker-compose"
+DATASET_PATH="./dataset/full_dataset.csv"
 
-echo "Checking and installing dependencies $DEPS"
+echo "Checking and installing dependencies"
 echo "This may ask for your password"
 sudo apt-get update
-sudo apt-get install $DEPS
+sudo apt-get install docker docker-compose
 
-# Setup app
-
-# Ask to download dataset if not found
-if [ ! -f "./backend/working_data/full_dataset.csv" ]; then
-	echo "Dataset not found. Please download it from https://recipenlg.cs.put.poznan.pl/ and place it in ./backend/working_data/full_dataset.csv"
-	exit
+# Check if dataset exists
+if [ ! -f "$DATASET_PATH" ]; then
+	echo "Dataset not found. Please download it from https://recipenlg.cs.put.poznan.pl/ and place it in $DATASET_PATH"
+	exit 1
 fi
 
-echo "Building backend container. Hope you have a SSD, because Node creates a ridiculous amount of files"
-(
-	cd backend
-	docker-compose build
-)
+echo "Running setup script"
+docker-compose --env-file backend.env run --rm backend npm run setup
 
-# Run app
+echo "Building containers"
+docker-compose build
 
-echo "Setting up backend. Grab a cuppa, this will take a while"
-(
-	cd backend
-	docker-compose run --rm chef npm run setup
-)
-
-# TODO: Build and run the frontend
-
-echo "Starting backend"
-(
-	cd backend
-	docker-compose up -d
-)
+echo "Starting containers"
+docker-compose up -d

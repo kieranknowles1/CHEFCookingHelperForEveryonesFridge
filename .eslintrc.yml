@@ -17,6 +17,7 @@ settings:
     version: "18.2"
 ignorePatterns:
   - "**/*.generated.ts"
+  - "*.js"
 rules:
   sort-imports:
     - warn
