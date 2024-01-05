@@ -27,9 +27,22 @@ DISABLE_LINTERS:
   - JAVASCRIPT_STANDARD
   - TYPESCRIPT_STANDARD
 
+  # HTML is only present to load the React app
+  - HTML_HTMLHINT
+
+  # cSpell is handled through a vscode test task
+  - SPELL_CSPELL
+  - SPELL_LYCHEE
+
+  # This is designed for Transact-SQL, not SQLite
+  - SQL_TSQLLINT
+
 # DISABLE:
 # - COPYPASTE # Uncomment to disable checks of excessive copy-pastes
 # - SPELL # Uncomment to disable checks of spelling mistakes
+
+# tsconfig.json allows comments
+JSON_JSONLINT_FILTER_REGEX_EXCLUDE: tsconfig\.json
 
 SHOW_ELAPSED_TIME: true
 
