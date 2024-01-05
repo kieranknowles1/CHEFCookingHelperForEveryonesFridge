@@ -335,6 +335,7 @@ components:
       required: [path, message]
 
     Unit:
+      type: string
       enum:
         - none
         - whole
