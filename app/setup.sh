@@ -4,12 +4,11 @@
 set -e
 
 DATASET_PATH="./dataset/full_dataset.csv"
-DEPS="docker docker-compose"
 
-echo "Checking and installing dependencies $DEPS"
+echo "Checking and installing dependencies"
 echo "This may ask for your password"
 sudo apt-get update
-sudo apt-get install $DEPS
+sudo apt-get install docker docker-compose
 
 # Check if dataset exists
 if [ ! -f "$DATASET_PATH" ]; then
