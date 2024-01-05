@@ -1,2 +1,5 @@
 dist/
 node_modules/
+
+# Development only config
+public/config/
