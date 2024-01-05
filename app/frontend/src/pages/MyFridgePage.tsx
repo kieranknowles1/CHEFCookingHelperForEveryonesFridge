@@ -2,16 +2,19 @@ import { Dialog } from '@headlessui/react'
 import { Link } from 'react-router-dom'
 import React from 'react'
 
-import FridgeIngredient, { type FridgeIngredientProps } from '../components/FridgeIngredient'
 import LoadingSpinner, { type LoadingStatus, getHighestStatus } from '../components/LoadingSpinner'
 import AddIngredient from '../components/AddIngredient'
+import FridgeIngredient from '../components/FridgeIngredient'
 import ModalDialog from '../components/ModalDialog'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
+import { type components } from '../types/api.generated'
 import monitorStatus from '../utils/monitorStatus'
 import useSafeContext from '../contexts/useSafeContext'
 
 const ScanBarcode = React.lazy(async () => await import('../components/ScanBarcode'))
+
+type FridgeIngredientEntry = components['schemas']['FridgeIngredientEntry']
 
 // TODO: Implement
 export default function MyFridgePage (): React.JSX.Element {
@@ -19,7 +22,7 @@ export default function MyFridgePage (): React.JSX.Element {
 
   // TODO: Helper function to update status
   const [ingredientsStatus, setIngredientsStatus] = React.useState<LoadingStatus>('loading')
-  const [ingredients, setIngredients] = React.useState<FridgeIngredientProps[]>([])
+  const [ingredients, setIngredients] = React.useState<FridgeIngredientEntry[]>([])
 
   // Placeholder to show something while loading
   const [fridgeName, setFridgeName] = React.useState('My Fridge')
@@ -88,7 +91,7 @@ export default function MyFridgePage (): React.JSX.Element {
 
       <ul className='grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3'>
         {ingredients.map(ingredient =>
-          <FridgeIngredient key={ingredient.ingredient.id} {...ingredient} />
+          <FridgeIngredient key={ingredient.ingredient.id} {...ingredient} onEditAmount={fetchIngredients} />
         )}
       </ul>
 

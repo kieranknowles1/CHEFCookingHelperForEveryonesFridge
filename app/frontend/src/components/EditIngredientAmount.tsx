@@ -8,6 +8,7 @@ export interface EditIngredientAmountProps {
   ingredientId: number
   currentAmount: number
   setCurrentAmount: React.Dispatch<number>
+  onCancel: () => void
   // Callback for when the form has successfully been submitted
   onSubmit: () => void
 }
@@ -17,10 +18,16 @@ export default function EditIngredientAmount (props: EditIngredientAmountProps):
 
   const [deltaAmount, setDeltaAmount] = React.useState(0)
 
-  function onSubmit (event: React.FormEvent): void {
-    event.preventDefault()
+  function onSubmit (type: 'add' | 'remove'): void {
     // TODO: Handle removing ingredients. Probably want 2 popovers 1 for each action
-    const newAmount = props.currentAmount + deltaAmount
+    const change = type === 'add' ? deltaAmount : -deltaAmount
+    const newAmount = props.currentAmount + change
+
+    if (newAmount < 0) {
+      alert('New amount must be greater than or equal to 0.')
+      return
+    }
+
     const params = {
       path: { fridgeId: context.fridgeId, ingredientId: props.ingredientId },
       query: { amount: newAmount }
@@ -39,17 +46,17 @@ export default function EditIngredientAmount (props: EditIngredientAmountProps):
   }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={e => { e.preventDefault() }}>
       <label>Amount: <input
         type='number'
         min={0}
         onChange={event => { setDeltaAmount(Number.parseFloat(event.target.value)) }}
         autoFocus
-        className='w-1/2'
         required
       /></label>
-      {/* TODO: Remove item */}
-      <button className='w-full bg-savoy_blue-500 rounded' type='submit'>Submit</button>
+      <button type='button' className='float-right bg-red-900 hover:bg-red-950' onClick={props.onCancel}>Cancel</button>
+      <button className='w-full bg-lime-900 rounded hover:bg-lime-950' type='submit' onClick={() => { onSubmit('add') }}>Add</button>
+      <button className='w-full bg-red-900 rounded hover:bg-red-950' type='button' onClick={() => { onSubmit('remove') }}>Remove</button>
     </form>
   )
 }
