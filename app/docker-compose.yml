@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  backend:
+    build: ./backend
+    container_name: chef_backend
+    volumes:
+      - ./backend_data:/data
+      - ./dataset:/dataset:ro
+    ports:
+      - 3000:3000
+    env_file: backend.env
+
+  frontend:
+    build: ./frontend
+    container_name: chef_app
+    volumes:
+      - ./config:/usr/share/nginx/html/config:ro
+    ports:
+      - 80:80
+
