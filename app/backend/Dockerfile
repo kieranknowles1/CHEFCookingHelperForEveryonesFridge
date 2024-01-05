@@ -16,15 +16,13 @@ RUN npm ci --save-dev
 COPY . /usr/app/
 
 # Make sure all the tests pass
-RUN npm test
-
 # Build the app from source
-RUN npm run build
-
-### Prepare the app for production ###
-
-# Remove all dev dependencies and source files
-RUN npm prune --omit=dev && rm -rf src tsconfig.json build/tests
+# Prune dev dependencies
+# Remove the source files, tests, and tsconfig
+RUN npm test \
+    && npm run build \
+    && npm prune --omit=dev \
+    && rm -rf src tsconfig.json build/tests
 
 # For whatever reason, the data volume is owned by root, even after chowning it
 # Unless that's fixed, we need to run the app as root
