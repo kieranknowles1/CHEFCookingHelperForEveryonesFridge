@@ -2,12 +2,10 @@
 import path from 'path'
 import { readFileSync } from 'fs'
 
-import { type AvailableRecipe, type SimilarRecipe } from '../types/Recipe'
-import { type IngredientAmount, type IngredientId } from '../types/Ingredient'
+import { type AvailableRecipe } from '../types/Recipe'
 import type Barcode from '../types/Barcode'
 import type EmbeddedSentence from '../ml/EmbeddedSentence'
 import type Fridge from '../types/Fridge'
-import type Recipe from '../types/Recipe'
 import logger from '../logger'
 import ml_extendDatabase from '../ml/extendDatabase'
 
@@ -15,16 +13,18 @@ import type * as types from './types'
 import {
   type FridgeIngredientAmount,
   type IIngredientDatabase,
+  type IRecipeDatabase,
   type IUserDatabase,
   type IWritableDatabase
 } from './IChefDatabase'
-import { bufferFromFloat32Array, bufferToFloat32Array } from './bufferFloat32Array'
 import type IChefDatabase from './IChefDatabase'
 import type IConnection from './IConnection'
 import IngredientDatabaseImpl from './IngredientDatabaseImpl'
 import InvalidIdError from './InvalidIdError'
+import RecipeDatabaseImpl from './RecipeDatabaseImpl'
 import UserDatabaseImpl from './UserDatabaseImpl'
 import WritableDatabaseImpl from './WritableDatabaseImpl'
+import { bufferToFloat32Array } from './bufferFloat32Array'
 import ingredientFromRow from './ingredientFromRow'
 
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
@@ -44,11 +44,13 @@ export default class ChefDatabaseImpl implements IChefDatabase {
   private readonly _connection: IConnection
 
   public readonly ingredients: IIngredientDatabase
+  public readonly recipes: IRecipeDatabase
   public readonly users: IUserDatabase
 
   public constructor (connection: IConnection) {
     this._connection = connection
     this.ingredients = new IngredientDatabaseImpl(connection)
+    this.recipes = new RecipeDatabaseImpl(connection)
     this.users = new UserDatabaseImpl(connection)
 
     ml_extendDatabase(this._connection)
@@ -159,78 +161,6 @@ export default class ChefDatabaseImpl implements IChefDatabase {
       sentence: row.name,
       embedding: bufferToFloat32Array(row.embedding)
     }))
-  }
-
-  /**
-   * Get a recipe by its ID
-   */
-  public getRecipe (id: types.RowId): Recipe {
-    type Result = types.RecipeRow & types.RecipeIngredientRow & { mt_name: string, mt_embedding: Buffer, r_name_embedding: Buffer }
-    const statement = this._connection.prepare<Result>(`
-      SELECT
-        recipe.*,
-        recipe_ingredient.*,
-        r_embedding.embedding AS r_name_embedding,
-        meal_type.name AS mt_name,
-        mt_embedding.embedding AS mt_embedding
-      FROM recipe
-        JOIN recipe_ingredient ON recipe_ingredient.recipe_id = recipe.id
-        JOIN embedding AS r_embedding ON recipe.name = r_embedding.sentence
-        JOIN meal_type ON meal_type.id = recipe.meal_type_id
-        JOIN embedding AS mt_embedding ON meal_type.name = mt_embedding.sentence
-      WHERE recipe.id = :id
-    `)
-
-    const result = statement.all({ id })
-    if (result.length === 0) { throw new InvalidIdError('recipe', id) }
-
-    const ingredients = new Map<IngredientId, IngredientAmount>(result.map(row => [
-      row.ingredient_id,
-      { amount: row.amount, originalLine: row.original_line }
-    ]))
-
-    return {
-      id: result[0].id,
-      name: { sentence: result[0].name, embedding: bufferToFloat32Array(result[0].r_name_embedding) },
-      directions: result[0].directions,
-      ingredients,
-      link: result[0].link,
-      mealType: { sentence: result[0].mt_name, embedding: bufferToFloat32Array(result[0].mt_embedding) }
-    }
-  }
-
-  public getSimilarRecipes (embedding: EmbeddedSentence, minSimilarity: number, limit: number, mealType: string): SimilarRecipe[] {
-    interface SimilarRecipesResultRow {
-      id: types.RowId
-      name: string
-      similarity: number
-    }
-    const statement = this._connection.prepare<SimilarRecipesResultRow>(`
-      SELECT
-        recipe.id,
-        recipe.name,
-        -- Very expensive, filter as much as possible before this
-        ml_similarity(embedding.embedding, :embedding) AS similarity
-      FROM (
-        -- Subquery is executed first. Put filtering that
-        -- can be done before the similarity check here
-        -- Remove duplicate names
-        SELECT * FROM recipe
-        WHERE meal_type_id = (SELECT id FROM meal_type WHERE name = :mealType)
-        GROUP BY name COLLATE NOCASE
-      ) AS recipe
-      JOIN embedding ON recipe.name = embedding.sentence
-      WHERE similarity >= :minSimilarity
-      ORDER BY similarity DESC
-      LIMIT :limit
-    `)
-
-    return statement.all({
-      embedding: bufferFromFloat32Array(embedding.embedding),
-      mealType,
-      minSimilarity,
-      limit
-    })
   }
 
   /**

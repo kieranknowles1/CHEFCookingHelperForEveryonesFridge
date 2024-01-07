@@ -17,9 +17,9 @@ export default function registerSimilarRecipeEndpoint (app: Express, db: IChefDa
       const minSimilarity = Number.parseFloat(req.query.minSimilarity ?? '0.5')
       const limit = Number.parseInt(req.query.limit)
 
-      const recipe = db.getRecipe(recipeId)
+      const recipe = db.recipes.get(recipeId)
 
-      const similar = db.getSimilarRecipes(
+      const similar = db.recipes.getSimilar(
         recipe.name,
         minSimilarity,
         limit,

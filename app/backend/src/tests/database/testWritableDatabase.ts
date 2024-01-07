@@ -56,7 +56,7 @@ describe('database/WritableDatabaseImpl', () => {
       const id = database.wrapTransaction(writable => {
         return writable.addRecipe(recipe)
       })
-      assert.deepStrictEqual(database.getRecipe(id), { id, ...recipe })
+      assert.deepStrictEqual(database.recipes.get(id), { id, ...recipe })
     })
   })
 

@@ -14,7 +14,7 @@ export default function registerRecipeEndpoint (app: Express, db: IChefDatabase)
   app.get('/api/v1/recipe/:id',
     (req: TypedRequest<endpoint>, res: TypedResponse<endpoint, 200>) => {
       const id = Number.parseInt(req.params.id)
-      const recipe = db.getRecipe(id)
+      const recipe = db.recipes.get(id)
 
       const ingredients: IngredientEntry[] = []
       for (const entry of recipe.ingredients.entries()) {

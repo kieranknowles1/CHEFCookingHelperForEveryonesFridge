@@ -41,6 +41,15 @@ export interface IIngredientDatabase {
   getAllWithAltNames: () => CaseInsensitiveMap<Ingredient>
 }
 
+export interface IRecipeDatabase {
+  get: (id: types.RowId) => Recipe
+
+  /**
+   * Get the recipes that are similar to the given embedding and of the given meal type
+   */
+  getSimilar: (embedding: EmbeddedSentence, minSimilarity: number, limit: number, mealType: string) => SimilarRecipe[]
+}
+
 export interface IUserDatabase {
   get: (id: types.RowId) => User
 }
@@ -49,6 +58,7 @@ export interface IUserDatabase {
 export default interface IChefDatabase {
 
   readonly ingredients: IIngredientDatabase
+  readonly recipes: IRecipeDatabase
   readonly users: IUserDatabase
 
   /**
@@ -84,16 +94,6 @@ export default interface IChefDatabase {
 
   getMealTypeNames: () => string[]
   getMealTypes: () => EmbeddedSentence[]
-
-  /**
-   * Get a recipe by its ID
-   */
-  getRecipe: (id: types.RowId) => Recipe
-
-  /**
-   * Get similar recipes to the given embedding, ordered by similarity
-   */
-  getSimilarRecipes: (embedding: EmbeddedSentence, minSimilarity: number, limit: number, mealType: string) => SimilarRecipe[]
 
   /**
    * Get the amount of an ingredient in a fridge
