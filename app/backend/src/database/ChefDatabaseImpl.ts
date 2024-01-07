@@ -2,8 +2,8 @@
 import path from 'path'
 import { readFileSync } from 'fs'
 
-import { type AvailableRecipe, type RecipeNoId, type SimilarRecipe } from '../types/Recipe'
-import { type IngredientAmount, type IngredientId, type IngredientNoId } from '../types/Ingredient'
+import { type AvailableRecipe, type SimilarRecipe } from '../types/Recipe'
+import { type IngredientAmount, type IngredientId } from '../types/Ingredient'
 import type Barcode from '../types/Barcode'
 import CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type EmbeddedSentence from '../ml/EmbeddedSentence'
@@ -20,6 +20,7 @@ import type IChefDatabase from './IChefDatabase'
 import type IConnection from './IConnection'
 import InvalidIdError from './InvalidIdError'
 import UserDatabaseImpl from './UserDatabaseImpl'
+import WritableDatabaseImpl from './WritableDatabaseImpl'
 
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'data/initialdata.sql')
@@ -32,133 +33,6 @@ interface AvailableRecipesResultRow {
   // JSON array -> number[]
   fridge_amount: string
   missing_count: number
-}
-
-/**
- * Writable interface to the database, passed to the callback of {@link ChefDatabaseImpl.wrapTransaction}
- * and is only valid for the duration of the callback.
- */
-class WritableDatabaseImpl implements IWritableDatabase {
-  private readonly _db: ChefDatabaseImpl
-  private readonly _connection: IConnection
-
-  /** Whether the WritableDatabase is usable. Only true for the duration of {@link ChefDatabaseImpl.wrapTransaction} */
-  private _valid: boolean = true
-  public close (): void {
-    this._valid = false
-  }
-
-  private assertValid (): void {
-    if (!this._valid) {
-      throw new Error('WritableDatabase has been closed')
-    }
-  }
-
-  public constructor (db: ChefDatabaseImpl, connection: IConnection) {
-    this._db = db
-    this._connection = connection
-  }
-
-  // Check that the ID is not a bigint. Used to areas that work with IDs under the assumption that they are numbers as JSON does not support bigints
-  private assertNotBigint (id: number | bigint): asserts id is number {
-    if (typeof id === 'bigint') {
-      throw new Error('ID returned from database is a bigint')
-    }
-  }
-
-  public addIngredient (ingredient: IngredientNoId): types.RowId {
-    this.assertValid()
-    // TODO: Reuse prepared statements
-    // TODO: statement pack for writable to only prepare them once
-    const statement = this._connection.prepare<undefined>(`
-      INSERT INTO ingredient
-        (name, assumeUnlimited, preferredUnit, density)
-      VALUES
-        (:name, :assumeUnlimited, :preferredUnit, :density)
-    `)
-    const id = statement.run({
-      name: ingredient.name,
-      assumeUnlimited: ingredient.assumeUnlimited ? 1 : 0,
-      preferredUnit: ingredient.preferredUnit,
-      density: ingredient.density ?? null
-    }).lastInsertRowid
-    this.assertNotBigint(id)
-
-    return id
-  }
-
-  public addEmbedding (sentence: EmbeddedSentence): void {
-    this.assertValid()
-    const statement = this._connection.prepare<undefined>(`
-      INSERT INTO embedding
-        (sentence, embedding)
-      VALUES
-        (:sentence, :embedding)
-      ON CONFLICT DO NOTHING
-    `)
-
-    statement.run({
-      sentence: sentence.sentence,
-      embedding: bufferFromFloat32Array(sentence.embedding)
-    })
-  }
-
-  public addRecipe (recipe: RecipeNoId): types.RowId {
-    this.assertValid()
-    const statement = this._connection.prepare<undefined>(`
-      INSERT INTO recipe
-        (name, directions, link, meal_type_id)
-      VALUES
-        (:name, :directions, :link, (SELECT id FROM meal_type WHERE name = :mealType))
-    `)
-
-    // Add the embedding if it doesn't exist. Only do this once per sentence
-    if (this._db.getEmbedding(recipe.name.sentence) === null) {
-      this.addEmbedding(recipe.name)
-    }
-
-    const id = statement.run({
-      name: recipe.name.sentence,
-      directions: recipe.directions,
-      link: recipe.link,
-      mealType: recipe.mealType.sentence
-    }).lastInsertRowid
-    this.assertNotBigint(id)
-
-    const ingredientStatement = this._connection.prepare<undefined>(`
-      INSERT INTO recipe_ingredient
-        (recipe_id, ingredient_id, amount, original_line)
-      VALUES
-        (:recipeId, :ingredientId, :amount, :originalLine)
-    `)
-    for (const [ingredientId, amount] of recipe.ingredients) {
-      ingredientStatement.run({
-        recipeId: id,
-        ingredientId,
-        amount: amount.amount,
-        originalLine: amount.originalLine
-      })
-    }
-
-    return id
-  }
-
-  public setIngredientAmount (fridgeId: types.RowId, ingredientId: types.RowId, amount: number): void {
-    if (amount === 0) {
-      const statement = this._connection.prepare<undefined>(`
-        DELETE FROM fridge_ingredient WHERE fridge_id = :fridgeId AND ingredient_id = :ingredientId
-      `)
-      statement.run({ fridgeId, ingredientId })
-    } else {
-      const statement = this._connection.prepare<undefined>(`
-        INSERT OR REPLACE INTO fridge_ingredient
-          (fridge_id, ingredient_id, amount)
-        VALUES
-          (:fridgeId, :ingredientId, :amount)
-      `)
-      statement.run({ fridgeId, ingredientId, amount })
-    }
-  }
 }
 
 export default class ChefDatabaseImpl implements IChefDatabase {
@@ -202,7 +76,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
    * Wrap `callback` within a transaction. Must be used for any operations that write to the database
    * The transaction will be rolled back if an uncaught exception occurs and the exception re-thrown
    */
-  public wrapTransaction<TReturn = void> (callback: (db: WritableDatabaseImpl) => TReturn): TReturn {
+  public wrapTransaction<TReturn = void> (callback: (db: IWritableDatabase) => TReturn): TReturn {
     const writable = new WritableDatabaseImpl(this, this._connection)
     try {
       this._connection.exec('BEGIN TRANSACTION')
@@ -222,7 +96,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
    * settled before committing/rolling back
    * @returns The return value of `callback` or void if none
    */
-  public async wrapTransactionAsync<TReturn = void> (callback: (db: WritableDatabaseImpl) => Promise<TReturn>): Promise<TReturn> {
+  public async wrapTransactionAsync<TReturn = void> (callback: (db: IWritableDatabase) => Promise<TReturn>): Promise<TReturn> {
     return await new Promise<TReturn>((resolve, reject) => {
       const writable = new WritableDatabaseImpl(this, this._connection)
       this._connection.exec('BEGIN TRANSACTION')
