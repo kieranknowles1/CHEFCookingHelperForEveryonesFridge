@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import React from 'react'
 import { useDebounce } from 'use-debounce'
 
@@ -108,6 +109,7 @@ export default function FindRecipesPage (): React.JSX.Element {
             <Recipe key={recipe.id} {...recipe} />
           ))}
       </ul>
+      {recipesStatus === 'done' && recipes.length === 0 && <p>You can&apos;t make anything with your current ingredients. <Link to='/fridge'>Add Some</Link></p>}
       {pageButtons}
     </main>
   )
