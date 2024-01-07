@@ -74,8 +74,12 @@ export default interface IChefDatabase {
   checkIntegrity: () => void
 
   /**
-   * Wrap `callback` within a transaction. Must be used for any operations that write to the database
-   * The transaction will be rolled back if an uncaught exception occurs and the exception re-thrown
+   * Execute a callback in a transaction. The callback can write to the database using the given
+   * {@link IWritableDatabase} instance.
+   * - The writable database is only valid for the duration of the callback.
+   * - If an exception is thrown, the transaction will be rolled back and the exception re-thrown.
+   *
+   * @returns The return value of the callback, if any
    */
   wrapTransaction: <TReturn = void>(callback: (db: IWritableDatabase) => TReturn) => TReturn
 

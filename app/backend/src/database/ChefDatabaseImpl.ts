@@ -81,10 +81,6 @@ export default class ChefDatabaseImpl implements IChefDatabase {
     logger.info(`Database integrity check passed in ${end - start}ms`)
   }
 
-  /**
-   * Wrap `callback` within a transaction. Must be used for any operations that write to the database
-   * The transaction will be rolled back if an uncaught exception occurs and the exception re-thrown
-   */
   public wrapTransaction<TReturn = void> (callback: (db: IWritableDatabase) => TReturn): TReturn {
     const writable = new WritableDatabaseImpl(this, this._connection)
     try {
@@ -96,7 +92,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
       this._connection.exec('ROLLBACK')
       throw ex
     } finally {
-      writable.close()
+      writable.invalidate()
     }
   }
 

@@ -18,7 +18,7 @@ export default class WritableDatabaseImpl implements IWritableDatabase {
 
   /** Whether the WritableDatabase is usable. Only true for the duration of {@link ChefDatabaseImpl.wrapTransaction} */
   private _valid: boolean = true
-  public close (): void {
+  public invalidate (): void {
     this._valid = false
   }
 
