@@ -33,6 +33,18 @@ export interface IWritableDatabase {
   setIngredientAmount: (fridgeId: types.RowId, ingredientId: types.RowId, amount: number) => void
 }
 
+export interface IFridgeDatabase {
+  get: (id: types.RowId) => Fridge
+
+  getIngredientAmount: (fridgeId: types.RowId, ingredientId: types.RowId) => number
+  getAllIngredientAmounts: (fridgeId: types.RowId) => Map<types.RowId, FridgeIngredientAmount>
+
+  /**
+   * Get the recipes that can be made with the current ingredients in the fridge
+   */
+  getAvailableRecipes: (fridgeId: types.RowId, checkAmount: boolean, maxMissingIngredients: number, mealType: string | null) => AvailableRecipe[]
+}
+
 export interface IIngredientDatabase {
   get: (id: types.RowId) => Ingredient
   getByName: (name: string) => Ingredient | undefined
@@ -56,6 +68,7 @@ export interface IUserDatabase {
 
 export default interface IChefDatabase {
 
+  readonly fridges: IFridgeDatabase
   readonly ingredients: IIngredientDatabase
   readonly recipes: IRecipeDatabase
   readonly users: IUserDatabase
@@ -92,24 +105,7 @@ export default interface IChefDatabase {
   getMealTypes: () => EmbeddedSentence[]
 
   /**
-   * Get the amount of an ingredient in a fridge
-   */
-  getIngredientAmount: (fridgeId: types.RowId, ingredientId: types.RowId) => number
-
-  /**
-   * Get the amounts of all ingredients in a fridge
-   */
-  getAllIngredientAmounts: (fridgeId: types.RowId) => Map<types.RowId, FridgeIngredientAmount>
-
-  /**
-   * Get the recipes that can be made with the current ingredients in the fridge
-   */
-  getAvailableRecipes: (fridgeId: types.RowId, checkAmount: boolean, maxMissingIngredients: number, mealType: string | null) => AvailableRecipe[]
-
-  /**
    * Get the data associated with a barcode, throws if code not found
    */
   getBarcode: (code: types.RowId) => Barcode
-
-  getFridge: (id: types.RowId) => Fridge
 }

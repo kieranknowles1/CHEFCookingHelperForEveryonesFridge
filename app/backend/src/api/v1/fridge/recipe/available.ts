@@ -14,7 +14,7 @@ export default function registerFridgeAvailableRecipeEndpoint (app: Express, db:
       const maxMissingIngredients = parseInt(req.query.maxMissingIngredients ?? '0')
       const mealType = req.query.mealType ?? null
 
-      res.json(db.getAvailableRecipes(
+      res.json(db.fridges.getAvailableRecipes(
         fridgeId,
         checkAmounts,
         maxMissingIngredients,

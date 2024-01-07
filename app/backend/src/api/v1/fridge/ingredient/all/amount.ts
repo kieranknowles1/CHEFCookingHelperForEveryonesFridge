@@ -11,7 +11,7 @@ export default function registerFridgeIngredientAllAmountEndpoint (app: Express,
     (req: TypedRequest<endpoint>, res: TypedResponse<endpoint, 200>) => {
       const fridgeId = parseInt(req.params.fridgeId)
 
-      const ingredients = db.getAllIngredientAmounts(fridgeId)
+      const ingredients = db.fridges.getAllIngredientAmounts(fridgeId)
 
       res.json(Array.from(ingredients, ([id, row]) => {
         return {

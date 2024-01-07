@@ -65,7 +65,7 @@ describe('database/WritableDatabaseImpl', () => {
       database.wrapTransaction(writable => {
         writable.setIngredientAmount(1, 1, 1234)
       })
-      assert.deepStrictEqual(database.getIngredientAmount(1, 1), 1234)
+      assert.deepStrictEqual(database.fridges.getIngredientAmount(1, 1), 1234)
     })
 
     it('should remove an ingredient amount if set to 0', () => {

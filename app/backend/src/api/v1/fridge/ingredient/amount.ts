@@ -16,7 +16,7 @@ export default function registerFridgeIngredientEndpoint (app: Express, db: IChe
       const fridgeId = Number.parseInt(req.params.fridgeId)
       const ingredientId = Number.parseInt(req.params.ingredientId)
 
-      const amount = db.getIngredientAmount(fridgeId, ingredientId)
+      const amount = db.fridges.getIngredientAmount(fridgeId, ingredientId)
       res.json(amount)
     }
   )
