@@ -54,7 +54,6 @@ export interface IUserDatabase {
   get: (id: types.RowId) => User
 }
 
-// TODO: This is a bit of a mess, should be split into multiple interfaces and each implemented in a separate file
 export default interface IChefDatabase {
 
   readonly ingredients: IIngredientDatabase
