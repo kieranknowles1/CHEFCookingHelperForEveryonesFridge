@@ -11,7 +11,7 @@ export default function registerUserInfoEndpoint (app: Express, db: IChefDatabas
     (req: TypedRequest<endpoint>, res: TypedResponse<endpoint, 200>) => {
       const userId = parseInt(req.params.userId)
 
-      const user = db.getUser(userId)
+      const user = db.users.get(userId)
 
       res.json({
         id: user.id,

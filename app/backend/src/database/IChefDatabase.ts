@@ -33,8 +33,15 @@ export interface IWritableDatabase {
   setIngredientAmount: (fridgeId: types.RowId, ingredientId: types.RowId, amount: number) => void
 }
 
+export interface IUserDatabase {
+  get: (id: types.RowId) => User
+}
+
 // TODO: This is a bit of a mess, should be split into multiple interfaces and each implemented in a separate file
 export default interface IChefDatabase {
+
+  readonly users: IUserDatabase
+
   /**
    * Run the schema and initial script. Should only be used during setup
    *
@@ -115,6 +122,5 @@ export default interface IChefDatabase {
    */
   getBarcode: (code: types.RowId) => Barcode
 
-  getUser: (id: types.RowId) => User
   getFridge: (id: types.RowId) => Fridge
 }

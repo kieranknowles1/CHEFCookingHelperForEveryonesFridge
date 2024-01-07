@@ -10,16 +10,16 @@ import type EmbeddedSentence from '../ml/EmbeddedSentence'
 import type Fridge from '../types/Fridge'
 import type Ingredient from '../types/Ingredient'
 import type Recipe from '../types/Recipe'
-import type User from '../types/User'
 import logger from '../logger'
 import ml_extendDatabase from '../ml/extendDatabase'
 
 import type * as types from './types'
-import { type FridgeIngredientAmount, type IWritableDatabase } from './IChefDatabase'
+import { type FridgeIngredientAmount, type IUserDatabase, type IWritableDatabase } from './IChefDatabase'
 import { bufferFromFloat32Array, bufferToFloat32Array } from './bufferFloat32Array'
 import type IChefDatabase from './IChefDatabase'
 import type IConnection from './IConnection'
 import InvalidIdError from './InvalidIdError'
+import UserDatabaseImpl from './UserDatabaseImpl'
 
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'data/initialdata.sql')
@@ -164,8 +164,11 @@ class WritableDatabaseImpl implements IWritableDatabase {
 export default class ChefDatabaseImpl implements IChefDatabase {
   private readonly _connection: IConnection
 
+  public readonly users: IUserDatabase
+
   public constructor (connection: IConnection) {
     this._connection = connection
+    this.users = new UserDatabaseImpl(connection)
 
     ml_extendDatabase(this._connection)
   }
@@ -519,22 +522,6 @@ export default class ChefDatabaseImpl implements IChefDatabase {
       ingredient: this.ingredientFromRow(result),
       productName: result.product_name,
       amount: result.amount
-    }
-  }
-
-  public getUser (id: types.RowId): User {
-    const statement = this._connection.prepare<types.UserRow>(`
-      SELECT * FROM user WHERE id = :id
-    `)
-    const result = statement.get({ id })
-
-    if (result === undefined) {
-      throw new InvalidIdError('user', id)
-    }
-
-    return {
-      id: result.id,
-      name: result.username
     }
   }
 

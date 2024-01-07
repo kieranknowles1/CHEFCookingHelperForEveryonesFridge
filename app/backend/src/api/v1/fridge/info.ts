@@ -12,7 +12,7 @@ export default function registerFridgeInfoEndpoint (app: Express, db: IChefDatab
       const fridgeId = parseInt(req.params.fridgeId)
 
       const fridge = db.getFridge(fridgeId)
-      const owner = db.getUser(fridge.ownerId)
+      const owner = db.users.get(fridge.ownerId)
 
       res.json({
         id: fridge.id,
