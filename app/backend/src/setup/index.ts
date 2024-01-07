@@ -127,9 +127,11 @@ function predictMealType (recipeName: EmbeddedSentence, mealTypes: EmbeddedSente
 // Add embeddings for the meal types
 // Can't be done in pure SQL as async functions are not supported
 async function embedMealTypes (db: IChefDatabase): Promise<void> {
-  await db.wrapTransactionAsync(async (writable) => {
-    for (const mealType of db.getMealTypeNames()) {
-      writable.addEmbedding(await getEmbedding(mealType))
+  const embeddedMealTypes = await Promise.all(db.getMealTypeNames().map(getEmbedding))
+
+  db.wrapTransaction(writable => {
+    for (const mealType of embeddedMealTypes) {
+      writable.addEmbedding(mealType)
     }
   })
 }
@@ -151,19 +153,33 @@ async function importData (db: IChefDatabase): Promise<void> {
   logger.info('Importing data into the database')
   const mealTypes = db.getMealTypes()
 
+  logger.info('Embedding recipe names')
+
   const bar = new cliProgress.SingleBar({}, PROGRESS_BAR_STYLE)
   bar.start(csvRecipes.length, 0)
+  const nameEmbeddings = new Map<string, EmbeddedSentence>()
+  for (const recipe of csvRecipes) {
+    if (!nameEmbeddings.has(recipe.name)) {
+      nameEmbeddings.set(recipe.name, await getEmbedding(recipe.name))
+    }
+    bar.increment()
+  }
+  bar.stop()
 
-  await db.wrapTransactionAsync(async (writable) => {
+  logger.info('Adding recipes to the database')
+  bar.start(csvRecipes.length, 0)
+  db.wrapTransaction(writable => {
     for (const recipe of csvRecipes) {
-      const nameEmbedding = await getEmbedding(recipe.name)
-      writable.addEmbedding(nameEmbedding)
+      const embeddedName = nameEmbeddings.get(recipe.name)
+      if (embeddedName === undefined) {
+        // Should never happen
+        throw new Error('Recipe name was not embedded')
+      }
       writable.addRecipe({
         ...recipe,
-        name: await getEmbedding(recipe.name),
-        mealType: predictMealType(nameEmbedding, mealTypes)
+        name: embeddedName,
+        mealType: predictMealType(embeddedName, mealTypes)
       })
-
       bar.increment()
     }
   })

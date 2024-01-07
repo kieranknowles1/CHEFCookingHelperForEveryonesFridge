@@ -60,34 +60,4 @@ describe('database/ChefDatabaseImpl', () => {
       assert.throws(() => { writable.addEmbedding(embedded) })
     })
   })
-
-  describe('wrapTransactionAsync', () => {
-    it('should wrap a transaction', async () => {
-      await database.wrapTransactionAsync(async writable => {
-        writable.addEmbedding(embedded)
-        await new Promise(resolve => setTimeout(resolve, 20))
-      })
-      assert.deepStrictEqual(database.getEmbedding(embedded.sentence), embedded)
-    })
-
-    it('should rollback and rethrow on error', async () => {
-      await assert.rejects(async () => {
-        await database.wrapTransactionAsync(async writable => {
-          writable.addEmbedding(embedded)
-          await new Promise(resolve => setTimeout(resolve, 20))
-          throw new Error('test')
-        })
-      }, /test/)
-      assert.deepStrictEqual(database.getEmbedding('test'), null)
-    })
-
-    it('should invalidate the writable after commit', async () => {
-      let writable: IWritableDatabase
-      await database.wrapTransactionAsync(async w => {
-        writable = w
-        await new Promise(resolve => setTimeout(resolve, 20))
-      })
-      assert.throws(() => { writable.addEmbedding(embedded) })
-    })
-  })
 })

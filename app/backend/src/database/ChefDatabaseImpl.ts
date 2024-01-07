@@ -100,27 +100,6 @@ export default class ChefDatabaseImpl implements IChefDatabase {
     }
   }
 
-  /**
-   * Async version of {@link wrapTransaction} that waits for the promise to be
-   * settled before committing/rolling back
-   * @returns The return value of `callback` or void if none
-   */
-  public async wrapTransactionAsync<TReturn = void> (callback: (db: IWritableDatabase) => Promise<TReturn>): Promise<TReturn> {
-    return await new Promise<TReturn>((resolve, reject) => {
-      const writable = new WritableDatabaseImpl(this, this._connection)
-      this._connection.exec('BEGIN TRANSACTION')
-      callback(writable).then(data => {
-        this._connection.exec('COMMIT')
-        writable.close()
-        resolve(data)
-      }).catch((ex) => {
-        this._connection.exec('ROLLBACK')
-        writable.close()
-        reject(ex)
-      })
-    })
-  }
-
   public getEmbedding (sentence: string): EmbeddedSentence | null {
     const statement = this._connection.prepare<{ embedding: Buffer }>(`
       SELECT embedding FROM embedding WHERE sentence = :sentence

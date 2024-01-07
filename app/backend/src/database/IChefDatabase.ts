@@ -80,13 +80,6 @@ export default interface IChefDatabase {
   wrapTransaction: <TReturn = void>(callback: (db: IWritableDatabase) => TReturn) => TReturn
 
   /**
-   * Async version of {@link wrapTransaction} that waits for the promise to be
-   * settled before committing/rolling back
-   * @returns The return value of `callback` or void if none
-   */
-  wrapTransactionAsync: <TReturn = void>(callback: (db: IWritableDatabase) => Promise<TReturn>) => Promise<TReturn>
-
-  /**
    * Get the embedding for a sentence if it exists
    */
   getEmbedding: (sentence: string) => EmbeddedSentence | null
