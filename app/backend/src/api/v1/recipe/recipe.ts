@@ -18,7 +18,7 @@ export default function registerRecipeEndpoint (app: Express, db: IChefDatabase)
 
       const ingredients: IngredientEntry[] = []
       for (const entry of recipe.ingredients.entries()) {
-        const ingredient = db.getIngredient(entry[0])
+        const ingredient = db.ingredients.get(entry[0])
         const amount = entry[1]
         ingredients.push({
           ingredient: {

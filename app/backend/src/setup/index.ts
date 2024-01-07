@@ -136,7 +136,7 @@ async function embedMealTypes (db: IChefDatabase): Promise<void> {
 
 async function importData (db: IChefDatabase): Promise<void> {
   logger.info('Collecting data from CSV')
-  const [csvRecipes, csvTotalRows] = await getCsvData(db.getAllIngredientsByName())
+  const [csvRecipes, csvTotalRows] = await getCsvData(db.ingredients.getAllWithAltNames())
 
   logger.info(`Imported ${csvRecipes.length} recipes from ${csvTotalRows} rows (${(csvRecipes.length / csvTotalRows) * 100}%) of CSV data`)
 

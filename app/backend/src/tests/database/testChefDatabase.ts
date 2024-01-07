@@ -9,7 +9,6 @@ import ChefDatabaseImpl from '../../database/ChefDatabaseImpl'
 import type IChefDatabase from '../../database/IChefDatabase'
 import type IConnection from '../../database/IConnection'
 import { type IWritableDatabase } from '../../database/IChefDatabase'
-import type Ingredient from '../../types/Ingredient'
 import { type RecipeNoId } from '../../types/Recipe'
 import SqliteConnection from '../../database/SqliteConnection'
 
@@ -109,69 +108,6 @@ describe('database/ChefDatabaseImpl', () => {
     })
   })
 
-  describe('getIngredient', () => {
-    it('should get an ingredient', () => {
-      const ingredient: Ingredient = {
-        id: 1234,
-        name: 'test',
-        assumeUnlimited: false,
-        density: 1,
-        preferredUnit: 'g'
-      }
-      connection.exec("INSERT INTO ingredient (id, name, assumeUnlimited, density, preferredUnit) VALUES (1234, 'test', 0, 1, 'g')")
-      assert.deepStrictEqual(database.getIngredient(ingredient.id), ingredient)
-    })
-
-    it('should throw an error if the ingredient does not exist', () => {
-      assert.throws(() => { database.getIngredient(123456) })
-    })
-  })
-
-  describe('getAllIngredients', () => {
-    it('should get all ingredients', () => {
-      const ingredients = database.getAllIngredients()
-      const rowCount = connection.prepare<{ count: number }>('SELECT COUNT(*) AS count FROM ingredient').get()?.count
-
-      assert.strictEqual(ingredients.size, rowCount)
-    })
-
-    it('should return the same ingredient properties as getIngredient', () => {
-      const ingredients = database.getAllIngredients()
-      for (const ingredient of ingredients.values()) {
-        assert.deepStrictEqual(ingredient, database.getIngredient(ingredient.id))
-      }
-    })
-  })
-
-  describe('getAllIngredientsByName', () => {
-    it('should get all ingredients by name', () => {
-      const ingredients = database.getAllIngredientsByName()
-      const rowCount = connection.prepare<{ count: number }>('SELECT COUNT(*) AS count FROM view_ingredient_by_name').get()?.count
-
-      assert.strictEqual(ingredients.size, rowCount)
-    })
-
-    it('should return the same ingredient properties as getIngredient', () => {
-      const ingredients = database.getAllIngredientsByName()
-      for (const ingredient of ingredients.values()) {
-        assert.deepStrictEqual(ingredient, database.getIngredient(ingredient.id))
-      }
-    })
-  })
-
-  describe('findIngredientByName', () => {
-    it('should get an ingredient by its name', () => {
-      const byId = database.getIngredient(1)
-      const byName = database.findIngredientByName(byId.name)
-
-      assert.deepStrictEqual(byName, byId)
-    })
-
-    it('should return null if the ingredient does not exist', () => {
-      assert.deepStrictEqual(database.findIngredientByName('does not exist'), null)
-    })
-  })
-
   describe('WritableDatabase', () => {
     describe('addEmbedding', () => {
       it('should add an embedding', () => {
@@ -193,7 +129,7 @@ describe('database/ChefDatabaseImpl', () => {
         const id = database.wrapTransaction(writable => {
           return writable.addIngredient(ingredient)
         })
-        assert.deepStrictEqual(database.getIngredient(id), { id, ...ingredient })
+        assert.deepStrictEqual(database.ingredients.get(id), { id, ...ingredient })
       })
     })
 

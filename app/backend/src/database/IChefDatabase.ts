@@ -1,10 +1,10 @@
 import { type AvailableRecipe, type RecipeNoId, type SimilarRecipe } from '../types/Recipe'
-import { type IngredientId, type IngredientNoId } from '../types/Ingredient'
 import type Barcode from '../types/Barcode'
 import type CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type EmbeddedSentence from '../ml/EmbeddedSentence'
 import type Fridge from '../types/Fridge'
 import type Ingredient from '../types/Ingredient'
+import { type IngredientNoId } from '../types/Ingredient'
 import type Recipe from '../types/Recipe'
 import type User from '../types/User'
 
@@ -33,6 +33,14 @@ export interface IWritableDatabase {
   setIngredientAmount: (fridgeId: types.RowId, ingredientId: types.RowId, amount: number) => void
 }
 
+export interface IIngredientDatabase {
+  get: (id: types.RowId) => Ingredient
+  getByName: (name: string) => Ingredient | undefined
+
+  getAll: () => Map<types.RowId, Ingredient>
+  getAllWithAltNames: () => CaseInsensitiveMap<Ingredient>
+}
+
 export interface IUserDatabase {
   get: (id: types.RowId) => User
 }
@@ -40,6 +48,7 @@ export interface IUserDatabase {
 // TODO: This is a bit of a mess, should be split into multiple interfaces and each implemented in a separate file
 export default interface IChefDatabase {
 
+  readonly ingredients: IIngredientDatabase
   readonly users: IUserDatabase
 
   /**
@@ -73,24 +82,8 @@ export default interface IChefDatabase {
    */
   getEmbedding: (sentence: string) => EmbeddedSentence | null
 
-  getIngredient: (id: IngredientId) => Ingredient
-
-  getAllIngredients: () => Map<types.RowId, Ingredient>
-
-  /**
-   * @param name The name to search for
-   * @returns The ingredient, or null if it is not found. May return
-   * an equivalent ingredient if an exact match is not found.
-   */
-  findIngredientByName: (name: string) => Ingredient | null
-
   getMealTypeNames: () => string[]
   getMealTypes: () => EmbeddedSentence[]
-
-  /**
-   * Get a map of ingredient names the ingredient, including any alternate names
-   */
-  getAllIngredientsByName: () => CaseInsensitiveMap<Ingredient>
 
   /**
    * Get a recipe by its ID

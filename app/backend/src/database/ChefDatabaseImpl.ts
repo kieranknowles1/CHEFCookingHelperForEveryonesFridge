@@ -5,22 +5,27 @@ import { readFileSync } from 'fs'
 import { type AvailableRecipe, type SimilarRecipe } from '../types/Recipe'
 import { type IngredientAmount, type IngredientId } from '../types/Ingredient'
 import type Barcode from '../types/Barcode'
-import CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type EmbeddedSentence from '../ml/EmbeddedSentence'
 import type Fridge from '../types/Fridge'
-import type Ingredient from '../types/Ingredient'
 import type Recipe from '../types/Recipe'
 import logger from '../logger'
 import ml_extendDatabase from '../ml/extendDatabase'
 
 import type * as types from './types'
-import { type FridgeIngredientAmount, type IUserDatabase, type IWritableDatabase } from './IChefDatabase'
+import {
+  type FridgeIngredientAmount,
+  type IIngredientDatabase,
+  type IUserDatabase,
+  type IWritableDatabase
+} from './IChefDatabase'
 import { bufferFromFloat32Array, bufferToFloat32Array } from './bufferFloat32Array'
 import type IChefDatabase from './IChefDatabase'
 import type IConnection from './IConnection'
+import IngredientDatabaseImpl from './IngredientDatabaseImpl'
 import InvalidIdError from './InvalidIdError'
 import UserDatabaseImpl from './UserDatabaseImpl'
 import WritableDatabaseImpl from './WritableDatabaseImpl'
+import ingredientFromRow from './ingredientFromRow'
 
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
 const INITIAL_DATA_PATH = path.join(process.cwd(), 'data/initialdata.sql')
@@ -38,10 +43,12 @@ interface AvailableRecipesResultRow {
 export default class ChefDatabaseImpl implements IChefDatabase {
   private readonly _connection: IConnection
 
+  public readonly ingredients: IIngredientDatabase
   public readonly users: IUserDatabase
 
   public constructor (connection: IConnection) {
     this._connection = connection
+    this.ingredients = new IngredientDatabaseImpl(connection)
     this.users = new UserDatabaseImpl(connection)
 
     ml_extendDatabase(this._connection)
@@ -128,61 +135,6 @@ export default class ChefDatabaseImpl implements IChefDatabase {
     }
   }
 
-  private ingredientFromRow (row: types.IngredientRow): Ingredient {
-    return {
-      id: row.id,
-      name: row.name,
-      preferredUnit: row.preferredUnit,
-      density: row.density ?? undefined,
-      assumeUnlimited: row.assumeUnlimited !== 0
-    }
-  }
-
-  public getIngredient (id: IngredientId): Ingredient {
-    const statement = this._connection.prepare<types.IngredientRow>(`
-      SELECT * FROM ingredient WHERE id = :id
-    `)
-    const result = statement.get({ id })
-
-    if (result === undefined) {
-      throw new InvalidIdError('ingredient', id)
-    }
-
-    return this.ingredientFromRow(result)
-  }
-
-  public getAllIngredients (): Map<types.RowId, Ingredient> {
-    const statement = this._connection.prepare<types.IngredientRow>(`
-      SELECT * FROM ingredient
-    `)
-    const result = statement.all()
-
-    return new Map(result.map(row => [
-      row.id,
-      this.ingredientFromRow(row)
-    ]))
-  }
-
-  /**
-   * @param name The name to search for
-   * @returns The ingredient, or null if it is not found. May return
-   * an equivalent ingredient if an exact match is not found.
-   */
-  public findIngredientByName (name: string): Ingredient | null {
-    const statement = this._connection.prepare<types.IngredientRow>(`
-      SELECT ingredient.*
-        FROM view_ingredient_by_name
-        JOIN ingredient ON view_ingredient_by_name.id = ingredient.id
-        WHERE view_ingredient_by_name.name = :name COLLATE NOCASE
-    `)
-    const result = statement.get({ name })
-    if (result === undefined) {
-      return null
-    }
-
-    return this.ingredientFromRow(result)
-  }
-
   getMealTypeNames (): string[] {
     interface Result { name: string }
     const statement = this._connection.prepare<Result>(`
@@ -207,27 +159,6 @@ export default class ChefDatabaseImpl implements IChefDatabase {
       sentence: row.name,
       embedding: bufferToFloat32Array(row.embedding)
     }))
-  }
-
-  /**
-   * Get a map of ingredient names to IDs, including any alternate names
-   */
-  public getAllIngredientsByName (): CaseInsensitiveMap<Ingredient> {
-    type Result = types.IngredientRow & { alt_name: string }
-    const statement = this._connection.prepare<Result>(`
-      SELECT
-        view_ingredient_by_name.name AS alt_name,
-        ingredient.*
-      FROM view_ingredient_by_name
-        JOIN ingredient ON ingredient.id = view_ingredient_by_name.id
-    `)
-    const result = statement.all()
-    const map = new CaseInsensitiveMap<Ingredient>()
-    for (const pair of result) {
-      map.set(pair.alt_name, this.ingredientFromRow(pair))
-    }
-
-    return map
   }
 
   /**
@@ -334,7 +265,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
     for (const row of result) {
       map.set(row.ingredient_id, {
         amount: row.amount,
-        ingredient: this.ingredientFromRow(row)
+        ingredient: ingredientFromRow(row)
       })
     }
     return map
@@ -393,7 +324,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
 
     return {
       code: result.code,
-      ingredient: this.ingredientFromRow(result),
+      ingredient: ingredientFromRow(result),
       productName: result.product_name,
       amount: result.amount
     }
