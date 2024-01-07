@@ -4,6 +4,7 @@ import { describe, it } from 'mocha'
 
 import type IChefDatabase from '../../database/IChefDatabase'
 import type IConnection from '../../database/IConnection'
+import InvalidIdError from '../../database/InvalidIdError'
 
 import createTestDatabase from './createTestDatabase'
 
@@ -24,6 +25,10 @@ describe('database/UserDatabaseImpl', () => {
         id: 1234,
         name: 'testy mc testface'
       })
+    })
+
+    it('should throw if the user does not exist', () => {
+      assert.throws(() => { database.users.get(314159) }, InvalidIdError)
     })
   })
 })
