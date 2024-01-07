@@ -86,12 +86,12 @@ export interface paths {
       };
     };
   };
-  "/recipe/{id}": {
+  "/recipe/{recipeId}": {
     /** Get a recipe by ID */
     get: {
       parameters: {
         path: {
-          id: components["parameters"]["recipeId"];
+          recipeId: components["parameters"]["recipeId"];
         };
       };
       responses: {
@@ -105,7 +105,7 @@ export interface paths {
       };
     };
   };
-  "/recipe/{id}/similar": {
+  "/recipe/{recipeId}/similar": {
     /**
      * Get similar recipes
      * @description Returns a list of recipes similar to the given recipe \ Items are sorted by similarity score, descending \ Only recipes of the same type are returned Note that if multiple recipes have the same name, only one will be returned
@@ -117,7 +117,7 @@ export interface paths {
           minSimilarity?: components["parameters"]["minSimilarity"];
         };
         path: {
-          id: components["parameters"]["recipeId"];
+          recipeId: components["parameters"]["recipeId"];
         };
       };
       responses: {
@@ -297,7 +297,7 @@ export interface components {
     };
     /**
      * @example g
-     * @enum {unknown}
+     * @enum {string}
      */
     Unit: "none" | "whole" | "ml" | "g";
     SimilarRecipe: {

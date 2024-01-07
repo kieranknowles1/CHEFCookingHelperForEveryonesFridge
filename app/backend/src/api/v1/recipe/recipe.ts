@@ -4,7 +4,7 @@ import { type TypedRequest, type TypedResponse } from '../../TypedEndpoint'
 import { type components, type paths } from '../../../types/api.generated'
 import type IChefDatabase from '../../../database/IChefDatabase'
 
-type endpoint = paths['/recipe/{id}']['get']
+type endpoint = paths['/recipe/{recipeId}']['get']
 type IngredientEntry = components['schemas']['RecipeIngredientEntry']
 
 /**
@@ -13,7 +13,7 @@ type IngredientEntry = components['schemas']['RecipeIngredientEntry']
 export default function registerRecipeEndpoint (app: Express, db: IChefDatabase): void {
   app.get('/api/v1/recipe/:id',
     (req: TypedRequest<endpoint>, res: TypedResponse<endpoint, 200>) => {
-      const id = Number.parseInt(req.params.id)
+      const id = Number.parseInt(req.params.recipeId)
       const recipe = db.recipes.get(id)
 
       const ingredients: IngredientEntry[] = []
