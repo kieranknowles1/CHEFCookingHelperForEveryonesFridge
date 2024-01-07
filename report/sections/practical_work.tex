@@ -77,6 +77,13 @@ implemented in TypeScript using the Node.js framework. TypeScript was chosen as 
 while adding compile-time type checking similar to statically typed languages such as Java. This would allow for the same language
 to be used for both the front and back end.
 
+One major difference between TypeScript and Java is TypeScript's use of structural typing. This means that any object
+that implements the properties specified in an interface is considered an instance of that interface in comparison
+to Java where an interface has to be explicitly implemented by a class. As the objects retrieved from the database
+did not need their own logic, it was decided early on to do away with having a class for each type in the database
+and to instead rely only on interfaces. This simplified the database code and allowed for specialised sub types to easily
+be added when needed for different endpoints.
+
 \todo{Expressjs}
 
 \subsection{Documentation}
