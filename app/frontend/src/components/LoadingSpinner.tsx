@@ -1,5 +1,7 @@
+import Icon from '@mdi/react'
 import { InfinitySpin } from 'react-loader-spinner'
 import React from 'react'
+import { mdiAlert } from '@mdi/js'
 
 export type LoadingStatus = 'loading' | 'done' | 'error'
 
@@ -30,7 +32,12 @@ function getSpinner (status: LoadingStatus): React.JSX.Element | null {
     case 'error':
       // TODO: Better way to show error?
       // TODO: Modal with error message and helper function to create modal or spinner based on status?
-      return <p>An error occurred. Please check the console for details.</p>
+      return (
+        <p className='text-red-500'>
+          <Icon path={mdiAlert} size={1} className='inline' />
+          An error occurred. Please check the console for details.
+        </p>
+      )
   }
 }
 

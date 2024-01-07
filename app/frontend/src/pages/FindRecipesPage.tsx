@@ -1,3 +1,5 @@
+import { mdiChevronLeft, mdiChevronRight } from '@mdi/js'
+import Icon from '@mdi/react'
 import { Link } from 'react-router-dom'
 import React from 'react'
 import { useDebounce } from 'use-debounce'
@@ -75,9 +77,13 @@ export default function FindRecipesPage (): React.JSX.Element {
 
   const pageButtons = (
     <div className='flex justify-center'>
-      <button className='btn' onClick={() => { setPage(page - 1) }} disabled={page === 0}>Previous</button>
+      <button className='btn' onClick={() => { setPage(page - 1) }} disabled={page === 0}>
+        <Icon path={mdiChevronLeft} size={1} className='inline' /> Previous
+      </button>
       <span className='mx-3'>Page {page + 1} / {getTotalPages()}</span>
-      <button className='btn' onClick={() => { setPage(page + 1) }} disabled={page >= getTotalPages() - 1}>Next</button>
+      <button className='btn' onClick={() => { setPage(page + 1) }} disabled={page >= getTotalPages() - 1}>
+        Next <Icon path={mdiChevronRight} size={1} className='inline' />
+      </button>
     </div>
   )
 
@@ -98,7 +104,7 @@ export default function FindRecipesPage (): React.JSX.Element {
       </select></label>
       <hr className='my-2 mx-2' />
       {recipesStatus === 'done' && <p>{recipes.length} recipes found.</p>}
-      <label>Search: <Search setQuery={q => { setQuery(q); setPage(0) }} /></label>
+      <Search setQuery={q => { setQuery(q); setPage(0) }} />
 
       <LoadingSpinner status={getHighestStatus([recipesStatus, mealTypesStatus])} />
       {pageButtons}

@@ -74,7 +74,10 @@ export default class FridgeDatabaseImpl implements IFridgeDatabase {
   }
 
   private getInsufficientAmountCount (row: AvailableRecipesResultRow): number {
+    // We know that the strings represent JSON arrays of numbers. Type assertion is safe in this case
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const neededAmounts = JSON.parse(row.recipe_amount) as number[]
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const availableAmounts = JSON.parse(row.fridge_amount) as number[]
 
     return neededAmounts.filter((needed, index) => availableAmounts[index] < needed).length
