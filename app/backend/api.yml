@@ -246,6 +246,23 @@ paths:
         "403":
           $ref: "#/components/responses/Forbidden"
 
+  # TODO: Authentication
+  /fridge/{fridgeId}/recipe/{recipeId}/deduct:
+    post:
+      tags: [Fridge]
+      summary: Deduct the ingredients of a recipe from the fridge
+      description:
+        Deduct the ingredients of `recipeId` from `fridgeId` \
+        If there is not enough of an ingredient, the amount will be set to 0 \
+      parameters:
+        - $ref: "#/components/parameters/fridgeId"
+        - $ref: "#/components/parameters/recipeId"
+      responses:
+        "204":
+          description: No Content
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
   # TODO: Authentication, implement
   /user/{userId}:
     get:

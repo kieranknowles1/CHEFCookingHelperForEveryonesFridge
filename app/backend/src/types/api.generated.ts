@@ -255,6 +255,27 @@ export interface paths {
       };
     };
   };
+  "/fridge/{fridgeId}/recipe/{recipeId}/deduct": {
+    /**
+     * Deduct the ingredients of a recipe from the fridge
+     * @description Deduct the ingredients of `recipeId` from `fridgeId` \ If there is not enough of an ingredient, the amount will be set to 0 \
+     */
+    post: {
+      parameters: {
+        path: {
+          fridgeId: components["parameters"]["fridgeId"];
+          recipeId: components["parameters"]["recipeId"];
+        };
+      };
+      responses: {
+        /** @description No Content */
+        204: {
+          content: never;
+        };
+        403: components["responses"]["Forbidden"];
+      };
+    };
+  };
   "/user/{userId}": {
     /** Get a user by ID */
     get: {
