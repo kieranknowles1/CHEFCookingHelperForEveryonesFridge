@@ -11,7 +11,7 @@ type IngredientEntry = components['schemas']['RecipeIngredientEntry']
  * Endpoint to get a specific recipe by its ID
  */
 export default function registerRecipeEndpoint (app: Express, db: IChefDatabase): void {
-  app.get('/api/v1/recipe/:id',
+  app.get('/api/v1/recipe/:recipeId',
     (req: TypedRequest<endpoint>, res: TypedResponse<endpoint, 200>) => {
       const id = Number.parseInt(req.params.recipeId)
       const recipe = db.recipes.get(id)

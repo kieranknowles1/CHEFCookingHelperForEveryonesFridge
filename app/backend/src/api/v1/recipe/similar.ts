@@ -11,7 +11,7 @@ type endpoint = paths['/recipe/{recipeId}/similar']['get']
  * // TODO: Filter by what is available in the fridge
  */
 export default function registerSimilarRecipeEndpoint (app: Express, db: IChefDatabase): void {
-  app.get('/api/v1/recipe/:id/similar',
+  app.get('/api/v1/recipe/:recipeId/similar',
     (req: TypedRequest<endpoint>, res: TypedResponse<endpoint, 200>) => {
       const recipeId = Number.parseInt(req.params.recipeId)
       const minSimilarity = Number.parseFloat(req.query.minSimilarity ?? '0.5')
