@@ -4,7 +4,6 @@
  */
 
 import { createReadStream, readFileSync, statSync } from 'fs'
-import path from 'path'
 
 import * as t from 'io-ts'
 import cliProgress from 'cli-progress'
@@ -20,6 +19,7 @@ import type IChefDatabase from '../database/IChefDatabase'
 import type IConnection from '../database/IConnection'
 import type Ingredient from '../types/Ingredient'
 import SqliteConnection from '../database/SqliteConnection'
+import constants from '../constants'
 import decodeObject from '../decodeObject'
 import environment from '../environment'
 import getEmbedding from '../ml/getEmbedding'
@@ -31,8 +31,6 @@ import type ParsedCsvRecipe from './ParsedCsvRecipe'
 import type RawCsvRecipe from './RawCsvRecipe'
 import parseCsvRecipeRow from './parseCsvRecipeRow'
 
-// TODO: Use environment variables and put this somewhere outside the container
-const SQL_DUMMY_DATA_PATH = path.join(process.cwd(), 'data/dummydata.sql')
 const PROGRESS_BAR_STYLE = cliProgress.Presets.shades_classic
 
 /**
@@ -193,7 +191,7 @@ async function main (connection: IConnection, db: IChefDatabase): Promise<void> 
   db.resetDatabase('IKnowWhatIAmDoing')
 
   logger.info('Adding dummy data')
-  const dummyData = readFileSync(SQL_DUMMY_DATA_PATH, 'utf-8')
+  const dummyData = readFileSync(constants.SQL_DUMMY_DATA_PATH, 'utf-8')
   db.wrapTransaction(() => {
     connection.exec(dummyData)
   })

@@ -42,8 +42,6 @@ export default class WritableDatabaseImpl implements IWritableDatabase {
 
   public addIngredient (ingredient: IngredientNoId): types.RowId {
     this.assertValid()
-    // TODO: Reuse prepared statements
-    // TODO: statement pack for writable to only prepare them once
     const statement = this._connection.prepare<undefined>(`
       INSERT INTO ingredient
         (name, assumeUnlimited, preferredUnit, density)

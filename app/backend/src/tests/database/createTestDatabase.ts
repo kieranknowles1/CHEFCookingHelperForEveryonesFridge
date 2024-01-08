@@ -1,10 +1,10 @@
 import fs from 'fs'
-import path from 'path'
 
 import ChefDatabaseImpl from '../../database/ChefDatabaseImpl'
 import type IChefDatabase from '../../database/IChefDatabase'
 import type IConnection from '../../database/IConnection'
 import SqliteConnection from '../../database/SqliteConnection'
+import constants from '../../constants'
 
 /**
  * Creates a test database with dummy data.
@@ -14,7 +14,7 @@ export default function createTestDatabase (): { database: IChefDatabase, connec
   const database = new ChefDatabaseImpl(connection)
   database.resetDatabase('IKnowWhatIAmDoing')
 
-  const dummyData = fs.readFileSync(path.join(process.cwd(), 'data/dummydata.sql'), 'utf-8')
+  const dummyData = fs.readFileSync(constants.SQL_DUMMY_DATA_PATH, 'utf-8')
   connection.exec(dummyData)
 
   // Add dummy values for meal type embeddings. Testing the embedding logic is not the point of this test

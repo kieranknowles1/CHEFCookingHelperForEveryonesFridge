@@ -34,7 +34,6 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
     })
   }, [props.recipeId, props.limit, props.minSimilarity])
 
-  // TODO: Show how much of each ingredient is available and highlight missing ones
   return (
     <div>
       <LoadingSpinner status={status} />

@@ -21,7 +21,6 @@ export default function EditIngredientAmount (props: EditIngredientAmountProps):
   const [deltaAmount, setDeltaAmount] = React.useState(0)
 
   function onSubmit (type: 'add' | 'remove'): void {
-    // TODO: Handle removing ingredients. Probably want 2 popovers 1 for each action
     const change = type === 'add' ? deltaAmount : -deltaAmount
     const newAmount = props.currentAmount + change
 

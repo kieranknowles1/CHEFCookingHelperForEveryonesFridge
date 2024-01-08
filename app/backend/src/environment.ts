@@ -1,5 +1,6 @@
 /**
  * Application settings that can be configured via environment variables.
+ * NOTE: readme.md has a list of all environment variables. Please keep it up to date with this file.
  */
 export default {
   // Setup
@@ -11,5 +12,6 @@ export default {
   PORT: process.env.CHEF_PORT ?? 3000,
 
   // Both
-  DATABASE_PATH: process.env.CHEF_DATABASE_PATH ?? 'working_data/chefdatabase.db'
+  DATABASE_PATH: process.env.CHEF_DATABASE_PATH ?? 'working_data/chefdatabase.db',
+  MIN_LOG_LEVEL: process.env.CHEF_MIN_LOG_LEVEL ?? 'info'
 }

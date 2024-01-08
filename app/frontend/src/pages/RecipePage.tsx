@@ -46,6 +46,7 @@ export default function RecipePage (): React.JSX.Element {
     return <NotFoundMessage />
   }
 
+  // TODO: Show how much of each ingredient is available and highlight missing ones
   return (
     <main>
       <LoadingSpinner status={status} />

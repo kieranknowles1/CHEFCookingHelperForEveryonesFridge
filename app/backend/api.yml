@@ -398,7 +398,7 @@ components:
         density: { type: number, example: 0.5 }
         assumeUnlimited: { type: boolean, example: false }
         # TODO: Substitutions
-        # TODO: Weight
+        # TODO: Include density in response
       required: [name, id, preferredUnit, assumeUnlimited]
 
     IngredientEntry:

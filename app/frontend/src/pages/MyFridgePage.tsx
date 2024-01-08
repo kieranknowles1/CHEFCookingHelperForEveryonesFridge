@@ -16,15 +16,13 @@ const ScanBarcode = React.lazy(async () => await import('../components/ScanBarco
 
 type FridgeIngredientEntry = components['schemas']['FridgeIngredientEntry']
 
-// TODO: Implement
 export default function MyFridgePage (): React.JSX.Element {
   const context = useSafeContext(UserContext)
 
-  // TODO: Helper function to update status
   const [ingredientsStatus, setIngredientsStatus] = React.useState<LoadingStatus>('loading')
   const [ingredients, setIngredients] = React.useState<FridgeIngredientEntry[]>([])
 
-  // Placeholder to show something while loading
+  // Placeholder to show something while the name is loading
   const [fridgeName, setFridgeName] = React.useState('My Fridge')
   const [fridgeNameStatus, setFridgeNameStatus] = React.useState<LoadingStatus>('loading')
 
