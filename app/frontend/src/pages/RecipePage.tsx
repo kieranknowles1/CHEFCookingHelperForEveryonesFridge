@@ -60,9 +60,11 @@ export default function RecipePage (): React.JSX.Element {
             {recipe.ingredients.map(entry => <RecipeIngredient key={entry.ingredient.id} {...entry} />)}
           </ul>
           <h2>Directions</h2>
-          <p>
-            {recipe.directions.split('\n').map((line, index) => <React.Fragment key={index}>{line}</React.Fragment>)}
-          </p>
+          <ol className='list-inside list-decimal'>
+            {recipe.directions.split('\n').map((line, index) =>
+              <li key={index}>{line}</li>
+            )}
+          </ol>
           <MadeItButton recipeId={recipe.id} />
         </div>
       )}
