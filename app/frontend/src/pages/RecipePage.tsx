@@ -2,13 +2,13 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
+import monitorStatus, { type ApiError } from '../utils/monitorStatus'
 import MadeItButton from '../components/MadeItButton'
 import NotFoundMessage from '../components/NotFoundMessage'
 import RecipeIngredient from '../components/RecipeIngredient'
 import SimilarRecipes from '../components/SimilarRecipes'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
-import monitorStatus from '../utils/monitorStatus'
 
 type Recipe = components['schemas']['Recipe']
 
@@ -34,10 +34,11 @@ export default function RecipePage (): React.JSX.Element {
       monitorStatus(setRecipeStatus)
     ).then(data => {
       setRecipe(data)
-    }).catch(err => {
+    }).catch((err: ApiError) => {
       console.error(err)
-      // TODO: Check error code. Use notfound for 404, error for everything else.
-      // setStatus('notfound')
+      if (err.errors.status === 404) {
+        setRecipeStatus('notfound')
+      }
     })
   }, [idNumber])
 
