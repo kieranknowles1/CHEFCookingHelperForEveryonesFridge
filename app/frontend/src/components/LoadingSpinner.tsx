@@ -3,30 +3,53 @@ import { InfinitySpin } from 'react-loader-spinner'
 import React from 'react'
 import { mdiAlert } from '@mdi/js'
 
-export type LoadingStatus = 'loading' | 'done' | 'error'
+/**
+ * Status of a loading operation.
+ *
+ * - `notstarted`: The operation has not started yet.
+ *   Functionally equivalent to `done`, but can be used for clarity.
+ * - `loading`: The operation is currently loading.
+ *   The spinner will be shown.
+ * - `done`: The operation has finished successfully.
+ *   Nothing will be shown.
+ * - `error`: The operation has finished with an error.
+ *   An error message will be shown.
+ */
+export type LoadingStatus =
+  | 'notstarted'
+  | 'loading'
+  | 'done'
+  | 'error'
+
+export const DefaultSpinner = <InfinitySpin />
 
 export interface LoadingSpinnerProps {
   status: LoadingStatus
+  /** The spinner to show while loading. Defaults to InfinitySpin from react-loader-spinner. */
+  spinner?: React.JSX.Element
 }
 
 /**
  * Get the highest status from a list of statuses.
- * Order of precedence: error > loading > done
+ * Order of precedence: error > loading > done > notstarted.
  */
 export function getHighestStatus (statuses: LoadingStatus[]): LoadingStatus {
   if (statuses.includes('error')) {
     return 'error'
   } else if (statuses.includes('loading')) {
     return 'loading'
-  } else {
+  } else if (statuses.includes('done')) {
     return 'done'
+  } else {
+    return 'notstarted'
   }
 }
 
-function getSpinner (status: LoadingStatus): React.JSX.Element | null {
-  switch (status) {
+function getSpinner (props: LoadingSpinnerProps): React.JSX.Element | null {
+  switch (props.status) {
     case 'loading':
-      return <InfinitySpin />
+      return props.spinner ?? DefaultSpinner
+    case 'notstarted':
     case 'done':
       return null
     case 'error':
@@ -48,5 +71,5 @@ function getSpinner (status: LoadingStatus): React.JSX.Element | null {
  * @see monitorStatus - Helper function to update a status that can be used with this component.
  */
 export default function LoadingSpinner (props: LoadingSpinnerProps): React.JSX.Element {
-  return <div className='flex justify-center'>{getSpinner(props.status)}</div>
+  return <div className='flex justify-center'>{getSpinner(props)}</div>
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
+import MadeItButton from '../components/MadeItButton'
 import NotFoundMessage from '../components/NotFoundMessage'
 import RecipeIngredient from '../components/RecipeIngredient'
 import SimilarRecipes from '../components/SimilarRecipes'
@@ -15,7 +16,7 @@ const MAX_SIMILAR_RECIPES = 100
 const MIN_SIMILARITY = 0.5
 
 export default function RecipePage (): React.JSX.Element {
-  const [status, setStatus] = React.useState<LoadingStatus | 'notfound'>('loading')
+  const [status, setRecipeStatus] = React.useState<LoadingStatus | 'notfound'>('loading')
   const [recipe, setRecipe] = React.useState<Recipe>()
 
   const { id } = useParams()
@@ -27,10 +28,10 @@ export default function RecipePage (): React.JSX.Element {
   React.useEffect(() => {
     setRecipe(undefined)
     apiClient.GET(
-      '/recipe/{id}',
-      { params: { path: { id: idNumber } } }
+      '/recipe/{recipeId}',
+      { params: { path: { recipeId: idNumber } } }
     ).then(
-      monitorStatus(setStatus)
+      monitorStatus(setRecipeStatus)
     ).then(data => {
       setRecipe(data)
     }).catch(err => {
@@ -60,8 +61,7 @@ export default function RecipePage (): React.JSX.Element {
           <p>
             {recipe.directions.split('\n').map((line, index) => <React.Fragment key={index}>{line}</React.Fragment>)}
           </p>
-          {/* TODO: Implement, deduct ingredients from fridge */ }
-          <button>Made it - Remove Ingredients From Fridge</button>
+          <MadeItButton recipeId={recipe.id} />
         </div>
       )}
       <h2>Similar recipes that you can make</h2>
