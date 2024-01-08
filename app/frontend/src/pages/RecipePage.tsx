@@ -18,6 +18,7 @@ const MIN_SIMILARITY = 0.5
 export default function RecipePage (): React.JSX.Element {
   const [status, setRecipeStatus] = React.useState<LoadingStatus | 'notfound'>('loading')
   const [recipe, setRecipe] = React.useState<Recipe>()
+  const [onlyAvailable, setOnlyAvailable] = React.useState<boolean>(true)
 
   const { id } = useParams()
   const idNumber = Number.parseInt(id ?? 'NaN')
@@ -45,31 +46,43 @@ export default function RecipePage (): React.JSX.Element {
   if (status === 'notfound') {
     return <NotFoundMessage />
   }
+  if (recipe === undefined) {
+    return <LoadingSpinner status={status} />
+  }
 
   // TODO: Show how much of each ingredient is available and highlight missing ones
   return (
     <main>
-      <LoadingSpinner status={status} />
-      {recipe !== undefined && (
-        <div>
-          <h1>{recipe.name}</h1>
-          <a href={`http://${recipe.link}`} target='_blank' rel='noreferrer'>Source</a>
-          <p>Meal Type: {recipe.mealType}</p>
-          <h2>Ingredients</h2>
-          <ul className='list-inside list-disc'>
-            {recipe.ingredients.map(entry => <RecipeIngredient key={entry.ingredient.id} {...entry} />)}
-          </ul>
-          <h2>Directions</h2>
-          <ol className='list-inside list-decimal'>
-            {recipe.directions.split('\n').map((line, index) =>
-              <li key={index}>{line}</li>
-            )}
-          </ol>
-          <MadeItButton recipeId={recipe.id} />
-        </div>
-      )}
-      <h2>Similar recipes that you can make</h2>
-      {recipe !== undefined && <SimilarRecipes recipeId={recipe.id} limit={MAX_SIMILAR_RECIPES} minSimilarity={MIN_SIMILARITY} />}
+      <div>
+        <h1>{recipe.name}</h1>
+        <a href={`http://${recipe.link}`} target='_blank' rel='noreferrer'>Source</a>
+        <p>Meal Type: {recipe.mealType}</p>
+        <h2>Ingredients</h2>
+        <ul className='list-inside list-disc'>
+          {recipe.ingredients.map(entry => <RecipeIngredient key={entry.ingredient.id} {...entry} />)}
+        </ul>
+        <h2>Directions</h2>
+        <ol className='list-inside list-decimal'>
+          {recipe.directions.split('\n').map((line, index) =>
+            <li key={index}>{line}</li>
+          )}
+        </ol>
+        <MadeItButton recipeId={recipe.id} />
+      </div>
+      <h2>Similar recipes</h2>
+      <label>Only show recipes with ingredients available in your fridge:{' '}
+        <input
+          type='checkbox'
+          checked={onlyAvailable}
+          onChange={e => { setOnlyAvailable(e.target.checked) }}
+        />
+      </label>
+      <SimilarRecipes
+        recipeId={recipe.id}
+        limit={MAX_SIMILAR_RECIPES}
+        minSimilarity={MIN_SIMILARITY}
+        onlyAvailable={onlyAvailable}
+      />
     </main>
   )
 }

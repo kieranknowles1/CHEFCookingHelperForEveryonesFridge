@@ -5,7 +5,7 @@ import { type IngredientMap } from './Ingredient'
 
 export interface AvailableRecipe {
   id: RowId
-  name: string
+  name: EmbeddedSentence
   missingIngredientAmount: number
 }
 

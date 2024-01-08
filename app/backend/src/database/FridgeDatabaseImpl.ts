@@ -6,10 +6,12 @@ import { type FridgeIngredientAmount, type IFridgeDatabase } from './IChefDataba
 import type IConnection from './IConnection'
 import InvalidIdError from './InvalidIdError'
 import ingredientFromRow from './ingredientFromRow'
+import { bufferToFloat32Array } from './bufferFloat32Array'
 
 interface AvailableRecipesResultRow {
   id: types.RowId
   name: string
+  embedding: Buffer
   // JSON array -> number[]
   recipe_amount: string
   // JSON array -> number[]
@@ -89,12 +91,14 @@ export default class FridgeDatabaseImpl implements IFridgeDatabase {
     const statement = this._connection.prepare<AvailableRecipesResultRow>(`
       SELECT
         recipe.name, recipe.id,
+        embedding.embedding,
         -- Used to filter by available amount later
         json_group_array(recipe_ingredient.amount) AS recipe_amount,
         json_group_array(fridge_ingredient.amount) AS fridge_amount,
         count(recipe_ingredient.recipe_id) - count(fridge_ingredient.ingredient_id) AS missing_count
       FROM
         recipe
+      JOIN embedding ON embedding.sentence = recipe.name
       LEFT JOIN recipe_ingredient ON recipe_ingredient.recipe_id = recipe.id
       LEFT JOIN fridge_ingredient ON fridge_ingredient.ingredient_id = recipe_ingredient.ingredient_id AND fridge_ingredient.fridge_id = :fridgeId
       JOIN ingredient ON ingredient.id = recipe_ingredient.ingredient_id AND NOT ingredient.assumeUnlimited
@@ -109,7 +113,7 @@ export default class FridgeDatabaseImpl implements IFridgeDatabase {
       .filter(row => !checkAmount || this.getInsufficientAmountCount(row) + row.missing_count <= maxMissingIngredients)
       .map(row => ({
         id: row.id,
-        name: row.name,
+        name: { sentence: row.name, embedding: bufferToFloat32Array(row.embedding) },
         missingIngredientAmount: row.missing_count
       }))
   }

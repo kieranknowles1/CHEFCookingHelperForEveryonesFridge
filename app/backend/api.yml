@@ -121,6 +121,13 @@ paths:
         - $ref: "#/components/parameters/recipeId"
         - $ref: "#/components/parameters/limitRequired"
         - $ref: "#/components/parameters/minSimilarity"
+        # TODO: Authentication if filtering by fridge
+        - in: query
+          name: availableForFridge
+          description: If specified, only return recipes that can be made with the ingredients in the fridge
+          schema: { type: integer, example: 1 }
+          required: false
+
 
       responses:
         "200":

@@ -83,6 +83,7 @@ export interface paths {
             "application/json": components["schemas"]["Ingredient"][];
           };
         };
+        429: components["responses"]["TooManyRequests"];
       };
     };
   };
@@ -115,6 +116,8 @@ export interface paths {
         query: {
           limit: components["parameters"]["limitRequired"];
           minSimilarity?: components["parameters"]["minSimilarity"];
+          /** @description If specified, only return recipes that can be made with the ingredients in the fridge */
+          availableForFridge?: number;
         };
         path: {
           recipeId: components["parameters"]["recipeId"];
@@ -127,6 +130,7 @@ export interface paths {
             "application/json": components["schemas"]["SimilarRecipe"][];
           };
         };
+        404: components["responses"]["NotFound"];
       };
     };
   };

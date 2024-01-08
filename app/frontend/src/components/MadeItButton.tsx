@@ -33,9 +33,7 @@ export default function MadeItButton (props: MadeItButtonProps): React.JSX.Eleme
   return (
     <button onClick={handleClick} disabled={madeItStatus === 'loading' || madeItStatus === 'done'}>
       <Icon path={madeItStatus === 'done' ? mdiHamburgerCheck : mdiHamburger} size={1} className='inline' />
-      {/** Render a space between the icon and the text. */}
-      {' '}
-      Made it - Remove Ingredients From Fridge
+      {' '}Made it - Remove Ingredients From Fridge
       <LoadingSpinner
         status={madeItStatus}
         spinner={<ThreeDots width={32} height={16} wrapperClass='inline' />}

@@ -19,6 +19,9 @@ export default function registerFridgeAvailableRecipeEndpoint (app: Express, db:
         checkAmounts,
         maxMissingIngredients,
         mealType
-      ))
+      ).map(r => ({
+        ...r,
+        name: r.name.sentence
+      })))
     })
 }
