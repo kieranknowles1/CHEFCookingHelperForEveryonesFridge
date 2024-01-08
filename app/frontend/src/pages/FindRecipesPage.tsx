@@ -5,7 +5,8 @@ import React from 'react'
 import { useDebounce } from 'use-debounce'
 
 import LoadingSpinner, { type LoadingStatus, getHighestStatus } from '../components/LoadingSpinner'
-import Recipe, { type RecipeProps } from '../components/Recipe'
+import RecipeList from '../components/RecipeList'
+import { type RecipeProps } from '../components/Recipe'
 import Search from '../components/Search'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
@@ -75,6 +76,11 @@ export default function FindRecipesPage (): React.JSX.Element {
     setFiltered(recipes.filter(r => r.name.toLowerCase().includes(query.toLowerCase())))
   }, [recipes, query])
 
+  const [pageItems, setPageItems] = React.useState<RecipeProps[]>([])
+  React.useEffect(() => {
+    setPageItems(filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE))
+  }, [filtered, page])
+
   const pageButtons = (
     <div className='flex justify-center'>
       <button className='btn' onClick={() => { setPage(page - 1) }} disabled={page === 0}>
@@ -108,13 +114,7 @@ export default function FindRecipesPage (): React.JSX.Element {
 
       <LoadingSpinner status={getHighestStatus([recipesStatus, mealTypesStatus])} />
       {pageButtons}
-      <ul className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3'>
-        {filtered
-          .slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
-          .map(recipe => (
-            <Recipe key={recipe.id} {...recipe} />
-          ))}
-      </ul>
+      <RecipeList recipes={pageItems} />
       {recipesStatus === 'done' && recipes.length === 0 && <p>You can&apos;t make anything with your current ingredients. <Link to='/fridge'>Add Some</Link></p>}
       {pageButtons}
     </main>

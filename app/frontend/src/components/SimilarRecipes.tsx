@@ -1,9 +1,11 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
-import Recipe, { type RecipeProps } from '../components/Recipe'
+import { type RecipeProps } from '../components/Recipe'
 import apiClient from '../apiClient'
 import monitorStatus from '../utils/monitorStatus'
+
+import RecipeList from './RecipeList'
 
 export interface SimilarRecipeProps {
   recipeId: number
@@ -37,10 +39,7 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
   return (
     <div>
       <LoadingSpinner status={status} />
-      {/* TODO: Recipe list component for here and available recipes page */}
-      <ul className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
-        {recipes.map(recipe => <Recipe key={recipe.id} {...recipe} />)}
-      </ul>
+      <RecipeList recipes={recipes} />
     </div>
   )
 }
