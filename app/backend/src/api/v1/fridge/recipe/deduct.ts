@@ -28,5 +28,7 @@ export default function registerFridgeDeductRecipeEndpoint (app: Express, db: IC
           writable.setIngredientAmount(fridgeId, ingredient, newAmount)
         }
       })
+
+      res.status(204).send()
     })
 }
