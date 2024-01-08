@@ -70,7 +70,7 @@ export default function RecipePage (): React.JSX.Element {
         <MadeItButton recipeId={recipe.id} />
       </div>
       <h2>Similar recipes</h2>
-      <label>Only show recipes with ingredients available in your fridge:{' '}
+      <label>Only show recipes with ingredients available in my fridge:{' '}
         <input
           type='checkbox'
           checked={onlyAvailable}
