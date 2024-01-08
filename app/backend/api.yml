@@ -91,6 +91,8 @@ paths:
               schema:
                 type: array
                 items: { $ref: "#/components/schemas/Ingredient" }
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
 
   /recipe/{recipeId}:
     get:
@@ -129,6 +131,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/SimilarRecipe"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   # TODO: Authentication for all fridge endpoints
   # TODO: Implement

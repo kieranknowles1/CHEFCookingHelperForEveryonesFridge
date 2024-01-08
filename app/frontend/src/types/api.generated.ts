@@ -83,6 +83,7 @@ export interface paths {
             "application/json": components["schemas"]["Ingredient"][];
           };
         };
+        429: components["responses"]["TooManyRequests"];
       };
     };
   };
@@ -127,6 +128,7 @@ export interface paths {
             "application/json": components["schemas"]["SimilarRecipe"][];
           };
         };
+        404: components["responses"]["NotFound"];
       };
     };
   };

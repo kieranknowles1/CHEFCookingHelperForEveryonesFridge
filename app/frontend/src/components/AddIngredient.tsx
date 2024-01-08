@@ -4,6 +4,7 @@ import React from 'react'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
+import monitorStatus from '../utils/monitorStatus'
 import useSafeContext from '../contexts/useSafeContext'
 
 import LoadingSpinner, { type LoadingStatus } from './LoadingSpinner'
@@ -33,17 +34,14 @@ export default function AddIngredient (props: AddIngredientProps): React.JSX.Ele
     apiClient.GET(
       '/ingredient/all',
       { }
-    ).then(response => {
-      if (response.data === undefined) {
-        throw new Error(response.error)
-      }
-      setIngredients(response.data.filter(
+    ).then(
+      monitorStatus(setStatus)
+    ).then(data => {
+      setIngredients(data.filter(
         ingredient => !ingredient.assumeUnlimited && !currentIngredientIds.has(ingredient.id)
       ))
-      setStatus('done')
     }).catch(err => {
       console.error(err)
-      setStatus('error')
     })
   }, [])
 

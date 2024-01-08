@@ -3,6 +3,7 @@ import React from 'react'
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
 import Recipe, { type RecipeProps } from '../components/Recipe'
 import apiClient from '../apiClient'
+import monitorStatus from '../utils/monitorStatus'
 
 export interface SimilarRecipeProps {
   recipeId: number
@@ -15,27 +16,21 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
 
   React.useEffect(() => {
-    setStatus('loading')
     setRecipes([])
     apiClient.GET(
-      '/recipe/{id}/similar',
+      '/recipe/{recipeId}/similar',
       {
         params: {
-          path: { id: props.recipeId },
+          path: { recipeId: props.recipeId },
           query: { limit: props.limit, minSimilarity: props.minSimilarity }
         }
       }
-    ).then(response => {
-      if (response.data === undefined) {
-        console.error(response.error)
-        setStatus('error')
-        return
-      }
-      setRecipes(response.data)
-      setStatus('done')
+    ).then(
+      monitorStatus(setStatus)
+    ).then(data => {
+      setRecipes(data)
     }).catch(err => {
       console.error(err)
-      setStatus('error')
     })
   }, [props.recipeId, props.limit, props.minSimilarity])
 

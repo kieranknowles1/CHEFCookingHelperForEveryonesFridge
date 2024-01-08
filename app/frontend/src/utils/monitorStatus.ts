@@ -27,8 +27,6 @@ export class ApiError extends Error {
   }
 }
 
-// TODO: Use this everywhere we make API calls instead of the manual approach. Would make it easier to add
-// a message with more details about the error.
 /**
  * Helper function to monitor the status of an API call.
  * Status will be set to 'loading' when the function is called (i.e., inside the useEffect hook).
