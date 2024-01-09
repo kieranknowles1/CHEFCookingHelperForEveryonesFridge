@@ -4,10 +4,10 @@ import type IChefDatabase from '../../../../database/IChefDatabase'
 import { type TypedRequest } from '../../../TypedEndpoint'
 import { type paths } from '../../../../types/api.generated'
 
-type endpoint = paths['/fridge/{fridgeId}/recipe/{recipeId}/deduct']['post']
+type endpoint = paths['/fridge/{fridgeId}/recipe/{recipeId}/maderecipe']['post']
 
-export default function registerFridgeDeductRecipeEndpoint (app: Express, db: IChefDatabase): void {
-  app.post('/api/v1/fridge/:fridgeId/recipe/:recipeId/deduct',
+export default function registerFridgeMadeRecipeEndpoint (app: Express, db: IChefDatabase): void {
+  app.post('/api/v1/fridge/:fridgeId/recipe/:recipeId/maderecipe',
     (req: TypedRequest<endpoint>, res) => {
       const fridgeId = Number.parseInt(req.params.fridgeId)
       const recipeId = Number.parseInt(req.params.recipeId)

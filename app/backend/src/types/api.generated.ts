@@ -160,7 +160,10 @@ export interface paths {
     };
   };
   "/fridge/{fridgeId}/ingredient/all/amount": {
-    /** Get all ingredients in the fridge */
+    /**
+     * Get all ingredients in the fridge
+     * @description Returns a list of all ingredients in the fridge, with their amounts Does not include ingredients with amount 0
+     */
     get: {
       parameters: {
         path: {
@@ -259,10 +262,10 @@ export interface paths {
       };
     };
   };
-  "/fridge/{fridgeId}/recipe/{recipeId}/deduct": {
+  "/fridge/{fridgeId}/recipe/{recipeId}/maderecipe": {
     /**
-     * Deduct the ingredients of a recipe from the fridge
-     * @description Deduct the ingredients of `recipeId` from `fridgeId` \ If there is not enough of an ingredient, the amount will be set to 0 \
+     * Log that a recipe has been made and deduct the ingredients from the fridge
+     * @description Log that a recipe has been made and deduct the ingredients from the fridge. If there are not enough of an ingredient, its amount will be set to 0.
      */
     post: {
       parameters: {

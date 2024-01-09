@@ -6,7 +6,7 @@ import errorHandler from './errorHandler'
 import notFoundHandler from './notFoundHandler'
 import registerBarcodeEndpoint from './v1/barcode/barcode'
 import registerFridgeAvailableRecipeEndpoint from './v1/fridge/recipe/available'
-import registerFridgeDeductRecipeEndpoint from './v1/fridge/recipe/deduct'
+import registerFridgeMadeRecipeEndpoint from './v1/fridge/recipe/madeRecipe'
 import registerFridgeInfoEndpoint from './v1/fridge/info'
 import registerFridgeIngredientAllAmountEndpoint from './v1/fridge/ingredient/all/amount'
 import registerFridgeIngredientEndpoint from './v1/fridge/ingredient/amount'
@@ -22,7 +22,7 @@ import registerUserInfoEndpoint from './v1/user/info'
 export default function registerEndpoints (app: Express, db: IChefDatabase): void {
   registerBarcodeEndpoint(app, db)
   registerFridgeAvailableRecipeEndpoint(app, db)
-  registerFridgeDeductRecipeEndpoint(app, db)
+  registerFridgeMadeRecipeEndpoint(app, db)
   registerFridgeInfoEndpoint(app, db)
   registerFridgeIngredientAllAmountEndpoint(app, db)
   registerFridgeIngredientEndpoint(app, db)

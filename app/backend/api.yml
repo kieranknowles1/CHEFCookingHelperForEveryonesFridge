@@ -168,6 +168,9 @@ paths:
     get:
       tags: [Fridge]
       summary: Get all ingredients in the fridge
+      description:
+        Returns a list of all ingredients in the fridge, with their amounts
+        Does not include ingredients with amount 0
       parameters:
         - $ref: "#/components/parameters/fridgeId"
       responses:
@@ -257,12 +260,13 @@ paths:
           $ref: "#/components/responses/Forbidden"
 
   # TODO: Authentication
-  /fridge/{fridgeId}/recipe/{recipeId}/deduct:
+  /fridge/{fridgeId}/recipe/{recipeId}/maderecipe:
     post:
       tags: [Fridge]
-      summary: Deduct the ingredients of a recipe from the fridge
-      description: Deduct the ingredients of `recipeId` from `fridgeId` \
-        If there is not enough of an ingredient, the amount will be set to 0 \
+      summary: Log that a recipe has been made and deduct the ingredients from the fridge
+      description:
+        Log that a recipe has been made and deduct the ingredients from the fridge.
+        If there are not enough of an ingredient, its amount will be set to 0.
       parameters:
         - $ref: "#/components/parameters/fridgeId"
         - $ref: "#/components/parameters/recipeId"

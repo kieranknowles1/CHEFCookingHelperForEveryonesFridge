@@ -21,7 +21,7 @@ export default function MadeItButton (props: MadeItButtonProps): React.JSX.Eleme
 
   function handleClick (): void {
     apiClient.POST(
-      '/fridge/{fridgeId}/recipe/{recipeId}/deduct',
+      '/fridge/{fridgeId}/recipe/{recipeId}/maderecipe',
       { params: { path: { fridgeId: 1, recipeId: props.recipeId } } }
     ).then(
       monitorStatus(setMadeItStatus)
