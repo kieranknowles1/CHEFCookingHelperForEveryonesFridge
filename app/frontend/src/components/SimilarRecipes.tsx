@@ -1,52 +1,51 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
-import Recipe, { type RecipeProps } from '../components/Recipe'
+import { type RecipeProps } from '../components/Recipe'
+import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
+import monitorStatus from '../utils/monitorStatus'
+import useSafeContext from '../contexts/useSafeContext'
+
+import RecipeList from './RecipeList'
 
 export interface SimilarRecipeProps {
   recipeId: number
   limit: number
   minSimilarity: number
+  onlyAvailable: boolean
 }
 
 export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.Element {
+  const context = useSafeContext(UserContext)
+
   const [recipes, setRecipes] = React.useState<RecipeProps[]>([])
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
 
   React.useEffect(() => {
-    setStatus('loading')
     setRecipes([])
+    const availableForFridge = props.onlyAvailable ? context.fridgeId : undefined
     apiClient.GET(
-      '/recipe/{id}/similar',
+      '/recipe/{recipeId}/similar',
       {
         params: {
-          path: { id: props.recipeId },
-          query: { limit: props.limit, minSimilarity: props.minSimilarity }
+          path: { recipeId: props.recipeId },
+          query: { limit: props.limit, minSimilarity: props.minSimilarity, availableForFridge }
         }
       }
-    ).then(response => {
-      if (response.data === undefined) {
-        console.error(response.error)
-        setStatus('error')
-        return
-      }
-      setRecipes(response.data)
-      setStatus('done')
+    ).then(
+      monitorStatus(setStatus)
+    ).then(data => {
+      setRecipes(data)
     }).catch(err => {
       console.error(err)
-      setStatus('error')
     })
-  }, [props.recipeId, props.limit, props.minSimilarity])
+  }, [props.recipeId, props.limit, props.minSimilarity, props.onlyAvailable, context.fridgeId])
 
-  // TODO: Show how much of each ingredient is available and highlight missing ones
   return (
     <div>
       <LoadingSpinner status={status} />
-      {/* TODO: Recipe list component for here and available recipes page */}
-      <ul className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
-        {recipes.map(recipe => <Recipe key={recipe.id} {...recipe} />)}
-      </ul>
+      <RecipeList recipes={recipes} />
     </div>
   )
 }

@@ -2,12 +2,13 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
+import monitorStatus, { type ApiError } from '../utils/monitorStatus'
+import MadeItButton from '../components/MadeItButton'
 import NotFoundMessage from '../components/NotFoundMessage'
 import RecipeIngredient from '../components/RecipeIngredient'
 import SimilarRecipes from '../components/SimilarRecipes'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
-import monitorStatus from '../utils/monitorStatus'
 
 type Recipe = components['schemas']['Recipe']
 
@@ -15,8 +16,9 @@ const MAX_SIMILAR_RECIPES = 100
 const MIN_SIMILARITY = 0.5
 
 export default function RecipePage (): React.JSX.Element {
-  const [status, setStatus] = React.useState<LoadingStatus | 'notfound'>('loading')
+  const [status, setRecipeStatus] = React.useState<LoadingStatus | 'notfound'>('loading')
   const [recipe, setRecipe] = React.useState<Recipe>()
+  const [onlyAvailable, setOnlyAvailable] = React.useState<boolean>(true)
 
   const { id } = useParams()
   const idNumber = Number.parseInt(id ?? 'NaN')
@@ -27,45 +29,60 @@ export default function RecipePage (): React.JSX.Element {
   React.useEffect(() => {
     setRecipe(undefined)
     apiClient.GET(
-      '/recipe/{id}',
-      { params: { path: { id: idNumber } } }
+      '/recipe/{recipeId}',
+      { params: { path: { recipeId: idNumber } } }
     ).then(
-      monitorStatus(setStatus)
+      monitorStatus(setRecipeStatus)
     ).then(data => {
       setRecipe(data)
-    }).catch(err => {
+    }).catch((err: ApiError) => {
       console.error(err)
-      // TODO: Check error code. Use notfound for 404, error for everything else.
-      // setStatus('notfound')
+      if (err.errors.status === 404) {
+        setRecipeStatus('notfound')
+      }
     })
   }, [idNumber])
 
   if (status === 'notfound') {
     return <NotFoundMessage />
   }
+  if (recipe === undefined) {
+    return <LoadingSpinner status={status} />
+  }
 
+  // TODO: Show how much of each ingredient is available and highlight missing ones
   return (
     <main>
-      <LoadingSpinner status={status} />
-      {recipe !== undefined && (
-        <div>
-          <h1>{recipe.name}</h1>
-          <a href={`http://${recipe.link}`} target='_blank' rel='noreferrer'>Source</a>
-          <p>Meal Type: {recipe.mealType}</p>
-          <h2>Ingredients</h2>
-          <ul className='list-inside list-disc'>
-            {recipe.ingredients.map(entry => <RecipeIngredient key={entry.ingredient.id} {...entry} />)}
-          </ul>
-          <h2>Directions</h2>
-          <p>
-            {recipe.directions.split('\n').map((line, index) => <React.Fragment key={index}>{line}</React.Fragment>)}
-          </p>
-          {/* TODO: Implement, deduct ingredients from fridge */ }
-          <button>Made it - Remove Ingredients From Fridge</button>
-        </div>
-      )}
-      <h2>Similar recipes that you can make</h2>
-      {recipe !== undefined && <SimilarRecipes recipeId={recipe.id} limit={MAX_SIMILAR_RECIPES} minSimilarity={MIN_SIMILARITY} />}
+      <div>
+        <h1>{recipe.name}</h1>
+        <a href={`http://${recipe.link}`} target='_blank' rel='noreferrer'>Source</a>
+        <p>Meal Type: {recipe.mealType}</p>
+        <h2>Ingredients</h2>
+        <ul className='list-inside list-disc'>
+          {recipe.ingredients.map(entry => <RecipeIngredient key={entry.ingredient.id} {...entry} />)}
+        </ul>
+        <h2>Directions</h2>
+        <ol className='list-inside list-decimal'>
+          {recipe.directions.split('\n').map((line, index) =>
+            <li key={index}>{line}</li>
+          )}
+        </ol>
+        <MadeItButton recipeId={recipe.id} />
+      </div>
+      <h2>Similar recipes</h2>
+      <label>Only show recipes with ingredients available in my fridge:{' '}
+        <input
+          type='checkbox'
+          checked={onlyAvailable}
+          onChange={e => { setOnlyAvailable(e.target.checked) }}
+        />
+      </label>
+      <SimilarRecipes
+        recipeId={recipe.id}
+        limit={MAX_SIMILAR_RECIPES}
+        minSimilarity={MIN_SIMILARITY}
+        onlyAvailable={onlyAvailable}
+      />
     </main>
   )
 }

@@ -7,7 +7,13 @@ import formatAmount from '../formatAmount'
 import EditIngredientAmount from './EditIngredientAmount'
 import createPopper from './createPopper'
 
-export type FridgeIngredientProps = components['schemas']['FridgeIngredientEntry']
+type Ingredient = components['schemas']['Ingredient']
+
+export interface FridgeIngredientProps {
+  ingredient: Ingredient
+  amount: number
+  onEditAmount: (newAmount: number) => void
+}
 
 /**
  * A representation of an ingredient in a user's fridge
@@ -41,7 +47,11 @@ export default function FridgeIngredient (props: FridgeIngredientProps): React.J
             ingredientId={props.ingredient.id}
             currentAmount={amount}
             setCurrentAmount={setAmount}
-            onSubmit={close}
+            onCancel={close}
+            onSubmit={() => {
+              close()
+              props.onEditAmount(amount)
+            }}
           />
         )}
       </Popover.Panel>

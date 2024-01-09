@@ -52,3 +52,14 @@ export interface BarcodeRow {
   product_name: string
   amount: number
 }
+
+export interface UserRow {
+  id: RowId
+  username: string
+}
+
+export interface FridgeRow {
+  id: RowId
+  name: string
+  owner_id: RowId
+}

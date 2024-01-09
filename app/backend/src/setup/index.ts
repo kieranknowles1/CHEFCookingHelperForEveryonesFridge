@@ -4,7 +4,6 @@
  */
 
 import { createReadStream, readFileSync, statSync } from 'fs'
-import path from 'path'
 
 import * as t from 'io-ts'
 import cliProgress from 'cli-progress'
@@ -20,6 +19,7 @@ import type IChefDatabase from '../database/IChefDatabase'
 import type IConnection from '../database/IConnection'
 import type Ingredient from '../types/Ingredient'
 import SqliteConnection from '../database/SqliteConnection'
+import constants from '../constants'
 import decodeObject from '../decodeObject'
 import environment from '../environment'
 import getEmbedding from '../ml/getEmbedding'
@@ -31,8 +31,6 @@ import type ParsedCsvRecipe from './ParsedCsvRecipe'
 import type RawCsvRecipe from './RawCsvRecipe'
 import parseCsvRecipeRow from './parseCsvRecipeRow'
 
-// TODO: Use environment variables and put this somewhere outside the container
-const SQL_DUMMY_DATA_PATH = path.join(process.cwd(), 'data/dummydata.sql')
 const PROGRESS_BAR_STYLE = cliProgress.Presets.shades_classic
 
 /**
@@ -127,16 +125,18 @@ function predictMealType (recipeName: EmbeddedSentence, mealTypes: EmbeddedSente
 // Add embeddings for the meal types
 // Can't be done in pure SQL as async functions are not supported
 async function embedMealTypes (db: IChefDatabase): Promise<void> {
-  await db.wrapTransactionAsync(async (writable) => {
-    for (const mealType of db.getMealTypeNames()) {
-      writable.addEmbedding(await getEmbedding(mealType))
+  const embeddedMealTypes = await Promise.all(db.getMealTypeNames().map(getEmbedding))
+
+  db.wrapTransaction(writable => {
+    for (const mealType of embeddedMealTypes) {
+      writable.addEmbedding(mealType)
     }
   })
 }
 
 async function importData (db: IChefDatabase): Promise<void> {
   logger.info('Collecting data from CSV')
-  const [csvRecipes, csvTotalRows] = await getCsvData(db.getAllIngredientsByName())
+  const [csvRecipes, csvTotalRows] = await getCsvData(db.ingredients.getAllWithAltNames())
 
   logger.info(`Imported ${csvRecipes.length} recipes from ${csvTotalRows} rows (${(csvRecipes.length / csvTotalRows) * 100}%) of CSV data`)
 
@@ -151,19 +151,33 @@ async function importData (db: IChefDatabase): Promise<void> {
   logger.info('Importing data into the database')
   const mealTypes = db.getMealTypes()
 
+  logger.info('Embedding recipe names')
+
   const bar = new cliProgress.SingleBar({}, PROGRESS_BAR_STYLE)
   bar.start(csvRecipes.length, 0)
+  const nameEmbeddings = new Map<string, EmbeddedSentence>()
+  for (const recipe of csvRecipes) {
+    if (!nameEmbeddings.has(recipe.name)) {
+      nameEmbeddings.set(recipe.name, await getEmbedding(recipe.name))
+    }
+    bar.increment()
+  }
+  bar.stop()
 
-  await db.wrapTransactionAsync(async (writable) => {
+  logger.info('Adding recipes to the database')
+  bar.start(csvRecipes.length, 0)
+  db.wrapTransaction(writable => {
     for (const recipe of csvRecipes) {
-      const nameEmbedding = await getEmbedding(recipe.name)
-      writable.addEmbedding(nameEmbedding)
+      const embeddedName = nameEmbeddings.get(recipe.name)
+      if (embeddedName === undefined) {
+        // Should never happen
+        throw new Error('Recipe name was not embedded')
+      }
       writable.addRecipe({
         ...recipe,
-        name: await getEmbedding(recipe.name),
-        mealType: predictMealType(nameEmbedding, mealTypes)
+        name: embeddedName,
+        mealType: predictMealType(embeddedName, mealTypes)
       })
-
       bar.increment()
     }
   })
@@ -177,7 +191,7 @@ async function main (connection: IConnection, db: IChefDatabase): Promise<void> 
   db.resetDatabase('IKnowWhatIAmDoing')
 
   logger.info('Adding dummy data')
-  const dummyData = readFileSync(SQL_DUMMY_DATA_PATH, 'utf-8')
+  const dummyData = readFileSync(constants.SQL_DUMMY_DATA_PATH, 'utf-8')
   db.wrapTransaction(() => {
     connection.exec(dummyData)
   })

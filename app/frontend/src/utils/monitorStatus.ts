@@ -17,13 +17,22 @@ type GenericFetchResponse<TData> = {
 
 export type StatusMonitor = <TData>(response: GenericFetchResponse<TData>) => Promise<TData>
 
-// TODO: Use this everywhere we make API calls instead of the manual approach. Would make it easier to add
-// a message with more details about the error.
+export class ApiError extends Error {
+  public readonly errors: ErrorList
+
+  constructor (errors: ErrorList) {
+    super('API call failed')
+    this.name = ApiError.name
+    this.errors = errors
+  }
+}
+
 /**
  * Helper function to monitor the status of an API call.
  * Status will be set to 'loading' when the function is called (i.e., inside the useEffect hook).
  * Status will be set to 'done' or 'error' depending on the result of the API call.
- * Errors will be re thrown so they can be handled by the caller.
+ * Errors will be thrown as an ApiError on failure (i.e., when the endpoint returns a non-200 status code).
+ * Error details are available in the ApiError.errors property.
  * Data is returned on success.
  *
  * Note that the endpoint must be declared as returning an ErrorList on failure
@@ -38,7 +47,7 @@ export type StatusMonitor = <TData>(response: GenericFetchResponse<TData>) => Pr
  *  .then(monitorStatus(setStatus))
  *  .then((response) => {
  *   // Do something with response
- *  }).catch((error) => {
+ *  }).catch((error: ApiError) => {
  *   // Do something with error
  *  })
  * ```
@@ -48,7 +57,7 @@ export default function monitorStatus (setStatus: StatusSetter): StatusMonitor {
   return async (response) => await new Promise((resolve, reject) => {
     if (response.error !== undefined) {
       setStatus('error')
-      reject(response.error)
+      reject(new ApiError(response.error))
     } else {
       setStatus('done')
       resolve(response.data)

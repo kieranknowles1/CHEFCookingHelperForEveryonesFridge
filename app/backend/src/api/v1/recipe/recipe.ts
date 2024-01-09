@@ -4,21 +4,21 @@ import { type TypedRequest, type TypedResponse } from '../../TypedEndpoint'
 import { type components, type paths } from '../../../types/api.generated'
 import type IChefDatabase from '../../../database/IChefDatabase'
 
-type endpoint = paths['/recipe/{id}']['get']
+type endpoint = paths['/recipe/{recipeId}']['get']
 type IngredientEntry = components['schemas']['RecipeIngredientEntry']
 
 /**
  * Endpoint to get a specific recipe by its ID
  */
 export default function registerRecipeEndpoint (app: Express, db: IChefDatabase): void {
-  app.get('/api/v1/recipe/:id',
+  app.get('/api/v1/recipe/:recipeId',
     (req: TypedRequest<endpoint>, res: TypedResponse<endpoint, 200>) => {
-      const id = Number.parseInt(req.params.id)
-      const recipe = db.getRecipe(id)
+      const id = Number.parseInt(req.params.recipeId)
+      const recipe = db.recipes.get(id)
 
       const ingredients: IngredientEntry[] = []
       for (const entry of recipe.ingredients.entries()) {
-        const ingredient = db.getIngredient(entry[0])
+        const ingredient = db.ingredients.get(entry[0])
         const amount = entry[1]
         ingredients.push({
           ingredient: {

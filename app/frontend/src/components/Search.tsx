@@ -1,4 +1,6 @@
+import Icon from '@mdi/react'
 import React from 'react'
+import { mdiMagnify } from '@mdi/js'
 
 export interface SearchProps {
   setQuery: React.Dispatch<string>
@@ -10,9 +12,8 @@ export interface SearchProps {
 export default function Search (props: SearchProps): React.JSX.Element {
   return (
     <label>
-      <input
+      <Icon path={mdiMagnify} size={1} className='inline' /> Search: <input
         type='search'
-        placeholder='🔍'
         onChange={e => { props.setQuery(e.target.value) }}
       />
     </label>

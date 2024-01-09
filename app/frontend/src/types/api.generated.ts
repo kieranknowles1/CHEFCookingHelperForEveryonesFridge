@@ -83,15 +83,16 @@ export interface paths {
             "application/json": components["schemas"]["Ingredient"][];
           };
         };
+        429: components["responses"]["TooManyRequests"];
       };
     };
   };
-  "/recipe/{id}": {
+  "/recipe/{recipeId}": {
     /** Get a recipe by ID */
     get: {
       parameters: {
         path: {
-          id: components["parameters"]["recipeId"];
+          recipeId: components["parameters"]["recipeId"];
         };
       };
       responses: {
@@ -105,7 +106,7 @@ export interface paths {
       };
     };
   };
-  "/recipe/{id}/similar": {
+  "/recipe/{recipeId}/similar": {
     /**
      * Get similar recipes
      * @description Returns a list of recipes similar to the given recipe \ Items are sorted by similarity score, descending \ Only recipes of the same type are returned Note that if multiple recipes have the same name, only one will be returned
@@ -115,9 +116,11 @@ export interface paths {
         query: {
           limit: components["parameters"]["limitRequired"];
           minSimilarity?: components["parameters"]["minSimilarity"];
+          /** @description If specified, only return recipes that can be made with the ingredients in the fridge */
+          availableForFridge?: number;
         };
         path: {
-          id: components["parameters"]["recipeId"];
+          recipeId: components["parameters"]["recipeId"];
         };
       };
       responses: {
@@ -127,6 +130,7 @@ export interface paths {
             "application/json": components["schemas"]["SimilarRecipe"][];
           };
         };
+        404: components["responses"]["NotFound"];
       };
     };
   };
@@ -255,6 +259,27 @@ export interface paths {
       };
     };
   };
+  "/fridge/{fridgeId}/recipe/{recipeId}/deduct": {
+    /**
+     * Deduct the ingredients of a recipe from the fridge
+     * @description Deduct the ingredients of `recipeId` from `fridgeId` \ If there is not enough of an ingredient, the amount will be set to 0 \
+     */
+    post: {
+      parameters: {
+        path: {
+          fridgeId: components["parameters"]["fridgeId"];
+          recipeId: components["parameters"]["recipeId"];
+        };
+      };
+      responses: {
+        /** @description No Content */
+        204: {
+          content: never;
+        };
+        403: components["responses"]["Forbidden"];
+      };
+    };
+  };
   "/user/{userId}": {
     /** Get a user by ID */
     get: {
@@ -297,7 +322,7 @@ export interface components {
     };
     /**
      * @example g
-     * @enum {unknown}
+     * @enum {string}
      */
     Unit: "none" | "whole" | "ml" | "g";
     SimilarRecipe: {

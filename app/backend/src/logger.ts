@@ -2,6 +2,8 @@ import fs from 'fs'
 
 import winston from 'winston'
 
+import environment from './environment'
+
 export interface ILogger {
   log: (level: string, message: string) => void
 }
@@ -27,8 +29,7 @@ export function createDefaultLogger (path: string): ILogger {
     fs.unlinkSync(path)
   }
   const logger = winston.createLogger({
-    // TODO: Environment variable for log level
-    level: 'info',
+    level: environment.MIN_LOG_LEVEL,
     format: winston.format.simple(),
     transports: [
       new winston.transports.Console({

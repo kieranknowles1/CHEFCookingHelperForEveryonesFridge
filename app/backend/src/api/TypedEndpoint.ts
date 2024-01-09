@@ -2,7 +2,6 @@ import type express from 'express'
 
 // https://stackoverflow.com/questions/62410684/constrain-keys-using-value-type
 // TODO: Reference list, use separate file
-// TODO: Am I even using this?
 type KeysOfType<T, P> = { [K in keyof T]: P extends T[K] ? K : never }[keyof T]
 
 interface JsonResponse {
@@ -23,15 +22,6 @@ export interface JsonEndpointWithParameters extends JsonEndpoint {
     body?: Record<string, any>
   }
 }
-
-/**
- * Combine all query, path, and body parameters as returned by `matchedData`
- * // TODO: Remove this
- * @deprecated Use express-openapi-validator instead
- */
-export type EndpointParameters<
-  endpoint extends JsonEndpointWithParameters
-> = endpoint['parameters']['query'] & endpoint['parameters']['path'] & endpoint['parameters']['body']
 
 export interface TypedRequest<
   endpoint extends JsonEndpointWithParameters
