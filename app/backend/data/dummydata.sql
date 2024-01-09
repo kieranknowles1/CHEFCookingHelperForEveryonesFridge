@@ -1,4 +1,5 @@
 -- Sample data to get something visible
+-- Used in test cases and for development
 INSERT INTO user
     (id, username)
 VALUES
