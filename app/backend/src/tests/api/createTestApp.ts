@@ -9,7 +9,6 @@ import registerEndpoints from '../../api/registerEndpoints'
 
 export interface TestApp {
   server: http.Server
-  // TODO: May want to remove DB and connection from here
   connection: IConnection
   db: IChefDatabase
 }
