@@ -10,14 +10,12 @@ export default function registerFridgeAvailableRecipeEndpoint (app: Express, db:
   app.get('/api/v1/fridge/:fridgeId/recipe/available',
     (req: TypedRequest<endpoint>, res: TypedResponse<endpoint, 200>) => {
       const fridgeId = parseInt(req.params.fridgeId)
-      const checkAmounts = req.query.checkAmounts === 'true'
-      const maxMissingIngredients = parseInt(req.query.maxMissingIngredients ?? '0')
       const mealType = req.query.mealType ?? null
 
       res.json(db.fridges.getAvailableRecipes(
         fridgeId,
-        checkAmounts,
-        maxMissingIngredients,
+        req.query.checkAmounts ?? true,
+        req.query.maxMissingIngredients ?? 0,
         mealType
       ).map(r => ({
         ...r,

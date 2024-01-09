@@ -26,10 +26,9 @@ export default function registerFridgeIngredientEndpoint (app: Express, db: IChe
     (req: TypedRequest<ingredientPostEndpoint>, res) => {
       const fridgeId = Number.parseInt(req.params.fridgeId)
       const ingredientId = Number.parseInt(req.params.ingredientId)
-      const amount = Number.parseFloat(req.query.amount)
 
       db.wrapTransaction(writable => {
-        writable.setIngredientAmount(fridgeId, ingredientId, amount)
+        writable.setIngredientAmount(fridgeId, ingredientId, req.query.amount)
       })
       res.status(204).send()
     }

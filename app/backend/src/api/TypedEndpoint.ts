@@ -25,14 +25,11 @@ export interface JsonEndpointWithParameters extends JsonEndpoint {
 
 export interface TypedRequest<
   endpoint extends JsonEndpointWithParameters
-> { // extends express.Request {
+> extends express.Request {
+  // Path parameters are NOT converted to numbers, hooray for consistency!
   params: Record<keyof endpoint['parameters']['path'], string>
-  query: {
-    [key in keyof Exclude<endpoint['parameters']['query'], undefined>]: (
-      // Map required to string, optional to string | undefined
-      Exclude<endpoint['parameters']['query'], undefined>[key] extends undefined ? string | undefined : string
-    )
-  }
+  // NOTE: Optional parameters are typed as possibly undefined, even if default is provided
+  query: Exclude<endpoint['parameters']['query'], undefined>
 }
 
 /**

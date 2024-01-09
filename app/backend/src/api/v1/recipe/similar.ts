@@ -15,9 +15,8 @@ export default function registerSimilarRecipeEndpoint (app: Express, db: IChefDa
   app.get('/api/v1/recipe/:recipeId/similar',
     (req: TypedRequest<endpoint>, res: TypedResponse<endpoint, 200>) => {
       const recipeId = Number.parseInt(req.params.recipeId)
-      const minSimilarity = Number.parseFloat(req.query.minSimilarity ?? '0.5')
-      const limit = Number.parseInt(req.query.limit)
-      const fridgeId = req.query.availableForFridge !== undefined ? Number.parseInt(req.query.availableForFridge) : undefined
+      const minSimilarity = req.query.minSimilarity ?? 0.5
+      const fridgeId = req.query.availableForFridge
 
       const comparisonRecipe = db.recipes.get(recipeId)
 
@@ -25,7 +24,7 @@ export default function registerSimilarRecipeEndpoint (app: Express, db: IChefDa
         const similar = db.recipes.getSimilar(
           comparisonRecipe.name,
           minSimilarity,
-          limit,
+          req.query.limit,
           comparisonRecipe.mealType.sentence
         )
 
@@ -44,7 +43,7 @@ export default function registerSimilarRecipeEndpoint (app: Express, db: IChefDa
           (a, b) => b.similarity - a.similarity
         )
 
-        res.json(similar.slice(0, limit).map(r => ({
+        res.json(similar.slice(0, req.query.limit).map(r => ({
           ...r,
           name: r.name.sentence
         })))

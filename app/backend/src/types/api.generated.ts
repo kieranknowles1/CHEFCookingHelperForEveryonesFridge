@@ -227,9 +227,9 @@ export interface paths {
     get: {
       parameters: {
         query?: {
-          /** @description Maximum number of ingredients that can be missing. Defaults to 0. */
+          /** @description Maximum number of ingredients that can be missing. */
           maxMissingIngredients?: number;
-          /** @description Whether to check that there is enough of each ingredient. Defaults to true. */
+          /** @description Whether to check that there is enough of each ingredient. */
           checkAmounts?: boolean;
           /** @description If specified, only return recipes of this type */
           mealType?: string;
