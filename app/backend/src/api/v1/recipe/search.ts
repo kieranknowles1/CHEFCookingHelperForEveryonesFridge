@@ -29,6 +29,16 @@ export default function registerRecipeSearchEndpoint (app: Express, db: IChefDat
       logger.info('Searching with params')
       console.log(req.query)
 
-      res.json([])
+      res.json(db.recipes.search({
+        search: searchEmbedding,
+        minSimilarity,
+
+        availableForFridge,
+        maxMissingIngredients,
+        checkAmounts,
+
+        limit,
+        mealType
+      }))
     }))
 }

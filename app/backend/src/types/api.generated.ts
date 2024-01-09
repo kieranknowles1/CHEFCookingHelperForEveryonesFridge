@@ -99,8 +99,6 @@ export interface paths {
           search?: string;
           /** @description Minimum similarity score, meaningless if `search` is not specified */
           minSimilarity?: number;
-          /** @description If specified, only return recipes of this type. By default, all recipes are returned. */
-          mealType?: string;
           /** @description If specified, only return recipes that can be made with the ingredients in the fridge */
           availableForFridge?: number;
           /** @description Maximum number of ingredients that can be missing. Meaningless if `availableForFridge` is not specified. */
@@ -109,6 +107,8 @@ export interface paths {
           checkAmounts?: boolean;
           /** @description Maximum number of results to return. By default, 10 results are returned. */
           limit?: number;
+          /** @description If specified, only return recipes of this type. By default, all recipes are returned. */
+          mealType?: string;
         };
       };
       responses: {
@@ -378,7 +378,7 @@ export interface components {
       /** @example 1234 */
       id: number;
       /** @example 0.5 */
-      similarity: number;
+      similarity?: number;
       /**
        * @description Number of ingredients missing or not enough of. Only present if `availableForFridge` is specified.
        * @example 1

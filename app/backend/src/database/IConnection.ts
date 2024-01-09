@@ -14,7 +14,7 @@ export interface RunResult {
   lastInsertRowid: number | bigint
 }
 
-export type SqliteValue = number | string | bigint | Buffer | null
+export type SqliteValue = number | string | bigint | Buffer | null | undefined
 /**
  * Bind parameters in the format { name: value }
  * Note that the @, $, or : should be omitted.

@@ -1,4 +1,4 @@
-import { type AvailableRecipe, type RecipeNoId, type SimilarRecipe } from '../types/Recipe'
+import { SearchRecipe, type AvailableRecipe, type RecipeNoId, type SimilarRecipe } from '../types/Recipe'
 import type Barcode from '../types/Barcode'
 import type CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type EmbeddedSentence from '../ml/EmbeddedSentence'
@@ -53,8 +53,22 @@ export interface IIngredientDatabase {
   getAllWithAltNames: () => CaseInsensitiveMap<Ingredient>
 }
 
+export interface SearchParams {
+  search?: EmbeddedSentence
+  minSimilarity?: number
+
+  availableForFridge?: types.RowId
+  maxMissingIngredients?: number
+  checkAmounts?: boolean
+
+  limit?: number
+  mealType?: string
+}
+
 export interface IRecipeDatabase {
   get: (id: types.RowId) => Recipe
+
+  search: (params: SearchParams) => SearchRecipe[]
 
   /**
    * Get the recipes that are similar to the given embedding and of the given meal type

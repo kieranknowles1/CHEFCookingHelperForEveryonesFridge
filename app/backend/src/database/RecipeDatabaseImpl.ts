@@ -1,12 +1,12 @@
 import { type IngredientAmount, type IngredientId } from '../types/Ingredient'
 import type EmbeddedSentence from '../ml/EmbeddedSentence'
 import type Recipe from '../types/Recipe'
-import { type SimilarRecipe } from '../types/Recipe'
+import { SearchRecipe, type SimilarRecipe } from '../types/Recipe'
 
 import type * as types from './types'
 import { bufferFromFloat32Array, bufferToFloat32Array } from './bufferFloat32Array'
 import type IConnection from './IConnection'
-import { type IRecipeDatabase } from './IChefDatabase'
+import { type IRecipeDatabase, type SearchParams } from './IChefDatabase'
 import InvalidIdError from './InvalidIdError'
 
 export default class RecipeDatabaseImpl implements IRecipeDatabase {
@@ -49,6 +49,66 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
       link: result[0].link,
       mealType: { sentence: result[0].mt_name, embedding: bufferToFloat32Array(result[0].mt_embedding) }
     }
+  }
+
+  public search (params: SearchParams): SearchRecipe[] {
+    interface SearchRecipesResultRow {
+      name: string
+      id: types.RowId
+      missing_count: number
+    }
+
+    // Destructure the params so I know i've handled them all
+    const {
+      search,
+      minSimilarity = 0,
+
+      availableForFridge,
+      maxMissingIngredients = 0,
+      checkAmounts = true,
+
+      limit = Number.MAX_SAFE_INTEGER,
+      mealType
+    } = params
+
+    // This query is an unholy monstrosity that should burn for its sins, but the SQL gods have blessed it anyway
+    // TODO: Optionally allow substitutions
+    const statement = this._connection.prepare<SearchRecipesResultRow>(`
+      SELECT
+        recipe.name, recipe.id,
+        COUNT(
+          CASE WHEN
+            -- Check if fridge has ingredient
+            (fridge_ingredient.amount IS NULL)
+            -- Optionally check if fridge has enough ingredient
+            OR (:checkAmount AND fridge_ingredient.amount < recipe_ingredient.amount)
+          THEN 1 END
+        ) as missing_count
+      FROM
+        recipe
+      JOIN embedding ON embedding.sentence = recipe.name
+      LEFT JOIN recipe_ingredient ON recipe_ingredient.recipe_id = recipe.id
+      LEFT JOIN fridge_ingredient ON fridge_ingredient.ingredient_id = recipe_ingredient.ingredient_id AND fridge_ingredient.fridge_id = :fridgeId
+      JOIN ingredient ON ingredient.id = recipe_ingredient.ingredient_id AND NOT ingredient.assumeUnlimited
+      WHERE recipe.meal_type_id = (SELECT id FROM meal_type WHERE name = :mealType) OR :mealType IS NULL
+      GROUP BY recipe.id
+      -- COUNT excludes NULLs. Less than used to optionally allow missing ingredients
+      HAVING missing_count <= :maxMissingIngredients OR :fridgeId IS NULL
+      LIMIT :limit
+    `)
+
+    return statement.all({
+      fridgeId: availableForFridge,
+      mealType,
+      maxMissingIngredients,
+      checkAmount: checkAmounts ? 1 : 0,
+      limit
+    }).map(row => ({
+      id: row.id,
+      name: row.name,
+      missingIngredientAmount: row.missing_count,
+      similarity: 0
+    }))
   }
 
   public getSimilar (

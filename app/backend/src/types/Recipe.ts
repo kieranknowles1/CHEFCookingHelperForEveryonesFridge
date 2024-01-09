@@ -15,6 +15,13 @@ export interface SimilarRecipe {
   similarity: number
 }
 
+export interface SearchRecipe {
+  id: RowId
+  name: string
+  missingCount?: number
+  similarity?: number
+}
+
 export interface RecipeNoId {
   name: EmbeddedSentence
   directions: string

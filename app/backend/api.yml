@@ -450,7 +450,7 @@ components:
           type: integer
           example: 1
           description: Number of ingredients missing or not enough of. Only present if `availableForFridge` is specified.
-      required: [name, id, similarity]
+      required: [name, id]
 
     Recipe:
       type: object
