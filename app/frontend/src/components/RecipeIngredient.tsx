@@ -14,9 +14,9 @@ export interface RecipeIngredientProps {
   availableAmount: number | 'nologin'
 }
 
-function getAvailableAmountElement (availableAmount: number | 'nologin', amount: number | null, unit: Unit): React.JSX.Element | undefined {
-  // This ingredient doesn't have an amount, or the user is not logged in
-  if (amount === null || availableAmount === 'nologin') {
+function getAvailableAmountElement (availableAmount: number | 'nologin', amount: number | null, ingredient: Ingredient): React.JSX.Element | undefined {
+  // This ingredient doesn't have an amount, the user is not logged in, or the ingredient is assumed to be unlimited (i.e., water)
+  if (amount === null || availableAmount === 'nologin' || ingredient.assumeUnlimited) {
     return undefined
   }
 
@@ -24,7 +24,7 @@ function getAvailableAmountElement (availableAmount: number | 'nologin', amount:
 
   return (
     <span className={style}>
-      (have {formatAmount(availableAmount, unit)})
+      (have {formatAmount(availableAmount, ingredient.preferredUnit)})
     </span>
   )
 }
@@ -34,7 +34,7 @@ export default function RecipeIngredient (props: RecipeIngredientProps): React.J
 
   return (
     <li>
-      {amount} {props.ingredient.name} {getAvailableAmountElement(props.availableAmount, props.amount ?? null, props.ingredient.preferredUnit)}
+      {amount} {props.ingredient.name} {getAvailableAmountElement(props.availableAmount, props.amount ?? null, props.ingredient)}
     </li>
   )
 }
