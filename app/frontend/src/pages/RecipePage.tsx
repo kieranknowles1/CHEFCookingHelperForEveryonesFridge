@@ -76,7 +76,6 @@ export default function RecipePage (): React.JSX.Element {
     return <LoadingSpinner status={recipeStatus} />
   }
 
-  // TODO: Show how much of each ingredient is available and highlight missing ones
   return (
     <main>
       <div>
