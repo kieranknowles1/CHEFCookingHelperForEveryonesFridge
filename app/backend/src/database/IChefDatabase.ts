@@ -1,4 +1,4 @@
-import { SearchRecipe, type AvailableRecipe, type RecipeNoId, type SimilarRecipe } from '../types/Recipe'
+import { type AvailableRecipe, type RecipeNoId, type SearchRecipe, type SimilarRecipe } from '../types/Recipe'
 import type Barcode from '../types/Barcode'
 import type CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type EmbeddedSentence from '../ml/EmbeddedSentence'

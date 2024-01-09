@@ -1,12 +1,12 @@
 import { type IngredientAmount, type IngredientId } from '../types/Ingredient'
+import { type SearchRecipe, type SimilarRecipe } from '../types/Recipe'
 import type EmbeddedSentence from '../ml/EmbeddedSentence'
 import type Recipe from '../types/Recipe'
-import { SearchRecipe, type SimilarRecipe } from '../types/Recipe'
 
 import type * as types from './types'
+import { type IRecipeDatabase, type SearchParams } from './IChefDatabase'
 import { bufferFromFloat32Array, bufferToFloat32Array } from './bufferFloat32Array'
 import type IConnection from './IConnection'
-import { type IRecipeDatabase, type SearchParams } from './IChefDatabase'
 import InvalidIdError from './InvalidIdError'
 
 export default class RecipeDatabaseImpl implements IRecipeDatabase {
@@ -56,6 +56,7 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
       name: string
       id: types.RowId
       missing_count: number
+      similarity: number | null
     }
 
     // Destructure the params so I know i've handled them all
@@ -83,7 +84,8 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
             -- Optionally check if fridge has enough ingredient
             OR (:checkAmount AND fridge_ingredient.amount < recipe_ingredient.amount)
           THEN 1 END
-        ) as missing_count
+        ) as missing_count,
+        CASE WHEN :search IS NULL THEN NULL ELSE ml_similarity(embedding.embedding, :search) END AS similarity
       FROM
         recipe
       JOIN embedding ON embedding.sentence = recipe.name
@@ -93,7 +95,9 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
       WHERE recipe.meal_type_id = (SELECT id FROM meal_type WHERE name = :mealType) OR :mealType IS NULL
       GROUP BY recipe.id
       -- COUNT excludes NULLs. Less than used to optionally allow missing ingredients
-      HAVING missing_count <= :maxMissingIngredients OR :fridgeId IS NULL
+      HAVING
+        missing_count <= :maxMissingIngredients OR :fridgeId IS NULL
+        AND similarity >= :minSimilarity OR :search IS NULL
       LIMIT :limit
     `)
 
@@ -102,12 +106,14 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
       mealType,
       maxMissingIngredients,
       checkAmount: checkAmounts ? 1 : 0,
-      limit
+      limit,
+      search: search !== undefined ? bufferFromFloat32Array(search.embedding) : null,
+      minSimilarity
     }).map(row => ({
       id: row.id,
       name: row.name,
       missingIngredientAmount: row.missing_count,
-      similarity: 0
+      similarity: row.similarity ?? undefined
     }))
   }
 
