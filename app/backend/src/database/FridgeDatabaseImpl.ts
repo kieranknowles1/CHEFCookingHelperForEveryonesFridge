@@ -8,17 +8,6 @@ import InvalidIdError from './InvalidIdError'
 import { bufferToFloat32Array } from './bufferFloat32Array'
 import ingredientFromRow from './ingredientFromRow'
 
-interface AvailableRecipesResultRow {
-  id: types.RowId
-  name: string
-  embedding: Buffer
-  // JSON array -> number[]
-  recipe_amount: string
-  // JSON array -> number[]
-  fridge_amount: string
-  missing_count: number
-}
-
 export default class FridgeDatabaseImpl implements IFridgeDatabase {
   private readonly _connection: IConnection
 
@@ -75,27 +64,28 @@ export default class FridgeDatabaseImpl implements IFridgeDatabase {
     return map
   }
 
-  private getInsufficientAmountCount (row: AvailableRecipesResultRow): number {
-    // We know that the strings represent JSON arrays of numbers. Type assertion is safe in this case
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const neededAmounts = JSON.parse(row.recipe_amount) as number[]
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const availableAmounts = JSON.parse(row.fridge_amount) as number[]
-
-    return neededAmounts.filter((needed, index) => availableAmounts[index] < needed).length
-  }
-
   public getAvailableRecipes (fridgeId: types.RowId, checkAmount: boolean, maxMissingIngredients: number, mealType: string | null): AvailableRecipe[] {
+    interface AvailableRecipesResultRow {
+      id: types.RowId
+      name: string
+      embedding: Buffer
+      missing_count: number
+    }
+
     // Well this was easier than expected
     // TODO: Optionally allow substitutions
     const statement = this._connection.prepare<AvailableRecipesResultRow>(`
       SELECT
         recipe.name, recipe.id,
         embedding.embedding,
-        -- Used to filter by available amount later
-        json_group_array(recipe_ingredient.amount) AS recipe_amount,
-        json_group_array(fridge_ingredient.amount) AS fridge_amount,
-        count(recipe_ingredient.recipe_id) - count(fridge_ingredient.ingredient_id) AS missing_count
+        COUNT(
+          CASE WHEN
+            -- Check if fridge has ingredient
+            (fridge_ingredient.amount IS NULL)
+            -- Optionally check if fridge has enough ingredient
+            OR (:checkAmount AND fridge_ingredient.amount < recipe_ingredient.amount)
+          THEN 1 END
+        ) as missing_count
       FROM
         recipe
       JOIN embedding ON embedding.sentence = recipe.name
@@ -107,14 +97,13 @@ export default class FridgeDatabaseImpl implements IFridgeDatabase {
       -- COUNT excludes NULLs. Less than used to optionally allow missing ingredients
       HAVING missing_count <= :maxMissingIngredients
     `)
-    const result = statement.all({ fridgeId, mealType, maxMissingIngredients })
+    const result = statement.all({ fridgeId, mealType, maxMissingIngredients, checkAmount: checkAmount ? 1 : 0 })
 
     return result
       .map(row => ({
         id: row.id,
         name: { sentence: row.name, embedding: bufferToFloat32Array(row.embedding) },
-        missingIngredientAmount: row.missing_count + (checkAmount ? this.getInsufficientAmountCount(row) : 0)
+        missingIngredientAmount: row.missing_count
       }))
-      .filter(recipe => recipe.missingIngredientAmount <= maxMissingIngredients)
   }
 }
