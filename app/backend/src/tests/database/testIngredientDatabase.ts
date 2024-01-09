@@ -18,15 +18,14 @@ describe('database/IngredientDatabaseImpl', () => {
 
   describe('get', () => {
     it('should get an ingredient', () => {
-      const ingredient: Ingredient = {
-        id: 1234,
-        name: 'test',
+      const expected: Ingredient = {
         assumeUnlimited: false,
-        density: 1,
-        preferredUnit: 'g'
+        density: undefined,
+        id: 1,
+        name: 'Apples',
+        preferredUnit: 'whole'
       }
-      connection.exec("INSERT INTO ingredient (id, name, assumeUnlimited, density, preferredUnit) VALUES (1234, 'test', 0, 1, 'g')")
-      assert.deepStrictEqual(database.ingredients.get(ingredient.id), ingredient)
+      assert.deepStrictEqual(database.ingredients.get(1), expected)
     })
 
     it('should throw an error if the ingredient does not exist', () => {

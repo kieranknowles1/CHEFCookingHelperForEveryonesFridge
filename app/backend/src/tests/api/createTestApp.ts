@@ -2,14 +2,14 @@ import type http from 'http'
 
 import express from 'express'
 
-import ChefDatabaseImpl from '../../database/ChefDatabaseImpl'
 import type IChefDatabase from '../../database/IChefDatabase'
 import type IConnection from '../../database/IConnection'
-import SqliteConnection from '../../database/SqliteConnection'
+import createTestDatabase from '../database/createTestDatabase'
 import registerEndpoints from '../../api/registerEndpoints'
 
 export interface TestApp {
   server: http.Server
+  // TODO: May want to remove DB and connection from here
   connection: IConnection
   db: IChefDatabase
 }
@@ -18,15 +18,13 @@ export interface TestApp {
  * Helper to create the app for testing
  */
 export default function createTestApp (): TestApp {
-  const connection = new SqliteConnection(':memory:')
-  const db = new ChefDatabaseImpl(connection)
-  db.resetDatabase('IKnowWhatIAmDoing')
+  const { database, connection } = createTestDatabase()
   const app = express()
-  registerEndpoints(app, db)
+  registerEndpoints(app, database)
   const server = app.listen()
   return {
     server,
     connection,
-    db
+    db: database
   }
 }

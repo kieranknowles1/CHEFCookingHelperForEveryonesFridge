@@ -19,15 +19,15 @@ describe('database/ChefDatabaseImpl', () => {
 
   describe('checkIntegrity', () => {
     it('should succeed for a valid database', () => {
-      // meal_type relies on setup to be valid, drop it for this test
-      connection.exec('DROP TABLE meal_type')
       database.checkIntegrity()
       assert.ok(true)
     })
 
     it('should fail for a database with foreign key errors', () => {
       connection.exec('PRAGMA foreign_keys = OFF')
-      connection.exec('INSERT INTO fridge_ingredient (fridge_id, ingredient_id, amount) VALUES (123, 123, 123)')
+      database.wrapTransaction(writable => {
+        writable.setIngredientAmount(123, 123, 123)
+      })
       connection.exec('PRAGMA foreign_keys = ON')
 
       assert.throws(() => { database.checkIntegrity() })

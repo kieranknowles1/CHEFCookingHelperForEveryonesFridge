@@ -14,10 +14,6 @@ describe('GET /api/v1/barcode/:barcode', () => {
   })
 
   it('should return 200 for valid barcode', async () => {
-    app.connection.exec(`
-      INSERT INTO barcode (code, ingredient_id, product_name, amount) VALUES ('12345', 1, 'stuff', 1);
-    `)
-
     await request(app.server, { })
       .get('/api/v1/barcode/12345')
       .expect(200)

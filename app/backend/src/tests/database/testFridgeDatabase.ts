@@ -20,7 +20,7 @@ describe('database/FridgeDatabaseImpl', () => {
       const fridge = database.fridges.get(1)
       assert.deepStrictEqual(fridge, {
         id: 1,
-        name: 'Bobs Fridge',
+        name: 'The Test Fridge',
         ownerId: 1
       })
     })
@@ -29,14 +29,7 @@ describe('database/FridgeDatabaseImpl', () => {
   describe('getIngredientAmount', () => {
     it('should get the amount of an ingredient', () => {
       const fridgeId = 1
-      const ingredientId = database.wrapTransaction(writable => {
-        return writable.addIngredient({
-          assumeUnlimited: false,
-          density: 1,
-          name: 'Test Ingredient',
-          preferredUnit: 'g'
-        })
-      })
+      const ingredientId = 1
       assert.strictEqual(database.fridges.getIngredientAmount(fridgeId, ingredientId), 0)
 
       database.wrapTransaction(writable => {

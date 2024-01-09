@@ -1,5 +1,4 @@
--- Sample data to get something visible
--- Used in test cases and for development
+-- Sample data to get something visible in the app
 INSERT INTO user
     (id, username)
 VALUES
