@@ -94,8 +94,8 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
       LEFT JOIN fridge_ingredient ON fridge_ingredient.ingredient_id = recipe_ingredient.ingredient_id AND fridge_ingredient.fridge_id = :fridgeId
       JOIN ingredient ON ingredient.id = recipe_ingredient.ingredient_id AND NOT ingredient.assumeUnlimited
       WHERE
-        recipe.meal_type_id = (SELECT id FROM meal_type WHERE name = :mealType) OR :mealType IS NULL
-        AND similarity >= :minSimilarity OR :search IS NULL
+        (recipe.meal_type_id = (SELECT id FROM meal_type WHERE name = :mealType) OR :mealType IS NULL)
+        AND (similarity >= :minSimilarity OR :search IS NULL)
       GROUP BY recipe.id
       -- COUNT excludes NULLs. Less than used to optionally allow missing ingredients
       HAVING
