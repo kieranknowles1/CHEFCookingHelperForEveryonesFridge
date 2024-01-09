@@ -114,7 +114,7 @@ export default function FindRecipesPage (): React.JSX.Element {
 
       <LoadingSpinner status={getHighestStatus([recipesStatus, mealTypesStatus])} />
       {pageButtons}
-      <RecipeList recipes={pageItems} />
+      <RecipeList recipes={pageItems} status={recipesStatus} />
       {recipesStatus === 'done' && recipes.length === 0 && <p>You can&apos;t make anything with your current ingredients. <Link to='/fridge'>Add Some</Link></p>}
       {pageButtons}
     </main>

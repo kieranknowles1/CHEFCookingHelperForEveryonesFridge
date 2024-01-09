@@ -45,7 +45,7 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
   return (
     <div>
       <LoadingSpinner status={status} />
-      <RecipeList recipes={recipes} />
+      <RecipeList recipes={recipes} status={status} />
     </div>
   )
 }
