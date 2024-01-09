@@ -71,6 +71,7 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
       limit = Number.MAX_SAFE_INTEGER,
       mealType
     } = params
+    console.log(params)
 
     // This query is an unholy monstrosity that should burn for its sins, but the SQL gods have blessed it anyway
     // TODO: Optionally allow substitutions
@@ -92,12 +93,13 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
       LEFT JOIN recipe_ingredient ON recipe_ingredient.recipe_id = recipe.id
       LEFT JOIN fridge_ingredient ON fridge_ingredient.ingredient_id = recipe_ingredient.ingredient_id AND fridge_ingredient.fridge_id = :fridgeId
       JOIN ingredient ON ingredient.id = recipe_ingredient.ingredient_id AND NOT ingredient.assumeUnlimited
-      WHERE recipe.meal_type_id = (SELECT id FROM meal_type WHERE name = :mealType) OR :mealType IS NULL
+      WHERE
+        recipe.meal_type_id = (SELECT id FROM meal_type WHERE name = :mealType) OR :mealType IS NULL
+        AND similarity >= :minSimilarity OR :search IS NULL
       GROUP BY recipe.id
       -- COUNT excludes NULLs. Less than used to optionally allow missing ingredients
       HAVING
         missing_count <= :maxMissingIngredients OR :fridgeId IS NULL
-        AND similarity >= :minSimilarity OR :search IS NULL
       ORDER BY missing_count ASC, similarity DESC
       LIMIT :limit
     `)
