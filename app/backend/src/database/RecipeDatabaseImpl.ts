@@ -70,7 +70,6 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
       limit = Number.MAX_SAFE_INTEGER,
       mealType
     } = params
-    console.log(params)
 
     // This query is an unholy monstrosity that should burn for its sins, but the SQL gods have blessed it anyway
     // TODO: Optionally allow substitutions
