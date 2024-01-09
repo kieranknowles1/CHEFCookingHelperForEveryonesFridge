@@ -98,8 +98,7 @@ paths:
     get:
       tags: [Recipe]
       summary: Search for recipes
-      description:
-        Search for recipes by one or more matching terms.
+      description: Search for recipes by one or more matching terms.
         Results are unordered, unless the `search` parameter is specified, in which case they are ordered by similarity to the search term.
       parameters:
         - in: query
@@ -110,7 +109,8 @@ paths:
         - in: query
           name: minSimilarity
           description: Minimum similarity score, meaningless if `search` is not specified
-          schema: { type: number, example: 0.5, minimum: 0, maximum: 1, default: 0.5 }
+          schema:
+            { type: number, example: 0.5, minimum: 0, maximum: 1, default: 0.5 }
           required: false
 
         - in: query
@@ -304,7 +304,8 @@ components:
     minSimilarity:
       in: query
       name: minSimilarity
-      schema: { type: number, example: 0.5, minimum: 0, maximum: 1, default: 0.5 }
+      schema:
+        { type: number, example: 0.5, minimum: 0, maximum: 1, default: 0.5 }
       required: false
 
   responses:
