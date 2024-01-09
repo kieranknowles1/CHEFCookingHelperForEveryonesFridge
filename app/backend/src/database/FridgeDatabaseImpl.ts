@@ -5,8 +5,8 @@ import type * as types from './types'
 import { type FridgeIngredientAmount, type IFridgeDatabase } from './IChefDatabase'
 import type IConnection from './IConnection'
 import InvalidIdError from './InvalidIdError'
-import ingredientFromRow from './ingredientFromRow'
 import { bufferToFloat32Array } from './bufferFloat32Array'
+import ingredientFromRow from './ingredientFromRow'
 
 interface AvailableRecipesResultRow {
   id: types.RowId
@@ -110,11 +110,11 @@ export default class FridgeDatabaseImpl implements IFridgeDatabase {
     const result = statement.all({ fridgeId, mealType, maxMissingIngredients })
 
     return result
-      .filter(row => !checkAmount || this.getInsufficientAmountCount(row) + row.missing_count <= maxMissingIngredients)
       .map(row => ({
         id: row.id,
         name: { sentence: row.name, embedding: bufferToFloat32Array(row.embedding) },
-        missingIngredientAmount: row.missing_count
+        missingIngredientAmount: row.missing_count + (checkAmount ? this.getInsufficientAmountCount(row) : 0)
       }))
+      .filter(recipe => recipe.missingIngredientAmount <= maxMissingIngredients)
   }
 }
