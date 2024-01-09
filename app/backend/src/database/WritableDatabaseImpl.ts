@@ -131,4 +131,22 @@ export default class WritableDatabaseImpl implements IWritableDatabase {
       statement.run({ fridgeId, ingredientId, amount })
     }
   }
+
+  public addMadeRecipe (params: {
+    recipeId: types.RowId
+    fridgeId: types.RowId
+    dateMade: Date
+  }): void {
+    const statement = this._connection.prepare<undefined>(`
+      INSERT INTO made_recipe
+        (recipe_id, fridge_id, date_made)
+      VALUES
+        (:recipeId, :fridgeId, :dateMade)
+    `)
+    statement.run({
+      recipeId: params.recipeId,
+      fridgeId: params.fridgeId,
+      dateMade: params.dateMade.toISOString()
+    })
+  }
 }

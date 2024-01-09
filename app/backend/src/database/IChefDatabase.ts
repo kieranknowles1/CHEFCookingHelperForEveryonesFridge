@@ -31,6 +31,12 @@ export interface IWritableDatabase {
   addRecipe: (recipe: RecipeNoId) => types.RowId
 
   setIngredientAmount: (fridgeId: types.RowId, ingredientId: types.RowId, amount: number) => void
+
+  addMadeRecipe: (params: {
+    recipeId: types.RowId
+    fridgeId: types.RowId
+    dateMade: Date
+  }) => void
 }
 
 export interface IFridgeDatabase {

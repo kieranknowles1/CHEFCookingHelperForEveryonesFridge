@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS recipe_ingredient;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS fridge;
 DROP TABLE IF EXISTS fridge_ingredient;
+DROP TABLE IF EXISTS made_recipe;
 DROP TABLE IF EXISTS barcode;
 
 PRAGMA foreign_keys = ON;
@@ -147,3 +148,12 @@ CREATE TABLE fridge_ingredient (
 );
 CREATE INDEX index_fridge_ingredient_by_fridge_id
     ON fridge_ingredient(fridge_id);
+
+CREATE TABLE made_recipe (
+    recipe_id INTEGER NOT NULL REFERENCES recipe(id),
+    fridge_id INTEGER NOT NULL REFERENCES fridge(id),
+    -- ISO 8601
+    date_made DATETIME NOT NULL
+);
+CREATE INDEX index_made_recipe_by_fridge_id_and_date_made
+    ON made_recipe(fridge_id, date_made ASC);
