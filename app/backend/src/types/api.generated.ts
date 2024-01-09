@@ -140,35 +140,6 @@ export interface paths {
       };
     };
   };
-  "/recipe/{recipeId}/similar": {
-    /**
-     * Get similar recipes
-     * @deprecated
-     * @description Returns a list of recipes similar to the given recipe \ Items are sorted by similarity score, descending \ Only recipes of the same type are returned Note that if multiple recipes have the same name, only one will be returned
-     */
-    get: {
-      parameters: {
-        query: {
-          limit: components["parameters"]["limitRequired"];
-          minSimilarity?: components["parameters"]["minSimilarity"];
-          /** @description If specified, only return recipes that can be made with the ingredients in the fridge */
-          availableForFridge?: number;
-        };
-        path: {
-          recipeId: components["parameters"]["recipeId"];
-        };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          content: {
-            "application/json": components["schemas"]["SimilarRecipe"][];
-          };
-        };
-        404: components["responses"]["NotFound"];
-      };
-    };
-  };
   "/fridge/{fridgeId}": {
     /** Get data about a fridge */
     get: {
@@ -254,47 +225,6 @@ export interface paths {
         204: {
           content: never;
         };
-      };
-    };
-  };
-  "/fridge/{fridgeId}/recipe/available": {
-    /**
-     * Get a list of available recipes
-     * @deprecated
-     * @description Returns the IDs of all recipes that can be made with the available ingredients
-     */
-    get: {
-      parameters: {
-        query?: {
-          /** @description Maximum number of ingredients that can be missing. */
-          maxMissingIngredients?: number;
-          /** @description Whether to check that there is enough of each ingredient. */
-          checkAmounts?: boolean;
-          /** @description If specified, only return recipes of this type */
-          mealType?: string;
-        };
-        path: {
-          fridgeId: components["parameters"]["fridgeId"];
-        };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          content: {
-            "application/json": {
-                /** @example Just Soup */
-                name: string;
-                /** @example 1234 */
-                id: number;
-                /**
-                 * @description Number of ingredients missing or not enough of
-                 * @example 1
-                 */
-                missingIngredientAmount: number;
-              }[];
-          };
-        };
-        403: components["responses"]["Forbidden"];
       };
     };
   };

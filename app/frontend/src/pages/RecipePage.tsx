@@ -109,7 +109,7 @@ export default function RecipePage (): React.JSX.Element {
         />
       </label>
       <SimilarRecipes
-        recipeId={recipe.id}
+        recipeName={recipe.name}
         limit={MAX_SIMILAR_RECIPES}
         minSimilarity={MIN_SIMILARITY}
         onlyAvailable={onlyAvailable}

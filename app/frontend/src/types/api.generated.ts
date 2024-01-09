@@ -87,6 +87,41 @@ export interface paths {
       };
     };
   };
+  "/recipe/search": {
+    /**
+     * Search for recipes
+     * @description Search for recipes by one or more matching terms. Results are unordered, unless the `search` parameter is specified, in which case they are ordered by similarity to the search term.
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description Search term */
+          search?: string;
+          /** @description Minimum similarity score, meaningless if `search` is not specified */
+          minSimilarity?: number;
+          /** @description If specified, only return recipes that can be made with the ingredients in the fridge */
+          availableForFridge?: number;
+          /** @description Maximum number of ingredients that can be missing. Meaningless if `availableForFridge` is not specified. */
+          maxMissingIngredients?: number;
+          /** @description Whether to check that there is enough of each ingredient. Meaningless if `availableForFridge` is not specified. */
+          checkAmounts?: boolean;
+          /** @description Maximum number of results to return. By default, 10 results are returned. */
+          limit?: number;
+          /** @description If specified, only return recipes of this type. By default, all recipes are returned. */
+          mealType?: string;
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["SearchRecipe"][];
+          };
+        };
+        429: components["responses"]["TooManyRequests"];
+      };
+    };
+  };
   "/recipe/{recipeId}": {
     /** Get a recipe by ID */
     get: {
@@ -100,34 +135,6 @@ export interface paths {
         200: {
           content: {
             "application/json": components["schemas"]["Recipe"];
-          };
-        };
-        404: components["responses"]["NotFound"];
-      };
-    };
-  };
-  "/recipe/{recipeId}/similar": {
-    /**
-     * Get similar recipes
-     * @description Returns a list of recipes similar to the given recipe \ Items are sorted by similarity score, descending \ Only recipes of the same type are returned Note that if multiple recipes have the same name, only one will be returned
-     */
-    get: {
-      parameters: {
-        query: {
-          limit: components["parameters"]["limitRequired"];
-          minSimilarity?: components["parameters"]["minSimilarity"];
-          /** @description If specified, only return recipes that can be made with the ingredients in the fridge */
-          availableForFridge?: number;
-        };
-        path: {
-          recipeId: components["parameters"]["recipeId"];
-        };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          content: {
-            "application/json": components["schemas"]["SimilarRecipe"][];
           };
         };
         404: components["responses"]["NotFound"];
@@ -222,46 +229,6 @@ export interface paths {
       };
     };
   };
-  "/fridge/{fridgeId}/recipe/available": {
-    /**
-     * Get a list of available recipes
-     * @description Returns the IDs of all recipes that can be made with the available ingredients
-     */
-    get: {
-      parameters: {
-        query?: {
-          /** @description Maximum number of ingredients that can be missing. */
-          maxMissingIngredients?: number;
-          /** @description Whether to check that there is enough of each ingredient. */
-          checkAmounts?: boolean;
-          /** @description If specified, only return recipes of this type */
-          mealType?: string;
-        };
-        path: {
-          fridgeId: components["parameters"]["fridgeId"];
-        };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          content: {
-            "application/json": {
-                /** @example Just Soup */
-                name: string;
-                /** @example 1234 */
-                id: number;
-                /**
-                 * @description Number of ingredients missing or not enough of
-                 * @example 1
-                 */
-                missingIngredientAmount: number;
-              }[];
-          };
-        };
-        403: components["responses"]["Forbidden"];
-      };
-    };
-  };
   "/fridge/{fridgeId}/recipe/{recipeId}/maderecipe": {
     /**
      * Log that a recipe has been made and deduct the ingredients from the fridge
@@ -335,6 +302,19 @@ export interface components {
       id: number;
       /** @example 0.5 */
       similarity: number;
+    };
+    SearchRecipe: {
+      /** @example Just Soup */
+      name: string;
+      /** @example 1234 */
+      id: number;
+      /** @example 0.5 */
+      similarity?: number;
+      /**
+       * @description Number of ingredients missing or not enough of. Only present if `availableForFridge` is specified.
+       * @example 1
+       */
+      missingIngredientAmount?: number;
     };
     Recipe: {
       /** @example 12345 */

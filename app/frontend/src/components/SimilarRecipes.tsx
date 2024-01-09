@@ -10,7 +10,7 @@ import useSafeContext from '../contexts/useSafeContext'
 import RecipeList from './RecipeList'
 
 export interface SimilarRecipeProps {
-  recipeId: number
+  recipeName: string
   limit: number
   minSimilarity: number
   onlyAvailable: boolean
@@ -26,11 +26,10 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
     setRecipes([])
     const availableForFridge = props.onlyAvailable ? context.fridgeId : undefined
     apiClient.GET(
-      '/recipe/{recipeId}/similar',
+      '/recipe/search',
       {
         params: {
-          path: { recipeId: props.recipeId },
-          query: { limit: props.limit, minSimilarity: props.minSimilarity, availableForFridge }
+          query: { limit: props.limit, minSimilarity: props.minSimilarity, availableForFridge, search: props.recipeName }
         }
       }
     ).then(
@@ -40,7 +39,7 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
     }).catch(err => {
       console.error(err)
     })
-  }, [props.recipeId, props.limit, props.minSimilarity, props.onlyAvailable, context.fridgeId])
+  }, [props.recipeName, props.limit, props.minSimilarity, props.onlyAvailable, context.fridgeId])
 
   return (
     <div>

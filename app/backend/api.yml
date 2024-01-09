@@ -147,6 +147,8 @@ paths:
               schema:
                 type: array
                 items: { $ref: "#/components/schemas/SearchRecipe" }
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
 
   /recipe/{recipeId}:
     get:
@@ -160,39 +162,6 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Recipe" }
-        "404":
-          $ref: "#/components/responses/NotFound"
-
-  /recipe/{recipeId}/similar:
-    get:
-      # TODO: Remove when search is implemented
-      deprecated: true
-      tags: [Recipe]
-      summary: Get similar recipes
-      description: Returns a list of recipes similar to the given recipe \
-        Items are sorted by similarity score, descending \
-        Only recipes of the same type are returned
-        Note that if multiple recipes have the same name, only one will be returned
-      parameters:
-        - $ref: "#/components/parameters/recipeId"
-        - $ref: "#/components/parameters/limitRequired"
-        - $ref: "#/components/parameters/minSimilarity"
-        # TODO: Authentication if filtering by fridge
-        - in: query
-          name: availableForFridge
-          description: If specified, only return recipes that can be made with the ingredients in the fridge
-          schema: { type: integer, example: 1 }
-          required: false
-
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/SimilarRecipe"
         "404":
           $ref: "#/components/responses/NotFound"
 
@@ -269,53 +238,6 @@ paths:
       responses:
         "204":
           description: No Content
-
-  # TODO: Authentication
-  /fridge/{fridgeId}/recipe/available:
-    get:
-      # TODO: Remove when search is implemented
-      deprecated: true
-      tags: [Fridge]
-      summary: Get a list of available recipes
-      description: Returns the IDs of all recipes that can be made with the available ingredients
-      parameters:
-        - $ref: "#/components/parameters/fridgeId"
-        - in: query
-          name: maxMissingIngredients
-          description: Maximum number of ingredients that can be missing.
-          schema: { type: integer, minimum: 0, example: 1, default: 0 }
-          required: false
-        - in: query
-          name: checkAmounts
-          description: Whether to check that there is enough of each ingredient.
-          schema: { type: boolean, example: true, default: true }
-          required: false
-        - in: query
-          name: mealType
-          description: If specified, only return recipes of this type
-          schema: { type: string, example: "Dinner" }
-          required: false
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    name: { type: string, example: Just Soup }
-                    id: { type: integer, example: 1234 }
-                    missingIngredientAmount:
-                      {
-                        type: integer,
-                        example: 1,
-                        description: Number of ingredients missing or not enough of,
-                      }
-                  required: [name, id, missingIngredientAmount]
-        "403":
-          $ref: "#/components/responses/Forbidden"
 
   # TODO: Authentication
   /fridge/{fridgeId}/recipe/{recipeId}/maderecipe:

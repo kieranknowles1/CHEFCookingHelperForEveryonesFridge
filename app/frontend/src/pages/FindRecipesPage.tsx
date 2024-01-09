@@ -38,11 +38,10 @@ export default function FindRecipesPage (): React.JSX.Element {
   React.useEffect(() => {
     setRecipes([])
     apiClient.GET(
-      '/fridge/{fridgeId}/recipe/available',
+      '/recipe/search',
       {
         params: {
-          path: { fridgeId: context.fridgeId },
-          query: filters
+          query: { ...filters, availableForFridge: context.fridgeId, limit: 1000 }
         }
       }
     ).then(
