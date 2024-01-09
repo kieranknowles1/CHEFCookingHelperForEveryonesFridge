@@ -3,16 +3,11 @@ import { type RowId } from '../database/types'
 
 import { type IngredientMap } from './Ingredient'
 
-export interface AvailableRecipe {
-  id: RowId
-  name: EmbeddedSentence
-  missingIngredientAmount: number
-}
-
-export interface SimilarRecipe {
+export interface SearchRecipe {
   id: RowId
   name: string
-  similarity: number
+  missingCount?: number
+  similarity?: number
 }
 
 export interface RecipeNoId {

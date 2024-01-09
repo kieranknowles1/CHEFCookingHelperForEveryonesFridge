@@ -31,6 +31,7 @@ try {
 // Get the model ready for when a ML endpoint is called
 preloadModel().catch((err) => {
   logger.error('Failed to preload model. ML endpoints will not work.')
+  logger.error('Will retry when the model is next requested.')
   logger.caughtError(err)
 })
 

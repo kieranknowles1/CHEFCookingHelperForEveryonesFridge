@@ -1,12 +1,11 @@
 import { type IngredientAmount, type IngredientId } from '../types/Ingredient'
-import type EmbeddedSentence from '../ml/EmbeddedSentence'
 import type Recipe from '../types/Recipe'
-import { type SimilarRecipe } from '../types/Recipe'
+import { type SearchRecipe } from '../types/Recipe'
 
 import type * as types from './types'
+import { type IRecipeDatabase, type SearchParams } from './IChefDatabase'
 import { bufferFromFloat32Array, bufferToFloat32Array } from './bufferFloat32Array'
 import type IConnection from './IConnection'
-import { type IRecipeDatabase } from './IChefDatabase'
 import InvalidIdError from './InvalidIdError'
 
 export default class RecipeDatabaseImpl implements IRecipeDatabase {
@@ -51,43 +50,71 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
     }
   }
 
-  public getSimilar (
-    embedding: EmbeddedSentence,
-    minSimilarity: number,
-    limit: number,
-    mealType: string
-  ): SimilarRecipe[] {
-    interface SimilarRecipesResultRow {
-      id: types.RowId
+  public search (params: SearchParams): SearchRecipe[] {
+    interface SearchRecipesResultRow {
       name: string
-      similarity: number
+      id: types.RowId
+      missing_count: number
+      similarity: number | null
     }
-    const statement = this._connection.prepare<SimilarRecipesResultRow>(`
+
+    // Destructure the params so I know i've handled them all
+    const {
+      search,
+      minSimilarity = 0,
+
+      availableForFridge,
+      maxMissingIngredients = 0,
+      checkAmounts = true,
+
+      limit = Number.MAX_SAFE_INTEGER,
+      mealType
+    } = params
+
+    // This query is an unholy monstrosity that should burn for its sins, but the SQL gods have blessed it anyway
+    // TODO: Optionally allow substitutions
+    const statement = this._connection.prepare<SearchRecipesResultRow>(`
       SELECT
-        recipe.id,
-        recipe.name,
-        ml_similarity(embedding.embedding, :embedding) AS similarity
-      FROM (
-        -- Using a subquery here to force its execution before ml_similarity
-        -- This is because ml_similarity is expensive and we want to filter
-        -- as much as possible before executing it
-        SELECT * FROM recipe
-        WHERE meal_type_id = (SELECT id FROM meal_type WHERE name = :mealType)
-        -- EXPLAIN QUERY PLAN mentioned that this uses a temp b-tree, tests showed that it's faster
-        -- than using HAVING to filter meal type
-        GROUP BY name COLLATE NOCASE
-      ) AS recipe
-      JOIN embedding ON recipe.name = embedding.sentence
-      WHERE similarity >= :minSimilarity
-      ORDER BY similarity DESC
+        recipe.name, recipe.id,
+        COUNT(
+          CASE WHEN
+            -- Check if fridge has ingredient
+            (fridge_ingredient.amount IS NULL)
+            -- Optionally check if fridge has enough ingredient
+            OR (:checkAmount AND fridge_ingredient.amount < recipe_ingredient.amount)
+          THEN 1 END
+        ) as missing_count,
+        CASE WHEN :search IS NULL THEN NULL ELSE ml_similarity(embedding.embedding, :search) END AS similarity
+      FROM
+        recipe
+      JOIN embedding ON embedding.sentence = recipe.name
+      LEFT JOIN recipe_ingredient ON recipe_ingredient.recipe_id = recipe.id
+      LEFT JOIN fridge_ingredient ON fridge_ingredient.ingredient_id = recipe_ingredient.ingredient_id AND fridge_ingredient.fridge_id = :fridgeId
+      JOIN ingredient ON ingredient.id = recipe_ingredient.ingredient_id AND NOT ingredient.assumeUnlimited
+      WHERE
+        (recipe.meal_type_id = (SELECT id FROM meal_type WHERE name = :mealType) OR :mealType IS NULL)
+        AND (similarity >= :minSimilarity OR :search IS NULL)
+      GROUP BY recipe.id
+      -- COUNT excludes NULLs. Less than used to optionally allow missing ingredients
+      HAVING
+        missing_count <= :maxMissingIngredients OR :fridgeId IS NULL
+      ORDER BY missing_count ASC, similarity DESC
       LIMIT :limit
     `)
 
     return statement.all({
-      embedding: bufferFromFloat32Array(embedding.embedding),
+      fridgeId: availableForFridge,
       mealType,
-      minSimilarity,
-      limit
-    })
+      maxMissingIngredients,
+      checkAmount: checkAmounts ? 1 : 0,
+      limit,
+      search: search !== undefined ? bufferFromFloat32Array(search.embedding) : null,
+      minSimilarity
+    }).map(row => ({
+      id: row.id,
+      name: row.name,
+      missingIngredientAmount: row.missing_count,
+      similarity: row.similarity ?? undefined
+    }))
   }
 }

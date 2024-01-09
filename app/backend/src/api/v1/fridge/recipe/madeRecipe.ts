@@ -26,6 +26,13 @@ export default function registerFridgeMadeRecipeEndpoint (app: Express, db: IChe
           const available = db.fridges.getIngredientAmount(fridgeId, ingredient)
           const newAmount = Math.max(0, available - amount.amount)
           writable.setIngredientAmount(fridgeId, ingredient, newAmount)
+
+          writable.addMadeRecipe({
+            recipeId,
+            fridgeId,
+            dateMade: new Date(),
+            users: req.query.users
+          })
         }
       })
 

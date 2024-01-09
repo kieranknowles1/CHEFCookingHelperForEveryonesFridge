@@ -1,4 +1,4 @@
-import { type AvailableRecipe, type RecipeNoId, type SimilarRecipe } from '../types/Recipe'
+import { type RecipeNoId, type SearchRecipe } from '../types/Recipe'
 import type Barcode from '../types/Barcode'
 import type CaseInsensitiveMap from '../types/CaseInsensitiveMap'
 import type EmbeddedSentence from '../ml/EmbeddedSentence'
@@ -31,6 +31,13 @@ export interface IWritableDatabase {
   addRecipe: (recipe: RecipeNoId) => types.RowId
 
   setIngredientAmount: (fridgeId: types.RowId, ingredientId: types.RowId, amount: number) => void
+
+  addMadeRecipe: (params: {
+    recipeId: types.RowId
+    fridgeId: types.RowId
+    dateMade: Date
+    users: types.RowId[]
+  }) => void
 }
 
 export interface IFridgeDatabase {
@@ -38,11 +45,6 @@ export interface IFridgeDatabase {
 
   getIngredientAmount: (fridgeId: types.RowId, ingredientId: types.RowId) => number
   getAllIngredientAmounts: (fridgeId: types.RowId) => Map<types.RowId, FridgeIngredientAmount>
-
-  /**
-   * Get the recipes that can be made with the current ingredients in the fridge
-   */
-  getAvailableRecipes: (fridgeId: types.RowId, checkAmount: boolean, maxMissingIngredients: number, mealType: string | null) => AvailableRecipe[]
 }
 
 export interface IIngredientDatabase {
@@ -53,13 +55,22 @@ export interface IIngredientDatabase {
   getAllWithAltNames: () => CaseInsensitiveMap<Ingredient>
 }
 
+export interface SearchParams {
+  search?: EmbeddedSentence
+  minSimilarity?: number
+
+  availableForFridge?: types.RowId
+  maxMissingIngredients?: number
+  checkAmounts?: boolean
+
+  limit?: number
+  mealType?: string
+}
+
 export interface IRecipeDatabase {
   get: (id: types.RowId) => Recipe
 
-  /**
-   * Get the recipes that are similar to the given embedding and of the given meal type
-   */
-  getSimilar: (embedding: EmbeddedSentence, minSimilarity: number, limit: number, mealType: string) => SimilarRecipe[]
+  search: (params: SearchParams) => SearchRecipe[]
 }
 
 export interface IUserDatabase {
