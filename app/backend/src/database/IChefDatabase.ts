@@ -15,6 +15,22 @@ export interface FridgeIngredientAmount {
   amount: number
 }
 
+export interface MadeRecipeItem {
+  recipe: {
+    id: types.RowId
+    name: string
+  }
+  fridge: {
+    id: types.RowId
+    name: string
+  }
+  users: Array<{
+    id: types.RowId
+    name: string
+  }>
+  dateMade: Date
+}
+
 /**
  * Writable interface to the database, passed to the callback of {@link IChefDatabase.wrapTransaction}
  * and is only valid for the duration of the callback.
@@ -75,6 +91,11 @@ export interface IRecipeDatabase {
 
 export interface IUserDatabase {
   get: (id: types.RowId) => User
+
+  /**
+   * Get the history of recipes made by a user, sorted by date made most recent first
+   */
+  getHistory: (userId: types.RowId) => MadeRecipeItem[]
 }
 
 export default interface IChefDatabase {

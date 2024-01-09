@@ -263,7 +263,7 @@ paths:
         "403":
           $ref: "#/components/responses/Forbidden"
 
-  # TODO: Authentication, implement
+  # TODO: Authentication
   /user/{userId}:
     get:
       tags: [User]
@@ -276,6 +276,24 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/User" }
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # TODO: Authentication
+  /user/{userId}/history:
+    get:
+      tags: [User]
+      summary: Get a user's recipe history, ordered by most recent first
+      parameters:
+        - $ref: "#/components/parameters/userId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/MadeRecipe" }
         "404":
           $ref: "#/components/responses/NotFound"
 
@@ -413,3 +431,28 @@ components:
     FridgeIngredientEntry:
       allOf: [{ $ref: "#/components/schemas/IngredientEntry" }]
       required: [amount]
+
+    MadeRecipe:
+      properties:
+        fridge:
+          type: object
+          properties:
+            name: { type: string, example: "My Fridge" }
+            id: { type: integer, example: 1 }
+          required: [name, id]
+        recipe:
+          type: object
+          properties:
+            name: { type: string, example: "Chicken Pie" }
+            id: { type: integer, example: 1234 }
+          required: [name, id]
+        users:
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string, example: "John Smith" }
+              id: { type: integer, example: 1 }
+            required: [name, id]
+        dateMade: { type: string, example: "2020-01-01T00:00:00.000Z", format: date-time }
+      required: [recipe, users, dateMade]

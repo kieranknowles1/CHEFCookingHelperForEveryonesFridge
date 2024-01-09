@@ -273,6 +273,25 @@ export interface paths {
       };
     };
   };
+  "/user/{userId}/history": {
+    /** Get a user's recipe history, ordered by most recent first */
+    get: {
+      parameters: {
+        path: {
+          userId: components["parameters"]["userId"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["MadeRecipe"][];
+          };
+        };
+        404: components["responses"]["NotFound"];
+      };
+    };
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -299,14 +318,6 @@ export interface components {
      * @enum {string}
      */
     Unit: "none" | "whole" | "ml" | "g";
-    SimilarRecipe: {
-      /** @example Just Soup */
-      name: string;
-      /** @example 1234 */
-      id: number;
-      /** @example 0.5 */
-      similarity: number;
-    };
     SearchRecipe: {
       /** @example Just Soup */
       name: string;
@@ -360,6 +371,31 @@ export interface components {
       originalLine: string;
     } & components["schemas"]["IngredientEntry"], "originalLine">;
     FridgeIngredientEntry: WithRequired<components["schemas"]["IngredientEntry"], "amount">;
+    MadeRecipe: {
+      fridge?: {
+        /** @example My Fridge */
+        name: string;
+        /** @example 1 */
+        id: number;
+      };
+      recipe: {
+        /** @example Chicken Pie */
+        name: string;
+        /** @example 1234 */
+        id: number;
+      };
+      users: {
+          /** @example John Smith */
+          name: string;
+          /** @example 1 */
+          id: number;
+        }[];
+      /**
+       * Format: date-time
+       * @example 2020-01-01T00:00:00.000Z
+       */
+      dateMade: string;
+    };
   };
   responses: {
     /** @description Forbidden */
@@ -386,8 +422,6 @@ export interface components {
     ingredientId: number;
     recipeId: number;
     userId: number;
-    limitRequired: number;
-    minSimilarity?: number;
   };
   requestBodies: never;
   headers: never;
