@@ -36,6 +36,7 @@ export interface IWritableDatabase {
     recipeId: types.RowId
     fridgeId: types.RowId
     dateMade: Date
+    users: types.RowId[]
   }) => void
 }
 

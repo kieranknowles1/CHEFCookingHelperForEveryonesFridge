@@ -250,6 +250,13 @@ paths:
       parameters:
         - $ref: "#/components/parameters/fridgeId"
         - $ref: "#/components/parameters/recipeId"
+        - in: query
+          name: users
+          description: List of users who ate the recipe
+          schema:
+            type: array
+            items: { type: integer, example: 1 }
+          required: true
       responses:
         "204":
           description: No Content

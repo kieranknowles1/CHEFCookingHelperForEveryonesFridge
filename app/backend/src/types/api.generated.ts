@@ -118,6 +118,7 @@ export interface paths {
             "application/json": components["schemas"]["SearchRecipe"][];
           };
         };
+        429: components["responses"]["TooManyRequests"];
       };
     };
   };
@@ -235,6 +236,10 @@ export interface paths {
      */
     post: {
       parameters: {
+        query: {
+          /** @description List of users who ate the recipe */
+          users: number[];
+        };
         path: {
           fridgeId: components["parameters"]["fridgeId"];
           recipeId: components["parameters"]["recipeId"];

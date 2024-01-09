@@ -30,7 +30,8 @@ export default function registerFridgeMadeRecipeEndpoint (app: Express, db: IChe
           writable.addMadeRecipe({
             recipeId,
             fridgeId,
-            dateMade: new Date()
+            dateMade: new Date(),
+            users: req.query.users
           })
         }
       })

@@ -236,6 +236,10 @@ export interface paths {
      */
     post: {
       parameters: {
+        query: {
+          /** @description List of users who ate the recipe */
+          users: number[];
+        };
         path: {
           fridgeId: components["parameters"]["fridgeId"];
           recipeId: components["parameters"]["recipeId"];
