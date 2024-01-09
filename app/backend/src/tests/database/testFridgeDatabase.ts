@@ -3,16 +3,14 @@ import assert from 'assert'
 import { describe, it } from 'mocha'
 
 import type IChefDatabase from '../../database/IChefDatabase'
-import type IConnection from '../../database/IConnection'
 import { type RecipeNoId } from '../../types/Recipe'
 
 import createTestDatabase from './createTestDatabase'
 
 describe('database/FridgeDatabaseImpl', () => {
   let database: IChefDatabase
-  let connection: IConnection
   beforeEach(() => {
-    ({ database, connection } = createTestDatabase())
+    ({ database } = createTestDatabase())
   })
 
   describe('get', () => {
