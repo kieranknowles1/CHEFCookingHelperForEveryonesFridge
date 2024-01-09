@@ -128,7 +128,6 @@ paths:
           schema: { type: integer, example: 1 }
           required: false
 
-
       responses:
         "200":
           description: OK
@@ -262,8 +261,7 @@ paths:
     post:
       tags: [Fridge]
       summary: Deduct the ingredients of a recipe from the fridge
-      description:
-        Deduct the ingredients of `recipeId` from `fridgeId` \
+      description: Deduct the ingredients of `recipeId` from `fridgeId` \
         If there is not enough of an ingredient, the amount will be set to 0 \
       parameters:
         - $ref: "#/components/parameters/fridgeId"
