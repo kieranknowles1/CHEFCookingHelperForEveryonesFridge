@@ -7,6 +7,7 @@ import MadeItButton from '../components/MadeItButton'
 import NotFoundMessage from '../components/NotFoundMessage'
 import RecipeIngredient from '../components/RecipeIngredient'
 import SimilarRecipes from '../components/SimilarRecipes'
+import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
 
@@ -16,9 +17,14 @@ const MAX_SIMILAR_RECIPES = 100
 const MIN_SIMILARITY = 0.5
 
 export default function RecipePage (): React.JSX.Element {
-  const [status, setRecipeStatus] = React.useState<LoadingStatus | 'notfound'>('loading')
+  const context = React.useContext(UserContext)
+
+  const [recipeStatus, setRecipeStatus] = React.useState<LoadingStatus | 'notfound'>('loading')
   const [recipe, setRecipe] = React.useState<Recipe>()
   const [onlyAvailable, setOnlyAvailable] = React.useState<boolean>(true)
+
+  const [availableAmountsStatus, setAvailableAmountsStatus] = React.useState<LoadingStatus>('loading')
+  const [availableAmounts, setAvailableAmounts] = React.useState<Map<number, number> | null>(null)
 
   const { id } = useParams()
   const idNumber = Number.parseInt(id ?? 'NaN')
@@ -43,23 +49,49 @@ export default function RecipePage (): React.JSX.Element {
     })
   }, [idNumber])
 
-  if (status === 'notfound') {
+  React.useEffect(() => {
+    setAvailableAmounts(null)
+    if (context === null) {
+      // Don't try to fetch available amounts if the user is not logged in
+      setAvailableAmountsStatus('done')
+      return
+    }
+    apiClient.GET(
+      '/fridge/{fridgeId}/ingredient/all/amount',
+      { params: { path: { fridgeId: context.fridgeId } } }
+    ).then(
+      monitorStatus(setAvailableAmountsStatus)
+    ).then(data => {
+      setAvailableAmounts(new Map(data.map(entry => [entry.ingredient.id, entry.amount])))
+    }).catch((err: ApiError) => {
+      console.error(err)
+    })
+  }, [context])
+
+  if (recipeStatus === 'notfound') {
     return <NotFoundMessage />
   }
+  // Can't show anything meaningful while still loading
   if (recipe === undefined) {
-    return <LoadingSpinner status={status} />
+    return <LoadingSpinner status={recipeStatus} />
   }
 
   // TODO: Show how much of each ingredient is available and highlight missing ones
   return (
     <main>
       <div>
+        <LoadingSpinner status={availableAmountsStatus} />
         <h1>{recipe.name}</h1>
         <a href={`http://${recipe.link}`} target='_blank' rel='noreferrer'>Source</a>
         <p>Meal Type: {recipe.mealType}</p>
         <h2>Ingredients</h2>
         <ul className='list-inside list-disc'>
-          {recipe.ingredients.map(entry => <RecipeIngredient key={entry.ingredient.id} {...entry} />)}
+          {recipe.ingredients.map(entry =>
+            <RecipeIngredient
+              key={entry.ingredient.id}
+              availableAmount={availableAmounts === null ? 'nologin' : (availableAmounts.get(entry.ingredient.id) ?? 0)}
+              {...entry}
+            />)}
         </ul>
         <h2>Directions</h2>
         <ol className='list-inside list-decimal'>
