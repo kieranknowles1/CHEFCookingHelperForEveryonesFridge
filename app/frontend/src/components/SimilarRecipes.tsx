@@ -4,13 +4,16 @@ import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner
 import { type RecipeProps } from '../components/Recipe'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
+import { type components } from '../types/api.generated'
 import monitorStatus from '../utils/monitorStatus'
 import useSafeContext from '../contexts/useSafeContext'
 
 import RecipeList from './RecipeList'
 
+type Recipe = components['schemas']['Recipe']
+
 export interface SimilarRecipeProps {
-  recipeName: string
+  recipe: Recipe
   limit: number
   minSimilarity: number
   onlyAvailable: boolean
@@ -29,17 +32,17 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
       '/recipe/search',
       {
         params: {
-          query: { limit: props.limit, minSimilarity: props.minSimilarity, availableForFridge, search: props.recipeName }
+          query: { limit: props.limit, minSimilarity: props.minSimilarity, availableForFridge, search: props.recipe.name }
         }
       }
     ).then(
       monitorStatus(setStatus)
     ).then(data => {
-      setRecipes(data)
+      setRecipes(data.filter(recipe => recipe.id !== props.recipe.id))
     }).catch(err => {
       console.error(err)
     })
-  }, [props.recipeName, props.limit, props.minSimilarity, props.onlyAvailable, context.fridgeId])
+  }, [props.recipe.name, props.limit, props.minSimilarity, props.onlyAvailable, context.fridgeId])
 
   return (
     <div>
