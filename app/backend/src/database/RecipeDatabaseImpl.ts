@@ -98,6 +98,7 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
       HAVING
         missing_count <= :maxMissingIngredients OR :fridgeId IS NULL
         AND similarity >= :minSimilarity OR :search IS NULL
+      ORDER BY missing_count ASC, similarity DESC
       LIMIT :limit
     `)
 
