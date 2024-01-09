@@ -4,7 +4,6 @@ import { type components } from '../types/api.generated'
 import formatAmount from '../formatAmount'
 
 type Ingredient = components['schemas']['Ingredient']
-type Unit = components['schemas']['Unit']
 
 export interface RecipeIngredientProps {
   ingredient: Ingredient

@@ -18,7 +18,11 @@ export interface RecipeListProps {
  */
 export default function RecipeList (props: RecipeListProps): React.JSX.Element {
   if (props.status === 'done' && props.recipes.length === 0) {
-    return <p><Icon path={mdiFridgeOff} size={1} className='inline' /> No recipes found</p>
+    return (
+      <p className='text-center text-xl'>
+        <Icon path={mdiFridgeOff} size={1} className='inline' /> No recipes found
+      </p>
+    )
   } else {
     return (
       <ul className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>

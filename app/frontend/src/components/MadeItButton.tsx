@@ -1,12 +1,11 @@
 import { mdiHamburger, mdiHamburgerCheck } from '@mdi/js'
 import Icon from '@mdi/react'
 import React from 'react'
-import { ThreeDots } from 'react-loader-spinner'
 
 import apiClient from '../apiClient'
 import monitorStatus from '../utils/monitorStatus'
 
-import LoadingSpinner, { type LoadingStatus } from './LoadingSpinner'
+import LoadingSpinner, { DefaultSmallSpinner, type LoadingStatus } from './LoadingSpinner'
 
 export interface MadeItButtonProps {
   recipeId: number
@@ -36,7 +35,7 @@ export default function MadeItButton (props: MadeItButtonProps): React.JSX.Eleme
       {' '}Made it - Remove Ingredients From Fridge
       <LoadingSpinner
         status={madeItStatus}
-        spinner={<ThreeDots width={32} height={16} wrapperClass='inline' />}
+        spinner={DefaultSmallSpinner}
       />
     </button>
   )

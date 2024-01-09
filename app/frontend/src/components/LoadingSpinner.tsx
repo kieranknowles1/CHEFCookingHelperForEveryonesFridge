@@ -1,5 +1,5 @@
+import { InfinitySpin, ThreeDots } from 'react-loader-spinner'
 import Icon from '@mdi/react'
-import { InfinitySpin } from 'react-loader-spinner'
 import React from 'react'
 import { mdiAlert } from '@mdi/js'
 
@@ -22,8 +22,14 @@ export type LoadingStatus =
   | 'error'
 
 export const DefaultSpinner = <InfinitySpin />
+export const DefaultSmallSpinner = <ThreeDots width={32} height={16} wrapperClass='inline' />
 
 export interface LoadingSpinnerProps {
+  /**
+   * Class name to apply to the outer div.
+   * @default 'flex justify-center'
+   */
+  className?: string
   status: LoadingStatus
   /** The spinner to show while loading. Defaults to InfinitySpin from react-loader-spinner. */
   spinner?: React.JSX.Element
@@ -71,5 +77,6 @@ function getSpinner (props: LoadingSpinnerProps): React.JSX.Element | null {
  * @see monitorStatus - Helper function to update a status that can be used with this component.
  */
 export default function LoadingSpinner (props: LoadingSpinnerProps): React.JSX.Element {
-  return <div className='flex justify-center'>{getSpinner(props)}</div>
+  const className = props.className ?? 'flex justify-center'
+  return <span className={className}>{getSpinner(props)}</span>
 }
