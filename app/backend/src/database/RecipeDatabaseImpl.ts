@@ -1,7 +1,6 @@
 import { type IngredientAmount, type IngredientId } from '../types/Ingredient'
-import { type SearchRecipe, type SimilarRecipe } from '../types/Recipe'
-import type EmbeddedSentence from '../ml/EmbeddedSentence'
 import type Recipe from '../types/Recipe'
+import { type SearchRecipe } from '../types/Recipe'
 
 import type * as types from './types'
 import { type IRecipeDatabase, type SearchParams } from './IChefDatabase'
@@ -118,45 +117,5 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
       missingIngredientAmount: row.missing_count,
       similarity: row.similarity ?? undefined
     }))
-  }
-
-  public getSimilar (
-    embedding: EmbeddedSentence,
-    minSimilarity: number,
-    limit: number,
-    mealType: string
-  ): SimilarRecipe[] {
-    interface SimilarRecipesResultRow {
-      id: types.RowId
-      name: string
-      similarity: number
-    }
-    const statement = this._connection.prepare<SimilarRecipesResultRow>(`
-      SELECT
-        recipe.id,
-        recipe.name,
-        ml_similarity(embedding.embedding, :embedding) AS similarity
-      FROM (
-        -- Using a subquery here to force its execution before ml_similarity
-        -- This is because ml_similarity is expensive and we want to filter
-        -- as much as possible before executing it
-        SELECT * FROM recipe
-        WHERE meal_type_id = (SELECT id FROM meal_type WHERE name = :mealType)
-        -- EXPLAIN QUERY PLAN mentioned that this uses a temp b-tree, tests showed that it's faster
-        -- than using HAVING to filter meal type
-        GROUP BY name COLLATE NOCASE
-      ) AS recipe
-      JOIN embedding ON recipe.name = embedding.sentence
-      WHERE similarity >= :minSimilarity
-      ORDER BY similarity DESC
-      LIMIT :limit
-    `)
-
-    return statement.all({
-      embedding: bufferFromFloat32Array(embedding.embedding),
-      mealType,
-      minSimilarity,
-      limit
-    })
   }
 }
