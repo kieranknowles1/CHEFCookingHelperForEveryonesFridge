@@ -87,6 +87,40 @@ export interface paths {
       };
     };
   };
+  "/recipe/search": {
+    /**
+     * Search for recipes
+     * @description Search for recipes by one or more matching terms. Results are unordered, unless the `search` parameter is specified, in which case they are ordered by similarity to the search term.
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description Search term */
+          search?: string;
+          /** @description Minimum similarity score, meaningless if `search` is not specified */
+          minSimilarity?: number;
+          /** @description If specified, only return recipes of this type. By default, all recipes are returned. */
+          mealType?: string;
+          /** @description If specified, only return recipes that can be made with the ingredients in the fridge */
+          availableForFridge?: number;
+          /** @description Maximum number of ingredients that can be missing. Meaningless if `availableForFridge` is not specified. */
+          maxMissingIngredients?: number;
+          /** @description Whether to check that there is enough of each ingredient. Meaningless if `availableForFridge` is not specified. */
+          checkAmounts?: boolean;
+          /** @description Maximum number of results to return. By default, 10 results are returned. */
+          limit?: number;
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["SearchRecipe"][];
+          };
+        };
+      };
+    };
+  };
   "/recipe/{recipeId}": {
     /** Get a recipe by ID */
     get: {
@@ -109,6 +143,7 @@ export interface paths {
   "/recipe/{recipeId}/similar": {
     /**
      * Get similar recipes
+     * @deprecated
      * @description Returns a list of recipes similar to the given recipe \ Items are sorted by similarity score, descending \ Only recipes of the same type are returned Note that if multiple recipes have the same name, only one will be returned
      */
     get: {
@@ -225,6 +260,7 @@ export interface paths {
   "/fridge/{fridgeId}/recipe/available": {
     /**
      * Get a list of available recipes
+     * @deprecated
      * @description Returns the IDs of all recipes that can be made with the available ingredients
      */
     get: {
@@ -335,6 +371,19 @@ export interface components {
       id: number;
       /** @example 0.5 */
       similarity: number;
+    };
+    SearchRecipe: {
+      /** @example Just Soup */
+      name: string;
+      /** @example 1234 */
+      id: number;
+      /** @example 0.5 */
+      similarity: number;
+      /**
+       * @description Number of ingredients missing or not enough of. Only present if `availableForFridge` is specified.
+       * @example 1
+       */
+      missingIngredientAmount?: number;
     };
     Recipe: {
       /** @example 12345 */
