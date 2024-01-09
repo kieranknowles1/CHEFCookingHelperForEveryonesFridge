@@ -280,7 +280,6 @@ paths:
           $ref: "#/components/responses/NotFound"
 
 components:
-  # TODO: Remove unused components
   parameters:
     fridgeId:
       in: path
@@ -302,18 +301,6 @@ components:
       name: userId
       schema: { type: integer, example: 1 }
       required: true
-
-    limitRequired:
-      in: query
-      name: limit
-      schema: { type: integer, example: 10 }
-      required: true
-    minSimilarity:
-      in: query
-      name: minSimilarity
-      schema:
-        { type: number, example: 0.5, minimum: 0, maximum: 1, default: 0.5 }
-      required: false
 
   responses:
     Forbidden:
@@ -361,14 +348,6 @@ components:
         - ml
         - g
       example: g
-
-    SimilarRecipe:
-      type: object
-      properties:
-        name: { type: string, example: Just Soup }
-        id: { type: integer, example: 1234 }
-        similarity: { type: number, example: 0.5 }
-      required: [name, id, similarity]
 
     SearchRecipe:
       type: object
