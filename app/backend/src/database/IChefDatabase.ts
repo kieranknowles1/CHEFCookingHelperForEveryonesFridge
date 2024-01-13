@@ -90,13 +90,20 @@ export interface IRecipeDatabase {
   search: (params: SearchParams) => SearchRecipe[]
 }
 
+export interface GetHistoryParams {
+  userId: types.RowId
+  limit: number
+  // If provided, only return items for this recipe
+  recipeId?: types.RowId
+}
+
 export interface IUserDatabase {
   get: (id: types.RowId) => User
 
   /**
    * Get the history of recipes made by a user, sorted by date made most recent first
    */
-  getHistory: (userId: types.RowId, limit: number) => MadeRecipeItem[]
+  getHistory: (params: GetHistoryParams) => MadeRecipeItem[]
 }
 
 export default interface IChefDatabase {

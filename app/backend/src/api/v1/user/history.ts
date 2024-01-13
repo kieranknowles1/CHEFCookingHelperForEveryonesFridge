@@ -12,7 +12,11 @@ export default function registerUserHistoryEndpoint (app: Express, db: IChefData
       const userId = parseInt(req.params.userId)
       const limit = req.query.limit ?? 50
 
-      const history = db.users.getHistory(userId, limit)
+      const history = db.users.getHistory({
+        userId,
+        limit,
+        recipeId: req.query.recipe
+      })
 
       res.json(history.map(row => ({
         ...row,

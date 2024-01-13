@@ -291,6 +291,11 @@ paths:
           description: Maximum number of results to return. By default, 50 results are returned.
           schema: { type: integer, example: 50, default: 50 }
           required: false
+        - in: query
+          name: recipe
+          description: If specified, only return history entries for this recipe
+          schema: { type: integer, example: 12345 }
+          required: false
       responses:
         "200":
           description: OK

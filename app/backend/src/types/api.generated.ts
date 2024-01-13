@@ -280,6 +280,8 @@ export interface paths {
         query?: {
           /** @description Maximum number of results to return. By default, 50 results are returned. */
           limit?: number;
+          /** @description If specified, only return history entries for this recipe */
+          recipe?: number;
         };
         path: {
           userId: components["parameters"]["userId"];

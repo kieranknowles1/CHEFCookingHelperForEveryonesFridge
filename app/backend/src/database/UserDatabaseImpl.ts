@@ -1,7 +1,7 @@
 import type User from '../types/User'
 
 import type * as types from './types'
-import { type IUserDatabase, type MadeRecipeItem } from './IChefDatabase'
+import { type GetHistoryParams, type IUserDatabase, type MadeRecipeItem } from './IChefDatabase'
 import type IConnection from './IConnection'
 import InvalidIdError from './InvalidIdError'
 
@@ -28,7 +28,7 @@ export default class UserDatabaseImpl implements IUserDatabase {
     }
   }
 
-  public getHistory (userId: types.RowId, limit: number): MadeRecipeItem[] {
+  public getHistory (params: GetHistoryParams): MadeRecipeItem[] {
     interface Result {
       item_id: types.RowId
       recipe_id: types.RowId
@@ -58,6 +58,7 @@ export default class UserDatabaseImpl implements IUserDatabase {
       JOIN recipe ON recipe.id = made_recipe.recipe_id
       JOIN fridge ON fridge.id = made_recipe.fridge_id
       JOIN user ON user.id = made_recipe_user.user_id
+      WHERE (:recipeId IS NULL OR made_recipe.recipe_id = :recipeId)
       GROUP BY made_recipe.id
       -- Filter so that at least one of the users is the one we want
       HAVING MAX(made_recipe_user.user_id = :userId) = true
@@ -65,7 +66,11 @@ export default class UserDatabaseImpl implements IUserDatabase {
       LIMIT :limit
     `)
 
-    const result = statement.all({ userId, limit })
+    const result = statement.all({
+      userId: params.userId,
+      limit: params.limit,
+      recipeId: params.recipeId ?? null
+    })
     const output: MadeRecipeItem[] = []
 
     for (const row of result) {
