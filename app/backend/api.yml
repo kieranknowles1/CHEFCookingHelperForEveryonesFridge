@@ -39,7 +39,7 @@ paths:
       parameters:
         - in: path
           name: code
-          schema: { type: integer }
+          schema: { $ref: "#/components/schemas/id" }
           required: true
       responses:
         "200":
@@ -50,7 +50,8 @@ paths:
                 type: object
                 properties:
                   productName:
-                    { type: string, example: GenericMart Chicken 1kg }
+                    type: string
+                    example: GenericMart Chicken 1kg
                   ingredient:
                     $ref: "#/components/schemas/Ingredient"
                   amount: { type: number, example: 1000 }
@@ -65,7 +66,7 @@ paths:
       parameters:
         - in: path
           name: code
-          schema: { type: integer }
+          schema: { $ref: "#/components/schemas/id" }
           required: true
       requestBody:
         content:
@@ -74,8 +75,8 @@ paths:
               type: object
               properties:
                 productName: { type: string, example: GenericMart Chicken 1kg }
-                ingredientId: { type: number, example: 12345 }
-                amount: { type: number, example: 1000 }
+                ingredientId: { $ref: "#/components/schemas/id" }
+                amount: { type: number, example: 1000, minimum: 0 }
               required: [productName, ingredientId, amount]
               additionalProperties: false
       responses:
@@ -113,13 +114,17 @@ paths:
           name: minSimilarity
           description: Minimum similarity score, meaningless if `search` is not specified
           schema:
-            { type: number, example: 0.5, minimum: 0, maximum: 1, default: 0.5 }
+            type: number
+            example: 0.5
+            minimum: 0
+            maximum: 1
+            default: 0.5
           required: false
 
         - in: query
           name: availableForFridge
           description: If specified, only return recipes that can be made with the ingredients in the fridge
-          schema: { type: integer, example: 1 }
+          schema: { $ref: "#/components/schemas/id" }
           required: false
         - in: query
           name: maxMissingIngredients
@@ -134,8 +139,8 @@ paths:
 
         - in: query
           name: limit
-          description: Maximum number of results to return. By default, 10 results are returned.
-          schema: { type: integer, example: 10 }
+          description: Maximum number of results to return.
+          schema: { type: integer, example: 10, minimum: 1, default: 10 }
           required: false
         - in: query
           name: mealType
@@ -237,7 +242,7 @@ paths:
         - in: query
           name: amount
           description: Amount to set the ingredient to
-          schema: { type: integer, example: 1 }
+          schema: { type: integer, example: 1, minimum: 0 }
           required: true
       responses:
         "204":
@@ -259,7 +264,7 @@ paths:
           description: List of users who ate the recipe
           schema:
             type: array
-            items: { type: integer, example: 1 }
+            items: { $ref: "#/components/schemas/id" }
           required: true
       responses:
         "204":
@@ -293,12 +298,12 @@ paths:
         - in: query
           name: limit
           description: Maximum number of results to return. By default, 50 results are returned.
-          schema: { type: integer, example: 50, default: 50 }
+          schema: { type: integer, example: 50, default: 50, minimum: 1 }
           required: false
         - in: query
           name: recipe
           description: If specified, only return history entries for this recipe
-          schema: { type: integer, example: 12345 }
+          schema: { $ref: "#/components/schemas/id" }
           required: false
       responses:
         "200":
@@ -316,22 +321,22 @@ components:
     fridgeId:
       in: path
       name: fridgeId
-      schema: { type: integer, example: 1 }
+      schema: { $ref: "#/components/schemas/id" }
       required: true
     ingredientId:
       in: path
       name: ingredientId
-      schema: { type: integer, example: 1 }
+      schema: { $ref: "#/components/schemas/id" }
       required: true
     recipeId:
       in: path
       name: recipeId
-      schema: { type: integer, example: 1 }
+      schema: { $ref: "#/components/schemas/id" }
       required: true
     userId:
       in: path
       name: userId
-      schema: { type: integer, example: 1 }
+      schema: { $ref: "#/components/schemas/id" }
       required: true
 
   responses:
@@ -354,6 +359,13 @@ components:
           schema: { $ref: "#/components/schemas/ErrorList" }
 
   schemas:
+    id:
+      type: integer
+      example: 12345
+      minimum: 1
+      # MAX_SAFE_INTEGER, database does not support bigint
+      maximum: 9007199254740991
+
     ErrorList:
       type: object
       properties:
