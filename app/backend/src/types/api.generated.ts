@@ -277,6 +277,10 @@ export interface paths {
     /** Get a user's recipe history, ordered by most recent first */
     get: {
       parameters: {
+        query?: {
+          /** @description Maximum number of results to return. By default, 50 results are returned. */
+          limit?: number;
+        };
         path: {
           userId: components["parameters"]["userId"];
         };

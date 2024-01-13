@@ -286,6 +286,11 @@ paths:
       summary: Get a user's recipe history, ordered by most recent first
       parameters:
         - $ref: "#/components/parameters/userId"
+        - in: query
+          name: limit
+          description: Maximum number of results to return. By default, 50 results are returned.
+          schema: { type: integer, example: 50, default: 50 }
+          required: false
       responses:
         "200":
           description: OK

@@ -28,7 +28,7 @@ export default class UserDatabaseImpl implements IUserDatabase {
     }
   }
 
-  public getHistory (userId: types.RowId): MadeRecipeItem[] {
+  public getHistory (userId: types.RowId, limit: number): MadeRecipeItem[] {
     interface Result {
       item_id: types.RowId
       recipe_id: types.RowId
@@ -62,9 +62,10 @@ export default class UserDatabaseImpl implements IUserDatabase {
       -- Filter so that at least one of the users is the one we want
       HAVING MAX(made_recipe_user.user_id = :userId) = true
       ORDER BY made_recipe.date_made DESC
+      LIMIT :limit
     `)
 
-    const result = statement.all({ userId })
+    const result = statement.all({ userId, limit })
     const output: MadeRecipeItem[] = []
 
     for (const row of result) {

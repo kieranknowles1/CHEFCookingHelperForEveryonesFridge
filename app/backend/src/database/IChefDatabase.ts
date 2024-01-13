@@ -96,7 +96,7 @@ export interface IUserDatabase {
   /**
    * Get the history of recipes made by a user, sorted by date made most recent first
    */
-  getHistory: (userId: types.RowId) => MadeRecipeItem[]
+  getHistory: (userId: types.RowId, limit: number) => MadeRecipeItem[]
 }
 
 export default interface IChefDatabase {
