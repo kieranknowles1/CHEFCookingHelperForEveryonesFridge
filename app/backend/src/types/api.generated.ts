@@ -27,7 +27,7 @@ export interface paths {
     get: {
       parameters: {
         path: {
-          code: number;
+          code: components["schemas"]["id"];
         };
       };
       responses: {
@@ -50,18 +50,17 @@ export interface paths {
     post: {
       parameters: {
         path: {
-          code: number;
+          code: components["schemas"]["id"];
         };
       };
       requestBody?: {
         content: {
           "application/json": {
             /** @example GenericMart Chicken 1kg */
-            productName?: string;
-            /** @example 12345 */
-            ingredientId?: number;
+            productName: string;
+            ingredientId: components["schemas"]["id"];
             /** @example 1000 */
-            amount?: number;
+            amount: number;
           };
         };
       };
@@ -100,12 +99,12 @@ export interface paths {
           /** @description Minimum similarity score, meaningless if `search` is not specified */
           minSimilarity?: number;
           /** @description If specified, only return recipes that can be made with the ingredients in the fridge */
-          availableForFridge?: number;
+          availableForFridge?: components["schemas"]["id"];
           /** @description Maximum number of ingredients that can be missing. Meaningless if `availableForFridge` is not specified. */
           maxMissingIngredients?: number;
           /** @description Whether to check that there is enough of each ingredient. Meaningless if `availableForFridge` is not specified. */
           checkAmounts?: boolean;
-          /** @description Maximum number of results to return. By default, 10 results are returned. */
+          /** @description Maximum number of results to return. */
           limit?: number;
           /** @description If specified, only return recipes of this type. By default, all recipes are returned. */
           mealType?: string;
@@ -238,7 +237,7 @@ export interface paths {
       parameters: {
         query: {
           /** @description List of users who ate the recipe */
-          users: number[];
+          users: components["schemas"]["id"][];
         };
         path: {
           fridgeId: components["parameters"]["fridgeId"];
@@ -273,12 +272,39 @@ export interface paths {
       };
     };
   };
+  "/user/{userId}/history": {
+    /** Get a user's recipe history, ordered by most recent first */
+    get: {
+      parameters: {
+        query?: {
+          /** @description Maximum number of results to return. By default, 50 results are returned. */
+          limit?: number;
+          /** @description If specified, only return history entries for this recipe */
+          recipe?: components["schemas"]["id"];
+        };
+        path: {
+          userId: components["parameters"]["userId"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["MadeRecipe"][];
+          };
+        };
+        404: components["responses"]["NotFound"];
+      };
+    };
+  };
 }
 
 export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    /** @example 12345 */
+    id: number;
     ErrorList: {
       /** @example 404 */
       status: number;
@@ -299,14 +325,6 @@ export interface components {
      * @enum {string}
      */
     Unit: "none" | "whole" | "ml" | "g";
-    SimilarRecipe: {
-      /** @example Just Soup */
-      name: string;
-      /** @example 1234 */
-      id: number;
-      /** @example 0.5 */
-      similarity: number;
-    };
     SearchRecipe: {
       /** @example Just Soup */
       name: string;
@@ -360,6 +378,33 @@ export interface components {
       originalLine: string;
     } & components["schemas"]["IngredientEntry"], "originalLine">;
     FridgeIngredientEntry: WithRequired<components["schemas"]["IngredientEntry"], "amount">;
+    MadeRecipe: {
+      /** @example 12345 */
+      id: number;
+      fridge: {
+        /** @example My Fridge */
+        name: string;
+        /** @example 1 */
+        id: number;
+      };
+      recipe: {
+        /** @example Chicken Pie */
+        name: string;
+        /** @example 1234 */
+        id: number;
+      };
+      users: {
+          /** @example John Smith */
+          name: string;
+          /** @example 1 */
+          id: number;
+        }[];
+      /**
+       * Format: date-time
+       * @example 2020-01-01T00:00:00.000Z
+       */
+      dateMade: string;
+    };
   };
   responses: {
     /** @description Forbidden */
@@ -382,12 +427,10 @@ export interface components {
     };
   };
   parameters: {
-    fridgeId: number;
-    ingredientId: number;
-    recipeId: number;
-    userId: number;
-    limitRequired: number;
-    minSimilarity?: number;
+    fridgeId: components["schemas"]["id"];
+    ingredientId: components["schemas"]["id"];
+    recipeId: components["schemas"]["id"];
+    userId: components["schemas"]["id"];
   };
   requestBodies: never;
   headers: never;

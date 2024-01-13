@@ -39,7 +39,7 @@ paths:
       parameters:
         - in: path
           name: code
-          schema: { type: integer }
+          schema: { $ref: "#/components/schemas/id" }
           required: true
       responses:
         "200":
@@ -50,11 +50,13 @@ paths:
                 type: object
                 properties:
                   productName:
-                    { type: string, example: GenericMart Chicken 1kg }
+                    type: string
+                    example: GenericMart Chicken 1kg
                   ingredient:
                     $ref: "#/components/schemas/Ingredient"
                   amount: { type: number, example: 1000 }
                 required: [productName, ingredient, amount]
+                additionalProperties: false
         "404":
           $ref: "#/components/responses/NotFound"
     post:
@@ -64,7 +66,7 @@ paths:
       parameters:
         - in: path
           name: code
-          schema: { type: integer }
+          schema: { $ref: "#/components/schemas/id" }
           required: true
       requestBody:
         content:
@@ -73,8 +75,10 @@ paths:
               type: object
               properties:
                 productName: { type: string, example: GenericMart Chicken 1kg }
-                ingredientId: { type: number, example: 12345 }
-                amount: { type: number, example: 1000 }
+                ingredientId: { $ref: "#/components/schemas/id" }
+                amount: { type: number, example: 1000, minimum: 0 }
+              required: [productName, ingredientId, amount]
+              additionalProperties: false
       responses:
         "204":
           description: No Content
@@ -110,13 +114,17 @@ paths:
           name: minSimilarity
           description: Minimum similarity score, meaningless if `search` is not specified
           schema:
-            { type: number, example: 0.5, minimum: 0, maximum: 1, default: 0.5 }
+            type: number
+            example: 0.5
+            minimum: 0
+            maximum: 1
+            default: 0.5
           required: false
 
         - in: query
           name: availableForFridge
           description: If specified, only return recipes that can be made with the ingredients in the fridge
-          schema: { type: integer, example: 1 }
+          schema: { $ref: "#/components/schemas/id" }
           required: false
         - in: query
           name: maxMissingIngredients
@@ -131,8 +139,8 @@ paths:
 
         - in: query
           name: limit
-          description: Maximum number of results to return. By default, 10 results are returned.
-          schema: { type: integer, example: 10 }
+          description: Maximum number of results to return.
+          schema: { type: integer, example: 10, minimum: 1, default: 10 }
           required: false
         - in: query
           name: mealType
@@ -185,6 +193,7 @@ paths:
                   name: { type: string, example: "My Fridge" }
                   owner: { $ref: "#/components/schemas/User" }
                 required: [id, name, owner]
+                additionalProperties: false
         "404":
           $ref: "#/components/responses/NotFound"
 
@@ -233,7 +242,7 @@ paths:
         - in: query
           name: amount
           description: Amount to set the ingredient to
-          schema: { type: integer, example: 1 }
+          schema: { type: integer, example: 1, minimum: 0 }
           required: true
       responses:
         "204":
@@ -255,7 +264,7 @@ paths:
           description: List of users who ate the recipe
           schema:
             type: array
-            items: { type: integer, example: 1 }
+            items: { $ref: "#/components/schemas/id" }
           required: true
       responses:
         "204":
@@ -263,7 +272,7 @@ paths:
         "403":
           $ref: "#/components/responses/Forbidden"
 
-  # TODO: Authentication, implement
+  # TODO: Authentication
   /user/{userId}:
     get:
       tags: [User]
@@ -279,41 +288,56 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
+  # TODO: Authentication
+  /user/{userId}/history:
+    get:
+      tags: [User]
+      summary: Get a user's recipe history, ordered by most recent first
+      parameters:
+        - $ref: "#/components/parameters/userId"
+        - in: query
+          name: limit
+          description: Maximum number of results to return. By default, 50 results are returned.
+          schema: { type: integer, example: 50, default: 50, minimum: 1 }
+          required: false
+        - in: query
+          name: recipe
+          description: If specified, only return history entries for this recipe
+          schema: { $ref: "#/components/schemas/id" }
+          required: false
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/MadeRecipe" }
+        "404":
+          $ref: "#/components/responses/NotFound"
+
 components:
-  # TODO: Remove unused components
   parameters:
     fridgeId:
       in: path
       name: fridgeId
-      schema: { type: integer, example: 1 }
+      schema: { $ref: "#/components/schemas/id" }
       required: true
     ingredientId:
       in: path
       name: ingredientId
-      schema: { type: integer, example: 1 }
+      schema: { $ref: "#/components/schemas/id" }
       required: true
     recipeId:
       in: path
       name: recipeId
-      schema: { type: integer, example: 1 }
+      schema: { $ref: "#/components/schemas/id" }
       required: true
     userId:
       in: path
       name: userId
-      schema: { type: integer, example: 1 }
+      schema: { $ref: "#/components/schemas/id" }
       required: true
-
-    limitRequired:
-      in: query
-      name: limit
-      schema: { type: integer, example: 10 }
-      required: true
-    minSimilarity:
-      in: query
-      name: minSimilarity
-      schema:
-        { type: number, example: 0.5, minimum: 0, maximum: 1, default: 0.5 }
-      required: false
 
   responses:
     Forbidden:
@@ -335,6 +359,13 @@ components:
           schema: { $ref: "#/components/schemas/ErrorList" }
 
   schemas:
+    id:
+      type: integer
+      example: 12345
+      minimum: 1
+      # MAX_SAFE_INTEGER, database does not support bigint
+      maximum: 9007199254740991
+
     ErrorList:
       type: object
       properties:
@@ -344,6 +375,7 @@ components:
           type: array
           items: { $ref: "#/components/schemas/Error" }
       required: [status, path, errors]
+      additionalProperties: false
 
     Error:
       type: object
@@ -352,6 +384,7 @@ components:
         message: { type: string, example: "Must be integer" }
         errorCode: { type: string, example: "type.openapi.validation" }
       required: [path, message]
+      additionalProperties: false
 
     Unit:
       type: string
@@ -361,14 +394,6 @@ components:
         - ml
         - g
       example: g
-
-    SimilarRecipe:
-      type: object
-      properties:
-        name: { type: string, example: Just Soup }
-        id: { type: integer, example: 1234 }
-        similarity: { type: number, example: 0.5 }
-      required: [name, id, similarity]
 
     SearchRecipe:
       type: object
@@ -381,6 +406,7 @@ components:
           example: 1
           description: Number of ingredients missing or not enough of. Only present if `availableForFridge` is specified.
       required: [name, id]
+      additionalProperties: false
 
     Recipe:
       type: object
@@ -388,16 +414,15 @@ components:
         id: { type: integer, example: 12345 }
         name: { type: string, example: "Chicken Pie" }
         directions:
-          {
-            type: string,
-            example: "The great thing about chicken pie is that you don't need to know how to make it, just get some chicken. And put it in a pie.",
-          }
+          type: string
+          example: "The great thing about chicken pie is that you don't need to know how to make it, just get some chicken. And put it in a pie."
         link: { type: string, example: "example.com" }
         ingredients:
           type: array
           items: { $ref: "#/components/schemas/RecipeIngredientEntry" }
         mealType: { type: string, example: "Dinner" }
       required: [id, name, directions, link, ingredients, mealType]
+      additionalProperties: false
 
     Ingredient:
       type: object
@@ -410,6 +435,7 @@ components:
         # TODO: Substitutions
         # TODO: Include density in response
       required: [name, id, preferredUnit, assumeUnlimited]
+      additionalProperties: false
 
     IngredientEntry:
       type: object
@@ -424,6 +450,7 @@ components:
         id: { type: integer, example: 1 }
         name: { type: string, example: "John Smith" }
       required: [id, name]
+      additionalProperties: false
 
     RecipeIngredientEntry:
       allOf: [{ $ref: "#/components/schemas/IngredientEntry" }]
@@ -434,3 +461,37 @@ components:
     FridgeIngredientEntry:
       allOf: [{ $ref: "#/components/schemas/IngredientEntry" }]
       required: [amount]
+
+    MadeRecipe:
+      type: object
+      properties:
+        id: { $ref: "#/components/schemas/id" }
+        fridge:
+          type: object
+          properties:
+            name: { type: string, example: "My Fridge" }
+            id: { $ref: "#/components/schemas/id" }
+          required: [name, id]
+          additionalProperties: false
+        recipe:
+          type: object
+          properties:
+            name: { type: string, example: "Chicken Pie" }
+            id: { $ref: "#/components/schemas/id" }
+          required: [name, id]
+          additionalProperties: false
+        users:
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string, example: "John Smith" }
+              id: { $ref: "#/components/schemas/id" }
+            required: [name, id]
+            additionalProperties: false
+        dateMade:
+          type: string
+          example: "2020-01-01T00:00:00.000Z"
+          format: date-time
+      required: [id, fridge, recipe, users, dateMade]
+      additionalProperties: false
