@@ -55,6 +55,7 @@ paths:
                     $ref: "#/components/schemas/Ingredient"
                   amount: { type: number, example: 1000 }
                 required: [productName, ingredient, amount]
+                additionalProperties: false
         "404":
           $ref: "#/components/responses/NotFound"
     post:
@@ -75,6 +76,8 @@ paths:
                 productName: { type: string, example: GenericMart Chicken 1kg }
                 ingredientId: { type: number, example: 12345 }
                 amount: { type: number, example: 1000 }
+              required: [productName, ingredientId, amount]
+              additionalProperties: false
       responses:
         "204":
           description: No Content
@@ -185,6 +188,7 @@ paths:
                   name: { type: string, example: "My Fridge" }
                   owner: { $ref: "#/components/schemas/User" }
                 required: [id, name, owner]
+                additionalProperties: false
         "404":
           $ref: "#/components/responses/NotFound"
 
@@ -359,6 +363,7 @@ components:
           type: array
           items: { $ref: "#/components/schemas/Error" }
       required: [status, path, errors]
+      additionalProperties: false
 
     Error:
       type: object
@@ -367,6 +372,7 @@ components:
         message: { type: string, example: "Must be integer" }
         errorCode: { type: string, example: "type.openapi.validation" }
       required: [path, message]
+      additionalProperties: false
 
     Unit:
       type: string
@@ -388,6 +394,7 @@ components:
           example: 1
           description: Number of ingredients missing or not enough of. Only present if `availableForFridge` is specified.
       required: [name, id]
+      additionalProperties: false
 
     Recipe:
       type: object
@@ -395,16 +402,15 @@ components:
         id: { type: integer, example: 12345 }
         name: { type: string, example: "Chicken Pie" }
         directions:
-          {
-            type: string,
-            example: "The great thing about chicken pie is that you don't need to know how to make it, just get some chicken. And put it in a pie.",
-          }
+          type: string
+          example: "The great thing about chicken pie is that you don't need to know how to make it, just get some chicken. And put it in a pie."
         link: { type: string, example: "example.com" }
         ingredients:
           type: array
           items: { $ref: "#/components/schemas/RecipeIngredientEntry" }
         mealType: { type: string, example: "Dinner" }
       required: [id, name, directions, link, ingredients, mealType]
+      additionalProperties: false
 
     Ingredient:
       type: object
@@ -417,6 +423,7 @@ components:
         # TODO: Substitutions
         # TODO: Include density in response
       required: [name, id, preferredUnit, assumeUnlimited]
+      additionalProperties: false
 
     IngredientEntry:
       type: object
@@ -431,6 +438,7 @@ components:
         id: { type: integer, example: 1 }
         name: { type: string, example: "John Smith" }
       required: [id, name]
+      additionalProperties: false
 
     RecipeIngredientEntry:
       allOf: [{ $ref: "#/components/schemas/IngredientEntry" }]
