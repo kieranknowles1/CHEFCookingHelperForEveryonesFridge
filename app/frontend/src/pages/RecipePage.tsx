@@ -10,6 +10,7 @@ import SimilarRecipes from '../components/SimilarRecipes'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
+import SingleRecipeHistory from '../components/SingleRecipeHistory'
 
 type Recipe = components['schemas']['Recipe']
 
@@ -100,6 +101,10 @@ export default function RecipePage (): React.JSX.Element {
         </ol>
         <MadeItButton recipeId={recipe.id} />
       </div>
+      {context !== null && <>
+        <h2>History</h2>
+        <SingleRecipeHistory userId={context.userId} recipeId={recipe.id} />
+      </>}
       <h2>Similar recipes</h2>
       <label>Only show recipes with ingredients available in my fridge:{' '}
         <input

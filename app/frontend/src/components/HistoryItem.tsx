@@ -3,6 +3,7 @@ import React from 'react'
 
 import { type components } from '../types/api.generated'
 import getRecipeUrl from '../utils/getRecipeUrl'
+import formatShortDate from '../utils/formatShortDate'
 
 type MadeRecipe = components['schemas']['MadeRecipe']
 
@@ -22,12 +23,7 @@ export default function HistoryItem (props: HistoryItemProps): React.JSX.Element
 
   // Convert the ISO date returned by the API to a string in the user's locale.
   // I.e., UK English will format the date as DD/MM/YYYY while US English will format it as MM/DD/YYYY.
-  const dateMade = new Date(props.madeRecipe.dateMade).toLocaleDateString(/* user locale */ undefined, {
-    weekday: 'short',
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric'
-  })
+  const dateMade = formatShortDate(new Date(props.madeRecipe.dateMade))
 
   return (
     <tr className={props.rowStyle}>
