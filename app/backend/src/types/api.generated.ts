@@ -372,7 +372,7 @@ export interface components {
     } & components["schemas"]["IngredientEntry"], "originalLine">;
     FridgeIngredientEntry: WithRequired<components["schemas"]["IngredientEntry"], "amount">;
     MadeRecipe: {
-      fridge?: {
+      fridge: {
         /** @example My Fridge */
         name: string;
         /** @example 1 */

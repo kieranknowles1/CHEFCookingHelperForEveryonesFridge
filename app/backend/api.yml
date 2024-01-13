@@ -455,4 +455,4 @@ components:
               id: { type: integer, example: 1 }
             required: [name, id]
         dateMade: { type: string, example: "2020-01-01T00:00:00.000Z", format: date-time }
-      required: [recipe, users, dateMade]
+      required: [fridge, recipe, users, dateMade]
