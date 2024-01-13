@@ -1,5 +1,6 @@
 import React from 'react'
 
+import History from '../components/History'
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
@@ -30,11 +31,10 @@ export default function AccountPage (): React.JSX.Element {
 
   return (
     <main>
+      <h1>{user === undefined ? 'Hello' : `Hello, ${user.name}`}</h1>
       <LoadingSpinner status={status} />
-      {user !== undefined &&
-      <>
-        <h1>Hello, {user.name}</h1>
-      </>}
+      <h2>Your recent activity</h2>
+      <History userId={context.userId} />
     </main>
   )
 }
