@@ -434,6 +434,7 @@ components:
 
     MadeRecipe:
       properties:
+        id: { type: integer, example: 12345 }
         fridge:
           type: object
           properties:
@@ -455,4 +456,4 @@ components:
               id: { type: integer, example: 1 }
             required: [name, id]
         dateMade: { type: string, example: "2020-01-01T00:00:00.000Z", format: date-time }
-      required: [fridge, recipe, users, dateMade]
+      required: [id, fridge, recipe, users, dateMade]

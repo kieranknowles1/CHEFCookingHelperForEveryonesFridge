@@ -30,6 +30,7 @@ export default class UserDatabaseImpl implements IUserDatabase {
 
   public getHistory (userId: types.RowId): MadeRecipeItem[] {
     interface Result {
+      item_id: types.RowId
       recipe_id: types.RowId
       recipe_name: string
       fridge_name: string
@@ -44,6 +45,7 @@ export default class UserDatabaseImpl implements IUserDatabase {
     // If you're afraid of this, don't even look at the search query, that's a monster
     const statement = this._connection.prepare<Result>(`
       SELECT
+        made_recipe.id AS item_id,
         made_recipe.recipe_id,
         recipe.name AS recipe_name,
         fridge.name AS fridge_name,
@@ -72,6 +74,7 @@ export default class UserDatabaseImpl implements IUserDatabase {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       const userIds = JSON.parse(row.user_ids) as types.RowId[]
       output.push({
+        id: row.item_id,
         recipe: {
           id: row.recipe_id,
           name: row.recipe_name

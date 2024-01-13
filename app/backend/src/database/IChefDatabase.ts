@@ -16,6 +16,7 @@ export interface FridgeIngredientAmount {
 }
 
 export interface MadeRecipeItem {
+  id: types.RowId
   recipe: {
     id: types.RowId
     name: string
