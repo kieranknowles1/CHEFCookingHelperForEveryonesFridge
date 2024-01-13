@@ -463,32 +463,35 @@ components:
       required: [amount]
 
     MadeRecipe:
+      type: object
       properties:
-        id: { type: integer, example: 12345 }
+        id: { $ref: "#/components/schemas/id" }
         fridge:
           type: object
           properties:
             name: { type: string, example: "My Fridge" }
-            id: { type: integer, example: 1 }
+            id: { $ref: "#/components/schemas/id" }
           required: [name, id]
+          additionalProperties: false
         recipe:
           type: object
           properties:
             name: { type: string, example: "Chicken Pie" }
-            id: { type: integer, example: 1234 }
+            id: { $ref: "#/components/schemas/id" }
           required: [name, id]
+          additionalProperties: false
         users:
           type: array
           items:
             type: object
             properties:
               name: { type: string, example: "John Smith" }
-              id: { type: integer, example: 1 }
+              id: { $ref: "#/components/schemas/id" }
             required: [name, id]
+            additionalProperties: false
         dateMade:
-          {
-            type: string,
-            example: "2020-01-01T00:00:00.000Z",
-            format: date-time,
-          }
+          type: string
+          example: "2020-01-01T00:00:00.000Z"
+          format: date-time
       required: [id, fridge, recipe, users, dateMade]
+      additionalProperties: false
