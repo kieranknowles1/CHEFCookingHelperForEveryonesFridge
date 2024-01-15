@@ -1,11 +1,9 @@
 import type http from 'http'
 
-import express from 'express'
-
 import type IChefDatabase from '../../database/IChefDatabase'
 import type IConnection from '../../database/IConnection'
+import createApp from '../../createApp'
 import createTestDatabase from '../database/createTestDatabase'
-import registerEndpoints from '../../api/registerEndpoints'
 
 export interface TestApp {
   server: http.Server
@@ -18,8 +16,10 @@ export interface TestApp {
  */
 export default function createTestApp (): TestApp {
   const { database, connection } = createTestDatabase()
-  const app = express()
-  registerEndpoints(app, database)
+  const app = createApp(database, {
+    // Will throw 500 if a response is not valid. Saves having to write an io-ts validator for every response.
+    validateResponses: true
+  })
   const server = app.listen()
   return {
     server,

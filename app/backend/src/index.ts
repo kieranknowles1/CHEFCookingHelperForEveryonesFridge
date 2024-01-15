@@ -1,19 +1,9 @@
-import fs from 'fs'
-
-import * as OpenApiValidator from 'express-openapi-validator'
-import bodyParser from 'body-parser'
-import cors from 'cors'
-import express from 'express'
-import swaggerUi from 'swagger-ui-express'
-
 import logger, { createDefaultLogger, setLogger } from './logger'
 import ChefDatabaseImpl from './database/ChefDatabaseImpl'
 import SqliteConnection from './database/SqliteConnection'
-import constants from './constants'
+import createApp from './createApp'
 import environment from './environment'
-import getApiSpec from './getApiSpec'
 import { preloadModel } from './ml/getModel'
-import registerEndpoints from './api/registerEndpoints'
 
 setLogger(createDefaultLogger(environment.RUNTIME_LOG_FILE))
 
@@ -35,23 +25,9 @@ preloadModel().catch((err) => {
   logger.caughtError(err)
 })
 
-const app = express()
-app.use(cors())
-app.use(bodyParser.json())
-
-const specText = fs.readFileSync(constants.API_SPEC_PATH, 'utf8')
-const spec = getApiSpec(specText)
-app.use('/api-docs/v1', swaggerUi.serve, swaggerUi.setup(spec))
-
-logger.info(`Validating against API spec at ${constants.API_SPEC_PATH}`)
-app.use(OpenApiValidator.middleware({
-  apiSpec: constants.API_SPEC_PATH,
-  validateRequests: true,
+const app = createApp(db, {
   validateResponses: true
-}))
-
-logger.info('Registering endpoints.')
-registerEndpoints(app, db)
+})
 
 app.listen(environment.PORT, () => {
   logger.info(`Backend listening on http://localhost:${environment.PORT}`)
