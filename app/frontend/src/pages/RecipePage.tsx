@@ -7,10 +7,10 @@ import MadeItButton from '../components/MadeItButton'
 import NotFoundMessage from '../components/NotFoundMessage'
 import RecipeIngredient from '../components/RecipeIngredient'
 import SimilarRecipes from '../components/SimilarRecipes'
+import SingleRecipeHistory from '../components/SingleRecipeHistory'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
-import SingleRecipeHistory from '../components/SingleRecipeHistory'
 
 type Recipe = components['schemas']['Recipe']
 
