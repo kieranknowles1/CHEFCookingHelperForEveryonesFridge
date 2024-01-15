@@ -37,6 +37,7 @@ preloadModel().catch((err) => {
 
 const app = express()
 app.use(cors())
+app.use(bodyParser.json())
 
 const specText = fs.readFileSync(constants.API_SPEC_PATH, 'utf8')
 const spec = getApiSpec(specText)
@@ -49,7 +50,6 @@ app.use(OpenApiValidator.middleware({
   validateResponses: true
 }))
 
-app.use(bodyParser.json())
 
 logger.info('Registering endpoints.')
 registerEndpoints(app, db)
