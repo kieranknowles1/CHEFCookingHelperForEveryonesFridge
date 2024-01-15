@@ -53,7 +53,7 @@ export interface paths {
           code: components["schemas"]["id"];
         };
       };
-      requestBody?: {
+      requestBody: {
         content: {
           "application/json": {
             /** @example GenericMart Chicken 1kg */
@@ -379,25 +379,21 @@ export interface components {
     } & components["schemas"]["IngredientEntry"], "originalLine">;
     FridgeIngredientEntry: WithRequired<components["schemas"]["IngredientEntry"], "amount">;
     MadeRecipe: {
-      /** @example 12345 */
-      id: number;
+      id: components["schemas"]["id"];
       fridge: {
         /** @example My Fridge */
         name: string;
-        /** @example 1 */
-        id: number;
+        id: components["schemas"]["id"];
       };
       recipe: {
         /** @example Chicken Pie */
         name: string;
-        /** @example 1234 */
-        id: number;
+        id: components["schemas"]["id"];
       };
       users: {
           /** @example John Smith */
           name: string;
-          /** @example 1 */
-          id: number;
+          id: components["schemas"]["id"];
         }[];
       /**
        * Format: date-time

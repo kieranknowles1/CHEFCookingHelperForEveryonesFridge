@@ -4,7 +4,8 @@ import type express from 'express'
 // TODO: Reference list, use separate file
 type KeysOfType<T, P> = { [K in keyof T]: P extends T[K] ? K : never }[keyof T]
 
-interface JsonResponse {
+// JSON schema in either a POST body or a response
+interface JsonData {
   content: {
     'application/json': any
   }
@@ -12,15 +13,15 @@ interface JsonResponse {
 
 interface JsonEndpoint {
   // NOTE: Key is a string, despite being represented like a number
-  responses: Record<string, JsonResponse>
+  responses: Record<string, JsonData>
 }
 
 export interface JsonEndpointWithParameters extends JsonEndpoint {
   parameters: {
     query?: Record<string, any>
     path?: Record<string, any>
-    body?: Record<string, any>
   }
+  requestBody?: JsonData
 }
 
 export interface TypedRequest<
@@ -30,6 +31,10 @@ export interface TypedRequest<
   params: Record<keyof endpoint['parameters']['path'], string>
   // NOTE: Optional parameters are typed as possibly undefined, even if default is provided
   query: Exclude<endpoint['parameters']['query'], undefined>
+  // NOTE: This currently only works if the body is mandatory
+  body: endpoint['requestBody'] extends JsonData
+    ? endpoint['requestBody']['content']['application/json']
+    : never
 }
 
 /**
@@ -38,7 +43,7 @@ export interface TypedRequest<
  */
 export interface TypedResponse<
   endpoint extends JsonEndpoint,
-  code extends KeysOfType<endpoint['responses'], JsonResponse>
+  code extends KeysOfType<endpoint['responses'], JsonData>
 > extends express.Response {
   json: (body: endpoint['responses'][code]['content']['application/json']) => this
 }
