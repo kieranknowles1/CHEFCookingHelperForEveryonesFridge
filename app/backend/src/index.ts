@@ -50,7 +50,6 @@ app.use(OpenApiValidator.middleware({
   validateResponses: true
 }))
 
-
 logger.info('Registering endpoints.')
 registerEndpoints(app, db)
 
