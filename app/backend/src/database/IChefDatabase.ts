@@ -55,6 +55,14 @@ export interface IWritableDatabase {
     dateMade: Date
     users: types.RowId[]
   }) => void
+
+  // Add or update a barcode in the database.
+  // NOTE: There is no ID returned, as the barcode itself is the ID
+  setBarcode: (code: types.RowId, params: {
+    ingredientId: types.RowId
+    amount: number
+    productName: string
+  }) => void
 }
 
 export interface IFridgeDatabase {

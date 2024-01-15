@@ -160,4 +160,28 @@ export default class WritableDatabaseImpl implements IWritableDatabase {
       userStatement.run({ madeRecipeId: id, userId })
     }
   }
+
+  public setBarcode (code: types.RowId, params: {
+    ingredientId: types.RowId
+    amount: number
+    productName: string
+  }): void {
+    const statement = this._connection.prepare<undefined>(`
+      INSERT OR REPLACE INTO barcode
+        (code, ingredient_id, amount, product_name)
+      VALUES
+        (:code, :ingredientId, :amount, :productName)
+    `)
+    const result = statement.run({
+      code,
+      ingredientId: params.ingredientId,
+      amount: params.amount,
+      productName: params.productName
+    }).lastInsertRowid
+
+    // bigint currently can't be retrieved, if we get one, i'll need to rethink the API
+    if (typeof result === 'bigint') {
+      throw new Error('ID returned from database is a bigint')
+    }
+  }
 }
