@@ -45,7 +45,7 @@ describe('/api/v1/fridge/:fridgeId/ingredient/:ingredientId/amount', () => {
     it('should set the amount of an ingredient', async () => {
       await request(app.server)
         .post('/api/v1/fridge/1/ingredient/1/amount?amount=54321')
-        .expect(200)
+        .expect(204)
 
       await request(app.server)
         .get('/api/v1/fridge/1/ingredient/1/amount')
