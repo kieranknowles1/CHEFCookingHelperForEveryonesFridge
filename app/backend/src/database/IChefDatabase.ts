@@ -90,6 +90,9 @@ export interface SearchParams {
 
   limit?: number
   mealType?: string
+
+  bannedIngredients?: types.RowId[]
+  bannedTags?: types.RowId[]
 }
 
 export interface IRecipeDatabase {

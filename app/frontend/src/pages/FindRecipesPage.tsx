@@ -41,7 +41,7 @@ export default function FindRecipesPage (): React.JSX.Element {
       '/recipe/search',
       {
         params: {
-          query: { ...filters, availableForFridge: context.fridgeId, limit: 1000 }
+          query: { ...filters, availableForFridge: context.fridgeId, limit: 1000, suitableForUsers: [context.userId] }
         }
       }
     ).then(

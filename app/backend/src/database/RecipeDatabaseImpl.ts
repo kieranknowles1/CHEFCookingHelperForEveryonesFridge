@@ -68,8 +68,13 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
       checkAmounts = true,
 
       limit = Number.MAX_SAFE_INTEGER,
-      mealType
+      mealType,
+
+      bannedIngredients = [],
+      bannedTags = []
     } = params
+
+    console.log(bannedIngredients, bannedTags)
 
     // This query is an unholy monstrosity that should burn for its sins, but the SQL gods have blessed it anyway
     // TODO: Optionally allow substitutions

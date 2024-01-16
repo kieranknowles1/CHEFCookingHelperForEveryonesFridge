@@ -108,6 +108,8 @@ export interface paths {
           limit?: number;
           /** @description If specified, only return recipes of this type. By default, all recipes are returned. */
           mealType?: string;
+          /** @description If specified, only return recipes that are suitable for all of these users considering their dietary restrictions. By default, no restrictions are applied. */
+          suitableForUsers?: components["schemas"]["id"][];
         };
       };
       responses: {

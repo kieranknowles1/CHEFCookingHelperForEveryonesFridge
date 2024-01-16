@@ -148,6 +148,14 @@ paths:
           description: If specified, only return recipes of this type. By default, all recipes are returned.
           schema: { type: string, example: "Dinner" }
           required: false
+
+        - in: query
+          name: suitableForUsers
+          description: If specified, only return recipes that are suitable for all of these users considering their dietary restrictions. By default, no restrictions are applied.
+          schema:
+            type: array
+            items: { $ref: "#/components/schemas/id" }
+          required: false
       responses:
         "200":
           description: OK
