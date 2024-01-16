@@ -8,6 +8,7 @@ import { createReadStream, readFileSync, statSync } from 'fs'
 import * as t from 'io-ts'
 import cliProgress from 'cli-progress'
 import csv from 'csv-parse'
+import { program } from 'commander'
 import progressTracker from 'progress-stream'
 
 import logger, { createDefaultLogger, setLogger } from '../logger'
@@ -30,6 +31,12 @@ import DataImportError from './DataImportError'
 import type ParsedCsvRecipe from './ParsedCsvRecipe'
 import type RawCsvRecipe from './RawCsvRecipe'
 import parseCsvRecipeRow from './parseCsvRecipeRow'
+
+program
+  .option('--quick', 'Only import a small subset of the data')
+program.parse(process.argv)
+const options = program.opts()
+const limit = options.quick === true ? 10000 : undefined
 
 const PROGRESS_BAR_STYLE = cliProgress.Presets.shades_classic
 
@@ -78,7 +85,7 @@ async function getCsvData (ingredients: CaseInsensitiveMap<Ingredient>): Promise
   const [progress, bar] = createTrackers(file)
   await new Promise<void>((resolve, reject) => createReadStream(file)
     .pipe(progress)
-    .pipe(csv.parse({ columns: true }))
+    .pipe(csv.parse({ columns: true, to: limit }))
     .on('data', (row: RawCsvRecipe) => {
       totalRows++
       try {

@@ -9,7 +9,7 @@
     "start": "node build/index.js",
     "build": "tsc -p .",
     "dev": "nodemon src/index.ts",
-    "dev-setup": "nodemon src/setup/index.ts",
+    "dev-setup": "nodemon src/setup/index.ts --quick",
     "test": "mocha --reporter dot --require ts-node/register src/tests/**/*.ts",
     "test:coverage": "nyc npm run test",
     "flamegraph": "0x build/index.js"
@@ -58,6 +58,7 @@
     "async-mutex": "^0.4.0",
     "better-sqlite3": "^9.1.1",
     "cli-progress": "^3.12.0",
+    "commander": "^11.1.0",
     "cors": "^2.8.5",
     "csv-parse": "^5.5.2",
     "express": "^4.18.2",
