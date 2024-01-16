@@ -22,6 +22,20 @@ export interface paths {
       };
     };
   };
+  "/tag/list": {
+    /** Get a list of all tags */
+    get: {
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["Tag"][];
+          };
+        };
+        429: components["responses"]["TooManyRequests"];
+      };
+    };
+  };
   "/barcode/{code}": {
     /** Get the item associated with a given barcode */
     get: {
@@ -332,6 +346,14 @@ export interface components {
      * @enum {string}
      */
     Unit: "none" | "whole" | "ml" | "g";
+    Tag: {
+      /** @example 1 */
+      id: number;
+      /** @example Meat */
+      name: string;
+      /** @example Contains meat */
+      description: string;
+    };
     SearchRecipe: {
       /** @example Just Soup */
       name: string;
@@ -379,14 +401,7 @@ export interface components {
       id: number;
       /** @example John Smith */
       name: string;
-      bannedTags: {
-          /** @example 1 */
-          id: number;
-          /** @example Meat */
-          name: string;
-          /** @example Contains meat */
-          description: string;
-        }[];
+      bannedTags: components["schemas"]["Tag"][];
       bannedIngredients: {
           /** @example 1 */
           id: number;

@@ -32,6 +32,21 @@ paths:
         "429":
           $ref: "#/components/responses/TooManyRequests"
 
+  /tag/list:
+    get:
+      tags: [Metadata]
+      summary: Get a list of all tags
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Tag" }
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+
   /barcode/{code}:
     get:
       tags: [Barcode]
@@ -410,6 +425,15 @@ components:
         - g
       example: g
 
+    Tag:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        name: { type: string, example: "Meat" }
+        description: { type: string, example: "Contains meat" }
+      required: [id, name, description]
+      additionalProperties: false
+
     SearchRecipe:
       type: object
       properties:
@@ -447,6 +471,7 @@ components:
         preferredUnit: { $ref: "#/components/schemas/Unit" }
         density: { type: number, example: 0.5 }
         assumeUnlimited: { type: boolean, example: false }
+        # TODO: Should i include tags here?
         # TODO: Substitutions
         # TODO: Include density in response
       required: [name, id, preferredUnit, assumeUnlimited]
@@ -466,14 +491,7 @@ components:
         name: { type: string, example: "John Smith" }
         bannedTags:
           type: array
-          items:
-            type: object
-            properties:
-              id: { type: integer, example: 1 }
-              name: { type: string, example: "Meat" }
-              description: { type: string, example: "Contains meat" }
-            required: [id, name, description]
-            additionalProperties: false
+          items: { $ref: "#/components/schemas/Tag" }
         bannedIngredients:
           type: array
           items:

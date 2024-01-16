@@ -5,12 +5,12 @@ import { type components } from '../types/api.generated'
 import BannedIngredient from './BannedIngredient'
 import BannedTag from './BannedTag'
 
-type UserBannedTags = components['schemas']['User']['bannedTags']
+type Tag = components['schemas']['Tag']
 type UserBannedIngredients = components['schemas']['User']['bannedIngredients']
 
 export interface UserPreferencesProps {
   userId: number
-  bannedTags: UserBannedTags
+  bannedTags: Tag[]
   bannedIngredients: UserBannedIngredients
 }
 
