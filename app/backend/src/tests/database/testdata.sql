@@ -21,11 +21,11 @@ VALUES
     ('B and C pie', zeroblob(128));
 
 INSERT INTO ingredient
-    (id, name, preferredUnit)
+    (id, name, preferredUnit, density)
 VALUES
-    (1, 'Apples', 'whole'),
-    (2, 'Bananas', 'whole'),
-    (3, 'Carrots', 'whole');
+    (1, 'Apples', 'whole', 123),
+    (2, 'Bananas', 'whole', 456),
+    (3, 'Carrots', 'whole', 789);
 
 INSERT INTO recipe
     (id, name, directions, link, meal_type_id)
