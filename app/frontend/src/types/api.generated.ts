@@ -387,9 +387,9 @@ export interface components {
         }[];
       bannedIngredients: {
           /** @example 1 */
-          id?: number;
+          id: number;
           /** @example Mushrooms */
-          name?: string;
+          name: string;
         }[];
     };
     RecipeIngredientEntry: WithRequired<{

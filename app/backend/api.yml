@@ -473,6 +473,8 @@ components:
             properties:
               id: { type: integer, example: 1 }
               name: { type: string, example: "Mushrooms" }
+            required: [id, name]
+            additionalProperties: false
       required: [id, name, bannedTags, bannedIngredients]
       additionalProperties: false
 
