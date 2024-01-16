@@ -53,7 +53,7 @@ export interface paths {
           code: components["schemas"]["id"];
         };
       };
-      requestBody?: {
+      requestBody: {
         content: {
           "application/json": {
             /** @example GenericMart Chicken 1kg */
@@ -157,7 +157,12 @@ export interface paths {
               id: number;
               /** @example My Fridge */
               name: string;
-              owner: components["schemas"]["User"];
+              owner: {
+                /** @example 1 */
+                id: number;
+                /** @example John Smith */
+                name: string;
+              };
             };
           };
         };
@@ -372,6 +377,20 @@ export interface components {
       id: number;
       /** @example John Smith */
       name: string;
+      bannedTags: {
+          /** @example 1 */
+          id: number;
+          /** @example Meat */
+          name: string;
+          /** @example Contains meat */
+          description: string;
+        }[];
+      bannedIngredients: {
+          /** @example 1 */
+          id?: number;
+          /** @example Mushrooms */
+          name?: string;
+        }[];
     };
     RecipeIngredientEntry: WithRequired<{
       /** @example 250g of chicken */
@@ -379,25 +398,21 @@ export interface components {
     } & components["schemas"]["IngredientEntry"], "originalLine">;
     FridgeIngredientEntry: WithRequired<components["schemas"]["IngredientEntry"], "amount">;
     MadeRecipe: {
-      /** @example 12345 */
-      id: number;
+      id: components["schemas"]["id"];
       fridge: {
         /** @example My Fridge */
         name: string;
-        /** @example 1 */
-        id: number;
+        id: components["schemas"]["id"];
       };
       recipe: {
         /** @example Chicken Pie */
         name: string;
-        /** @example 1234 */
-        id: number;
+        id: components["schemas"]["id"];
       };
       users: {
           /** @example John Smith */
           name: string;
-          /** @example 1 */
-          id: number;
+          id: components["schemas"]["id"];
         }[];
       /**
        * Format: date-time

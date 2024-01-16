@@ -22,8 +22,8 @@ export default class UserDatabaseImpl implements IUserDatabase {
       throw new InvalidIdError('user', id)
     }
 
-    const bannedTags = this._connection.prepare<{ name: string, id: types.RowId }>(`
-      SELECT name, id
+    const bannedTags = this._connection.prepare<types.TagRow>(`
+      SELECT tag.*
       FROM user_banned_tag
       JOIN tag ON tag.id = user_banned_tag.tag_id
       WHERE user_banned_tag.user_id = :id
@@ -36,17 +36,10 @@ export default class UserDatabaseImpl implements IUserDatabase {
       WHERE user_banned_ingredient.user_id = :id
     `).all({ id })
 
-    // const bannedTags = results[0].tag_id === null
-    //   ? new Map()
-    //   : new Map(results.map(row => [row.tag_id, row.tag_name]))
-    // const bannedIngredients = results[0].ingredient_id === null
-    //   ? new Map()
-    //   : new Map(results.map(row => [row.ingredient_id, row.ingredient_name]))
-
     return {
       id: result.id,
       name: result.username,
-      bannedTags: new Map(bannedTags.map(row => [row.id, row.name])),
+      bannedTags: new Map(bannedTags.map(row => [row.id, row])),
       bannedIngredients: new Map(bannedIngredients.map(row => [row.id, row.name]))
     }
   }

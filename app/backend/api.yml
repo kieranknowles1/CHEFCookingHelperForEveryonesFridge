@@ -463,7 +463,8 @@ components:
             properties:
               id: { type: integer, example: 1 }
               name: { type: string, example: "Meat" }
-            required: [id, name]
+              description: { type: string, example: "Contains meat" }
+            required: [id, name, description]
             additionalProperties: false
         bannedIngredients:
           type: array

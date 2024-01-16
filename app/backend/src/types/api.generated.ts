@@ -382,6 +382,8 @@ export interface components {
           id: number;
           /** @example Meat */
           name: string;
+          /** @example Contains meat */
+          description: string;
         }[];
       bannedIngredients: {
           /** @example 1 */
