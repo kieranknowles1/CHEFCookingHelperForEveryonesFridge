@@ -20,7 +20,7 @@ describe('database/IngredientDatabaseImpl', () => {
     it('should get an ingredient', () => {
       const expected: Ingredient = {
         assumeUnlimited: false,
-        density: undefined,
+        density: 123,
         id: 1,
         name: 'Apples',
         preferredUnit: 'whole'

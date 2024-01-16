@@ -12,7 +12,7 @@ export type IngredientMap = Map<IngredientId, IngredientAmount>
 export interface IngredientNoId {
   name: string
   preferredUnit: DatabaseUnit
-  density: number | undefined
+  density?: number
   assumeUnlimited: boolean
 }
 
