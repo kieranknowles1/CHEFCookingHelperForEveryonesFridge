@@ -157,7 +157,12 @@ export interface paths {
               id: number;
               /** @example My Fridge */
               name: string;
-              owner: components["schemas"]["User"];
+              owner: {
+                /** @example 1 */
+                id: number;
+                /** @example John Smith */
+                name: string;
+              };
             };
           };
         };
@@ -372,6 +377,18 @@ export interface components {
       id: number;
       /** @example John Smith */
       name: string;
+      bannedTags: {
+          /** @example 1 */
+          id: number;
+          /** @example Meat */
+          name: string;
+        }[];
+      bannedIngredients: {
+          /** @example 1 */
+          id?: number;
+          /** @example Mushrooms */
+          name?: string;
+        }[];
     };
     RecipeIngredientEntry: WithRequired<{
       /** @example 250g of chicken */

@@ -192,7 +192,13 @@ paths:
                 properties:
                   id: { type: integer, example: 1 }
                   name: { type: string, example: "My Fridge" }
-                  owner: { $ref: "#/components/schemas/User" }
+                  owner:
+                    type: object
+                    properties:
+                      id: { type: integer, example: 1 }
+                      name: { type: string, example: "John Smith" }
+                    required: [id, name]
+                    additionalProperties: false
                 required: [id, name, owner]
                 additionalProperties: false
         "404":
@@ -450,7 +456,23 @@ components:
       properties:
         id: { type: integer, example: 1 }
         name: { type: string, example: "John Smith" }
-      required: [id, name]
+        bannedTags:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer, example: 1 }
+              name: { type: string, example: "Meat" }
+            required: [id, name]
+            additionalProperties: false
+        bannedIngredients:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer, example: 1 }
+              name: { type: string, example: "Mushrooms" }
+      required: [id, name, bannedTags, bannedIngredients]
       additionalProperties: false
 
     RecipeIngredientEntry:
