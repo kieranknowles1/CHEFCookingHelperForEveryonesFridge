@@ -100,15 +100,13 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
               OR (:checkAmount AND fridge_ingredient.amount < recipe_ingredient.amount)
             THEN 1 END
           ) as missing_count,
-          CASE WHEN :search IS NULL THEN NULL ELSE ml_similarity(embedding.embedding, :search) END AS similarity,
-          ingredient_tag.tag_id AS banned_tag
+          CASE WHEN :search IS NULL THEN NULL ELSE ml_similarity(embedding.embedding, :search) END AS similarity
         FROM recipe
           JOIN embedding ON embedding.sentence = recipe.name
           LEFT JOIN recipe_ingredient ON recipe_ingredient.recipe_id = recipe.id
           LEFT JOIN fridge_ingredient ON fridge_ingredient.ingredient_id = recipe_ingredient.ingredient_id AND fridge_ingredient.fridge_id = :fridgeId
           JOIN ingredient ON ingredient.id = recipe_ingredient.ingredient_id AND NOT ingredient.assumeUnlimited
-          -- Only join if a tag is banned
-          LEFT JOIN ingredient_tag ON ingredient_tag.ingredient_id = ingredient.id AND ingredient_tag.tag_id IN (SELECT tag_id FROM ${bannedTagsTable})
+          LEFT JOIN ingredient_tag ON ingredient_tag.ingredient_id = ingredient.id
         WHERE
           (recipe.meal_type_id = (SELECT id FROM meal_type WHERE name = :mealType) OR :mealType IS NULL)
           AND (similarity >= :minSimilarity OR :search IS NULL)
@@ -116,7 +114,11 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
         -- COUNT excludes NULLs. Less than used to optionally allow missing ingredients
         HAVING
           (missing_count <= :maxMissingIngredients OR :fridgeId IS NULL)
-          AND (COUNT(banned_tag) = 0)
+          -- SUM(CASE WHEN ... THEN 1 ELSE 0 END) = 0 checks for CASE WHEN returning false for all rows
+          -- No banned tags
+          AND (SUM(CASE WHEN ingredient_tag.tag_id IN (SELECT tag_id FROM ${bannedTagsTable}) THEN 1 ELSE 0 END) = 0)
+          -- No banned ingredients
+          AND (SUM(CASE WHEN recipe_ingredient.ingredient_id IN (SELECT ingredient_id FROM ${bannedIngredsTable}) THEN 1 ELSE 0 END) = 0)
         ORDER BY missing_count ASC, similarity DESC
         LIMIT :limit
       `)
