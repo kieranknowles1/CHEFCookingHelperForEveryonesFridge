@@ -8,7 +8,7 @@ import createTestApp, { type TestApp } from './createTestApp'
 type BarcodeBody = paths['/barcode/{code}']['post']['requestBody']['content']['application/json']
 type BarcodeResponse = paths['/barcode/{code}']['get']['responses']['200']['content']['application/json']
 
-describe('GET /api/v1/barcode/:barcode', () => {
+describe('/api/v1/barcode/:barcode', () => {
   let app: TestApp
   before(() => {
     app = createTestApp()
