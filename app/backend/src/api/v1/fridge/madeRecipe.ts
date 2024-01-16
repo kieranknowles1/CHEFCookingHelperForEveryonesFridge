@@ -1,8 +1,8 @@
 import { type Express } from 'express'
 
-import type IChefDatabase from '../../../../database/IChefDatabase'
-import { type TypedRequest } from '../../../TypedEndpoint'
-import { type paths } from '../../../../types/api.generated'
+import type IChefDatabase from '../../../database/IChefDatabase'
+import { type TypedRequest } from '../../TypedEndpoint'
+import { type paths } from '../../../types/api.generated'
 
 type endpoint = paths['/fridge/{fridgeId}/recipe/{recipeId}/maderecipe']['post']
 
