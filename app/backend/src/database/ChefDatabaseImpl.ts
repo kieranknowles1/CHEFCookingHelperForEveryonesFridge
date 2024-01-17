@@ -4,6 +4,7 @@ import { readFileSync } from 'fs'
 
 import type Barcode from '../types/Barcode'
 import type EmbeddedSentence from '../ml/EmbeddedSentence'
+import type Tag from '../types/Tag'
 import logger from '../logger'
 import ml_extendDatabase from '../ml/extendDatabase'
 
@@ -103,7 +104,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
     }
   }
 
-  getMealTypeNames (): string[] {
+  public getMealTypeNames (): string[] {
     interface Result { name: string }
     const statement = this._connection.prepare<Result>(`
       SELECT name FROM meal_type
@@ -113,7 +114,7 @@ export default class ChefDatabaseImpl implements IChefDatabase {
     return result.map(row => row.name)
   }
 
-  getMealTypes (): EmbeddedSentence[] {
+  public getMealTypes (): EmbeddedSentence[] {
     interface Result { name: string, embedding: Buffer }
     const statement = this._connection.prepare<Result>(`
       SELECT
@@ -127,6 +128,13 @@ export default class ChefDatabaseImpl implements IChefDatabase {
       sentence: row.name,
       embedding: bufferToFloat32Array(row.embedding)
     }))
+  }
+
+  public getTags (): Tag[] {
+    const statement = this._connection.prepare<types.TagRow>(`
+      SELECT * FROM tag
+    `)
+    return statement.all()
   }
 
   public getBarcode (code: types.RowId): Barcode {

@@ -9,6 +9,7 @@ import registerFridgeInfoEndpoint from './v1/fridge/info'
 import registerFridgeIngredientAllAmountEndpoint from './v1/fridge/ingredient/allAmounts'
 import registerFridgeIngredientEndpoint from './v1/fridge/ingredient/amount'
 import registerFridgeMadeRecipeEndpoint from './v1/fridge/madeRecipe'
+import registerGetTagsEndpoint from './v1/getTags'
 import registerIngredientAllEndpoint from './v1/getAllIngredients'
 import registerMealTypeListEndpoint from './v1/getMealTypes'
 import registerRecipeEndpoint from './v1/recipe/recipe'
@@ -25,6 +26,7 @@ export default function registerEndpoints (app: Express, db: IChefDatabase): voi
   registerFridgeInfoEndpoint(app, db)
   registerFridgeIngredientAllAmountEndpoint(app, db)
   registerFridgeIngredientEndpoint(app, db)
+  registerGetTagsEndpoint(app, db)
   registerIngredientAllEndpoint(app, db)
   registerMealTypeListEndpoint(app, db)
   registerRecipeSearchEndpoint(app, db)

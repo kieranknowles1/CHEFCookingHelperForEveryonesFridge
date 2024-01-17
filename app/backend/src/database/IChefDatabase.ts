@@ -6,6 +6,7 @@ import type Fridge from '../types/Fridge'
 import type Ingredient from '../types/Ingredient'
 import { type IngredientNoId } from '../types/Ingredient'
 import type Recipe from '../types/Recipe'
+import type Tag from '../types/Tag'
 import type User from '../types/User'
 
 import type * as types from './types'
@@ -154,6 +155,8 @@ export default interface IChefDatabase {
 
   getMealTypeNames: () => string[]
   getMealTypes: () => EmbeddedSentence[]
+
+  getTags: () => Tag[]
 
   /**
    * Get the data associated with a barcode, throws if code not found
