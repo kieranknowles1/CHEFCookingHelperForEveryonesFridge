@@ -1,13 +1,13 @@
 import { Combobox } from '@headlessui/react'
 import React from 'react'
 
-import UserContext from '../contexts/UserContext'
-import apiClient from '../apiClient'
-import { type components } from '../types/api.generated'
-import monitorStatus from '../utils/monitorStatus'
-import useSafeContext from '../contexts/useSafeContext'
+import UserContext from '../../contexts/UserContext'
+import apiClient from '../../apiClient'
+import { type components } from '../../types/api.generated'
+import monitorStatus from '../../utils/monitorStatus'
+import useSafeContext from '../../contexts/useSafeContext'
 
-import LoadingSpinner, { type LoadingStatus } from './LoadingSpinner'
+import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpinner'
 
 type Ingredient = components['schemas']['Ingredient']
 
