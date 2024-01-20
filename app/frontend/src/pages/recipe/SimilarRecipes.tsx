@@ -1,14 +1,13 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpinner'
+import RecipeList from '../../components/RecipeList'
 import { type RecipeProps } from '../../components/Recipe'
 import UserContext from '../../contexts/UserContext'
 import apiClient from '../../apiClient'
 import { type components } from '../../types/api.generated'
 import monitorStatus from '../../utils/monitorStatus'
 import useSafeContext from '../../contexts/useSafeContext'
-
-import RecipeList from '../../components/RecipeList'
 
 type Recipe = components['schemas']['Recipe']
 

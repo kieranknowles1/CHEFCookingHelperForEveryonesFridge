@@ -1,13 +1,14 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
-import History from './account/History'
 import UserContext from '../contexts/UserContext'
-import UserPreferences from './account/UserPreferences'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
 import monitorStatus from '../utils/monitorStatus'
 import useSafeContext from '../contexts/useSafeContext'
+
+import History from './account/History'
+import UserPreferences from './account/UserPreferences'
 
 type User = components['schemas']['User']
 

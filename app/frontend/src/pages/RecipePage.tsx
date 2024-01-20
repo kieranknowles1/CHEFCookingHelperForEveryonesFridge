@@ -3,14 +3,15 @@ import { useParams } from 'react-router-dom'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
 import monitorStatus, { type ApiError } from '../utils/monitorStatus'
-import MadeItButton from './recipe/MadeItButton'
 import NotFoundMessage from '../components/NotFoundMessage'
-import RecipeIngredient from './recipe/RecipeIngredient'
-import SimilarRecipes from './recipe/SimilarRecipes'
-import SingleRecipeHistory from './recipe/SingleRecipeHistory'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
+
+import MadeItButton from './recipe/MadeItButton'
+import RecipeIngredient from './recipe/RecipeIngredient'
+import SimilarRecipes from './recipe/SimilarRecipes'
+import SingleRecipeHistory from './recipe/SingleRecipeHistory'
 
 type Recipe = components['schemas']['Recipe']
 

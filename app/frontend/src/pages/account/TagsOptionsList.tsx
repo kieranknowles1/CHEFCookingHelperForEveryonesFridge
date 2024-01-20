@@ -1,10 +1,10 @@
 import React from 'react'
 
+import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpinner'
 import monitorStatus, { type ApiError } from '../../utils/monitorStatus'
 import apiClient from '../../apiClient'
 import { type components } from '../../types/api.generated'
 
-import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpinner'
 import TagOption from './TagOption'
 
 type Tag = components['schemas']['Tag']
