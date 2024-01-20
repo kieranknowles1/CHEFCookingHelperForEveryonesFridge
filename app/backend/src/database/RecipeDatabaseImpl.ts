@@ -99,7 +99,7 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
               -- Optionally check if fridge has enough ingredient
               OR (:checkAmount AND fridge_ingredient.amount < recipe_ingredient.amount)
             THEN 1 END
-          ) as missing_count,
+          ) as missing_count, -- Meaningless if fridgeId is null
           CASE WHEN :search IS NULL THEN NULL ELSE ml_similarity(embedding.embedding, :search) END AS similarity
         FROM recipe
           JOIN embedding ON embedding.sentence = recipe.name
@@ -134,7 +134,7 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
       }).map(row => ({
         id: row.id,
         name: row.name,
-        missingIngredientAmount: row.missing_count,
+        missingIngredientAmount: availableForFridge !== undefined ? row.missing_count : undefined,
         similarity: row.similarity ?? undefined
       }))
     } finally {
