@@ -2,8 +2,8 @@ INSERT INTO tag
     (name, description)
 VALUES
     ('Nuts', 'Any kind of nut that you may be allergic to'),
-    ('Meat', 'Any meat or poultry that would not be suitable for a vegetarian'),
-    ('Animal Product', 'Any non-meat animal product that would not be suitable for a vegan');
+    ('Meats', 'Any meat or poultry that would not be suitable for a vegetarian'),
+    ('Animal Products', 'Any non-meat animal product that would not be suitable for a vegan');
 
 INSERT INTO ingredient
     (name, preferredUnit)
