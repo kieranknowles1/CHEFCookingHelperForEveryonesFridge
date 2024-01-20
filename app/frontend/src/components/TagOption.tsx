@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ToggleButton from './ToggleButton'
+import ToggleButton from './inputs/ToggleButton'
 
 export interface TagOptionProps {
   name: string

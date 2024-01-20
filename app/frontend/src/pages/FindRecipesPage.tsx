@@ -7,7 +7,7 @@ import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner
 import RecipeSearchFilters, { type SearchFilters } from '../components/RecipeSearchOptions'
 import RecipeList from '../components/RecipeList'
 import { type RecipeProps } from '../components/Recipe'
-import Search from '../components/Search'
+import Search from '../components/inputs/Search'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import monitorStatus from '../utils/monitorStatus'
