@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { type components } from '../types/api.generated'
-import apiClient from '../apiClient'
 import monitorStatus, { type ApiError } from '../utils/monitorStatus'
+import apiClient from '../apiClient'
+import { type components } from '../types/api.generated'
 
 import LoadingSpinner, { type LoadingStatus } from './LoadingSpinner'
 import TagOption from './TagOption'
