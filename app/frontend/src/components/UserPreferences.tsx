@@ -3,7 +3,7 @@ import React from 'react'
 import { type components } from '../types/api.generated'
 
 import BannedIngredient from './BannedIngredient'
-import BannedTag from './BannedTag'
+import TagsOptions from './TagsOptions'
 
 type Tag = components['schemas']['Tag']
 type UserBannedIngredients = components['schemas']['User']['bannedIngredients']
@@ -18,17 +18,8 @@ export default function UserPreferences (props: UserPreferencesProps): React.JSX
   return (
     <div>
       <h3>Dietary Restrictions</h3>
-      <p>Types of food disallowed by your diet.</p>
-      <ul className='list-inside list-disc'>
-        {props.bannedTags.length === 0 && <p>No dietary restrictions.</p>}
-        {props.bannedTags.map(tag => (
-          <BannedTag
-            key={tag.id}
-            name={tag.name}
-            description={tag.description}
-          />
-        ))}
-      </ul>
+      <p>Types of food allowed or disallowed by your diet.</p>
+      <TagsOptions userId={props.userId} bannedTags={props.bannedTags} />
 
       <h3>Disliked Ingredients</h3>
       <p>Specific ingredients you don&apos;t like or can&apos;t eat.</p>
