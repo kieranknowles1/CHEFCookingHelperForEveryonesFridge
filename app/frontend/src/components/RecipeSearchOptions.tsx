@@ -11,7 +11,7 @@ export interface SearchFilters {
   mealType: string | undefined
 }
 
-export interface RecipeSearchFiltersProps {
+export interface RecipeSearchOptionsProps {
   filters: SearchFilters
   setFilters: (filters: SearchFilters) => void
 }
@@ -20,7 +20,7 @@ export interface RecipeSearchFiltersProps {
  * Component for filters to search recipes by.
  * Default options are set in the provided filters prop.
  */
-export default function RecipeSearchFilters (props: RecipeSearchFiltersProps): React.ReactElement {
+export default function RecipeSearchOptions (props: RecipeSearchOptionsProps): React.ReactElement {
   const { filters, setFilters } = props
 
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
