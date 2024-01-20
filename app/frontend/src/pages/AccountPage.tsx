@@ -1,9 +1,9 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
-import History from '../components/History'
+import History from './account/History'
 import UserContext from '../contexts/UserContext'
-import UserPreferences from '../components/UserPreferences'
+import UserPreferences from './account/UserPreferences'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
 import monitorStatus from '../utils/monitorStatus'

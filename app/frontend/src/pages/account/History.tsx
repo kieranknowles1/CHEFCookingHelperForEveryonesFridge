@@ -1,10 +1,10 @@
 import React from 'react'
 
-import apiClient from '../apiClient'
-import { type components } from '../types/api.generated'
-import monitorStatus from '../utils/monitorStatus'
+import apiClient from '../../apiClient'
+import { type components } from '../../types/api.generated'
+import monitorStatus from '../../utils/monitorStatus'
 
-import LoadingSpinner, { type LoadingStatus } from './LoadingSpinner'
+import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpinner'
 import HistoryItem from './HistoryItem'
 
 type MadeRecipe = components['schemas']['MadeRecipe']

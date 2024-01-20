@@ -1,10 +1,10 @@
 import React from 'react'
 
-import monitorStatus, { type ApiError } from '../utils/monitorStatus'
-import apiClient from '../apiClient'
-import { type components } from '../types/api.generated'
+import monitorStatus, { type ApiError } from '../../utils/monitorStatus'
+import apiClient from '../../apiClient'
+import { type components } from '../../types/api.generated'
 
-import LoadingSpinner, { type LoadingStatus } from './LoadingSpinner'
+import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpinner'
 import TagOption from './TagOption'
 
 type Tag = components['schemas']['Tag']
@@ -14,7 +14,7 @@ export interface TagsOptionsProps {
   bannedTags: Tag[]
 }
 
-export default function TagsOptions (props: TagsOptionsProps): React.JSX.Element {
+export default function TagsOptionsList (props: TagsOptionsProps): React.JSX.Element {
   const [allTags, setAllTags] = React.useState<Tag[]>([])
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
 

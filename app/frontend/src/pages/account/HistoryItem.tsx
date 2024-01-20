@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import React from 'react'
 
-import { type components } from '../types/api.generated'
-import formatShortDate from '../utils/formatShortDate'
-import getRecipeUrl from '../utils/getRecipeUrl'
+import { type components } from '../../types/api.generated'
+import formatShortDate from '../../utils/formatShortDate'
+import getRecipeUrl from '../../utils/getRecipeUrl'
 
 type MadeRecipe = components['schemas']['MadeRecipe']
 
