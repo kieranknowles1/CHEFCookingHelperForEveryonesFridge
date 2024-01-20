@@ -2,12 +2,12 @@ import { mdiHamburger, mdiHamburgerCheck } from '@mdi/js'
 import Icon from '@mdi/react'
 import React from 'react'
 
-import UserContext from '../contexts/UserContext'
-import apiClient from '../apiClient'
-import monitorStatus from '../utils/monitorStatus'
-import useSafeContext from '../contexts/useSafeContext'
+import UserContext from '../../contexts/UserContext'
+import apiClient from '../../apiClient'
+import monitorStatus from '../../utils/monitorStatus'
+import useSafeContext from '../../contexts/useSafeContext'
 
-import LoadingSpinner, { DefaultSmallSpinner, type LoadingStatus } from './LoadingSpinner'
+import LoadingSpinner, { DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
 
 export interface MadeItButtonProps {
   recipeId: number

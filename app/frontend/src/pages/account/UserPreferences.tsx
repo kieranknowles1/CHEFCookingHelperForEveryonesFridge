@@ -2,7 +2,7 @@ import React from 'react'
 
 import { type components } from '../../types/api.generated'
 
-import BannedIngredient from '../../components/BannedIngredient'
+import BannedIngredient from './BannedIngredient'
 import TagsOptionsList from './TagsOptionsList'
 
 type Tag = components['schemas']['Tag']
