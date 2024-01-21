@@ -3,7 +3,7 @@ import { Switch } from '@headlessui/react'
 
 export interface ToggleButtonProps {
   checked: boolean
-  onChange: (checked: boolean) => void
+  setChecked: (checked: boolean) => void
   // The label that will be read by screen readers
   screenReaderLabel: string
 }
@@ -15,7 +15,7 @@ export default function ToggleButton (props: ToggleButtonProps): React.JSX.Eleme
   return (
     <Switch
       checked={props.checked}
-      onChange={props.onChange}
+      onChange={props.setChecked}
       className={`
         ${props.checked ? 'bg-savoy_blue-500 hover:bg-savoy_blue-400' : 'bg-dim_gray-500 hover:bg-dim_gray-400'}
         relative inline-flex h-5 w-11 items-center rounded-full transition-colors duration-200

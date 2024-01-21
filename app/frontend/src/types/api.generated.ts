@@ -318,6 +318,50 @@ export interface paths {
       };
     };
   };
+  "/user/{userId}/preference/tag/{tagId}": {
+    /** Add or remove a tag from a user's banned tags */
+    post: {
+      parameters: {
+        query: {
+          /** @description Whether to allow or ban the tag */
+          allow: boolean;
+        };
+        path: {
+          userId: components["parameters"]["userId"];
+          tagId: components["parameters"]["tagId"];
+        };
+      };
+      responses: {
+        /** @description No Content */
+        204: {
+          content: never;
+        };
+        403: components["responses"]["Forbidden"];
+      };
+    };
+  };
+  "/user/{userId}/preference/ingredient/{ingredientId}": {
+    /** Add or remove an ingredient from a user's banned ingredients */
+    post: {
+      parameters: {
+        query: {
+          /** @description Whether to allow or ban the ingredient */
+          allow: boolean;
+        };
+        path: {
+          userId: components["parameters"]["userId"];
+          ingredientId: components["parameters"]["ingredientId"];
+        };
+      };
+      responses: {
+        /** @description No Content */
+        204: {
+          content: never;
+        };
+        403: components["responses"]["Forbidden"];
+      };
+    };
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -463,6 +507,7 @@ export interface components {
     ingredientId: components["schemas"]["id"];
     recipeId: components["schemas"]["id"];
     userId: components["schemas"]["id"];
+    tagId: components["schemas"]["id"];
   };
   requestBodies: never;
   headers: never;
