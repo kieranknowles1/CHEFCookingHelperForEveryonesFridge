@@ -7,6 +7,7 @@ import type IChefDatabase from './IChefDatabase'
 import type IConnection from './IConnection'
 import { type IWritableDatabase } from './IChefDatabase'
 import { bufferFromFloat32Array } from './bufferFloat32Array'
+import { type IPreparedStatement } from './IConnection'
 
 /**
  * Writable interface to the database, passed to the callback of {@link ChefDatabaseImpl.wrapTransaction}
@@ -183,5 +184,41 @@ export default class WritableDatabaseImpl implements IWritableDatabase {
     if (typeof result === 'bigint') {
       throw new Error('ID returned from database is a bigint')
     }
+  }
+
+  public setTagPreference (userId: types.RowId, tagId: types.RowId, allow: boolean): void {
+    let statement: IPreparedStatement<undefined>
+    if (allow) {
+      statement = this._connection.prepare<undefined>(`
+        DELETE FROM user_banned_tag WHERE user_id = :userId AND tag_id = :tagId
+      `)
+    } else {
+      statement = this._connection.prepare<undefined>(`
+        INSERT OR REPLACE INTO user_banned_tag
+          (user_id, tag_id)
+        VALUES
+          (:userId, :tagId)
+      `)
+    }
+
+    statement.run({ userId, tagId })
+  }
+
+  public setIngredientPreference (userId: types.RowId, ingredientId: types.RowId, allow: boolean): void {
+    let statement: IPreparedStatement<undefined>
+    if (allow) {
+      statement = this._connection.prepare<undefined>(`
+        DELETE FROM user_banned_ingredient WHERE user_id = :userId AND ingredient_id = :ingredientId
+      `)
+    } else {
+      statement = this._connection.prepare<undefined>(`
+        INSERT OR REPLACE INTO user_banned_ingredient
+          (user_id, ingredient_id)
+        VALUES
+          (:userId, :ingredientId)
+      `)
+    }
+
+    statement.run({ userId, ingredientId })
   }
 }

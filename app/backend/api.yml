@@ -346,6 +346,43 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
+  # TODO: Authentication
+  /user/{userId}/preference/tag/{tagId}:
+    post:
+      tags: [User]
+      summary: Add or remove a tag from a user's banned tags
+      parameters:
+        - $ref: "#/components/parameters/userId"
+        - $ref: "#/components/parameters/tagId"
+        - in: query
+          name: allow
+          description: Whether to allow or ban the tag
+          schema: { type: boolean, example: true }
+          required: true
+      responses:
+        "204":
+          description: No Content
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /user/{userId}/preferences/ingredient/{ingredientId}:
+    post:
+      tags: [User]
+      summary: Add or remove an ingredient from a user's banned ingredients
+      parameters:
+        - $ref: "#/components/parameters/userId"
+        - $ref: "#/components/parameters/ingredientId"
+        - in: query
+          name: allow
+          description: Whether to allow or ban the ingredient
+          schema: { type: boolean, example: true }
+          required: true
+      responses:
+        "204":
+          description: No Content
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
 components:
   parameters:
     fridgeId:
@@ -366,6 +403,11 @@ components:
     userId:
       in: path
       name: userId
+      schema: { $ref: "#/components/schemas/id" }
+      required: true
+    tagId:
+      in: path
+      name: tagId
       schema: { $ref: "#/components/schemas/id" }
       required: true
 
