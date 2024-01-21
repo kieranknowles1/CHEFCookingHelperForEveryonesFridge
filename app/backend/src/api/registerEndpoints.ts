@@ -16,6 +16,7 @@ import registerRecipeEndpoint from './v1/recipe/recipe'
 import registerRecipeSearchEndpoint from './v1/recipe/search'
 import registerUserHistoryEndpoint from './v1/user/history'
 import registerUserInfoEndpoint from './v1/user/info'
+import registerUserIngredientPreferenceEndpoint from './v1/user/ingredientPreference'
 import registerUserTagPreferenceEndpoint from './v1/user/tagPreference'
 
 /**
@@ -34,6 +35,7 @@ export default function registerEndpoints (app: Express, db: IChefDatabase): voi
   registerRecipeEndpoint(app, db)
   registerUserHistoryEndpoint(app, db)
   registerUserInfoEndpoint(app, db)
+  registerUserIngredientPreferenceEndpoint(app, db)
   registerUserTagPreferenceEndpoint(app, db)
 
   app.use(notFoundHandler)

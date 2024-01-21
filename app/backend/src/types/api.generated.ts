@@ -340,7 +340,7 @@ export interface paths {
       };
     };
   };
-  "/user/{userId}/preferences/ingredient/{ingredientId}": {
+  "/user/{userId}/preference/ingredient/{ingredientId}": {
     /** Add or remove an ingredient from a user's banned ingredients */
     post: {
       parameters: {

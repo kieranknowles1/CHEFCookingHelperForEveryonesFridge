@@ -365,7 +365,7 @@ paths:
         "403":
           $ref: "#/components/responses/Forbidden"
 
-  /user/{userId}/preferences/ingredient/{ingredientId}:
+  /user/{userId}/preference/ingredient/{ingredientId}:
     post:
       tags: [User]
       summary: Add or remove an ingredient from a user's banned ingredients
