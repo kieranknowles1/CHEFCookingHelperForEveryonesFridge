@@ -10,6 +10,8 @@ DELETE FROM ingredient_substitution_entry;
 DELETE FROM recipe;
 DELETE FROM recipe_ingredient;
 DELETE FROM user;
+DELETE FROM user_banned_ingredient;
+DELETE FROM user_banned_tag;
 DELETE FROM fridge;
 DELETE FROM fridge_ingredient;
 PRAGMA foreign_keys = ON;
@@ -52,6 +54,16 @@ INSERT INTO user
     (id, username)
 VALUES
     (1, 'Testy McTestface');
+INSERT INTO user_banned_ingredient
+    (user_id, ingredient_id)
+VALUES
+    (1, 1); -- Apples
+
+INSERT INTO user_banned_tag
+    (user_id, tag_id)
+VALUES
+    (1, 1); -- Nuts
+
 
 INSERT INTO fridge
     (id, name, owner_id)

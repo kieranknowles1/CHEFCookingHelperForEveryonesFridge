@@ -22,7 +22,10 @@ describe('/api/v1/fridge/:id', () => {
       const expected: FridgeInfoResponse = {
         id: 1,
         name: 'The Test Fridge',
-        owner: app.db.users.get(1)
+        owner: {
+          id: 1,
+          name: 'Testy McTestface'
+        }
       }
 
       await request(app.server)
