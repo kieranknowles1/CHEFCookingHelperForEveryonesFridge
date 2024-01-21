@@ -3,6 +3,7 @@
 
 PRAGMA foreign_keys = OFF;
 DELETE FROM ingredient;
+DELETE FROM ingredient_tag;
 DELETE FROM ingredient_alt_name;
 DELETE FROM ingredient_substitution_group;
 DELETE FROM ingredient_substitution_entry;
