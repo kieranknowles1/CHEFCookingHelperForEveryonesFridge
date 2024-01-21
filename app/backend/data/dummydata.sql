@@ -8,7 +8,7 @@ VALUES
 INSERT INTO user_banned_tag
     (user_id, tag_id)
 VALUES
-    (1, (SELECT id FROM tag WHERE name = 'Meat'));
+    (1, (SELECT id FROM tag WHERE name = 'Meats'));
 
 INSERT INTO user_banned_ingredient
     (user_id, ingredient_id)

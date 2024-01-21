@@ -24,7 +24,7 @@ export default function parseCsvRecipeRow (row: RawCsvRecipe, allIngredients: Ca
   if (!foundFinite) throw new DataImportError('All ingredients unlimited, probably a scraping error')
 
   return {
-    name: row.title,
+    name: row.title.trim(),
     directions,
     link: row.link,
     ingredients: new Map(ingredients.map(e => [

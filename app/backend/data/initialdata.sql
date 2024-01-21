@@ -29,9 +29,9 @@ VALUES
 INSERT INTO ingredient_tag
     (ingredient_id, tag_id)
 VALUES
-    ((SELECT id FROM ingredient WHERE name = 'Chicken Breasts'), (SELECT id FROM tag WHERE name = 'Meat')),
-    ((SELECT id FROM ingredient WHERE name = 'Eggs'), (SELECT id FROM tag WHERE name = 'Animal Product')),
-    ((SELECT id FROM ingredient WHERE name = 'Hamburger'), (SELECT id FROM tag WHERE name = 'Meat'));
+    ((SELECT id FROM ingredient WHERE name = 'Chicken Breasts'), (SELECT id FROM tag WHERE name = 'Meats')),
+    ((SELECT id FROM ingredient WHERE name = 'Eggs'), (SELECT id FROM tag WHERE name = 'Animal Products')),
+    ((SELECT id FROM ingredient WHERE name = 'Hamburger'), (SELECT id FROM tag WHERE name = 'Meats'));
 
 INSERT INTO ingredient
     (name, preferredUnit, assumeUnlimited, density)
@@ -77,14 +77,14 @@ INSERT INTO ingredient_tag
     (ingredient_id, tag_id)
 VALUES
     -- Butter excluded as there are vegan substitutes
-    ((SELECT id FROM ingredient WHERE name = 'Cheddar Cheese'), (SELECT id FROM tag WHERE name = 'Animal Product')),
-    ((SELECT id FROM ingredient WHERE name = 'Cheese'), (SELECT id FROM tag WHERE name = 'Animal Product')),
-    ((SELECT id FROM ingredient WHERE name = 'Chicken'), (SELECT id FROM tag WHERE name = 'Meat')),
-    ((SELECT id FROM ingredient WHERE name = 'Cream Cheese'), (SELECT id FROM tag WHERE name = 'Animal Product')),
-    ((SELECT id FROM ingredient WHERE name = 'Ground Beef'), (SELECT id FROM tag WHERE name = 'Meat')),
-    ((SELECT id FROM ingredient WHERE name = 'Milk'), (SELECT id FROM tag WHERE name = 'Animal Product')),
-    ((SELECT id FROM ingredient WHERE name = 'Mozzarella Cheese'), (SELECT id FROM tag WHERE name = 'Animal Product')),
-    ((SELECT id FROM ingredient WHERE name = 'Sour Cream'), (SELECT id FROM tag WHERE name = 'Animal Product'));
+    ((SELECT id FROM ingredient WHERE name = 'Cheddar Cheese'), (SELECT id FROM tag WHERE name = 'Animal Products')),
+    ((SELECT id FROM ingredient WHERE name = 'Cheese'), (SELECT id FROM tag WHERE name = 'Animal Products')),
+    ((SELECT id FROM ingredient WHERE name = 'Chicken'), (SELECT id FROM tag WHERE name = 'Meats')),
+    ((SELECT id FROM ingredient WHERE name = 'Cream Cheese'), (SELECT id FROM tag WHERE name = 'Animal Products')),
+    ((SELECT id FROM ingredient WHERE name = 'Ground Beef'), (SELECT id FROM tag WHERE name = 'Meats')),
+    ((SELECT id FROM ingredient WHERE name = 'Milk'), (SELECT id FROM tag WHERE name = 'Animal Products')),
+    ((SELECT id FROM ingredient WHERE name = 'Mozzarella Cheese'), (SELECT id FROM tag WHERE name = 'Animal Products')),
+    ((SELECT id FROM ingredient WHERE name = 'Sour Cream'), (SELECT id FROM tag WHERE name = 'Animal Products'));
 
 INSERT INTO ingredient_alt_name
     (name, ingredient_id)
