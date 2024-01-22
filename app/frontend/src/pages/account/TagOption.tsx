@@ -11,7 +11,8 @@ export interface TagOptionProps {
   id: number
   description: string
   allowed: boolean
-  setAllowed: (allowed: boolean) => void
+  // Function to call after submitting and when the API call succeeds
+  onChange: (allowed: boolean) => void
 }
 
 export default function TagOption (props: TagOptionProps): React.JSX.Element {
@@ -30,7 +31,7 @@ export default function TagOption (props: TagOptionProps): React.JSX.Element {
     ).then(
       monitorStatus(setStatus)
     ).then(() => {
-      props.setAllowed(allowed)
+      props.onChange(allowed)
     }).catch((err: ApiError) => {
       console.error(err)
       alert(err.message)

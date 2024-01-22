@@ -47,6 +47,7 @@ export default function AccountPage (): React.JSX.Element {
       <UserPreferences
         userId={context.userId}
         bannedTags={bannedTags}
+        setBannedTags={setBannedTags}
         bannedIngredients={bannedIngredients}
         setBannedIngredients={setBannedIngredients}
       />

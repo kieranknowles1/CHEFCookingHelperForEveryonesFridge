@@ -11,6 +11,7 @@ type UserBannedIngredients = components['schemas']['User']['bannedIngredients']
 export interface UserPreferencesProps {
   userId: number
   bannedTags: Tag[]
+  setBannedTags: (bannedTags: Tag[]) => void
   bannedIngredients: UserBannedIngredients
   setBannedIngredients: (bannedIngredients: UserBannedIngredients) => void
 }
@@ -20,7 +21,11 @@ export default function UserPreferences (props: UserPreferencesProps): React.JSX
     <div>
       <h3>Dietary Restrictions</h3>
       <p>Types of food allowed or disallowed by your diet.</p>
-      <TagsOptionsList userId={props.userId} bannedTags={props.bannedTags} />
+      <TagsOptionsList
+        userId={props.userId}
+        bannedTags={props.bannedTags}
+        setBannedTags={props.setBannedTags}
+      />
 
       <h3>Disliked Ingredients</h3>
       <p>Specific ingredients you don&apos;t like or can&apos;t eat.</p>
