@@ -3,7 +3,8 @@ INSERT INTO tag
 VALUES
     ('Nuts', 'Any kind of nut that you may be allergic to'),
     ('Meats', 'Any meat or poultry that would not be suitable for a vegetarian'),
-    ('Animal Products', 'Any non-meat animal product that would not be suitable for a vegan');
+    ('Animal Products', 'Any non-meat animal product that would not be suitable for a vegan'),
+    ('Dairy', 'Any dairy product that would not be suitable for someone who is lactose intolerant');
 
 INSERT INTO ingredient
     (name, preferredUnit)
@@ -78,13 +79,19 @@ INSERT INTO ingredient_tag
 VALUES
     -- Butter excluded as there are vegan substitutes
     ((SELECT id FROM ingredient WHERE name = 'Cheddar Cheese'), (SELECT id FROM tag WHERE name = 'Animal Products')),
+    ((SELECT id FROM ingredient WHERE name = 'Cheddar Cheese'), (SELECT id FROM tag WHERE name = 'Dairy')),
     ((SELECT id FROM ingredient WHERE name = 'Cheese'), (SELECT id FROM tag WHERE name = 'Animal Products')),
+    ((SELECT id FROM ingredient WHERE name = 'Cheese'), (SELECT id FROM tag WHERE name = 'Dairy')),
     ((SELECT id FROM ingredient WHERE name = 'Chicken'), (SELECT id FROM tag WHERE name = 'Meats')),
     ((SELECT id FROM ingredient WHERE name = 'Cream Cheese'), (SELECT id FROM tag WHERE name = 'Animal Products')),
+    ((SELECT id FROM ingredient WHERE name = 'Cream Cheese'), (SELECT id FROM tag WHERE name = 'Dairy')),
     ((SELECT id FROM ingredient WHERE name = 'Ground Beef'), (SELECT id FROM tag WHERE name = 'Meats')),
     ((SELECT id FROM ingredient WHERE name = 'Milk'), (SELECT id FROM tag WHERE name = 'Animal Products')),
+    ((SELECT id FROM ingredient WHERE name = 'Milk'), (SELECT id FROM tag WHERE name = 'Dairy')),
     ((SELECT id FROM ingredient WHERE name = 'Mozzarella Cheese'), (SELECT id FROM tag WHERE name = 'Animal Products')),
-    ((SELECT id FROM ingredient WHERE name = 'Sour Cream'), (SELECT id FROM tag WHERE name = 'Animal Products'));
+    ((SELECT id FROM ingredient WHERE name = 'Mozzarella Cheese'), (SELECT id FROM tag WHERE name = 'Dairy')),
+    ((SELECT id FROM ingredient WHERE name = 'Sour Cream'), (SELECT id FROM tag WHERE name = 'Animal Products')),
+    ((SELECT id FROM ingredient WHERE name = 'Sour Cream'), (SELECT id FROM tag WHERE name = 'Dairy'));
 
 INSERT INTO ingredient_alt_name
     (name, ingredient_id)

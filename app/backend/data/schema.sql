@@ -41,6 +41,7 @@ CREATE TABLE tag (
     id INTEGER NOT NULL PRIMARY KEY,
 
     name TEXT NOT NULL UNIQUE,
+    -- Brief (1 sentence) description of why it may not be suitable for someone
     description TEXT NOT NULL
 );
 CREATE INDEX index_tag_by_name
