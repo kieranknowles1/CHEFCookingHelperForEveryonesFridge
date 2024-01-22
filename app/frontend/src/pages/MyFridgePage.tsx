@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom'
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus, getHighestStatus } from '../components/LoadingSpinner'
-import AddIngredient from '../components/AddIngredient'
-import FridgeIngredient from '../components/FridgeIngredient'
 import ModalDialog from '../components/ModalDialog'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
@@ -12,7 +10,10 @@ import { type components } from '../types/api.generated'
 import monitorStatus from '../utils/monitorStatus'
 import useSafeContext from '../contexts/useSafeContext'
 
-const ScanBarcode = React.lazy(async () => await import('../components/ScanBarcode'))
+import AddIngredient from './myfridge/AddIngredient'
+import FridgeIngredient from './myfridge/FridgeIngredient'
+
+const ScanBarcode = React.lazy(async () => await import('./myfridge/ScanBarcode'))
 
 type FridgeIngredientEntry = components['schemas']['FridgeIngredientEntry']
 

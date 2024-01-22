@@ -1,11 +1,11 @@
 import { Popover } from '@headlessui/react'
 import React from 'react'
 
-import { type components } from '../types/api.generated'
-import formatAmount from '../formatAmount'
+import { type components } from '../../types/api.generated'
+import createPopper from '../../components/createPopper'
+import formatAmount from '../../formatAmount'
 
 import EditIngredientAmount from './EditIngredientAmount'
-import createPopper from './createPopper'
 
 type Ingredient = components['schemas']['Ingredient']
 

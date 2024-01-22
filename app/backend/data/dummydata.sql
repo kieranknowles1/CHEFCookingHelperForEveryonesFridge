@@ -2,12 +2,25 @@
 INSERT INTO user
     (id, username)
 VALUES
-    (1, 'Bob');
+    (1, 'Alice'),
+    (2, 'Bob');
+
+INSERT INTO user_banned_tag
+    (user_id, tag_id)
+VALUES
+    (1, (SELECT id FROM tag WHERE name = 'Meats'));
+
+INSERT INTO user_banned_ingredient
+    (user_id, ingredient_id)
+VALUES
+    (2, (SELECT id FROM ingredient WHERE name = 'Mushrooms'));
 
 INSERT INTO fridge
     (id, name, owner_id)
 VALUES
-    (1, 'Bobs Fridge', 1);
+    (1, 'Alice Fridge', 1),
+    (2, 'Bobs Fridge', 2),
+    (3, 'Shared Fridge', 1);
 
 INSERT INTO fridge_ingredient
     (fridge_id, ingredient_id, amount)

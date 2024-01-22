@@ -1,14 +1,15 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import React from 'react'
 
+import UserContext, { type UserState } from './contexts/UserContext'
 import AccountPage from './pages/AccountPage'
 import FindRecipesPage from './pages/FindRecipesPage'
 import HomePage from './pages/HomePage'
+import Login from './components/Login'
 import MyFridgePage from './pages/MyFridgePage'
 import NavMenu from './components/NavMenu'
 import NotFoundMessage from './components/NotFoundMessage'
 import RecipePage from './pages/RecipePage'
-import UserContext from './contexts/UserContext'
 
 interface RouteItem {
   path: string
@@ -32,7 +33,7 @@ function App (): React.JSX.Element {
   ]
 
   // TODO: Login to set state
-  const [userState] = React.useState({
+  const [userState, setUserState] = React.useState<UserState | null>({
     userId: 1,
     fridgeId: 1
   })
@@ -40,6 +41,7 @@ function App (): React.JSX.Element {
   return (
     <BrowserRouter>
       <UserContext.Provider value={userState}>
+        <Login className='float-right' setUserState={setUserState} />
         <NavMenu items={routes} />
         <Routes>
           {toRouteElements(routes)}

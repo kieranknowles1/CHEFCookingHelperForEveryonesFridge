@@ -22,6 +22,20 @@ export interface paths {
       };
     };
   };
+  "/tag/list": {
+    /** Get a list of all tags */
+    get: {
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["Tag"][];
+          };
+        };
+        429: components["responses"]["TooManyRequests"];
+      };
+    };
+  };
   "/barcode/{code}": {
     /** Get the item associated with a given barcode */
     get: {
@@ -108,6 +122,8 @@ export interface paths {
           limit?: number;
           /** @description If specified, only return recipes of this type. By default, all recipes are returned. */
           mealType?: string;
+          /** @description If specified, only return recipes that are suitable for all of these users considering their dietary restrictions. By default, no restrictions are applied. */
+          suitableForUsers?: components["schemas"]["id"][];
         };
       };
       responses: {
@@ -157,7 +173,12 @@ export interface paths {
               id: number;
               /** @example My Fridge */
               name: string;
-              owner: components["schemas"]["User"];
+              owner: {
+                /** @example 1 */
+                id: number;
+                /** @example John Smith */
+                name: string;
+              };
             };
           };
         };
@@ -297,6 +318,50 @@ export interface paths {
       };
     };
   };
+  "/user/{userId}/preference/tag/{tagId}": {
+    /** Add or remove a tag from a user's banned tags */
+    post: {
+      parameters: {
+        query: {
+          /** @description Whether to allow or ban the tag */
+          allow: boolean;
+        };
+        path: {
+          userId: components["parameters"]["userId"];
+          tagId: components["parameters"]["tagId"];
+        };
+      };
+      responses: {
+        /** @description No Content */
+        204: {
+          content: never;
+        };
+        403: components["responses"]["Forbidden"];
+      };
+    };
+  };
+  "/user/{userId}/preference/ingredient/{ingredientId}": {
+    /** Add or remove an ingredient from a user's banned ingredients */
+    post: {
+      parameters: {
+        query: {
+          /** @description Whether to allow or ban the ingredient */
+          allow: boolean;
+        };
+        path: {
+          userId: components["parameters"]["userId"];
+          ingredientId: components["parameters"]["ingredientId"];
+        };
+      };
+      responses: {
+        /** @description No Content */
+        204: {
+          content: never;
+        };
+        403: components["responses"]["Forbidden"];
+      };
+    };
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -325,6 +390,14 @@ export interface components {
      * @enum {string}
      */
     Unit: "none" | "whole" | "ml" | "g";
+    Tag: {
+      /** @example 1 */
+      id: number;
+      /** @example Meat */
+      name: string;
+      /** @example Contains meat */
+      description: string;
+    };
     SearchRecipe: {
       /** @example Just Soup */
       name: string;
@@ -372,6 +445,13 @@ export interface components {
       id: number;
       /** @example John Smith */
       name: string;
+      bannedTags: components["schemas"]["Tag"][];
+      bannedIngredients: {
+          /** @example 1 */
+          id: number;
+          /** @example Mushrooms */
+          name: string;
+        }[];
     };
     RecipeIngredientEntry: WithRequired<{
       /** @example 250g of chicken */
@@ -427,6 +507,7 @@ export interface components {
     ingredientId: components["schemas"]["id"];
     recipeId: components["schemas"]["id"];
     userId: components["schemas"]["id"];
+    tagId: components["schemas"]["id"];
   };
   requestBodies: never;
   headers: never;

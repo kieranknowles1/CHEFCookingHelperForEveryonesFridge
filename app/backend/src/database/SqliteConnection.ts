@@ -81,4 +81,9 @@ export default class SqliteConnection implements IConnection {
       all: (params?: BindParams) => (params === undefined ? stmt.all() : stmt.all(params)) as TRow[]
     }
   }
+
+  private nextTempTableId = 0
+  public generateTempTableName (): string {
+    return `temp_${this.nextTempTableId++}`
+  }
 }

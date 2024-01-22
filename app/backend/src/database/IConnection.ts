@@ -19,7 +19,7 @@ export type SqliteValue = number | string | bigint | Buffer | null | undefined
  * Bind parameters in the format { name: value }
  * Note that the @, $, or : should be omitted.
  */
-export type BindParams = Record<string, SqliteValue>
+export type BindParams = any
 
 /**
  * A prepared statement that can be executed multiple times with different parameters
@@ -68,4 +68,14 @@ export default interface IConnection {
    * Register a function that can be called from SQL statements
    */
   function: (name: string, options: FunctionOptions, callback: (...args: unknown[]) => unknown) => void
+
+  /**
+   * Generate a unique name for a temporary table
+   * The name is guaranteed to only be used once per connection
+   * NOTE:
+   *  Table names cannot be provided through bind parameters, this is the only time that you should
+   *  be concatenating strings to form SQL statements. This is safe as the name does not come from
+   *  user input.
+   */
+  generateTempTableName: () => string
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { type components } from '../types/api.generated'
-import formatAmount from '../formatAmount'
+import { type components } from '../../types/api.generated'
+import formatAmount from '../../formatAmount'
 
 type Ingredient = components['schemas']['Ingredient']
 

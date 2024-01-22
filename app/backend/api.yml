@@ -32,6 +32,21 @@ paths:
         "429":
           $ref: "#/components/responses/TooManyRequests"
 
+  /tag/list:
+    get:
+      tags: [Metadata]
+      summary: Get a list of all tags
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Tag" }
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+
   /barcode/{code}:
     get:
       tags: [Barcode]
@@ -148,6 +163,14 @@ paths:
           description: If specified, only return recipes of this type. By default, all recipes are returned.
           schema: { type: string, example: "Dinner" }
           required: false
+
+        - in: query
+          name: suitableForUsers
+          description: If specified, only return recipes that are suitable for all of these users considering their dietary restrictions. By default, no restrictions are applied.
+          schema:
+            type: array
+            items: { $ref: "#/components/schemas/id" }
+          required: false
       responses:
         "200":
           description: OK
@@ -192,7 +215,13 @@ paths:
                 properties:
                   id: { type: integer, example: 1 }
                   name: { type: string, example: "My Fridge" }
-                  owner: { $ref: "#/components/schemas/User" }
+                  owner:
+                    type: object
+                    properties:
+                      id: { type: integer, example: 1 }
+                      name: { type: string, example: "John Smith" }
+                    required: [id, name]
+                    additionalProperties: false
                 required: [id, name, owner]
                 additionalProperties: false
         "404":
@@ -317,6 +346,43 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
+  # TODO: Authentication
+  /user/{userId}/preference/tag/{tagId}:
+    post:
+      tags: [User]
+      summary: Add or remove a tag from a user's banned tags
+      parameters:
+        - $ref: "#/components/parameters/userId"
+        - $ref: "#/components/parameters/tagId"
+        - in: query
+          name: allow
+          description: Whether to allow or ban the tag
+          schema: { type: boolean, example: true }
+          required: true
+      responses:
+        "204":
+          description: No Content
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /user/{userId}/preference/ingredient/{ingredientId}:
+    post:
+      tags: [User]
+      summary: Add or remove an ingredient from a user's banned ingredients
+      parameters:
+        - $ref: "#/components/parameters/userId"
+        - $ref: "#/components/parameters/ingredientId"
+        - in: query
+          name: allow
+          description: Whether to allow or ban the ingredient
+          schema: { type: boolean, example: true }
+          required: true
+      responses:
+        "204":
+          description: No Content
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
 components:
   parameters:
     fridgeId:
@@ -337,6 +403,11 @@ components:
     userId:
       in: path
       name: userId
+      schema: { $ref: "#/components/schemas/id" }
+      required: true
+    tagId:
+      in: path
+      name: tagId
       schema: { $ref: "#/components/schemas/id" }
       required: true
 
@@ -396,6 +467,15 @@ components:
         - g
       example: g
 
+    Tag:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        name: { type: string, example: "Meat" }
+        description: { type: string, example: "Contains meat" }
+      required: [id, name, description]
+      additionalProperties: false
+
     SearchRecipe:
       type: object
       properties:
@@ -433,6 +513,7 @@ components:
         preferredUnit: { $ref: "#/components/schemas/Unit" }
         density: { type: number, example: 0.5 }
         assumeUnlimited: { type: boolean, example: false }
+        # TODO: Should i include tags here?
         # TODO: Substitutions
         # TODO: Include density in response
       required: [name, id, preferredUnit, assumeUnlimited]
@@ -450,7 +531,19 @@ components:
       properties:
         id: { type: integer, example: 1 }
         name: { type: string, example: "John Smith" }
-      required: [id, name]
+        bannedTags:
+          type: array
+          items: { $ref: "#/components/schemas/Tag" }
+        bannedIngredients:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer, example: 1 }
+              name: { type: string, example: "Mushrooms" }
+            required: [id, name]
+            additionalProperties: false
+      required: [id, name, bannedTags, bannedIngredients]
       additionalProperties: false
 
     RecipeIngredientEntry:

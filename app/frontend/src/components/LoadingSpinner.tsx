@@ -24,6 +24,19 @@ export type LoadingStatus =
 export const DefaultSpinner = <InfinitySpin />
 export const DefaultSmallSpinner = <ThreeDots width={32} height={16} wrapperClass='inline' />
 
+export const DefaultError = (
+  <p className='text-red-500'>
+    <Icon path={mdiAlert} size={1} className='inline' />
+    An error occurred. Please check the console for details.
+  </p>
+)
+export const DefaultSmallError = (
+  <p className='text-red-500'>
+    <Icon path={mdiAlert} size={1} className='inline text-red-500' />
+    An error occurred.
+  </p>
+)
+
 export interface LoadingSpinnerProps {
   /**
    * Class name to apply to the outer div.
@@ -33,6 +46,8 @@ export interface LoadingSpinnerProps {
   status: LoadingStatus
   /** The spinner to show while loading. Defaults to InfinitySpin from react-loader-spinner. */
   spinner?: React.JSX.Element
+  /** The message to show when an error occurred. Defaults to DefaultError. Use DefaultSmallError for a compact version. */
+  errorMessage?: React.JSX.Element
 }
 
 /**
@@ -61,12 +76,7 @@ function getSpinner (props: LoadingSpinnerProps): React.JSX.Element | null {
     case 'error':
       // TODO: Better way to show error?
       // TODO: Modal with error message and helper function to create modal or spinner based on status?
-      return (
-        <p className='text-red-500'>
-          <Icon path={mdiAlert} size={1} className='inline' />
-          An error occurred. Please check the console for details.
-        </p>
-      )
+      return props.errorMessage ?? DefaultError
   }
 }
 

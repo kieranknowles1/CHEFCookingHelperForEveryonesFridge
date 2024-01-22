@@ -12,6 +12,8 @@
 		},
 
 		"todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.)|%)\\s*($TAGS)|(\\\\todo(inline)?\\{)",
+
+		"editor.tabSize": 2,
 	},
 	"extensions": {
 		"recommendations": [

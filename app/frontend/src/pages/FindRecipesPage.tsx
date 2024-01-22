@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom'
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
-import RecipeSearchFilters, { type SearchFilters } from '../components/RecipeSearchOptions'
+import RecipeSearchOptions, { type SearchFilters } from '../components/RecipeSearchOptions'
 import RecipeList from '../components/RecipeList'
 import { type RecipeProps } from '../components/Recipe'
-import Search from '../components/Search'
+import Search from '../components/inputs/Search'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import monitorStatus from '../utils/monitorStatus'
@@ -41,7 +41,7 @@ export default function FindRecipesPage (): React.JSX.Element {
       '/recipe/search',
       {
         params: {
-          query: { ...filters, availableForFridge: context.fridgeId, limit: 1000 }
+          query: { ...filters, availableForFridge: context.fridgeId, limit: 1000, suitableForUsers: [context.userId] }
         }
       }
     ).then(
@@ -82,7 +82,7 @@ export default function FindRecipesPage (): React.JSX.Element {
         <br />
         Click any recipe to view details and/or mark it as have been made.
       </p>
-      <RecipeSearchFilters filters={filters} setFilters={setFilters} />
+      <RecipeSearchOptions filters={filters} setFilters={setFilters} />
       <hr className='my-2 mx-2' />
       {status === 'done' && <p>{recipes.length} recipes found.</p>}
       <Search setQuery={q => { setQuery(q); setPage(0) }} />

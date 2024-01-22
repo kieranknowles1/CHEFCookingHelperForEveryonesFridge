@@ -1,6 +1,5 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { HttpError } from 'express-openapi-validator/dist/framework/types'
-import { error } from 'express-openapi-validator'
 
 import CodedError from '../CodedError'
 import { type components } from '../types/api.generated'
@@ -11,7 +10,7 @@ type ErrorList = components['schemas']['ErrorList']
 function getResponseCode (err: Error): number {
   if (err instanceof CodedError) {
     return err.code
-  } else if (err instanceof error.BadRequest) {
+  } else if (err instanceof HttpError) {
     return err.status
   } else {
     return 500

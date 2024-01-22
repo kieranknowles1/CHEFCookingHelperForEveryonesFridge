@@ -7,7 +7,11 @@ PRAGMA journal_mode = WAL;
 PRAGMA foreign_keys = OFF;
 
 DROP TABLE IF EXISTS embedding;
+
+DROP TABLE IF EXISTS tag;
+
 DROP TABLE IF EXISTS ingredient;
+DROP TABLE IF EXISTS ingredient_tag;
 DROP TABLE IF EXISTS ingredient_alt_name;
 DROP TABLE IF EXISTS ingredient_substitution_group;
 DROP TABLE IF EXISTS ingredient_substitution_entry;
@@ -18,13 +22,30 @@ DROP TABLE IF EXISTS recipe;
 DROP TABLE IF EXISTS recipe_ingredient;
 
 DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS user_banned_tag;
+DROP TABLE IF EXISTS user_banned_ingredient;
+
 DROP TABLE IF EXISTS fridge;
+DROP TABLE IF EXISTS fridge_user;
 DROP TABLE IF EXISTS fridge_ingredient;
 DROP TABLE IF EXISTS made_recipe;
 DROP TABLE IF EXISTS made_recipe_user;
 DROP TABLE IF EXISTS barcode;
 
 PRAGMA foreign_keys = ON;
+
+-- =========
+--  Tagging
+-- =========
+CREATE TABLE tag (
+    id INTEGER NOT NULL PRIMARY KEY,
+
+    name TEXT NOT NULL UNIQUE,
+    -- Brief (1 sentence) description of why it may not be suitable for someone
+    description TEXT NOT NULL
+);
+CREATE INDEX index_tag_by_name
+    ON tag(name);
 
 -- ==================
 --  Machine Learning
@@ -55,6 +76,13 @@ CREATE TABLE ingredient (
 );
 CREATE INDEX index_ingredient_by_name_nocase
     ON ingredient(name COLLATE NOCASE);
+
+CREATE TABLE ingredient_tag (
+    ingredient_id INTEGER NOT NULL REFERENCES ingredient(id),
+    tag_id INTEGER NOT NULL REFERENCES tag(id),
+
+    PRIMARY KEY (ingredient_id, tag_id)
+);
 
 -- Alternate names for ingredients that are recognised by data import
 CREATE TABLE ingredient_alt_name (
@@ -122,9 +150,9 @@ CREATE TABLE recipe_ingredient (
 CREATE INDEX index_recipe_ingredient_by_recipe_id
     ON recipe_ingredient(recipe_id);
 
--- =========
---  Fridges
--- =========
+-- =======
+--  Users
+-- =======
 
 CREATE TABLE user (
     id INTEGER NOT NULL PRIMARY KEY,
@@ -134,10 +162,34 @@ CREATE TABLE user (
 CREATE INDEX index_user_by_username
     ON user(username);
 
+CREATE TABLE user_banned_tag (
+    user_id INTEGER NOT NULL REFERENCES user(id),
+    tag_id INTEGER NOT NULL REFERENCES tag(id),
+
+    PRIMARY KEY (user_id, tag_id)
+);
+
+CREATE TABLE user_banned_ingredient (
+    user_id INTEGER NOT NULL REFERENCES user(id),
+    ingredient_id INTEGER NOT NULL REFERENCES ingredient(id),
+
+    PRIMARY KEY (user_id, ingredient_id)
+);
+
+-- =========
+--  Fridges
+-- =========
+
 CREATE TABLE fridge (
     id INTEGER NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
     owner_id INTEGER NOT NULL REFERENCES user(id)
+);
+
+CREATE TABLE fridge_user (
+    fridge_id INTEGER NOT NULL REFERENCES fridge(id),
+    user_id INTEGER NOT NULL REFERENCES user(id),
+    PRIMARY KEY (fridge_id, user_id)
 );
 
 CREATE TABLE fridge_ingredient (

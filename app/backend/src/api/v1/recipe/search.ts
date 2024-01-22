@@ -20,8 +20,22 @@ export default function registerRecipeSearchEndpoint (app: Express, db: IChefDat
         checkAmounts = true,
 
         limit = 10,
-        mealType
+        mealType,
+
+        suitableForUsers = []
       } = req.query
+
+      const users = suitableForUsers.map(user => db.users.get(user))
+      const bannedIngredients: number[] = []
+      const bannedTags: number[] = []
+      for (const user of users) {
+        for (const ingredient of user.bannedIngredients.keys()) {
+          bannedIngredients.push(ingredient)
+        }
+        for (const tag of user.bannedTags.keys()) {
+          bannedTags.push(tag)
+        }
+      }
 
       const searchEmbedding = search !== undefined ? await getEmbedding(search) : undefined
 
@@ -34,7 +48,10 @@ export default function registerRecipeSearchEndpoint (app: Express, db: IChefDat
         checkAmounts,
 
         limit,
-        mealType
+        mealType,
+
+        bannedIngredients,
+        bannedTags
       }))
     }))
 }

@@ -2,9 +2,9 @@ import { mdiClose, mdiMinus, mdiPlus } from '@mdi/js'
 import Icon from '@mdi/react'
 import React from 'react'
 
-import UserContext from '../contexts/UserContext'
-import apiClient from '../apiClient'
-import useSafeContext from '../contexts/useSafeContext'
+import UserContext from '../../contexts/UserContext'
+import apiClient from '../../apiClient'
+import useSafeContext from '../../contexts/useSafeContext'
 
 export interface EditIngredientAmountProps {
   ingredientId: number

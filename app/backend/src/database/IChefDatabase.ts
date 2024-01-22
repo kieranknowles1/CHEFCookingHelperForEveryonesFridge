@@ -6,6 +6,7 @@ import type Fridge from '../types/Fridge'
 import type Ingredient from '../types/Ingredient'
 import { type IngredientNoId } from '../types/Ingredient'
 import type Recipe from '../types/Recipe'
+import type Tag from '../types/Tag'
 import type User from '../types/User'
 
 import type * as types from './types'
@@ -63,6 +64,9 @@ export interface IWritableDatabase {
     amount: number
     productName: string
   }) => void
+
+  setTagPreference: (userId: types.RowId, tagId: types.RowId, allow: boolean) => void
+  setIngredientPreference: (userId: types.RowId, ingredientId: types.RowId, allow: boolean) => void
 }
 
 export interface IFridgeDatabase {
@@ -90,6 +94,9 @@ export interface SearchParams {
 
   limit?: number
   mealType?: string
+
+  bannedIngredients?: types.RowId[]
+  bannedTags?: types.RowId[]
 }
 
 export interface IRecipeDatabase {
@@ -151,6 +158,8 @@ export default interface IChefDatabase {
 
   getMealTypeNames: () => string[]
   getMealTypes: () => EmbeddedSentence[]
+
+  getTags: () => Tag[]
 
   /**
    * Get the data associated with a barcode, throws if code not found
