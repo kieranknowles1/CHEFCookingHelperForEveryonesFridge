@@ -12,6 +12,7 @@ export interface UserPreferencesProps {
   userId: number
   bannedTags: Tag[]
   bannedIngredients: UserBannedIngredients
+  setBannedIngredients: (bannedIngredients: UserBannedIngredients) => void
 }
 
 export default function UserPreferences (props: UserPreferencesProps): React.JSX.Element {
@@ -23,7 +24,10 @@ export default function UserPreferences (props: UserPreferencesProps): React.JSX
 
       <h3>Disliked Ingredients</h3>
       <p>Specific ingredients you don&apos;t like or can&apos;t eat.</p>
-      <IngredientOptionsList bannedIngredients={props.bannedIngredients} />
+      <IngredientOptionsList
+        bannedIngredients={props.bannedIngredients}
+        setBannedIngredients={props.setBannedIngredients}
+      />
     </div>
   )
 }

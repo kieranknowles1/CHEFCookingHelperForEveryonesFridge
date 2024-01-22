@@ -15,8 +15,11 @@ type User = components['schemas']['User']
 export default function AccountPage (): React.JSX.Element {
   const context = useSafeContext(UserContext)
 
-  const [user, setUser] = React.useState<User>()
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
+
+  const [userName, setUserName] = React.useState<string>()
+  const [bannedTags, setBannedTags] = React.useState<User['bannedTags']>([])
+  const [bannedIngredients, setBannedIngredients] = React.useState<User['bannedIngredients']>([])
 
   React.useEffect(() => {
     apiClient.GET(
@@ -25,24 +28,27 @@ export default function AccountPage (): React.JSX.Element {
     ).then(
       monitorStatus(setStatus)
     ).then(data => {
-      setUser(data)
+      setUserName(data.name)
+      setBannedTags(data.bannedTags)
+      setBannedIngredients(data.bannedIngredients)
     }).catch(err => {
       console.error(err)
     })
   }, [context.userId])
 
-  if (user === undefined) {
+  if (status !== 'done') {
     return <LoadingSpinner status={status} />
   }
 
   return (
     <main>
-      <h1>Hello, {user.name}</h1>
+      <h1>Hello, {userName}</h1>
       <h2>Your dislikes</h2>
       <UserPreferences
         userId={context.userId}
-        bannedTags={user.bannedTags}
-        bannedIngredients={user.bannedIngredients}
+        bannedTags={bannedTags}
+        bannedIngredients={bannedIngredients}
+        setBannedIngredients={setBannedIngredients}
       />
       <h2>Your recent activity</h2>
       <History userId={context.userId} />
