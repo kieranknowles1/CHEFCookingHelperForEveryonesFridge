@@ -43,7 +43,7 @@ export interface TypedRequest<
  */
 export interface TypedResponse<
   endpoint extends JsonEndpoint,
-  code extends KeysOfType<endpoint['responses'], JsonData>
+  code extends KeysOfType<endpoint['responses'], JsonData>,
 > extends express.Response {
   json: (body: endpoint['responses'][code]['content']['application/json']) => this
 }

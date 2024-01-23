@@ -302,6 +302,23 @@ paths:
         "403":
           $ref: "#/components/responses/Forbidden"
 
+  /login:
+    post:
+      tags: [User]
+      summary: Authenticate as a user
+      description:
+        Authenticate as a user using HTTP Basic Authentication.
+        Returns a token that can be used for future requests.
+      security: [Basic: []]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Token" }
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
   # TODO: Authentication
   /user/{userId}:
     get:
@@ -384,6 +401,15 @@ paths:
           $ref: "#/components/responses/Forbidden"
 
 components:
+  securitySchemes:
+    Basic:
+      type: http
+      scheme: basic
+
+    Bearer:
+      type: http
+      scheme: bearer
+
   parameters:
     fridgeId:
       in: path
@@ -430,6 +456,12 @@ components:
         application/json:
           schema: { $ref: "#/components/schemas/ErrorList" }
 
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorList" }
+
   schemas:
     id:
       type: integer
@@ -437,6 +469,13 @@ components:
       minimum: 1
       # MAX_SAFE_INTEGER, database does not support bigint
       maximum: 9007199254740991
+
+    Token:
+      type: object
+      properties:
+        token: { type: string, example: "abc123" }
+      required: [token]
+      additionalProperties: false
 
     ErrorList:
       type: object

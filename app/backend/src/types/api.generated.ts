@@ -274,6 +274,23 @@ export interface paths {
       };
     };
   };
+  "/login": {
+    /**
+     * Authenticate as a user
+     * @description Authenticate as a user using HTTP Basic Authentication. Returns a token that can be used for future requests.
+     */
+    post: {
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["Token"];
+          };
+        };
+        401: components["responses"]["Unauthorized"];
+      };
+    };
+  };
   "/user/{userId}": {
     /** Get a user by ID */
     get: {
@@ -370,6 +387,10 @@ export interface components {
   schemas: {
     /** @example 12345 */
     id: number;
+    Token: {
+      /** @example abc123 */
+      token: string;
+    };
     ErrorList: {
       /** @example 404 */
       status: number;
@@ -497,6 +518,12 @@ export interface components {
     };
     /** @description Too Many Requests */
     TooManyRequests: {
+      content: {
+        "application/json": components["schemas"]["ErrorList"];
+      };
+    };
+    /** @description Unauthorized */
+    Unauthorized: {
       content: {
         "application/json": components["schemas"]["ErrorList"];
       };
