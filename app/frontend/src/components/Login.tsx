@@ -1,10 +1,10 @@
 import React from 'react'
 
 import UserContext, { type UserState } from '../contexts/UserContext'
+import monitorStatus, { type ApiError } from '../utils/monitorStatus'
 import apiClient from '../apiClient'
 
-import LoadingSpinner, { DefaultSmallError, DefaultSmallSpinner, DefaultTinyError, type LoadingStatus } from './LoadingSpinner'
-import monitorStatus, { ApiError } from '../utils/monitorStatus'
+import LoadingSpinner, { DefaultSmallSpinner, DefaultTinyError, type LoadingStatus } from './LoadingSpinner'
 
 export interface LoginProps {
   className?: string
@@ -31,7 +31,15 @@ export default function Login (props: LoginProps): React.JSX.Element {
     ).then(
       monitorStatus(setStatus)
     ).then(data => {
+      // TODO: Store token in local storage
+      // TODO: Have a way of selecting which fridge to use
 
+      props.setUserState({
+        token: data.token,
+        userId: data.userId,
+        // TODO: Add fridgeId
+        fridgeId: 1
+      })
     }).catch((err: ApiError) => {
       console.error(err)
       alert(`Could not log in: ${err.message}`)
