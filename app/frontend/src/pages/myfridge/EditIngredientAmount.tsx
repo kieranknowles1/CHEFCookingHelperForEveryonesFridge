@@ -4,7 +4,6 @@ import React from 'react'
 
 import UserContext from '../../contexts/UserContext'
 import apiClient from '../../apiClient'
-import useSafeContext from '../../contexts/useSafeContext'
 
 export interface EditIngredientAmountProps {
   ingredientId: number
@@ -16,11 +15,15 @@ export interface EditIngredientAmountProps {
 }
 
 export default function EditIngredientAmount (props: EditIngredientAmountProps): React.JSX.Element {
-  const context = useSafeContext(UserContext)
+  const context = React.useContext(UserContext)
+
+  if (context === null) {
+    throw new Error('UserContext is null')
+  }
 
   const [deltaAmount, setDeltaAmount] = React.useState(0)
 
-  function onSubmit (type: 'add' | 'remove'): void {
+  const onSubmit = (type: 'add' | 'remove'): void => {
     const change = type === 'add' ? deltaAmount : -deltaAmount
     const newAmount = props.currentAmount + change
 

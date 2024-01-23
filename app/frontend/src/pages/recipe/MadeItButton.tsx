@@ -6,7 +6,6 @@ import LoadingSpinner, { DefaultSmallSpinner, type LoadingStatus } from '../../c
 import UserContext from '../../contexts/UserContext'
 import apiClient from '../../apiClient'
 import monitorStatus from '../../utils/monitorStatus'
-import useSafeContext from '../../contexts/useSafeContext'
 
 export interface MadeItButtonProps {
   recipeId: number
@@ -17,11 +16,15 @@ export interface MadeItButtonProps {
  * Used on RecipePage. Split for readability.
  */
 export default function MadeItButton (props: MadeItButtonProps): React.JSX.Element {
-  const context = useSafeContext(UserContext)
+  const context = React.useContext(UserContext)
 
   const [status, setStatus] = React.useState<LoadingStatus>('notstarted')
 
-  function handleClick (): void {
+  if (context === null) {
+    return <p>Log in to track what you&apos;ve made!</p>
+  }
+
+  const handleClick = (): void => {
     apiClient.POST(
       '/fridge/{fridgeId}/recipe/{recipeId}/maderecipe',
       {

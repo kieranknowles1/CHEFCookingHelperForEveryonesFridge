@@ -4,11 +4,11 @@ import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus, getHighestStatus } from '../components/LoadingSpinner'
 import ModalDialog from '../components/ModalDialog'
+import NeedsLoginPage from '../errorpages/NeedsLoginPage'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
 import monitorStatus from '../utils/monitorStatus'
-import useSafeContext from '../contexts/useSafeContext'
 
 import AddIngredient from './myfridge/AddIngredient'
 import FridgeIngredient from './myfridge/FridgeIngredient'
@@ -18,7 +18,7 @@ const ScanBarcode = React.lazy(async () => await import('./myfridge/ScanBarcode'
 type FridgeIngredientEntry = components['schemas']['FridgeIngredientEntry']
 
 export default function MyFridgePage (): React.JSX.Element {
-  const context = useSafeContext(UserContext)
+  const context = React.useContext(UserContext)
 
   const [ingredientsStatus, setIngredientsStatus] = React.useState<LoadingStatus>('loading')
   const [ingredients, setIngredients] = React.useState<FridgeIngredientEntry[]>([])
@@ -29,6 +29,10 @@ export default function MyFridgePage (): React.JSX.Element {
 
   const [addIngredientOpen, setAddingredientOpen] = React.useState(false)
   const [scanBarcodeOpen, setScanBarcodeOpen] = React.useState(false)
+
+  if (context === null) {
+    return <NeedsLoginPage />
+  }
 
   React.useEffect(() => {
     apiClient.GET(
@@ -43,7 +47,7 @@ export default function MyFridgePage (): React.JSX.Element {
     })
   }, [context.fridgeId])
 
-  function fetchIngredients (): void {
+  const fetchIngredients = (): void => {
     apiClient.GET(
       '/fridge/{fridgeId}/ingredient/all/amount',
       { params: { path: { fridgeId: context.fridgeId } } }

@@ -7,7 +7,7 @@ export default function NeedsLoginPage (): React.JSX.Element {
   return (
     <div>
       <h1>Login Required</h1>
-      <p>Please login to view this page.</p>
+      <p>Please log in to view this page.</p>
     </div>
   )
 }

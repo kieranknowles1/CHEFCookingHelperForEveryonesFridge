@@ -7,7 +7,6 @@ import UserContext from '../../contexts/UserContext'
 import apiClient from '../../apiClient'
 import { type components } from '../../types/api.generated'
 import monitorStatus from '../../utils/monitorStatus'
-import useSafeContext from '../../contexts/useSafeContext'
 
 type Recipe = components['schemas']['Recipe']
 
@@ -19,14 +18,16 @@ export interface SimilarRecipeProps {
 }
 
 export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.Element {
-  const context = useSafeContext(UserContext)
+  const context = React.useContext(UserContext)
 
   const [recipes, setRecipes] = React.useState<RecipeProps[]>([])
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
 
   React.useEffect(() => {
     setRecipes([])
-    const availableForFridge = props.onlyAvailable ? context.fridgeId : undefined
+    const availableForFridge = props.onlyAvailable && context !== null
+      ? context.fridgeId
+      : undefined
     apiClient.GET(
       '/recipe/search',
       {
@@ -41,7 +42,7 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
     }).catch(err => {
       console.error(err)
     })
-  }, [props.recipe.name, props.limit, props.minSimilarity, props.onlyAvailable, context.fridgeId])
+  }, [props.recipe.name, props.limit, props.minSimilarity, props.onlyAvailable, context])
 
   return (
     <div>

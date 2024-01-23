@@ -1,11 +1,11 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
+import NeedsLoginPage from '../errorpages/NeedsLoginPage'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
 import monitorStatus from '../utils/monitorStatus'
-import useSafeContext from '../contexts/useSafeContext'
 
 import History from './account/History'
 import UserPreferences from './account/UserPreferences'
@@ -13,7 +13,11 @@ import UserPreferences from './account/UserPreferences'
 type User = components['schemas']['User']
 
 export default function AccountPage (): React.JSX.Element {
-  const context = useSafeContext(UserContext)
+  const context = React.useContext(UserContext)
+
+  if (context === null) {
+    return <NeedsLoginPage />
+  }
 
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
 

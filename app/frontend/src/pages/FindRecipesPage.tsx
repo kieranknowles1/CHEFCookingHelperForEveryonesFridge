@@ -11,12 +11,11 @@ import Search from '../components/inputs/Search'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import monitorStatus from '../utils/monitorStatus'
-import useSafeContext from '../contexts/useSafeContext'
 
 const PAGE_SIZE = 100
 
 export default function FindRecipesPage (): React.JSX.Element {
-  const context = useSafeContext(UserContext)
+  const context = React.useContext(UserContext)
 
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
   const [recipes, setRecipes] = React.useState<RecipeProps[]>([])
@@ -41,7 +40,12 @@ export default function FindRecipesPage (): React.JSX.Element {
       '/recipe/search',
       {
         params: {
-          query: { ...filters, availableForFridge: context.fridgeId, limit: 1000, suitableForUsers: [context.userId] }
+          query: {
+            ...filters,
+            availableForFridge: context?.fridgeId ?? undefined,
+            limit: 1000,
+            suitableForUsers: context !== null ? [context.userId] : undefined
+          }
         }
       }
     ).then(
@@ -51,7 +55,7 @@ export default function FindRecipesPage (): React.JSX.Element {
     }).catch(err => {
       console.error(err)
     })
-  }, [context.fridgeId, filters])
+  }, [context, filters])
 
   React.useEffect(() => {
     setFiltered(recipes.filter(r => r.name.toLowerCase().includes(query.toLowerCase())))

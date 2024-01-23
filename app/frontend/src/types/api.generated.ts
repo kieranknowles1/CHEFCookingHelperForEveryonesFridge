@@ -176,8 +176,7 @@ export interface paths {
               owner: {
                 /** @example 1 */
                 id: number;
-                /** @example John Smith */
-                name: string;
+                name: components["schemas"]["username"];
               };
             };
           };
@@ -274,6 +273,24 @@ export interface paths {
       };
     };
   };
+  "/login": {
+    /**
+     * Authenticate as a user
+     * @description Authenticate as a user using HTTP Basic Authentication. Returns a token that can be used for future requests.
+     */
+    post: {
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["Token"];
+          };
+        };
+        400: components["responses"]["BadRequest"];
+        401: components["responses"]["Unauthorized"];
+      };
+    };
+  };
   "/user/{userId}": {
     /** Get a user by ID */
     get: {
@@ -289,6 +306,8 @@ export interface paths {
             "application/json": components["schemas"]["User"];
           };
         };
+        401: components["responses"]["Unauthorized"];
+        403: components["responses"]["Forbidden"];
         404: components["responses"]["NotFound"];
       };
     };
@@ -314,6 +333,8 @@ export interface paths {
             "application/json": components["schemas"]["MadeRecipe"][];
           };
         };
+        401: components["responses"]["Unauthorized"];
+        403: components["responses"]["Forbidden"];
         404: components["responses"]["NotFound"];
       };
     };
@@ -336,6 +357,7 @@ export interface paths {
         204: {
           content: never;
         };
+        401: components["responses"]["Unauthorized"];
         403: components["responses"]["Forbidden"];
       };
     };
@@ -358,6 +380,7 @@ export interface paths {
         204: {
           content: never;
         };
+        401: components["responses"]["Unauthorized"];
         403: components["responses"]["Forbidden"];
       };
     };
@@ -370,6 +393,12 @@ export interface components {
   schemas: {
     /** @example 12345 */
     id: number;
+    /** @example johnsmith */
+    username: string;
+    Token: {
+      /** @example abc123 */
+      token: string;
+    };
     ErrorList: {
       /** @example 404 */
       status: number;
@@ -443,8 +472,7 @@ export interface components {
     User: {
       /** @example 1 */
       id: number;
-      /** @example John Smith */
-      name: string;
+      name: components["schemas"]["username"];
       bannedTags: components["schemas"]["Tag"][];
       bannedIngredients: {
           /** @example 1 */
@@ -471,8 +499,7 @@ export interface components {
         id: components["schemas"]["id"];
       };
       users: {
-          /** @example John Smith */
-          name: string;
+          name: components["schemas"]["username"];
           id: components["schemas"]["id"];
         }[];
       /**
@@ -483,6 +510,12 @@ export interface components {
     };
   };
   responses: {
+    /** @description Bad Request */
+    BadRequest: {
+      content: {
+        "application/json": components["schemas"]["ErrorList"];
+      };
+    };
     /** @description Forbidden */
     Forbidden: {
       content: {
@@ -497,6 +530,12 @@ export interface components {
     };
     /** @description Too Many Requests */
     TooManyRequests: {
+      content: {
+        "application/json": components["schemas"]["ErrorList"];
+      };
+    };
+    /** @description Unauthorized */
+    Unauthorized: {
       content: {
         "application/json": components["schemas"]["ErrorList"];
       };
