@@ -1,7 +1,7 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
-import NeedsLoginPage from '../errorpages/NeedsLoginPage'
+import NeedsLoginMessage from '../errorpages/NeedsLoginMessage'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
@@ -16,7 +16,7 @@ export default function AccountPage (): React.JSX.Element {
   const context = React.useContext(UserContext)
 
   if (context === null) {
-    return <NeedsLoginPage />
+    return <NeedsLoginMessage />
   }
 
   const [status, setStatus] = React.useState<LoadingStatus>('loading')

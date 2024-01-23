@@ -4,7 +4,7 @@ import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus, getHighestStatus } from '../components/LoadingSpinner'
 import ModalDialog from '../components/ModalDialog'
-import NeedsLoginPage from '../errorpages/NeedsLoginPage'
+import NeedsLoginMessage from '../errorpages/NeedsLoginMessage'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
@@ -31,7 +31,7 @@ export default function MyFridgePage (): React.JSX.Element {
   const [scanBarcodeOpen, setScanBarcodeOpen] = React.useState(false)
 
   if (context === null) {
-    return <NeedsLoginPage />
+    return <NeedsLoginMessage />
   }
 
   React.useEffect(() => {

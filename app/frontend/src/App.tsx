@@ -8,7 +8,7 @@ import HomePage from './pages/HomePage'
 import Login from './components/Login'
 import MyFridgePage from './pages/MyFridgePage'
 import NavMenu from './components/NavMenu'
-import NotFoundMessage from './components/NotFoundMessage'
+import NotFoundMessage from './errorpages/NotFoundMessage'
 import RecipePage from './pages/RecipePage'
 
 interface RouteItem {

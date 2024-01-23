@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
 import monitorStatus, { type ApiError } from '../utils/monitorStatus'
-import NotFoundMessage from '../components/NotFoundMessage'
+import NotFoundMessage from '../errorpages/NotFoundMessage'
 import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
