@@ -9,6 +9,7 @@ import NotAuthorizedError from '../NotAuthorizedError'
 import type Token from '../../types/Token'
 import { type TypedResponse } from '../TypedEndpoint'
 import checkHash from '../../utils/checkHash'
+import constants from '../../constants'
 import decodeBasicAuth from '../../utils/decodeBasicAuth'
 import environment from '../../environment'
 import { type paths } from '../../types/api.generated'
@@ -50,9 +51,12 @@ export default function registerLoginEndpoint (app: Express, db: IChefDatabase):
         iss: 'chef-backend',
         sub: credentials.id
       }
+      const signed = jwt.sign(rawToken, environment.SECRET, {
+        algorithm: constants.JWT_ALGORITHM
+      })
 
       res.json({
-        token: jwt.sign(rawToken, environment.SECRET)
+        token: signed
       })
     }))
 }
