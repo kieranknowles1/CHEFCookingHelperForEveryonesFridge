@@ -125,9 +125,8 @@ export default class UserDatabaseImpl implements IUserDatabase {
     const statement = this._connection.prepare<Result>(`
       SELECT
         id,
-        username
-        -- // TODO: Add password hashing
-        -- password_hash
+        username,
+        password_hash
       FROM user
         WHERE username = :username COLLATE NOCASE
     `)

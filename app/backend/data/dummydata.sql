@@ -1,9 +1,11 @@
 -- Sample data to get something visible in the app
 INSERT INTO user
-    (id, username)
+    (id, username, password_hash)
 VALUES
-    (1, 'Alice'),
-    (2, 'Bob');
+    -- Password is 'password'
+    (1, 'Alice', '$2b$12$mM0NcGsJUXzMspCnyKuNee7JsM.27z2xdRKEwBgerR.LmiZYuH8tC'),
+    -- Password is '12345'
+    (2, 'Bob', '$2b$12$pbng8MtE8Zgfy0oSGEo0mOWO7Pt5uMnX/evVmXiHq.9EEQj4DpyJi');
 
 INSERT INTO user_banned_tag
     (user_id, tag_id)
