@@ -219,7 +219,7 @@ paths:
                     type: object
                     properties:
                       id: { type: integer, example: 1 }
-                      name: { type: string, example: "John Smith" }
+                      name: { $ref: "#/components/schemas/username" }
                     required: [id, name]
                     additionalProperties: false
                 required: [id, name, owner]
@@ -491,6 +491,12 @@ components:
       # MAX_SAFE_INTEGER, database does not support bigint
       maximum: 9007199254740991
 
+    username:
+      type: string
+      example: "johnsmith"
+      pattern: "^[^:]+$"
+      maxLength: 255
+
     Token:
       type: object
       properties:
@@ -590,7 +596,7 @@ components:
       type: object
       properties:
         id: { type: integer, example: 1 }
-        name: { type: string, example: "John Smith" }
+        name: { $ref: "#/components/schemas/username" }
         bannedTags:
           type: array
           items: { $ref: "#/components/schemas/Tag" }
@@ -639,7 +645,7 @@ components:
           items:
             type: object
             properties:
-              name: { type: string, example: "John Smith" }
+              name: { $ref: "#/components/schemas/username" }
               id: { $ref: "#/components/schemas/id" }
             required: [name, id]
             additionalProperties: false
