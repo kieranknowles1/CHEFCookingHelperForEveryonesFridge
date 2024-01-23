@@ -43,6 +43,9 @@ export default function Login (props: LoginProps): React.JSX.Element {
     }).catch((err: ApiError) => {
       console.error(err)
       alert(`Could not log in: ${err.message}`)
+    }).finally(() => {
+      setUsername('')
+      setPassword('')
     })
   }
 
