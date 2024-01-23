@@ -321,11 +321,11 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthorized"
 
-  # TODO: Authentication
   /user/{userId}:
     get:
       tags: [User]
       summary: Get a user by ID
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/userId"
       responses:
@@ -334,14 +334,18 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/User" }
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         "404":
           $ref: "#/components/responses/NotFound"
 
-  # TODO: Authentication
   /user/{userId}/history:
     get:
       tags: [User]
       summary: Get a user's recipe history, ordered by most recent first
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/userId"
         - in: query
@@ -362,14 +366,18 @@ paths:
               schema:
                 type: array
                 items: { $ref: "#/components/schemas/MadeRecipe" }
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         "404":
           $ref: "#/components/responses/NotFound"
 
-  # TODO: Authentication
   /user/{userId}/preference/tag/{tagId}:
     post:
       tags: [User]
       summary: Add or remove a tag from a user's banned tags
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/userId"
         - $ref: "#/components/parameters/tagId"
@@ -381,6 +389,8 @@ paths:
       responses:
         "204":
           description: No Content
+        "401":
+          $ref: "#/components/responses/Unauthorized"
         "403":
           $ref: "#/components/responses/Forbidden"
 
@@ -388,6 +398,7 @@ paths:
     post:
       tags: [User]
       summary: Add or remove an ingredient from a user's banned ingredients
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/userId"
         - $ref: "#/components/parameters/ingredientId"
@@ -399,6 +410,8 @@ paths:
       responses:
         "204":
           description: No Content
+        "401":
+          $ref: "#/components/responses/Unauthorized"
         "403":
           $ref: "#/components/responses/Forbidden"
 
