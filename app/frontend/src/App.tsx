@@ -32,11 +32,7 @@ function App (): React.JSX.Element {
     { path: '*', element: <NotFoundMessage /> }
   ]
 
-  // TODO: Login to set state
-  const [userState, setUserState] = React.useState<UserState | null>({
-    userId: 1,
-    fridgeId: 1
-  })
+  const [userState, setUserState] = React.useState<UserState | null>(null)
 
   return (
     <BrowserRouter>

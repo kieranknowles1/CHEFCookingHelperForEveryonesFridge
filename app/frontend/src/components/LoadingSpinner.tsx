@@ -24,18 +24,21 @@ export type LoadingStatus =
 export const DefaultSpinner = <InfinitySpin />
 export const DefaultSmallSpinner = <ThreeDots width={32} height={16} wrapperClass='inline' />
 
+const errorIcon = <Icon path={mdiAlert} size={1} className='inline' />
+
 export const DefaultError = (
   <p className='text-red-500'>
-    <Icon path={mdiAlert} size={1} className='inline' />
+    {errorIcon}
     An error occurred. Please check the console for details.
   </p>
 )
 export const DefaultSmallError = (
   <p className='text-red-500'>
-    <Icon path={mdiAlert} size={1} className='inline text-red-500' />
+    {errorIcon}
     An error occurred.
   </p>
 )
+export const DefaultTinyError = <p className='text-red-500'>{errorIcon}</p>
 
 export interface LoadingSpinnerProps {
   /**
