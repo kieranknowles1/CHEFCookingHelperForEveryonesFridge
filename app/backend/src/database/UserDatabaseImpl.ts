@@ -1,4 +1,5 @@
 import type User from '../types/User'
+import { type UserCredentials } from '../types/User'
 
 import type * as types from './types'
 import { type GetHistoryParams, type IUserDatabase, type MadeRecipeItem } from './IChefDatabase'
@@ -113,5 +114,33 @@ export default class UserDatabaseImpl implements IUserDatabase {
       })
     }
     return output
+  }
+
+  public getCredentials (username: string): UserCredentials | null {
+    interface Result {
+      id: types.RowId
+      username: string
+      password_hash: string
+    }
+    const statement = this._connection.prepare<Result>(`
+      SELECT
+        id,
+        username
+        -- // TODO: Add password hashing
+        -- password_hash
+      FROM user
+        WHERE username = :username COLLATE NOCASE
+    `)
+    const result = statement.get({ username })
+
+    if (result === undefined) {
+      return null
+    }
+
+    return {
+      id: result.id,
+      name: result.username,
+      passwordHash: result.password_hash
+    }
   }
 }

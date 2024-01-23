@@ -8,6 +8,7 @@ import { type IngredientNoId } from '../types/Ingredient'
 import type Recipe from '../types/Recipe'
 import type Tag from '../types/Tag'
 import type User from '../types/User'
+import { type UserCredentials } from '../types/User'
 
 import type * as types from './types'
 
@@ -119,6 +120,12 @@ export interface IUserDatabase {
    * Get the history of recipes made by a user, sorted by date made most recent first
    */
   getHistory: (params: GetHistoryParams) => MadeRecipeItem[]
+
+  /**
+   * Get the user with the given name and return their credentials.
+   * Case insensitive.
+   */
+  getCredentials: (username: string) => UserCredentials | null
 }
 
 export default interface IChefDatabase {

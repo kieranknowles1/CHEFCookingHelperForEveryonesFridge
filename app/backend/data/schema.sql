@@ -156,8 +156,8 @@ CREATE INDEX index_recipe_ingredient_by_recipe_id
 
 CREATE TABLE user (
     id INTEGER NOT NULL PRIMARY KEY,
-    username TEXT NOT NULL UNIQUE
-    --// TODO: password
+    username TEXT NOT NULL UNIQUE COLLATE NOCASE,
+    password_hash TEXT NOT NULL
 );
 CREATE INDEX index_user_by_username
     ON user(username);
