@@ -1,5 +1,5 @@
-import { mdiClose, mdiMinus, mdiPlus } from '@mdi/js'
-import Icon from '@mdi/react'
+import { BiMinus, BiPlus } from 'react-icons/bi'
+import { MdClose } from 'react-icons/md'
 import React from 'react'
 
 import UserContext from '../../contexts/UserContext'
@@ -59,15 +59,15 @@ export default function EditIngredientAmount (props: EditIngredientAmountProps):
         required
       /></label>
       <button type='button' className='float-right bg-red-900 hover:bg-red-950' onClick={props.onCancel}>
-        <Icon path={mdiClose} size={1} className='inline' />
+        <MdClose size={24} className='inline' />
       </button>
       <br />
       <div className='w-full grid grid-cols-2'>
       <button className='w-full bg-lime-900 rounded hover:bg-lime-950' type='submit' onClick={() => { onSubmit('add') }}>
-        <Icon path={mdiPlus} size={1} className='inline' /> Add
+        <BiPlus size={24} className='inline' /> Add
       </button>
       <button className='w-full bg-red-900 rounded hover:bg-red-950' type='button' onClick={() => { onSubmit('remove') }}>
-        <Icon path={mdiMinus} size={1} className='inline' /> Remove
+        <BiMinus size={24} className='inline' /> Remove
       </button>
       </div>
     </form>

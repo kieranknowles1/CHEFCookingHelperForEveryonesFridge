@@ -1,5 +1,4 @@
-import { mdiHamburger, mdiHamburgerCheck } from '@mdi/js'
-import Icon from '@mdi/react'
+import { FaBurger } from 'react-icons/fa6'
 import React from 'react'
 
 import LoadingSpinner, { DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
@@ -41,11 +40,10 @@ export default function MadeItButton (props: MadeItButtonProps): React.JSX.Eleme
   }
 
   const message = status === 'done' ? 'Removed Ingredients and added to History' : 'Made it - Remove Ingredients From Fridge'
-  const icon = status === 'done' ? mdiHamburgerCheck : mdiHamburger
 
   return (
     <button onClick={handleClick} disabled={status === 'loading' || status === 'done'}>
-      <Icon path={icon} size={1} className='inline' />
+      <FaBurger size={24} className='inline' />
       {' ' + message}
       <LoadingSpinner
         status={status}

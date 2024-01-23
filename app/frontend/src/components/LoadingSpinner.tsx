@@ -1,7 +1,6 @@
 import { InfinitySpin, ThreeDots } from 'react-loader-spinner'
-import Icon from '@mdi/react'
+import { BiSolidError } from 'react-icons/bi'
 import React from 'react'
-import { mdiAlert } from '@mdi/js'
 
 /**
  * Status of a loading operation.
@@ -24,7 +23,7 @@ export type LoadingStatus =
 export const DefaultSpinner = <InfinitySpin />
 export const DefaultSmallSpinner = <ThreeDots width={32} height={16} wrapperClass='inline' />
 
-const errorIcon = <Icon path={mdiAlert} size={1} className='inline-block' />
+const errorIcon = <BiSolidError size={24} className='inline' />
 
 export const DefaultError = (
   <p className='text-red-500'>

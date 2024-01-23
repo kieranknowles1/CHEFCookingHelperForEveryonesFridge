@@ -1,5 +1,4 @@
-import { mdiChevronLeft, mdiChevronRight } from '@mdi/js'
-import Icon from '@mdi/react'
+import { BiChevronLeft, BiChevronRight } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 import React from 'react'
 
@@ -69,11 +68,11 @@ export default function FindRecipesPage (): React.JSX.Element {
   const pageButtons = (
     <div className='flex justify-center'>
       <button className='btn' onClick={() => { setPage(page - 1) }} disabled={page === 0}>
-        <Icon path={mdiChevronLeft} size={1} className='inline' /> Previous
+        <BiChevronLeft size={24} className='inline' /> Previous
       </button>
       <span className='mx-3'>Page {page + 1} / {getTotalPages()}</span>
       <button className='btn' onClick={() => { setPage(page + 1) }} disabled={page >= getTotalPages() - 1}>
-        Next <Icon path={mdiChevronRight} size={1} className='inline' />
+        Next <BiChevronRight size={24} className='inline' />
       </button>
     </div>
   )

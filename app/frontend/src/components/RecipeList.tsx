@@ -1,6 +1,5 @@
-import Icon from '@mdi/react'
 import React from 'react'
-import { mdiFridgeOff } from '@mdi/js'
+import { TbFridgeOff } from 'react-icons/tb'
 
 import Recipe, { type RecipeProps } from './Recipe'
 import { type LoadingStatus } from './LoadingSpinner'
@@ -20,7 +19,7 @@ export default function RecipeList (props: RecipeListProps): React.JSX.Element {
   if (props.status === 'done' && props.recipes.length === 0) {
     return (
       <p className='text-center text-xl'>
-        <Icon path={mdiFridgeOff} size={1} className='inline' /> No recipes found
+        <TbFridgeOff className='inline' /> No recipes found
       </p>
     )
   } else {
