@@ -283,7 +283,11 @@ export interface paths {
         /** @description OK */
         200: {
           content: {
-            "application/json": components["schemas"]["Token"];
+            "application/json": {
+              /** @example abc123 */
+              token: string;
+              userId: components["schemas"]["id"];
+            };
           };
         };
         400: components["responses"]["BadRequest"];
@@ -395,10 +399,6 @@ export interface components {
     id: number;
     /** @example johnsmith */
     username: string;
-    Token: {
-      /** @example abc123 */
-      token: string;
-    };
     ErrorList: {
       /** @example 404 */
       status: number;

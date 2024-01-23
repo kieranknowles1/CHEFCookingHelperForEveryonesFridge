@@ -315,7 +315,13 @@ paths:
           description: OK
           content:
             application/json:
-              schema: { $ref: "#/components/schemas/Token" }
+              schema:
+                type: object
+                properties:
+                  token: { type: string, example: "abc123" }
+                  userId: { $ref: "#/components/schemas/id" }
+                required: [token, userId]
+                additionalProperties: false
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -496,13 +502,6 @@ components:
       example: "johnsmith"
       pattern: "^[^:]+$"
       maxLength: 255
-
-    Token:
-      type: object
-      properties:
-        token: { type: string, example: "abc123" }
-      required: [token]
-      additionalProperties: false
 
     ErrorList:
       type: object

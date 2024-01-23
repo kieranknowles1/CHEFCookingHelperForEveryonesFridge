@@ -54,7 +54,8 @@ export default function registerLoginEndpoint (app: Express, db: IChefDatabase):
       })
 
       res.json({
-        token: signed
+        token: signed,
+        userId: credentials.id
       })
     }))
 }
