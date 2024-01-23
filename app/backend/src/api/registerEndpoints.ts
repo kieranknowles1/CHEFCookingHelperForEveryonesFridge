@@ -15,6 +15,7 @@ import registerLoginEndpoint from './v1/login'
 import registerMealTypeListEndpoint from './v1/getMealTypes'
 import registerRecipeEndpoint from './v1/recipe/recipe'
 import registerRecipeSearchEndpoint from './v1/recipe/search'
+import registerUserAuthMiddleware from './v1/user/auth'
 import registerUserHistoryEndpoint from './v1/user/history'
 import registerUserInfoEndpoint from './v1/user/info'
 import registerUserIngredientPreferenceEndpoint from './v1/user/ingredientPreference'
@@ -35,6 +36,9 @@ export default function registerEndpoints (app: Express, db: IChefDatabase): voi
   registerRecipeSearchEndpoint(app, db)
   registerRecipeEndpoint(app, db)
   registerLoginEndpoint(app, db)
+
+  // User endpoints. Requires authentication as the requested user.
+  registerUserAuthMiddleware(app)
   registerUserHistoryEndpoint(app, db)
   registerUserInfoEndpoint(app, db)
   registerUserIngredientPreferenceEndpoint(app, db)

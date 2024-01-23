@@ -1,12 +1,10 @@
-import type * as t from 'io-ts'
 import { type Express, type Request } from 'express'
+import jwt, { type JwtPayload } from 'jsonwebtoken'
 import { BadRequest } from 'express-openapi-validator/dist/openapi.validator'
 import expressAsyncHandler from 'express-async-handler'
-import jwt from 'jsonwebtoken'
 
 import type IChefDatabase from '../../database/IChefDatabase'
 import NotAuthorizedError from '../NotAuthorizedError'
-import type Token from '../../types/Token'
 import { type TypedResponse } from '../TypedEndpoint'
 import checkHash from '../../utils/checkHash'
 import constants from '../../constants'
@@ -44,12 +42,12 @@ export default function registerLoginEndpoint (app: Express, db: IChefDatabase):
 
       // Date.now() returns milliseconds, but JWT expects seconds
       const nowSeconds = Math.floor(Date.now() / 1000)
-      const rawToken: t.TypeOf<typeof Token> = {
+      const rawToken: JwtPayload = {
         iat: nowSeconds,
         nbf: nowSeconds,
         exp: nowSeconds + environment.TOKEN_VALIDITY,
         iss: 'chef-backend',
-        sub: credentials.id
+        sub: credentials.id.toString()
       }
       const signed = jwt.sign(rawToken, environment.SECRET, {
         algorithm: constants.JWT_ALGORITHM

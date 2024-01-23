@@ -1,5 +1,6 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { HttpError } from 'express-openapi-validator/dist/framework/types'
+import { UnauthorizedError } from 'express-jwt'
 
 import CodedError from '../CodedError'
 import { type components } from '../types/api.generated'
@@ -12,6 +13,8 @@ function getResponseCode (err: Error): number {
     return err.code
   } else if (err instanceof HttpError) {
     return err.status
+  } else if (err instanceof UnauthorizedError) {
+    return 401
   } else {
     return 500
   }
