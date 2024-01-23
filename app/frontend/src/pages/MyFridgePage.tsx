@@ -30,11 +30,10 @@ export default function MyFridgePage (): React.JSX.Element {
   const [addIngredientOpen, setAddingredientOpen] = React.useState(false)
   const [scanBarcodeOpen, setScanBarcodeOpen] = React.useState(false)
 
-  if (context === null) {
-    return <NeedsLoginMessage />
-  }
-
   React.useEffect(() => {
+    if (context === null) {
+      return
+    }
     apiClient.GET(
       '/fridge/{fridgeId}',
       { params: { path: { fridgeId: context.fridgeId } } }
@@ -45,9 +44,12 @@ export default function MyFridgePage (): React.JSX.Element {
     }).catch(err => {
       console.error(err)
     })
-  }, [context.fridgeId])
+  }, [context])
 
   const fetchIngredients = (): void => {
+    if (context === null) {
+      return
+    }
     apiClient.GET(
       '/fridge/{fridgeId}/ingredient/all/amount',
       { params: { path: { fridgeId: context.fridgeId } } }
@@ -60,7 +62,11 @@ export default function MyFridgePage (): React.JSX.Element {
     })
   }
 
-  React.useEffect(fetchIngredients, [context.fridgeId])
+  React.useEffect(fetchIngredients, [context])
+
+  if (context === null) {
+    return <NeedsLoginMessage />
+  }
 
   return (
     <main>
