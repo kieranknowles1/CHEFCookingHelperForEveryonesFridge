@@ -316,6 +316,8 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Token" }
+        "400":
+          $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
 
@@ -438,6 +440,12 @@ components:
       required: true
 
   responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorList" }
+
     Forbidden:
       description: Forbidden
       content:
