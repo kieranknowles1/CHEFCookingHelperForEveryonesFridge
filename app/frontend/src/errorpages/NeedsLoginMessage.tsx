@@ -3,7 +3,6 @@ import React from 'react'
 
 /**
  * Page to display when a user needs to login to view a page.
- * // TODO: Don't show this until all hooks are called. This breaks react otherwise.
  */
 export default function NeedsLoginMessage (): React.JSX.Element {
   return (

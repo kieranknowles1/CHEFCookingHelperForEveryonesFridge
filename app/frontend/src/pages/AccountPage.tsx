@@ -15,10 +15,6 @@ type User = components['schemas']['User']
 export default function AccountPage (): React.JSX.Element {
   const context = React.useContext(UserContext)
 
-  if (context === null) {
-    return <NeedsLoginMessage />
-  }
-
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
 
   const [userName, setUserName] = React.useState<string>()
@@ -26,6 +22,9 @@ export default function AccountPage (): React.JSX.Element {
   const [bannedIngredients, setBannedIngredients] = React.useState<User['bannedIngredients']>([])
 
   React.useEffect(() => {
+    if (context === null) {
+      return
+    }
     apiClient.GET(
       '/user/{userId}',
       { params: { path: { userId: context.userId } } }
@@ -38,8 +37,11 @@ export default function AccountPage (): React.JSX.Element {
     }).catch(err => {
       console.error(err)
     })
-  }, [context.userId])
+  }, [context])
 
+  if (context === null) {
+    return <NeedsLoginMessage />
+  }
   if (status !== 'done') {
     return <LoadingSpinner status={status} />
   }
