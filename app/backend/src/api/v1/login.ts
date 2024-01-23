@@ -27,8 +27,6 @@ export default function registerLoginEndpoint (app: Express, db: IChefDatabase):
 
       const { username, password } = decodeBasicAuth(header)
 
-      console.log(username, password)
-
       const credentials = db.users.getCredentials(username)
       if (credentials === null) {
         throwNotAuthorized()
