@@ -1,4 +1,6 @@
-import { BadRequest } from 'express-openapi-validator/dist/openapi.validator'
+import { error } from 'express-openapi-validator'
+
+import constants from '../constants'
 
 export interface BasicAuth {
   username: string
@@ -7,7 +9,7 @@ export interface BasicAuth {
 }
 
 function throwInvalidHeader (): never {
-  throw new BadRequest({ path: 'header', message: 'Invalid Authorization header' })
+  throw new error.BadRequest({ path: 'header', message: 'Invalid Authorization header' })
 }
 
 /**
@@ -34,6 +36,12 @@ export default function decodeBasicAuth (header: string): BasicAuth {
 
   const username = decoded.substring(0, colon)
   const password = decoded.substring(colon + 1)
+
+  const byteLength = Buffer.byteLength(password, 'utf-8')
+
+  if (byteLength > constants.MAX_PASSWORD_BYTES) {
+    throw new error.BadRequest({ path: 'header', message: 'Password too long' })
+  }
 
   return { username, password }
 }
