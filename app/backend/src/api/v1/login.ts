@@ -1,4 +1,4 @@
-import * as t from 'io-ts'
+import type * as t from 'io-ts'
 import { type Express, type Request } from 'express'
 import { BadRequest } from 'express-openapi-validator/dist/openapi.validator'
 import expressAsyncHandler from 'express-async-handler'
@@ -6,12 +6,12 @@ import jwt from 'jsonwebtoken'
 
 import type IChefDatabase from '../../database/IChefDatabase'
 import NotAuthorizedError from '../NotAuthorizedError'
-import Token from '../../types/Token'
+import type Token from '../../types/Token'
 import { type TypedResponse } from '../TypedEndpoint'
 import checkHash from '../../utils/checkHash'
 import decodeBasicAuth from '../../utils/decodeBasicAuth'
-import { type paths } from '../../types/api.generated'
 import environment from '../../environment'
+import { type paths } from '../../types/api.generated'
 
 type endpoint = paths['/login']['post']
 
