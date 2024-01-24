@@ -223,6 +223,10 @@ paths:
                     additionalProperties: false
                 required: [id, name, owner]
                 additionalProperties: false
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         "404":
           $ref: "#/components/responses/NotFound"
 
@@ -245,8 +249,12 @@ paths:
               schema:
                 type: array
                 items: { $ref: "#/components/schemas/FridgeIngredientEntry" }
+        "401":
+          $ref: "#/components/responses/Unauthorized"
         "403":
           $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /fridge/{fridgeId}/ingredient/{ingredientId}/amount:
     get:
@@ -262,6 +270,12 @@ paths:
           content:
             application/json:
               schema: { type: number, example: 100 }
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
     post:
       tags: [Fridge]
       summary: Update the amount of an ingredient in the fridge
@@ -278,6 +292,10 @@ paths:
       responses:
         "204":
           description: No Content
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
 
   /fridge/{fridgeId}/recipe/{recipeId}/maderecipe:
     post:
@@ -300,6 +318,8 @@ paths:
       responses:
         "204":
           description: No Content
+        "401":
+          $ref: "#/components/responses/Unauthorized"
         "403":
           $ref: "#/components/responses/Forbidden"
 

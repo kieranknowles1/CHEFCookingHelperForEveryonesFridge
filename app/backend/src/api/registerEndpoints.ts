@@ -20,22 +20,27 @@ import registerUserHistoryEndpoint from './v1/user/history'
 import registerUserInfoEndpoint from './v1/user/info'
 import registerUserIngredientPreferenceEndpoint from './v1/user/ingredientPreference'
 import registerUserTagPreferenceEndpoint from './v1/user/tagPreference'
+import registerFridgeAuthMiddleware from './v1/fridge/auth'
 
 /**
  * Register all endpoints and error handlers for the API.
  */
 export default function registerEndpoints (app: Express, db: IChefDatabase): void {
   registerBarcodeEndpoint(app, db)
-  registerFridgeMadeRecipeEndpoint(app, db)
-  registerFridgeInfoEndpoint(app, db)
-  registerFridgeIngredientAllAmountEndpoint(app, db)
-  registerFridgeIngredientEndpoint(app, db)
+
   registerGetTagsEndpoint(app, db)
   registerIngredientAllEndpoint(app, db)
   registerMealTypeListEndpoint(app, db)
   registerRecipeSearchEndpoint(app, db)
   registerRecipeEndpoint(app, db)
   registerLoginEndpoint(app, db)
+
+  // Fridge endpoints. Requires authentication as a user with access to the fridge.
+  registerFridgeAuthMiddleware(app, db)
+  registerFridgeMadeRecipeEndpoint(app, db)
+  registerFridgeInfoEndpoint(app, db)
+  registerFridgeIngredientAllAmountEndpoint(app, db)
+  registerFridgeIngredientEndpoint(app, db)
 
   // User endpoints. Requires authentication as the requested user.
   registerUserAuthMiddleware(app)

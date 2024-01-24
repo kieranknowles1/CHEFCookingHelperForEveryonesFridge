@@ -74,6 +74,17 @@ export default class UserDatabaseImpl implements IUserDatabase {
     }))
   }
 
+  public hasFridgeAccess (userId: types.RowId, fridgeId: types.RowId): boolean {
+    const statement = this._connection.prepare<{ count: number }>(`
+      SELECT 1
+      FROM fridge
+      JOIN fridge_user ON fridge_user.fridge_id = fridge.id
+      WHERE fridge_user.user_id = :userId AND fridge.id = :fridgeId
+    `)
+
+    return statement.all({ userId, fridgeId }).length > 0
+  }
+
   public getHistory (params: GetHistoryParams): MadeRecipeItem[] {
     interface Result {
       item_id: types.RowId

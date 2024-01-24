@@ -131,6 +131,11 @@ export interface IUserDatabase {
   getAvailableFridges: (userId: types.RowId) => AvailableFridge[]
 
   /**
+   * Return true if the user has access to the fridge
+   */
+  hasFridgeAccess: (userId: types.RowId, fridgeId: types.RowId) => boolean
+
+  /**
    * Get the history of recipes made by a user, sorted by date made most recent first
    */
   getHistory: (params: GetHistoryParams) => MadeRecipeItem[]
