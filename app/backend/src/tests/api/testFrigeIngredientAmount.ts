@@ -3,7 +3,7 @@ import request from 'supertest'
 
 import createTestApp, { type TestApp } from './createTestApp'
 
-describe('GET /api/v1/fridge/:fridgeId/ingredient/all/amount', () => {
+describe('/api/v1/fridge/:fridgeId/ingredient/all/amount', () => {
   let app: TestApp
   before(() => {
     app = createTestApp()
@@ -13,10 +13,13 @@ describe('GET /api/v1/fridge/:fridgeId/ingredient/all/amount', () => {
     app.server.close()
   })
 
-  it('should return 200 for valid fridgeId', async () => {
-    await request(app.server)
-      .get('/api/v1/fridge/1/ingredient/all/amount')
-      .expect(200)
+  describe('GET', () => {
+    it('should return 200 for valid fridgeId', async () => {
+      await request(app.server)
+        .get('/api/v1/fridge/1/ingredient/all/amount')
+        .set('Authorization', app.authHeaderValue)
+        .expect(200)
+    })
   })
 })
 
@@ -37,6 +40,7 @@ describe('/api/v1/fridge/:fridgeId/ingredient/:ingredientId/amount', () => {
       })
       await request(app.server)
         .get('/api/v1/fridge/1/ingredient/1/amount')
+        .set('Authorization', app.authHeaderValue)
         .expect(200, '12345')
     })
   })
@@ -45,10 +49,12 @@ describe('/api/v1/fridge/:fridgeId/ingredient/:ingredientId/amount', () => {
     it('should set the amount of an ingredient', async () => {
       await request(app.server)
         .post('/api/v1/fridge/1/ingredient/1/amount?amount=54321')
+        .set('Authorization', app.authHeaderValue)
         .expect(204)
 
       await request(app.server)
         .get('/api/v1/fridge/1/ingredient/1/amount')
+        .set('Authorization', app.authHeaderValue)
         .expect(200, '54321')
     })
   })

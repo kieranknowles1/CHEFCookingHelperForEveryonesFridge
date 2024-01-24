@@ -4,11 +4,13 @@ import type IChefDatabase from '../../database/IChefDatabase'
 import type IConnection from '../../database/IConnection'
 import createApp from '../../createApp'
 import createTestDatabase from '../database/createTestDatabase'
+import issueToken from '../../utils/issueToken'
 
 export interface TestApp {
   server: http.Server
   connection: IConnection
   db: IChefDatabase
+  authHeaderValue: string
 }
 
 /**
@@ -24,6 +26,7 @@ export default function createTestApp (): TestApp {
   return {
     server,
     connection,
-    db: database
+    db: database,
+    authHeaderValue: `Bearer ${issueToken(1)}`
   }
 }

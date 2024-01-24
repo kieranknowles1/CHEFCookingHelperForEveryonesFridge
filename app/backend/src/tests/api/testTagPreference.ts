@@ -19,6 +19,7 @@ describe('/api/v1/user/:userId/preference/tag/:tagId/', () => {
     it('should set a disallowed tag', async () => {
       await request(app.server)
         .post('/api/v1/user/1/preference/tag/1?allow=false')
+        .set('Authorization', app.authHeaderValue)
         .expect(204)
 
       const user = app.db.users.get(1)
@@ -29,6 +30,7 @@ describe('/api/v1/user/:userId/preference/tag/:tagId/', () => {
     it('should clear a disallowed tag', async () => {
       await request(app.server)
         .post('/api/v1/user/1/preference/tag/1?allow=true')
+        .set('Authorization', app.authHeaderValue)
         .expect(204)
 
       const user = app.db.users.get(1)
