@@ -110,6 +110,7 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
           <FridgeIngredient key={ingredient.ingredient.id} {...ingredient} onEditAmount={fetchIngredients} />
         )}
       </ul>
+      {status === 'done' && ingredients.length === 0 && <p>Your fridge is empty!</p>}
 
       <Link to='/findrecipes'>What can I make?</Link>
     </main>
