@@ -3,7 +3,7 @@ import React from 'react'
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
 import NeedsLoginMessage from '../errorpages/NeedsLoginMessage'
 import UserContext from '../contexts/UserContext'
-import apiClient from '../apiClient'
+import apiClient, { createAuthHeaders } from '../apiClient'
 import { type components } from '../types/api.generated'
 import monitorStatus from '../utils/monitorStatus'
 
@@ -27,7 +27,10 @@ export default function AccountPage (): React.JSX.Element {
     }
     apiClient.GET(
       '/user/{userId}',
-      { params: { path: { userId: context.userId } } }
+      {
+        params: { path: { userId: context.userId } },
+        headers: createAuthHeaders(context)
+      }
     ).then(
       monitorStatus(setStatus)
     ).then(data => {

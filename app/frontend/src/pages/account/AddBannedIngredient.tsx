@@ -3,8 +3,9 @@ import React from 'react'
 import LoadingSpinner, { DefaultSmallError, DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
 import monitorStatus, { type ApiError } from '../../utils/monitorStatus'
 import { IngredientPicker } from '../../components/IngredientPicker'
-import apiClient from '../../apiClient'
+import apiClient, { createAuthHeaders } from '../../apiClient'
 import { type components } from '../../types/api.generated'
+import UserContext from '../../contexts/UserContext'
 
 type Ingredient = components['schemas']['Ingredient']
 
@@ -15,10 +16,16 @@ export interface AddBannedIngredientProps {
 }
 
 export default function AddBannedIngredient (props: AddBannedIngredientProps): React.JSX.Element {
+  const context = React.useContext(UserContext)
+
+  if (context === null) {
+    throw new Error('UserContext is null')
+  }
+
   const [selected, setSelected] = React.useState<Ingredient | null>(null)
   const [status, setStatus] = React.useState<LoadingStatus>('notstarted')
 
-  function onSubmit (event: React.FormEvent): void {
+  const onSubmit = (event: React.FormEvent): void => {
     event.preventDefault()
 
     if (selected === null) {
@@ -30,9 +37,10 @@ export default function AddBannedIngredient (props: AddBannedIngredientProps): R
       '/user/{userId}/preference/ingredient/{ingredientId}',
       {
         params: {
-          path: { userId: 1, ingredientId: selected.id },
+          path: { userId: context.userId, ingredientId: selected.id },
           query: { allow: false }
-        }
+        },
+        headers: createAuthHeaders(context)
       }
     ).then(
       monitorStatus(setStatus)

@@ -3,7 +3,7 @@ import React from 'react'
 import LoadingSpinner, { DefaultSmallError, DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
 import monitorStatus, { type ApiError } from '../../utils/monitorStatus'
 import UserContext from '../../contexts/UserContext'
-import apiClient from '../../apiClient'
+import apiClient, { createAuthHeaders } from '../../apiClient'
 
 export interface BannedIngredientProps {
   name: string
@@ -27,7 +27,8 @@ export default function BannedIngredient (props: BannedIngredientProps): React.J
         params: {
           path: { userId: context.userId, ingredientId: props.id },
           query: { allow: true }
-        }
+        },
+        headers: createAuthHeaders(context)
       }
     ).then(
       monitorStatus(setStatus)

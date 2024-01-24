@@ -1,10 +1,11 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpinner'
-import apiClient from '../../apiClient'
+import apiClient, { createAuthHeaders } from '../../apiClient'
 import { type components } from '../../types/api.generated'
 import formatShortDate from '../../utils/formatShortDate'
 import monitorStatus from '../../utils/monitorStatus'
+import UserContext from '../../contexts/UserContext'
 
 type MadeRecipe = components['schemas']['MadeRecipe']
 
@@ -31,6 +32,12 @@ function getTimesMadeString (timesMade: number): string {
  * Information is only meaningful if the recipe name is shown elsewhere on the page.
  */
 export default function SingleRecipeHistory (props: SingleRecipeHistoryProps): React.JSX.Element {
+  const context = React.useContext(UserContext)
+
+  if (context === null) {
+    throw new Error('UserContext is null')
+  }
+
   const [history, setHistory] = React.useState<MadeRecipe[]>([])
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
 
@@ -41,7 +48,8 @@ export default function SingleRecipeHistory (props: SingleRecipeHistoryProps): R
         params: {
           path: { userId: props.userId },
           query: { recipe: props.recipeId, limit: LIMIT }
-        }
+        },
+        headers: createAuthHeaders(context)
       }
     ).then(
       monitorStatus(setStatus)
