@@ -181,6 +181,8 @@ export interface paths {
             };
           };
         };
+        401: components["responses"]["Unauthorized"];
+        403: components["responses"]["Forbidden"];
         404: components["responses"]["NotFound"];
       };
     };
@@ -203,7 +205,9 @@ export interface paths {
             "application/json": components["schemas"]["FridgeIngredientEntry"][];
           };
         };
+        401: components["responses"]["Unauthorized"];
         403: components["responses"]["Forbidden"];
+        404: components["responses"]["NotFound"];
       };
     };
   };
@@ -223,6 +227,9 @@ export interface paths {
             "application/json": number;
           };
         };
+        401: components["responses"]["Unauthorized"];
+        403: components["responses"]["Forbidden"];
+        404: components["responses"]["NotFound"];
       };
     };
     /**
@@ -245,6 +252,8 @@ export interface paths {
         204: {
           content: never;
         };
+        401: components["responses"]["Unauthorized"];
+        403: components["responses"]["Forbidden"];
       };
     };
   };
@@ -269,6 +278,7 @@ export interface paths {
         204: {
           content: never;
         };
+        401: components["responses"]["Unauthorized"];
         403: components["responses"]["Forbidden"];
       };
     };
@@ -313,6 +323,30 @@ export interface paths {
         401: components["responses"]["Unauthorized"];
         403: components["responses"]["Forbidden"];
         404: components["responses"]["NotFound"];
+      };
+    };
+  };
+  "/user/{userId}/fridges": {
+    /** Get all fridges a user has access to */
+    get: {
+      parameters: {
+        path: {
+          userId: components["parameters"]["userId"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": {
+                /** @example 1 */
+                id: number;
+                /** @example My Fridge */
+                name: string;
+                owner: components["schemas"]["NameAndId"];
+              }[];
+          };
+        };
       };
     };
   };
@@ -480,13 +514,6 @@ export interface components {
       name: components["schemas"]["username"];
       bannedTags: components["schemas"]["Tag"][];
       bannedIngredients: components["schemas"]["NameAndId"][];
-      fridges: {
-          /** @example 1 */
-          id: number;
-          /** @example My Fridge */
-          name: string;
-          owner: components["schemas"]["NameAndId"];
-        }[];
     };
     RecipeIngredientEntry: WithRequired<{
       /** @example 250g of chicken */

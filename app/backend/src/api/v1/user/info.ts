@@ -17,8 +17,7 @@ export default function registerUserInfoEndpoint (app: Express, db: IChefDatabas
         id: user.id,
         name: user.name,
         bannedTags: Array.from(user.bannedTags.entries()).map(([id, data]) => ({ id, name: data.name, description: data.description })),
-        bannedIngredients: Array.from(user.bannedIngredients.entries()).map(([id, name]) => ({ id, name })),
-        fridges: db.users.getAvailableFridges(userId)
+        bannedIngredients: Array.from(user.bannedIngredients.entries()).map(([id, name]) => ({ id, name }))
       })
     })
 }

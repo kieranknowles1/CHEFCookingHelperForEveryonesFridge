@@ -368,6 +368,30 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
+  /user/{userId}/fridges:
+    get:
+      tags: [User]
+      summary: Get all fridges a user has access to
+      security: [Bearer: []]
+      parameters:
+        - $ref: "#/components/parameters/userId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id: { type: integer, example: 1 }
+                    name: { type: string, example: "My Fridge" }
+                    owner: { $ref: "#/components/schemas/NameAndId" }
+                  required: [id, name, owner]
+                  additionalProperties: false
+
+
   /user/{userId}/history:
     get:
       tags: [User]
@@ -631,17 +655,7 @@ components:
         bannedIngredients:
           type: array
           items: { $ref: "#/components/schemas/NameAndId" }
-        fridges:
-          type: array
-          items:
-            type: object
-            properties:
-              id: { type: integer, example: 1 }
-              name: { type: string, example: "My Fridge" }
-              owner: { $ref: "#/components/schemas/NameAndId" }
-            required: [id, name, owner]
-            additionalProperties: false
-      required: [id, name, bannedTags, bannedIngredients, fridges]
+      required: [id, name, bannedTags, bannedIngredients]
       additionalProperties: false
 
     RecipeIngredientEntry:

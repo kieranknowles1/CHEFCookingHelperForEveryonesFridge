@@ -21,6 +21,7 @@ import registerUserInfoEndpoint from './v1/user/info'
 import registerUserIngredientPreferenceEndpoint from './v1/user/ingredientPreference'
 import registerUserTagPreferenceEndpoint from './v1/user/tagPreference'
 import registerFridgeAuthMiddleware from './v1/fridge/auth'
+import registerUserFridgesEndpoint from './v1/user/fridges'
 
 /**
  * Register all endpoints and error handlers for the API.
@@ -44,6 +45,7 @@ export default function registerEndpoints (app: Express, db: IChefDatabase): voi
 
   // User endpoints. Requires authentication as the requested user.
   registerUserAuthMiddleware(app)
+  registerUserFridgesEndpoint(app, db)
   registerUserHistoryEndpoint(app, db)
   registerUserInfoEndpoint(app, db)
   registerUserIngredientPreferenceEndpoint(app, db)
