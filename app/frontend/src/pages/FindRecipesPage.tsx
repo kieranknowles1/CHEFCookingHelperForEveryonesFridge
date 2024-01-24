@@ -7,13 +7,18 @@ import RecipeSearchOptions, { type SearchFilters } from '../components/RecipeSea
 import RecipeList from '../components/RecipeList'
 import { type RecipeProps } from '../components/Recipe'
 import Search from '../components/inputs/Search'
-import UserContext from '../contexts/UserContext'
+import UserContext, { UserState } from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import monitorStatus from '../utils/monitorStatus'
+import { FridgePicker } from '../components/FridgePicker'
 
 const PAGE_SIZE = 100
 
-export default function FindRecipesPage (): React.JSX.Element {
+export interface FindRecipesPageProps {
+  setUserState: (state: UserState) => void
+}
+
+export default function FindRecipesPage (props: FindRecipesPageProps): React.JSX.Element {
   const context = React.useContext(UserContext)
 
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
@@ -41,7 +46,7 @@ export default function FindRecipesPage (): React.JSX.Element {
         params: {
           query: {
             ...filters,
-            availableForFridge: context?.fridgeId ?? undefined,
+            availableForFridge: context?.fridge?.id,
             limit: 1000,
             suitableForUsers: context !== null ? [context.userId] : undefined
           }
@@ -85,6 +90,15 @@ export default function FindRecipesPage (): React.JSX.Element {
         <br />
         Click any recipe to view details and/or mark it as have been made.
       </p>
+      {context !== null && <FridgePicker
+        selected={context.fridge}
+        setSelected={fridge => {
+          props.setUserState({
+            ...context,
+            fridge
+          })
+        }}
+      />}
       <RecipeSearchOptions filters={filters} setFilters={setFilters} />
       <hr className='my-2 mx-2' />
       {status === 'done' && <p>{recipes.length} recipes found.</p>}

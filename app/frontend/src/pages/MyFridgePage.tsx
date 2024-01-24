@@ -26,7 +26,7 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
   const context = React.useContext(UserContext)
 
   const [ingredients, setIngredients] = React.useState<FridgeIngredientEntry[]>([])
-  const [status, setStatus] = React.useState<LoadingStatus>('loading')
+  const [status, setStatus] = React.useState<LoadingStatus>('notstarted')
 
   const [addIngredientOpen, setAddingredientOpen] = React.useState(false)
   const [scanBarcodeOpen, setScanBarcodeOpen] = React.useState(false)
@@ -56,15 +56,28 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
     return <NeedsLoginMessage />
   }
 
+  const picker = (
+    <FridgePicker
+      selected={context.fridge}
+      setSelected={fridge => {
+        props.setUserState({ ...context, fridge })
+      }}
+    />
+  )
+
+  if (context.fridge === undefined) {
+    return (
+      <main>
+        {picker}
+        <h1>Select a fridge</h1>
+      </main>
+    )
+  }
+
   return (
     <main>
-      <FridgePicker
-        selected={context.fridge}
-        setSelected={fridge => {
-          props.setUserState({ ...context, fridge })
-        }}
-      />
-      <h1>{context.fridge?.name ?? 'Select a fridge'}</h1>
+      {picker}
+      <h1>{context.fridge.name}</h1>
       <LoadingSpinner status={status} />
       <button onClick={() => { setAddingredientOpen(true) } }>Add Ingredient</button>
       <ModalDialog

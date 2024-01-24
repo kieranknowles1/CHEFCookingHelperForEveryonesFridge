@@ -40,11 +40,11 @@ function App (): React.JSX.Element {
   const routes = [
     { path: '/', element: <HomePage />, name: 'Home' },
     { path: '/fridge', element: <MyFridgePage setUserState={handleUserStateChange} />, name: 'My Fridge' },
-    { path: '/findrecipes', element: <FindRecipesPage />, name: 'Find Recipes' },
+    { path: '/findrecipes', element: <FindRecipesPage setUserState={handleUserStateChange} />, name: 'Find Recipes' },
     { path: '/account', element: <AccountPage />, name: 'Account' }
   ]
   const nonNavRoutes = [
-    { path: '/recipe/:id', element: <RecipePage /> },
+    { path: '/recipe/:id', element: <RecipePage setUserState={handleUserStateChange} /> },
     { path: '*', element: <NotFoundMessage /> }
   ]
 

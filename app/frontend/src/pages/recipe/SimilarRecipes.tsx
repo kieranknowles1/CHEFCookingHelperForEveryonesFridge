@@ -26,7 +26,7 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
   React.useEffect(() => {
     setRecipes([])
     const availableForFridge = props.onlyAvailable && context !== null
-      ? context.fridgeId
+      ? context.fridge?.id
       : undefined
     apiClient.GET(
       '/recipe/search',

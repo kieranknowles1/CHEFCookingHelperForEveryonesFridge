@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
 import monitorStatus, { type ApiError } from '../utils/monitorStatus'
 import NotFoundMessage from '../errorpages/NotFoundMessage'
-import UserContext from '../contexts/UserContext'
+import UserContext, { UserState } from '../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../apiClient'
 import { type components } from '../types/api.generated'
 
@@ -12,13 +12,18 @@ import MadeItButton from './recipe/MadeItButton'
 import RecipeIngredient from './recipe/RecipeIngredient'
 import SimilarRecipes from './recipe/SimilarRecipes'
 import SingleRecipeHistory from './recipe/SingleRecipeHistory'
+import { FridgePicker } from '../components/FridgePicker'
 
 type Recipe = components['schemas']['Recipe']
 
 const MAX_SIMILAR_RECIPES = 100
 const MIN_SIMILARITY = 0.5
 
-export default function RecipePage (): React.JSX.Element {
+export interface RecipePageProps {
+  setUserState: (userState: UserState) => void
+}
+
+export default function RecipePage (props: RecipePageProps): React.JSX.Element {
   const context = React.useContext(UserContext)
 
   const [recipeStatus, setRecipeStatus] = React.useState<LoadingStatus | 'notfound'>('loading')
@@ -53,15 +58,15 @@ export default function RecipePage (): React.JSX.Element {
 
   React.useEffect(() => {
     setAvailableAmounts(null)
-    if (context === null) {
-      // Don't try to fetch available amounts if the user is not logged in
+    if (context === null || context.fridge === undefined) {
+      // Don't try to fetch available amounts if the user is not logged in or has not selected a fridge
       setAvailableAmountsStatus('done')
       return
     }
     apiClient.GET(
       '/fridge/{fridgeId}/ingredient/all/amount',
       {
-        params: { path: { fridgeId: context.fridgeId } },
+        params: { path: { fridgeId: context.fridge.id } },
         headers: createAuthHeaders(context)
       }
     ).then(
@@ -103,7 +108,18 @@ export default function RecipePage (): React.JSX.Element {
             <li key={index}>{line}</li>
           )}
         </ol>
-        <MadeItButton recipeId={recipe.id} />
+        {context !== null
+        ? <>
+            <FridgePicker
+              selected={context.fridge}
+              setSelected={fridge => {
+                props.setUserState({ ...context, fridge })
+              }}
+            />
+            {context.fridge && <MadeItButton recipeId={recipe.id} />}
+          </>
+        : <p>Log in to add this recipe to your history</p>
+        }
       </div>
       {context !== null && <>
         <h2>History</h2>

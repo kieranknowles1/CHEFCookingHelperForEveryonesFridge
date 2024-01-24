@@ -19,16 +19,21 @@ export default function MadeItButton (props: MadeItButtonProps): React.JSX.Eleme
 
   const [status, setStatus] = React.useState<LoadingStatus>('notstarted')
 
-  if (context === null) {
-    return <p>Log in to track what you&apos;ve made!</p>
+  if (context === null || context.fridge === undefined) {
+    return <p>Log in and select a fridge to track what you&apos;ve made!</p>
   }
 
   const handleClick = (): void => {
+    if (context.fridge === undefined) {
+      alert('Please select a fridge first')
+      return
+    }
+
     apiClient.POST(
       '/fridge/{fridgeId}/recipe/{recipeId}/maderecipe',
       {
         params: {
-          path: { fridgeId: context.fridgeId, recipeId: props.recipeId },
+          path: { fridgeId: context.fridge.id, recipeId: props.recipeId },
           query: { users: [context.userId] }
         },
         headers: createAuthHeaders(context)
