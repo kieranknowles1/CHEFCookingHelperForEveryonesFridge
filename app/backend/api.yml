@@ -382,14 +382,11 @@ paths:
             application/json:
               schema:
                 type: array
-                items:
-                  type: object
-                  properties:
-                    id: { type: integer, example: 1 }
-                    name: { type: string, example: "My Fridge" }
-                    owner: { $ref: "#/components/schemas/NameAndId" }
-                  required: [id, name, owner]
-                  additionalProperties: false
+                items: { $ref: "#/components/schemas/BasicFridge" }
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
 
 
   /user/{userId}/history:
@@ -643,6 +640,15 @@ components:
         ingredient: { $ref: "#/components/schemas/Ingredient" }
         amount: { type: number, example: 250 }
       required: [ingredient]
+
+    BasicFridge:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        name: { type: string, example: "My Fridge" }
+        owner: { $ref: "#/components/schemas/NameAndId" }
+      required: [id, name, owner]
+      additionalProperties: false
 
     User:
       type: object

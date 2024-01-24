@@ -338,15 +338,11 @@ export interface paths {
         /** @description OK */
         200: {
           content: {
-            "application/json": {
-                /** @example 1 */
-                id: number;
-                /** @example My Fridge */
-                name: string;
-                owner: components["schemas"]["NameAndId"];
-              }[];
+            "application/json": components["schemas"]["BasicFridge"][];
           };
         };
+        401: components["responses"]["Unauthorized"];
+        403: components["responses"]["Forbidden"];
       };
     };
   };
@@ -507,6 +503,13 @@ export interface components {
       ingredient: components["schemas"]["Ingredient"];
       /** @example 250 */
       amount?: number;
+    };
+    BasicFridge: {
+      /** @example 1 */
+      id: number;
+      /** @example My Fridge */
+      name: string;
+      owner: components["schemas"]["NameAndId"];
     };
     User: {
       /** @example 1 */
