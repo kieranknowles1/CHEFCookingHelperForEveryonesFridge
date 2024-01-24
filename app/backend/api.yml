@@ -197,12 +197,11 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
-  # TODO: Authentication for all fridge endpoints
-  # TODO: Implement
   /fridge/{fridgeId}:
     get:
       tags: [Fridge]
       summary: Get data about a fridge
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/fridgeId"
       responses:
@@ -235,6 +234,7 @@ paths:
       description:
         Returns a list of all ingredients in the fridge, with their amounts
         Does not include ingredients with amount 0
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/fridgeId"
       responses:
@@ -248,11 +248,11 @@ paths:
         "403":
           $ref: "#/components/responses/Forbidden"
 
-  # TODO: Authentication
   /fridge/{fridgeId}/ingredient/{ingredientId}/amount:
     get:
       tags: [Fridge]
       summary: Get the amount of an ingredient in the fridge
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/fridgeId"
         - $ref: "#/components/parameters/ingredientId"
@@ -266,6 +266,7 @@ paths:
       tags: [Fridge]
       summary: Update the amount of an ingredient in the fridge
       description: Set the amount of `ingredientId` in `fridgeId` to `amount`
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/fridgeId"
         - $ref: "#/components/parameters/ingredientId"
@@ -278,7 +279,6 @@ paths:
         "204":
           description: No Content
 
-  # TODO: Authentication
   /fridge/{fridgeId}/recipe/{recipeId}/maderecipe:
     post:
       tags: [Fridge]
@@ -286,6 +286,7 @@ paths:
       description:
         Log that a recipe has been made and deduct the ingredients from the fridge.
         If there are not enough of an ingredient, its amount will be set to 0.
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/fridgeId"
         - $ref: "#/components/parameters/recipeId"
