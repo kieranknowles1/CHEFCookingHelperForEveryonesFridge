@@ -504,6 +504,14 @@ components:
       pattern: "^[^:]+$"
       maxLength: 255
 
+    NameAndId:
+      type: object
+      properties:
+        id: { $ref: "#/components/schemas/id" }
+        name: { type: string, example: "My Fridge" }
+      required: [id, name]
+      additionalProperties: false
+
     ErrorList:
       type: object
       properties:
@@ -602,14 +610,18 @@ components:
           items: { $ref: "#/components/schemas/Tag" }
         bannedIngredients:
           type: array
+          items: { $ref: "#/components/schemas/NameAndId" }
+        fridges:
+          type: array
           items:
             type: object
             properties:
               id: { type: integer, example: 1 }
-              name: { type: string, example: "Mushrooms" }
-            required: [id, name]
+              name: { type: string, example: "My Fridge" }
+              owner: { $ref: "#/components/schemas/NameAndId" }
+            required: [id, name, owner]
             additionalProperties: false
-      required: [id, name, bannedTags, bannedIngredients]
+      required: [id, name, bannedTags, bannedIngredients, fridges]
       additionalProperties: false
 
     RecipeIngredientEntry:
@@ -626,29 +638,11 @@ components:
       type: object
       properties:
         id: { $ref: "#/components/schemas/id" }
-        fridge:
-          type: object
-          properties:
-            name: { type: string, example: "My Fridge" }
-            id: { $ref: "#/components/schemas/id" }
-          required: [name, id]
-          additionalProperties: false
-        recipe:
-          type: object
-          properties:
-            name: { type: string, example: "Chicken Pie" }
-            id: { $ref: "#/components/schemas/id" }
-          required: [name, id]
-          additionalProperties: false
+        fridge: { $ref: "#/components/schemas/NameAndId" }
+        recipe: { $ref: "#/components/schemas/NameAndId" }
         users:
           type: array
-          items:
-            type: object
-            properties:
-              name: { $ref: "#/components/schemas/username" }
-              id: { $ref: "#/components/schemas/id" }
-            required: [name, id]
-            additionalProperties: false
+          items: { $ref: "#/components/schemas/NameAndId" }
         dateMade:
           type: string
           example: "2020-01-01T00:00:00.000Z"

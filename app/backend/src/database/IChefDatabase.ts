@@ -113,8 +113,22 @@ export interface GetHistoryParams {
   recipeId?: types.RowId
 }
 
+export interface AvailableFridge {
+  id: types.RowId
+  name: string
+  owner: {
+    id: types.RowId
+    name: string
+  }
+}
+
 export interface IUserDatabase {
   get: (id: types.RowId) => User
+
+  /**
+   * Get all fridges that the user has access to, along with the names and IDs of their owners
+   */
+  getAvailableFridges: (userId: types.RowId) => AvailableFridge[]
 
   /**
    * Get the history of recipes made by a user, sorted by date made most recent first

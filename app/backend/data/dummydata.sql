@@ -24,6 +24,14 @@ VALUES
     (2, 'Bobs Fridge', 2),
     (3, 'Shared Fridge', 1);
 
+INSERT INTO fridge_user
+    (fridge_id, user_id)
+VALUES
+    (1, 1),
+    (2, 2),
+    (3, 1),
+    (3, 2);
+
 INSERT INTO fridge_ingredient
     (fridge_id, ingredient_id, amount)
 VALUES

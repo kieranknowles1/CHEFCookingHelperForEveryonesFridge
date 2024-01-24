@@ -399,6 +399,11 @@ export interface components {
     id: number;
     /** @example johnsmith */
     username: string;
+    NameAndId: {
+      id: components["schemas"]["id"];
+      /** @example My Fridge */
+      name: string;
+    };
     ErrorList: {
       /** @example 404 */
       status: number;
@@ -474,11 +479,13 @@ export interface components {
       id: number;
       name: components["schemas"]["username"];
       bannedTags: components["schemas"]["Tag"][];
-      bannedIngredients: {
+      bannedIngredients: components["schemas"]["NameAndId"][];
+      fridges: {
           /** @example 1 */
           id: number;
-          /** @example Mushrooms */
+          /** @example My Fridge */
           name: string;
+          owner: components["schemas"]["NameAndId"];
         }[];
     };
     RecipeIngredientEntry: WithRequired<{
@@ -488,20 +495,9 @@ export interface components {
     FridgeIngredientEntry: WithRequired<components["schemas"]["IngredientEntry"], "amount">;
     MadeRecipe: {
       id: components["schemas"]["id"];
-      fridge: {
-        /** @example My Fridge */
-        name: string;
-        id: components["schemas"]["id"];
-      };
-      recipe: {
-        /** @example Chicken Pie */
-        name: string;
-        id: components["schemas"]["id"];
-      };
-      users: {
-          name: components["schemas"]["username"];
-          id: components["schemas"]["id"];
-        }[];
+      fridge: components["schemas"]["NameAndId"];
+      recipe: components["schemas"]["NameAndId"];
+      users: components["schemas"]["NameAndId"][];
       /**
        * Format: date-time
        * @example 2020-01-01T00:00:00.000Z
