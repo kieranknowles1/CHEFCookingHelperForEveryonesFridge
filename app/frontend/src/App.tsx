@@ -25,6 +25,8 @@ function App (): React.JSX.Element {
 
   const rawUserState = localStorage.getItem(LOCAL_STORAGE_KEY)
   const [userState, setUserState] = React.useState<UserState | null>(
+    // The JSON here comes from localStorage, so it's safe to parse.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     rawUserState === null ? null : JSON.parse(rawUserState)
   )
 
@@ -47,8 +49,6 @@ function App (): React.JSX.Element {
     { path: '/recipe/:id', element: <RecipePage setUserState={handleUserStateChange} /> },
     { path: '*', element: <NotFoundMessage /> }
   ]
-
-
 
   return (
     <BrowserRouter>

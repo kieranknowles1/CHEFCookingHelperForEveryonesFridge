@@ -2,8 +2,8 @@ import { FaBurger } from 'react-icons/fa6'
 import React from 'react'
 
 import LoadingSpinner, { DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
-import UserContext from '../../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../../apiClient'
+import UserContext from '../../contexts/UserContext'
 import monitorStatus from '../../utils/monitorStatus'
 
 export interface MadeItButtonProps {
@@ -19,7 +19,7 @@ export default function MadeItButton (props: MadeItButtonProps): React.JSX.Eleme
 
   const [status, setStatus] = React.useState<LoadingStatus>('notstarted')
 
-  if (context === null || context.fridge === undefined) {
+  if (context?.fridge === undefined) {
     return <p>Log in and select a fridge to track what you&apos;ve made!</p>
   }
 

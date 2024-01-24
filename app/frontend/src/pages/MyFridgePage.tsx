@@ -2,17 +2,17 @@ import { Dialog } from '@headlessui/react'
 import { Link } from 'react-router-dom'
 import React from 'react'
 
-import LoadingSpinner, { type LoadingStatus, getHighestStatus } from '../components/LoadingSpinner'
+import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
+import UserContext, { type UserState } from '../contexts/UserContext'
+import apiClient, { createAuthHeaders } from '../apiClient'
+import { FridgePicker } from '../components/FridgePicker'
 import ModalDialog from '../components/ModalDialog'
 import NeedsLoginMessage from '../errorpages/NeedsLoginMessage'
-import UserContext, { UserState } from '../contexts/UserContext'
-import apiClient, { createAuthHeaders } from '../apiClient'
 import { type components } from '../types/api.generated'
 import monitorStatus from '../utils/monitorStatus'
 
 import AddIngredient from './myfridge/AddIngredient'
 import FridgeIngredient from './myfridge/FridgeIngredient'
-import { FridgePicker } from '../components/FridgePicker'
 
 const ScanBarcode = React.lazy(async () => await import('./myfridge/ScanBarcode'))
 
@@ -32,7 +32,7 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
   const [scanBarcodeOpen, setScanBarcodeOpen] = React.useState(false)
 
   const fetchIngredients = (): void => {
-    if (context === null || context.fridge === undefined) {
+    if (context?.fridge === undefined) {
       return
     }
     apiClient.GET(

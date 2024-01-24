@@ -2,17 +2,17 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
-import monitorStatus, { type ApiError } from '../utils/monitorStatus'
-import NotFoundMessage from '../errorpages/NotFoundMessage'
-import UserContext, { UserState } from '../contexts/UserContext'
+import UserContext, { type UserState } from '../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../apiClient'
+import monitorStatus, { type ApiError } from '../utils/monitorStatus'
+import { FridgePicker } from '../components/FridgePicker'
+import NotFoundMessage from '../errorpages/NotFoundMessage'
 import { type components } from '../types/api.generated'
 
 import MadeItButton from './recipe/MadeItButton'
 import RecipeIngredient from './recipe/RecipeIngredient'
 import SimilarRecipes from './recipe/SimilarRecipes'
 import SingleRecipeHistory from './recipe/SingleRecipeHistory'
-import { FridgePicker } from '../components/FridgePicker'
 
 type Recipe = components['schemas']['Recipe']
 
@@ -58,7 +58,7 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
 
   React.useEffect(() => {
     setAvailableAmounts(null)
-    if (context === null || context.fridge === undefined) {
+    if (context?.fridge === undefined) {
       // Don't try to fetch available amounts if the user is not logged in or has not selected a fridge
       setAvailableAmountsStatus('done')
       return
@@ -109,16 +109,16 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
           )}
         </ol>
         {context !== null
-        ? <>
+          ? <>
             <FridgePicker
               selected={context.fridge}
               setSelected={fridge => {
                 props.setUserState({ ...context, fridge })
               }}
             />
-            {context.fridge && <MadeItButton recipeId={recipe.id} />}
+            {context.fridge !== undefined && <MadeItButton recipeId={recipe.id} />}
           </>
-        : <p>Log in to add this recipe to your history</p>
+          : <p>Log in to add this recipe to your history</p>
         }
       </div>
       {context !== null && <>

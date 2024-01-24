@@ -1,8 +1,8 @@
 import React from 'react'
 
+import apiClient, { createAuthHeaders } from '../../apiClient'
 import { IngredientPicker } from '../../components/IngredientPicker'
 import UserContext from '../../contexts/UserContext'
-import apiClient, { createAuthHeaders } from '../../apiClient'
 import { type components } from '../../types/api.generated'
 
 type Ingredient = components['schemas']['Ingredient']

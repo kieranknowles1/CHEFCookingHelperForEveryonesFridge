@@ -2,11 +2,11 @@ import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpinner'
 import apiClient, { createAuthHeaders } from '../../apiClient'
+import UserContext from '../../contexts/UserContext'
 import { type components } from '../../types/api.generated'
 import monitorStatus from '../../utils/monitorStatus'
 
 import HistoryItem from './HistoryItem'
-import UserContext from '../../contexts/UserContext'
 
 type MadeRecipe = components['schemas']['MadeRecipe']
 

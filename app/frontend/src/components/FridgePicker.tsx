@@ -1,10 +1,11 @@
 import React from 'react'
 
-import { type components } from '../types/api.generated'
-import LoadingSpinner, { LoadingStatus } from './LoadingSpinner'
-import UserContext from '../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../apiClient'
+import UserContext from '../contexts/UserContext'
+import { type components } from '../types/api.generated'
 import monitorStatus from '../utils/monitorStatus'
+
+import LoadingSpinner, { type LoadingStatus } from './LoadingSpinner'
 
 type BasicFridge = components['schemas']['BasicFridge']
 

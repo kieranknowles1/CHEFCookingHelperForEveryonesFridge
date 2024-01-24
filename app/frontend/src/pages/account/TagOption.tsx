@@ -1,10 +1,10 @@
 import React from 'react'
 
 import LoadingSpinner, { DefaultSmallError, DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
+import apiClient, { createAuthHeaders } from '../../apiClient'
 import monitorStatus, { type ApiError } from '../../utils/monitorStatus'
 import ToggleButton from '../../components/inputs/ToggleButton'
 import UserContext from '../../contexts/UserContext'
-import apiClient, { createAuthHeaders } from '../../apiClient'
 
 export interface TagOptionProps {
   name: string

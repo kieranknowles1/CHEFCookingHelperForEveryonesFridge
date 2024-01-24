@@ -2,9 +2,9 @@ import { type Request, expressjwt } from 'express-jwt'
 import { type Express } from 'express'
 
 import ForbiddenError from '../../ForbiddenError'
-import jwtOptions from '../jwtOptions'
+import type IChefDatabase from '../../../database/IChefDatabase'
 import NotAuthorizedError from '../../NotAuthorizedError'
-import IChefDatabase from '../../../database/IChefDatabase'
+import jwtOptions from '../jwtOptions'
 
 /**
  * Require authentication for all fridge routes

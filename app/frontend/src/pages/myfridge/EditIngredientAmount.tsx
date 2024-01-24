@@ -2,8 +2,8 @@ import { BiMinus, BiPlus } from 'react-icons/bi'
 import { MdClose } from 'react-icons/md'
 import React from 'react'
 
-import UserContext from '../../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../../apiClient'
+import UserContext from '../../contexts/UserContext'
 
 export interface EditIngredientAmountProps {
   ingredientId: number

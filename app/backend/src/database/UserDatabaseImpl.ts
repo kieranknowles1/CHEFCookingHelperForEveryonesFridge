@@ -2,7 +2,12 @@ import type User from '../types/User'
 import { type UserCredentials } from '../types/User'
 
 import type * as types from './types'
-import { AvailableFridge, type GetHistoryParams, type IUserDatabase, type MadeRecipeItem } from './IChefDatabase'
+import {
+  type AvailableFridge,
+  type GetHistoryParams,
+  type IUserDatabase,
+  type MadeRecipeItem
+} from './IChefDatabase'
 import type IConnection from './IConnection'
 import InvalidIdError from './InvalidIdError'
 
