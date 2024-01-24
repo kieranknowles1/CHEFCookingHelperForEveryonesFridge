@@ -6,7 +6,7 @@ import LoadingSpinner, { type LoadingStatus, getHighestStatus } from '../compone
 import ModalDialog from '../components/ModalDialog'
 import NeedsLoginMessage from '../errorpages/NeedsLoginMessage'
 import UserContext from '../contexts/UserContext'
-import apiClient from '../apiClient'
+import apiClient, { createAuthHeaders } from '../apiClient'
 import { type components } from '../types/api.generated'
 import monitorStatus from '../utils/monitorStatus'
 
@@ -36,7 +36,10 @@ export default function MyFridgePage (): React.JSX.Element {
     }
     apiClient.GET(
       '/fridge/{fridgeId}',
-      { params: { path: { fridgeId: context.fridgeId } } }
+      {
+        params: { path: { fridgeId: context.fridgeId } },
+        headers: createAuthHeaders(context)
+      }
     ).then(
       monitorStatus(setFridgeNameStatus)
     ).then(data => {
@@ -52,7 +55,10 @@ export default function MyFridgePage (): React.JSX.Element {
     }
     apiClient.GET(
       '/fridge/{fridgeId}/ingredient/all/amount',
-      { params: { path: { fridgeId: context.fridgeId } } }
+      {
+        params: { path: { fridgeId: context.fridgeId } },
+        headers: createAuthHeaders(context)
+      }
     ).then(
       monitorStatus(setIngredientsStatus)
     ).then(data => {

@@ -3,7 +3,7 @@ import { MdClose } from 'react-icons/md'
 import React from 'react'
 
 import UserContext from '../../contexts/UserContext'
-import apiClient from '../../apiClient'
+import apiClient, { createAuthHeaders } from '../../apiClient'
 
 export interface EditIngredientAmountProps {
   ingredientId: number
@@ -32,14 +32,15 @@ export default function EditIngredientAmount (props: EditIngredientAmountProps):
       return
     }
 
-    const params = {
-      path: { fridgeId: context.fridgeId, ingredientId: props.ingredientId },
-      query: { amount: newAmount }
-    }
-
     apiClient.POST(
       '/fridge/{fridgeId}/ingredient/{ingredientId}/amount',
-      { params }
+      {
+        params: {
+          path: { fridgeId: context.fridgeId, ingredientId: props.ingredientId },
+          query: { amount: newAmount }
+        },
+        headers: createAuthHeaders(context)
+      }
     ).then(() => {
       props.setCurrentAmount(newAmount)
       props.onSubmit()

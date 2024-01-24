@@ -5,7 +5,7 @@ import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner
 import monitorStatus, { type ApiError } from '../utils/monitorStatus'
 import NotFoundMessage from '../errorpages/NotFoundMessage'
 import UserContext from '../contexts/UserContext'
-import apiClient from '../apiClient'
+import apiClient, { createAuthHeaders } from '../apiClient'
 import { type components } from '../types/api.generated'
 
 import MadeItButton from './recipe/MadeItButton'
@@ -60,7 +60,10 @@ export default function RecipePage (): React.JSX.Element {
     }
     apiClient.GET(
       '/fridge/{fridgeId}/ingredient/all/amount',
-      { params: { path: { fridgeId: context.fridgeId } } }
+      {
+        params: { path: { fridgeId: context.fridgeId } },
+        headers: createAuthHeaders(context)
+      }
     ).then(
       monitorStatus(setAvailableAmountsStatus)
     ).then(data => {

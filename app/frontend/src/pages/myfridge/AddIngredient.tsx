@@ -2,7 +2,7 @@ import React from 'react'
 
 import { IngredientPicker } from '../../components/IngredientPicker'
 import UserContext from '../../contexts/UserContext'
-import apiClient from '../../apiClient'
+import apiClient, { createAuthHeaders } from '../../apiClient'
 import { type components } from '../../types/api.generated'
 
 type Ingredient = components['schemas']['Ingredient']
@@ -38,7 +38,10 @@ export default function AddIngredient (props: AddIngredientProps): React.JSX.Ele
 
     apiClient.POST(
       '/fridge/{fridgeId}/ingredient/{ingredientId}/amount',
-      { params: { path: { fridgeId: context.fridgeId, ingredientId: selected.id }, query: { amount } } }
+      {
+        params: { path: { fridgeId: context.fridgeId, ingredientId: selected.id }, query: { amount } },
+        headers: createAuthHeaders(context)
+      }
     ).then(() => {
       props.onSubmit(selected, amount)
     }).catch(err => {

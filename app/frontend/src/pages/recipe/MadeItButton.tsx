@@ -3,7 +3,7 @@ import React from 'react'
 
 import LoadingSpinner, { DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
 import UserContext from '../../contexts/UserContext'
-import apiClient from '../../apiClient'
+import apiClient, { createAuthHeaders } from '../../apiClient'
 import monitorStatus from '../../utils/monitorStatus'
 
 export interface MadeItButtonProps {
@@ -30,7 +30,8 @@ export default function MadeItButton (props: MadeItButtonProps): React.JSX.Eleme
         params: {
           path: { fridgeId: context.fridgeId, recipeId: props.recipeId },
           query: { users: [context.userId] }
-        }
+        },
+        headers: createAuthHeaders(context)
       }
     ).then(
       monitorStatus(setStatus)
