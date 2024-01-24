@@ -8,7 +8,7 @@ import LoadingSpinner, { DefaultSmallSpinner, DefaultTinyError, type LoadingStat
 
 export interface LoginProps {
   className?: string
-  setUserState: (user: UserState | null) => void
+  handleLogin: (user: UserState | null) => void
 }
 
 /**
@@ -34,7 +34,7 @@ export default function Login (props: LoginProps): React.JSX.Element {
       // TODO: Store token in local storage
       // TODO: Have a way of selecting which fridge to use
 
-      props.setUserState({
+      props.handleLogin({
         token: data.token,
         userId: data.userId,
         // TODO: Add fridgeId
@@ -51,7 +51,7 @@ export default function Login (props: LoginProps): React.JSX.Element {
 
   function handleLogout (): void {
     // TODO: Flush any data that needs to be flushed
-    props.setUserState(null)
+    props.handleLogin(null)
   }
 
   const buttonStyle = 'bg-raisin_black-700 hover:bg-raisin_black-800 text-citron-700 rounded-none'

@@ -11,6 +11,8 @@ import NavMenu from './components/NavMenu'
 import NotFoundMessage from './errorpages/NotFoundMessage'
 import RecipePage from './pages/RecipePage'
 
+const LOCAL_STORAGE_KEY = 'login'
+
 interface RouteItem {
   path: string
   element: React.JSX.Element
@@ -32,12 +34,24 @@ function App (): React.JSX.Element {
     { path: '*', element: <NotFoundMessage /> }
   ]
 
-  const [userState, setUserState] = React.useState<UserState | null>(null)
+  const rawUserState = localStorage.getItem(LOCAL_STORAGE_KEY)
+  const [userState, setUserState] = React.useState<UserState | null>(
+    rawUserState === null ? null : JSON.parse(rawUserState)
+  )
+
+  function handleLogin (userState: UserState | null): void {
+    setUserState(userState)
+    if (userState === null) {
+      localStorage.removeItem(LOCAL_STORAGE_KEY)
+    } else {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(userState))
+    }
+  }
 
   return (
     <BrowserRouter>
       <UserContext.Provider value={userState}>
-        <Login className='float-right' setUserState={setUserState} />
+        <Login className='float-right' handleLogin={handleLogin} />
         <NavMenu items={routes} />
         <Routes>
           {toRouteElements(routes)}
