@@ -5,62 +5,44 @@ import React from 'react'
 import LoadingSpinner, { type LoadingStatus, getHighestStatus } from '../components/LoadingSpinner'
 import ModalDialog from '../components/ModalDialog'
 import NeedsLoginMessage from '../errorpages/NeedsLoginMessage'
-import UserContext from '../contexts/UserContext'
+import UserContext, { UserState } from '../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../apiClient'
 import { type components } from '../types/api.generated'
 import monitorStatus from '../utils/monitorStatus'
 
 import AddIngredient from './myfridge/AddIngredient'
 import FridgeIngredient from './myfridge/FridgeIngredient'
+import { FridgePicker } from '../components/FridgePicker'
 
 const ScanBarcode = React.lazy(async () => await import('./myfridge/ScanBarcode'))
 
 type FridgeIngredientEntry = components['schemas']['FridgeIngredientEntry']
 
-export default function MyFridgePage (): React.JSX.Element {
+interface MyFridgePageProps {
+  setUserState: (userState: UserState) => void
+}
+
+export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Element {
   const context = React.useContext(UserContext)
 
-  const [ingredientsStatus, setIngredientsStatus] = React.useState<LoadingStatus>('loading')
   const [ingredients, setIngredients] = React.useState<FridgeIngredientEntry[]>([])
-
-  // Placeholder to show something while the name is loading
-  const [fridgeName, setFridgeName] = React.useState('My Fridge')
-  const [fridgeNameStatus, setFridgeNameStatus] = React.useState<LoadingStatus>('loading')
+  const [status, setStatus] = React.useState<LoadingStatus>('loading')
 
   const [addIngredientOpen, setAddingredientOpen] = React.useState(false)
   const [scanBarcodeOpen, setScanBarcodeOpen] = React.useState(false)
 
-  React.useEffect(() => {
-    if (context === null) {
-      return
-    }
-    apiClient.GET(
-      '/fridge/{fridgeId}',
-      {
-        params: { path: { fridgeId: context.fridgeId } },
-        headers: createAuthHeaders(context)
-      }
-    ).then(
-      monitorStatus(setFridgeNameStatus)
-    ).then(data => {
-      setFridgeName(data.name)
-    }).catch(err => {
-      console.error(err)
-    })
-  }, [context])
-
   const fetchIngredients = (): void => {
-    if (context === null) {
+    if (context === null || context.fridge === undefined) {
       return
     }
     apiClient.GET(
       '/fridge/{fridgeId}/ingredient/all/amount',
       {
-        params: { path: { fridgeId: context.fridgeId } },
+        params: { path: { fridgeId: context.fridge.id } },
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setIngredientsStatus)
+      monitorStatus(setStatus)
     ).then(data => {
       setIngredients(data)
     }).catch(err => {
@@ -76,8 +58,14 @@ export default function MyFridgePage (): React.JSX.Element {
 
   return (
     <main>
-      <h1>{fridgeName}</h1>
-      <LoadingSpinner status={getHighestStatus([ingredientsStatus, fridgeNameStatus])} />
+      <FridgePicker
+        selected={context.fridge}
+        setSelected={fridge => {
+          props.setUserState({ ...context, fridge })
+        }}
+      />
+      <h1>{context.fridge?.name ?? 'Select a fridge'}</h1>
+      <LoadingSpinner status={status} />
       <button onClick={() => { setAddingredientOpen(true) } }>Add Ingredient</button>
       <ModalDialog
         open={addIngredientOpen}

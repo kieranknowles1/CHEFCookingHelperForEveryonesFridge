@@ -1,9 +1,13 @@
 import { createContext } from 'react'
 
+import { type components } from '../types/api.generated'
+
+type BasicFridge = components['schemas']['BasicFridge']
+
 export interface UserState {
   token: string
   userId: number
-  fridgeId: number
+  fridge?: BasicFridge
 }
 
 /**

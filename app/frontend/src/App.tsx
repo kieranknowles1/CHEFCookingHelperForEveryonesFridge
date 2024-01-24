@@ -23,23 +23,12 @@ function App (): React.JSX.Element {
     return routes.map(route => <Route key={route.path} path={route.path} element={route.element} />)
   }
 
-  const routes = [
-    { path: '/', element: <HomePage />, name: 'Home' },
-    { path: '/fridge', element: <MyFridgePage />, name: 'My Fridge' },
-    { path: '/findrecipes', element: <FindRecipesPage />, name: 'Find Recipes' },
-    { path: '/account', element: <AccountPage />, name: 'Account' }
-  ]
-  const nonNavRoutes = [
-    { path: '/recipe/:id', element: <RecipePage /> },
-    { path: '*', element: <NotFoundMessage /> }
-  ]
-
   const rawUserState = localStorage.getItem(LOCAL_STORAGE_KEY)
   const [userState, setUserState] = React.useState<UserState | null>(
     rawUserState === null ? null : JSON.parse(rawUserState)
   )
 
-  function handleLogin (userState: UserState | null): void {
+  function handleUserStateChange (userState: UserState | null): void {
     setUserState(userState)
     if (userState === null) {
       localStorage.removeItem(LOCAL_STORAGE_KEY)
@@ -48,10 +37,23 @@ function App (): React.JSX.Element {
     }
   }
 
+  const routes = [
+    { path: '/', element: <HomePage />, name: 'Home' },
+    { path: '/fridge', element: <MyFridgePage setUserState={handleUserStateChange} />, name: 'My Fridge' },
+    { path: '/findrecipes', element: <FindRecipesPage />, name: 'Find Recipes' },
+    { path: '/account', element: <AccountPage />, name: 'Account' }
+  ]
+  const nonNavRoutes = [
+    { path: '/recipe/:id', element: <RecipePage /> },
+    { path: '*', element: <NotFoundMessage /> }
+  ]
+
+
+
   return (
     <BrowserRouter>
       <UserContext.Provider value={userState}>
-        <Login className='float-right' handleLogin={handleLogin} />
+        <Login className='float-right' handleLogin={handleUserStateChange} />
         <NavMenu items={routes} />
         <Routes>
           {toRouteElements(routes)}

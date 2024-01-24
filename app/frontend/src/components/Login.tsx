@@ -36,9 +36,7 @@ export default function Login (props: LoginProps): React.JSX.Element {
 
       props.handleLogin({
         token: data.token,
-        userId: data.userId,
-        // TODO: Add fridgeId
-        fridgeId: 1
+        userId: data.userId
       })
     }).catch((err: ApiError) => {
       console.error(err)

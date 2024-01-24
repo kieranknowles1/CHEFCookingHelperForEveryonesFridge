@@ -9,7 +9,7 @@ import LoadingSpinner, { type LoadingStatus } from './LoadingSpinner'
 
 type Ingredient = components['schemas']['Ingredient']
 
-export interface IngredientSelectorProps {
+export interface IngredientPickerProps {
   selected: Ingredient | null
   setSelected: (ingredient: Ingredient | null) => void
 
@@ -21,7 +21,7 @@ export interface IngredientSelectorProps {
  * Shows all ingredients, except those that are excluded in the props.
  * Does not include a label.
  */
-export function IngredientPicker (props: IngredientSelectorProps): React.JSX.Element {
+export function IngredientPicker (props: IngredientPickerProps): React.JSX.Element {
   const [allIngredients, setAllIngredients] = React.useState<Ingredient[]>([])
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
 
