@@ -6,7 +6,6 @@ import RecipeSearchOptions, { type SearchFilters } from '../components/RecipeSea
 import UserContext, { type UserState } from '../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../apiClient'
 import monitorStatus, { type ApiError } from '../utils/monitorStatus'
-import { FridgePicker } from '../components/FridgePicker'
 import NotFoundMessage from '../errorpages/NotFoundMessage'
 import { type components } from '../types/api.generated'
 
