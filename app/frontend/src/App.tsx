@@ -53,8 +53,11 @@ function App (): React.JSX.Element {
   return (
     <BrowserRouter>
       <UserContext.Provider value={userState}>
-        <Login className='float-right' handleLogin={handleUserStateChange} />
         <NavMenu items={routes} />
+        <div className='bg-raisin_black-550'>
+          <Login className='float-right' handleLogin={handleUserStateChange} />
+          <br />
+        </div>
         <Routes>
           {toRouteElements(routes)}
           {toRouteElements(nonNavRoutes)}
