@@ -88,13 +88,7 @@ export default function FindRecipesPage (props: FindRecipesPageProps): React.JSX
         Click any recipe to view details and/or mark it as have been made.
       </p>
       {context !== null && <FridgePicker
-        selected={context.fridgeId}
-        setSelected={fridgeId => {
-          props.setUserState({
-            ...context,
-            fridgeId
-          })
-        }}
+        setUserState={props.setUserState}
       />}
       <RecipeSearchOptions filters={filters} setFilters={setFilters} />
       <hr className='my-2 mx-2' />

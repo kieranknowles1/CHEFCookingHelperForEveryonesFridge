@@ -125,10 +125,7 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
         {context !== null
           ? <>
             <FridgePicker
-              selected={context.fridgeId}
-              setSelected={fridgeId => {
-                props.setUserState({ ...context, fridgeId })
-              }}
+              setUserState={props.setUserState}
             />
             {context.fridgeId !== undefined && <MadeItButton recipeId={recipe.id} />}
           </>

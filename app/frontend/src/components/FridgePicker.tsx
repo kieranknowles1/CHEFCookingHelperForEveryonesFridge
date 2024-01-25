@@ -1,7 +1,7 @@
 import React from 'react'
 
+import UserContext, { type UserState } from '../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../apiClient'
-import UserContext from '../contexts/UserContext'
 import { type components } from '../types/api.generated'
 import monitorStatus from '../utils/monitorStatus'
 
@@ -10,14 +10,13 @@ import LoadingSpinner, { type LoadingStatus } from './LoadingSpinner'
 type BasicFridge = components['schemas']['BasicFridge']
 
 export interface FridgePickerProps {
-  selected?: number
-  setSelected: (fridge?: number) => void
+  setUserState: (userState: UserState) => void
 }
 
 /**
  * Component to select a fridge from a list.
  * Defaults to the first fridge in the list.
- * Selection is stored in the user's context.
+ * Selection is stored in the user's context for persistence and can only be accessed through the context.
  */
 export function FridgePicker (props: FridgePickerProps): React.JSX.Element {
   const context = React.useContext(UserContext)
@@ -46,11 +45,11 @@ export function FridgePicker (props: FridgePickerProps): React.JSX.Element {
 
   return (
     <select
-      value={props.selected ?? ''}
+      value={context.fridgeId ?? ''}
       onChange={event => {
         const fridge = fridges.find(fridge => fridge.id.toString() === event.target.value)
         // Will be undefined if selected value is none
-        props.setSelected(fridge?.id)
+        props.setUserState({ ...context, fridgeId: fridge?.id })
       }}
     >
       <option value=''>None</option>

@@ -80,10 +80,7 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
 
   const picker = (
     <FridgePicker
-      selected={context.fridgeId}
-      setSelected={fridgeId => {
-        props.setUserState({ ...context, fridgeId })
-      }}
+      setUserState={props.setUserState}
     />
   )
 
