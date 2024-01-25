@@ -2,10 +2,11 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
+import RecipeSearchOptions, { type SearchFilters } from '../components/RecipeSearchOptions'
+import UserContext, { type UserState } from '../contexts/UserContext'
+import apiClient, { createAuthHeaders } from '../apiClient'
 import monitorStatus, { type ApiError } from '../utils/monitorStatus'
-import NotFoundMessage from '../components/NotFoundMessage'
-import UserContext from '../contexts/UserContext'
-import apiClient from '../apiClient'
+import NotFoundMessage from '../errorpages/NotFoundMessage'
 import { type components } from '../types/api.generated'
 
 import MadeItButton from './recipe/MadeItButton'
@@ -18,12 +19,20 @@ type Recipe = components['schemas']['Recipe']
 const MAX_SIMILAR_RECIPES = 100
 const MIN_SIMILARITY = 0.5
 
-export default function RecipePage (): React.JSX.Element {
+export interface RecipePageProps {
+  setUserState: (userState: UserState) => void
+}
+
+export default function RecipePage (props: RecipePageProps): React.JSX.Element {
   const context = React.useContext(UserContext)
 
   const [recipeStatus, setRecipeStatus] = React.useState<LoadingStatus | 'notfound'>('loading')
   const [recipe, setRecipe] = React.useState<Recipe>()
-  const [onlyAvailable, setOnlyAvailable] = React.useState<boolean>(true)
+
+  const [filters, setFilters] = React.useState<SearchFilters>({
+    checkAmounts: true,
+    maxMissingIngredients: 0
+  })
 
   const [availableAmountsStatus, setAvailableAmountsStatus] = React.useState<LoadingStatus>('loading')
   const [availableAmounts, setAvailableAmounts] = React.useState<Map<number, number> | null>(null)
@@ -34,6 +43,7 @@ export default function RecipePage (): React.JSX.Element {
     return <NotFoundMessage />
   }
 
+  // Fetch recipe data
   React.useEffect(() => {
     setRecipe(undefined)
     apiClient.GET(
@@ -51,16 +61,20 @@ export default function RecipePage (): React.JSX.Element {
     })
   }, [idNumber])
 
+  // Fetch available amounts
   React.useEffect(() => {
     setAvailableAmounts(null)
-    if (context === null) {
-      // Don't try to fetch available amounts if the user is not logged in
+    if (context?.fridgeId === undefined) {
+      // Don't try to fetch available amounts if the user is not logged in or has not selected a fridge
       setAvailableAmountsStatus('done')
       return
     }
     apiClient.GET(
       '/fridge/{fridgeId}/ingredient/all/amount',
-      { params: { path: { fridgeId: context.fridgeId } } }
+      {
+        params: { path: { fridgeId: context.fridgeId } },
+        headers: createAuthHeaders(context)
+      }
     ).then(
       monitorStatus(setAvailableAmountsStatus)
     ).then(data => {
@@ -69,6 +83,13 @@ export default function RecipePage (): React.JSX.Element {
       console.error(err)
     })
   }, [context])
+
+  // Set meal type to the recipe's meal type
+  React.useEffect(() => {
+    if (recipe !== undefined) {
+      setFilters({ ...filters, mealType: recipe.mealType })
+    }
+  }, [recipe])
 
   if (recipeStatus === 'notfound') {
     return <NotFoundMessage />
@@ -100,25 +121,26 @@ export default function RecipePage (): React.JSX.Element {
             <li key={index}>{line}</li>
           )}
         </ol>
-        <MadeItButton recipeId={recipe.id} />
+        {context?.fridgeId !== undefined
+          ? <MadeItButton recipeId={recipe.id} />
+          : <p>Log in and select a fridge to mark this recipe as made!</p>
+        }
       </div>
       {context !== null && <>
         <h2>History</h2>
         <SingleRecipeHistory userId={context.userId} recipeId={recipe.id} />
       </>}
       <h2>Similar recipes</h2>
-      <label>Only show recipes with ingredients available in my fridge:{' '}
-        <input
-          type='checkbox'
-          checked={onlyAvailable}
-          onChange={e => { setOnlyAvailable(e.target.checked) }}
-        />
-      </label>
+      <RecipeSearchOptions
+        filters={filters}
+        setUserState={props.setUserState}
+        setFilters={setFilters}
+      />
       <SimilarRecipes
         recipe={recipe}
         limit={MAX_SIMILAR_RECIPES}
         minSimilarity={MIN_SIMILARITY}
-        onlyAvailable={onlyAvailable}
+        filters={filters}
       />
     </main>
   )

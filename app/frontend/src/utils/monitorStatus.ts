@@ -21,7 +21,7 @@ export class ApiError extends Error {
   public readonly errors: ErrorList
 
   constructor (errors: ErrorList) {
-    super('API call failed')
+    super(errors.errors[0].message)
     this.name = ApiError.name
     this.errors = errors
   }

@@ -40,10 +40,29 @@ export interface TypedRequest<
 /**
  * Strongly typed response for `express`
  * Based on https://plainenglish.io/blog/typed-express-request-and-response-with-typescript
+ *
+ * @template Endpoint The endpoint type, from the generated API at `src/types/api.generated.ts`
+ *
+ * @example
+ * // Endpoint with a single response code. Use TypedResponse<endpoint, code>
+ * app.get('/api/v1/getstuff', (req: TypedRequest<endpoint>, res: TypedResponse<endpoint, 200>) => {
+ *  res.json({ stuff: 'stuff' })
+ * })
+ *
+ * @example
+ * // Endpoint with multiple response codes. Use an intersection type of multiple TypedResponse<endpoint, code>
+ * // The type checker will consider res.json() to be overloaded with all the possible response codes
+ * // NOTE: The response code is not checked at compile time, only the type of the response body. Make sure to use the correct response code or express-openapi-validator will complain.
+ * app.get('/api/v1/getstuff', (req: TypedRequest<endpoint>, res: TypedResponse<endpoint, 200> & TypedResponse<endpoint, 401>) => {
+ * if (checkAuth(req)) {
+ *  res.json({ stuff: 'stuff' })
+ * } else {
+ *  res.status(401).json({ error: 'Unauthorized' })
+ * }
  */
 export interface TypedResponse<
-  endpoint extends JsonEndpoint,
-  code extends KeysOfType<endpoint['responses'], JsonData>
+  Endpoint extends JsonEndpoint,
+  Code extends KeysOfType<Endpoint['responses'], JsonData>,
 > extends express.Response {
-  json: (body: endpoint['responses'][code]['content']['application/json']) => this
+  json: (body: Endpoint['responses'][Code]['content']['application/json']) => this
 }

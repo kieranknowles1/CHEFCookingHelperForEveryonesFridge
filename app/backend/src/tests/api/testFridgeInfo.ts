@@ -30,6 +30,7 @@ describe('/api/v1/fridge/:id', () => {
 
       await request(app.server)
         .get('/api/v1/fridge/1')
+        .set('Authorization', app.authHeaderValue)
         .expect(200, expected)
     })
   })

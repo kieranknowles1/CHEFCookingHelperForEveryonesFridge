@@ -10,6 +10,8 @@ export default {
   // Runtime
   RUNTIME_LOG_FILE: process.env.CHEF_RUNTIME_LOG_FILE ?? 'working_data/chefbackend.log',
   PORT: process.env.CHEF_PORT ?? 3000,
+  SECRET: process.env.CHEF_SECRET ?? 'something-secret-here-please-change-me',
+  TOKEN_VALIDITY: Number.parseInt(process.env.CHEF_TOKEN_VALIDITY ?? '3600'), // seconds
 
   // Both
   DATABASE_PATH: process.env.CHEF_DATABASE_PATH ?? 'working_data/chefdatabase.db',

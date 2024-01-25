@@ -1,10 +1,9 @@
 import React from 'react'
 
+import apiClient, { createAuthHeaders } from '../../apiClient'
 import { IngredientPicker } from '../../components/IngredientPicker'
 import UserContext from '../../contexts/UserContext'
-import apiClient from '../../apiClient'
 import { type components } from '../../types/api.generated'
-import useSafeContext from '../../contexts/useSafeContext'
 
 type Ingredient = components['schemas']['Ingredient']
 
@@ -16,13 +15,22 @@ export interface AddIngredientProps {
 export default function AddIngredient (props: AddIngredientProps): React.JSX.Element {
   const currentIngredientIds = new Set(props.currentIngredients.map(i => i.id))
 
-  const context = useSafeContext(UserContext)
+  const context = React.useContext(UserContext)
 
   const [selected, setSelected] = React.useState<Ingredient | null>(null)
   const [amount, setAmount] = React.useState(0)
 
-  function onSubmit (event: React.FormEvent): void {
+  if (context === null) {
+    throw new Error('UserContext is null')
+  }
+
+  const onSubmit = (event: React.FormEvent): void => {
     event.preventDefault()
+
+    if (context.fridgeId === undefined) {
+      alert('Please select a fridge.')
+      return
+    }
 
     if (selected === null) {
       alert('Please select an ingredient.')
@@ -35,7 +43,10 @@ export default function AddIngredient (props: AddIngredientProps): React.JSX.Ele
 
     apiClient.POST(
       '/fridge/{fridgeId}/ingredient/{ingredientId}/amount',
-      { params: { path: { fridgeId: context.fridgeId, ingredientId: selected.id }, query: { amount } } }
+      {
+        params: { path: { fridgeId: context.fridgeId, ingredientId: selected.id }, query: { amount } },
+        headers: createAuthHeaders(context)
+      }
     ).then(() => {
       props.onSubmit(selected, amount)
     }).catch(err => {

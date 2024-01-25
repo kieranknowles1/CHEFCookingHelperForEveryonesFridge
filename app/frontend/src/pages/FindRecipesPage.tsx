@@ -1,22 +1,24 @@
-import { mdiChevronLeft, mdiChevronRight } from '@mdi/js'
-import Icon from '@mdi/react'
+import { BiChevronLeft, BiChevronRight } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
 import RecipeSearchOptions, { type SearchFilters } from '../components/RecipeSearchOptions'
+import UserContext, { type UserState } from '../contexts/UserContext'
 import RecipeList from '../components/RecipeList'
 import { type RecipeProps } from '../components/Recipe'
 import Search from '../components/inputs/Search'
-import UserContext from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import monitorStatus from '../utils/monitorStatus'
-import useSafeContext from '../contexts/useSafeContext'
 
 const PAGE_SIZE = 100
 
-export default function FindRecipesPage (): React.JSX.Element {
-  const context = useSafeContext(UserContext)
+export interface FindRecipesPageProps {
+  setUserState: (state: UserState) => void
+}
+
+export default function FindRecipesPage (props: FindRecipesPageProps): React.JSX.Element {
+  const context = React.useContext(UserContext)
 
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
   const [recipes, setRecipes] = React.useState<RecipeProps[]>([])
@@ -28,11 +30,10 @@ export default function FindRecipesPage (): React.JSX.Element {
   })
 
   const [query, setQuery] = React.useState('')
-  const [filtered, setFiltered] = React.useState<RecipeProps[]>([])
 
   const [page, setPage] = React.useState(0)
   function getTotalPages (): number {
-    return Math.ceil(filtered.length / PAGE_SIZE)
+    return Math.ceil(recipes.length / PAGE_SIZE)
   }
 
   React.useEffect(() => {
@@ -41,7 +42,14 @@ export default function FindRecipesPage (): React.JSX.Element {
       '/recipe/search',
       {
         params: {
-          query: { ...filters, availableForFridge: context.fridgeId, limit: 1000, suitableForUsers: [context.userId] }
+          query: {
+            ...filters,
+            availableForFridge: context?.fridgeId,
+            limit: 1000,
+            suitableForUsers: context !== null ? [context.userId] : undefined,
+            search: query === '' ? undefined : query,
+            minSimilarity: 0
+          }
         }
       }
     ).then(
@@ -51,25 +59,21 @@ export default function FindRecipesPage (): React.JSX.Element {
     }).catch(err => {
       console.error(err)
     })
-  }, [context.fridgeId, filters])
-
-  React.useEffect(() => {
-    setFiltered(recipes.filter(r => r.name.toLowerCase().includes(query.toLowerCase())))
-  }, [recipes, query])
+  }, [context, filters, query])
 
   const [pageItems, setPageItems] = React.useState<RecipeProps[]>([])
   React.useEffect(() => {
-    setPageItems(filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE))
-  }, [filtered, page])
+    setPageItems(recipes.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE))
+  }, [recipes, page])
 
   const pageButtons = (
     <div className='flex justify-center'>
       <button className='btn' onClick={() => { setPage(page - 1) }} disabled={page === 0}>
-        <Icon path={mdiChevronLeft} size={1} className='inline' /> Previous
+        <BiChevronLeft size={24} className='inline' /> Previous
       </button>
       <span className='mx-3'>Page {page + 1} / {getTotalPages()}</span>
       <button className='btn' onClick={() => { setPage(page + 1) }} disabled={page >= getTotalPages() - 1}>
-        Next <Icon path={mdiChevronRight} size={1} className='inline' />
+        Next <BiChevronRight size={24} className='inline' />
       </button>
     </div>
   )
@@ -82,7 +86,11 @@ export default function FindRecipesPage (): React.JSX.Element {
         <br />
         Click any recipe to view details and/or mark it as have been made.
       </p>
-      <RecipeSearchOptions filters={filters} setFilters={setFilters} />
+      <RecipeSearchOptions
+        filters={filters}
+        setUserState={props.setUserState}
+        setFilters={setFilters}
+      />
       <hr className='my-2 mx-2' />
       {status === 'done' && <p>{recipes.length} recipes found.</p>}
       <Search setQuery={q => { setQuery(q); setPage(0) }} />

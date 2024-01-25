@@ -1,7 +1,13 @@
 import type User from '../types/User'
+import { type UserCredentials } from '../types/User'
 
 import type * as types from './types'
-import { type GetHistoryParams, type IUserDatabase, type MadeRecipeItem } from './IChefDatabase'
+import {
+  type AvailableFridge,
+  type GetHistoryParams,
+  type IUserDatabase,
+  type MadeRecipeItem
+} from './IChefDatabase'
 import type IConnection from './IConnection'
 import InvalidIdError from './InvalidIdError'
 
@@ -42,6 +48,46 @@ export default class UserDatabaseImpl implements IUserDatabase {
       bannedTags: new Map(bannedTags.map(row => [row.id, row])),
       bannedIngredients: new Map(bannedIngredients.map(row => [row.id, row.name]))
     }
+  }
+
+  public getAvailableFridges (userId: number): AvailableFridge[] {
+    interface Result {
+      id: types.RowId
+      name: string
+      owner_id: types.RowId
+      owner_name: string
+    }
+    const statement = this._connection.prepare<Result>(`--sql
+      SELECT
+        fridge.id,
+        fridge.name,
+        user.id AS owner_id,
+        user.username AS owner_name
+      FROM fridge
+      JOIN fridge_user ON fridge_user.fridge_id = fridge.id
+      JOIN user ON user.id = fridge.owner_id
+      WHERE fridge_user.user_id = :userId
+    `)
+
+    return statement.all({ userId }).map(row => ({
+      id: row.id,
+      name: row.name,
+      owner: {
+        id: row.owner_id,
+        name: row.owner_name
+      }
+    }))
+  }
+
+  public hasFridgeAccess (userId: types.RowId, fridgeId: types.RowId): boolean {
+    const statement = this._connection.prepare<{ count: number }>(`
+      SELECT 1
+      FROM fridge
+      JOIN fridge_user ON fridge_user.fridge_id = fridge.id
+      WHERE fridge_user.user_id = :userId AND fridge.id = :fridgeId
+    `)
+
+    return statement.all({ userId, fridgeId }).length > 0
   }
 
   public getHistory (params: GetHistoryParams): MadeRecipeItem[] {
@@ -113,5 +159,32 @@ export default class UserDatabaseImpl implements IUserDatabase {
       })
     }
     return output
+  }
+
+  public getCredentials (username: string): UserCredentials | null {
+    interface Result {
+      id: types.RowId
+      username: string
+      password_hash: string
+    }
+    const statement = this._connection.prepare<Result>(`
+      SELECT
+        id,
+        username,
+        password_hash
+      FROM user
+        WHERE username = :username COLLATE NOCASE
+    `)
+    const result = statement.get({ username })
+
+    if (result === undefined) {
+      return null
+    }
+
+    return {
+      id: result.id,
+      name: result.username,
+      passwordHash: result.password_hash
+    }
   }
 }

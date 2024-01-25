@@ -9,3 +9,9 @@ export default interface User {
   // ID -> name
   bannedIngredients: Map<number, string>
 }
+
+export interface UserCredentials {
+  id: number
+  name: string
+  passwordHash: string
+}

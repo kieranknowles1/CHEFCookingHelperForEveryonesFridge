@@ -1,18 +1,21 @@
 import React from 'react'
 
+import UserContext, { type UserState } from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import monitorStatus from '../utils/monitorStatus'
 
 import LoadingSpinner, { DefaultSmallSpinner, type LoadingStatus } from './LoadingSpinner'
+import { FridgePicker } from './FridgePicker'
 
 export interface SearchFilters {
   checkAmounts: boolean
   maxMissingIngredients: number
-  mealType: string | undefined
+  mealType?: string
 }
 
 export interface RecipeSearchOptionsProps {
   filters: SearchFilters
+  setUserState: (userState: UserState) => void
   setFilters: (filters: SearchFilters) => void
 }
 
@@ -21,6 +24,8 @@ export interface RecipeSearchOptionsProps {
  * Default options are set in the provided filters prop.
  */
 export default function RecipeSearchOptions (props: RecipeSearchOptionsProps): React.ReactElement {
+  const context = React.useContext(UserContext)
+
   const { filters, setFilters } = props
 
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
@@ -58,23 +63,30 @@ export default function RecipeSearchOptions (props: RecipeSearchOptionsProps): R
 
   return (
     <div>
-      <label>Check I have enough of each ingredient:{' '}
-        <input
-          type='checkbox'
-          checked={filters.checkAmounts}
-          onChange={e => { setFilters({ ...filters, checkAmounts: e.target.checked }) }}
-        />
-      </label><br />
-      <label>Max missing or insufficient amount ingredients:{' '}
-        <input type='number'
-          value={filters.maxMissingIngredients}
-          min={0}
-          onChange={e => {
-            const value = e.target.value === '' ? 0 : parseInt(e.target.value)
-            setFilters({ ...filters, maxMissingIngredients: value })
-          }}
-        />
-        </label><br />
+      {context === null
+        ? <p>Log in to filter by the ingredients you have!</p>
+        : <>
+            <label>Fridge: <FridgePicker
+              setUserState={props.setUserState}
+            /></label><br />
+            <label>Check I have enough of each ingredient:{' '}
+              <input
+                type='checkbox'
+                checked={filters.checkAmounts}
+                onChange={e => { setFilters({ ...filters, checkAmounts: e.target.checked }) }}
+              />
+            </label><br />
+            <label>Max missing or insufficient amount ingredients:{' '}
+              <input type='number'
+                value={filters.maxMissingIngredients}
+                min={0}
+                onChange={e => {
+                  const value = e.target.value === '' ? 0 : parseInt(e.target.value)
+                  setFilters({ ...filters, maxMissingIngredients: value })
+                }}
+              />
+              </label><br />
+          </>}
       <label>Meal Type: {mealTypeElement}</label>
     </div>
   )

@@ -8,6 +8,7 @@ import { type IngredientNoId } from '../types/Ingredient'
 import type Recipe from '../types/Recipe'
 import type Tag from '../types/Tag'
 import type User from '../types/User'
+import { type UserCredentials } from '../types/User'
 
 import type * as types from './types'
 
@@ -112,13 +113,38 @@ export interface GetHistoryParams {
   recipeId?: types.RowId
 }
 
+export interface AvailableFridge {
+  id: types.RowId
+  name: string
+  owner: {
+    id: types.RowId
+    name: string
+  }
+}
+
 export interface IUserDatabase {
   get: (id: types.RowId) => User
+
+  /**
+   * Get all fridges that the user has access to, along with the names and IDs of their owners
+   */
+  getAvailableFridges: (userId: types.RowId) => AvailableFridge[]
+
+  /**
+   * Return true if the user has access to the fridge
+   */
+  hasFridgeAccess: (userId: types.RowId, fridgeId: types.RowId) => boolean
 
   /**
    * Get the history of recipes made by a user, sorted by date made most recent first
    */
   getHistory: (params: GetHistoryParams) => MadeRecipeItem[]
+
+  /**
+   * Get the user with the given name and return their credentials.
+   * Case insensitive.
+   */
+  getCredentials: (username: string) => UserCredentials | null
 }
 
 export default interface IChefDatabase {

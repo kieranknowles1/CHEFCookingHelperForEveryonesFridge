@@ -51,9 +51,10 @@ VALUES
     (12345, 1, 'The apples from the maths test', 1000);
 
 INSERT INTO user
-    (id, username)
+    (id, username, password_hash)
 VALUES
-    (1, 'Testy McTestface');
+    -- Password is '12345'
+    (1, 'Testy McTestface', '$2b$12$pbng8MtE8Zgfy0oSGEo0mOWO7Pt5uMnX/evVmXiHq.9EEQj4DpyJi');
 INSERT INTO user_banned_ingredient
     (user_id, ingredient_id)
 VALUES
@@ -69,3 +70,7 @@ INSERT INTO fridge
     (id, name, owner_id)
 VALUES
     (1, 'The Test Fridge', 1);
+INSERT INTO fridge_user
+    (fridge_id, user_id)
+VALUES
+    (1, 1);

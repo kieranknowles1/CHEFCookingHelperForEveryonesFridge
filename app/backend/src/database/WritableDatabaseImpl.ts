@@ -5,9 +5,9 @@ import { type RecipeNoId } from '../types/Recipe'
 import type * as types from './types'
 import type IChefDatabase from './IChefDatabase'
 import type IConnection from './IConnection'
+import { type IPreparedStatement } from './IConnection'
 import { type IWritableDatabase } from './IChefDatabase'
 import { bufferFromFloat32Array } from './bufferFloat32Array'
-import { type IPreparedStatement } from './IConnection'
 
 /**
  * Writable interface to the database, passed to the callback of {@link ChefDatabaseImpl.wrapTransaction}

@@ -176,12 +176,13 @@ export interface paths {
               owner: {
                 /** @example 1 */
                 id: number;
-                /** @example John Smith */
-                name: string;
+                name: components["schemas"]["username"];
               };
             };
           };
         };
+        401: components["responses"]["Unauthorized"];
+        403: components["responses"]["Forbidden"];
         404: components["responses"]["NotFound"];
       };
     };
@@ -204,7 +205,9 @@ export interface paths {
             "application/json": components["schemas"]["FridgeIngredientEntry"][];
           };
         };
+        401: components["responses"]["Unauthorized"];
         403: components["responses"]["Forbidden"];
+        404: components["responses"]["NotFound"];
       };
     };
   };
@@ -224,6 +227,9 @@ export interface paths {
             "application/json": number;
           };
         };
+        401: components["responses"]["Unauthorized"];
+        403: components["responses"]["Forbidden"];
+        404: components["responses"]["NotFound"];
       };
     };
     /**
@@ -246,6 +252,8 @@ export interface paths {
         204: {
           content: never;
         };
+        401: components["responses"]["Unauthorized"];
+        403: components["responses"]["Forbidden"];
       };
     };
   };
@@ -270,7 +278,30 @@ export interface paths {
         204: {
           content: never;
         };
+        401: components["responses"]["Unauthorized"];
         403: components["responses"]["Forbidden"];
+      };
+    };
+  };
+  "/login": {
+    /**
+     * Authenticate as a user
+     * @description Authenticate as a user using HTTP Basic Authentication. Returns a token that can be used for future requests.
+     */
+    post: {
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": {
+              /** @example abc123 */
+              token: string;
+              userId: components["schemas"]["id"];
+            };
+          };
+        };
+        400: components["responses"]["BadRequest"];
+        401: components["responses"]["Unauthorized"];
       };
     };
   };
@@ -289,7 +320,29 @@ export interface paths {
             "application/json": components["schemas"]["User"];
           };
         };
+        401: components["responses"]["Unauthorized"];
+        403: components["responses"]["Forbidden"];
         404: components["responses"]["NotFound"];
+      };
+    };
+  };
+  "/user/{userId}/fridges": {
+    /** Get all fridges a user has access to */
+    get: {
+      parameters: {
+        path: {
+          userId: components["parameters"]["userId"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["BasicFridge"][];
+          };
+        };
+        401: components["responses"]["Unauthorized"];
+        403: components["responses"]["Forbidden"];
       };
     };
   };
@@ -314,6 +367,8 @@ export interface paths {
             "application/json": components["schemas"]["MadeRecipe"][];
           };
         };
+        401: components["responses"]["Unauthorized"];
+        403: components["responses"]["Forbidden"];
         404: components["responses"]["NotFound"];
       };
     };
@@ -336,6 +391,7 @@ export interface paths {
         204: {
           content: never;
         };
+        401: components["responses"]["Unauthorized"];
         403: components["responses"]["Forbidden"];
       };
     };
@@ -358,6 +414,7 @@ export interface paths {
         204: {
           content: never;
         };
+        401: components["responses"]["Unauthorized"];
         403: components["responses"]["Forbidden"];
       };
     };
@@ -370,6 +427,13 @@ export interface components {
   schemas: {
     /** @example 12345 */
     id: number;
+    /** @example johnsmith */
+    username: string;
+    NameAndId: {
+      id: components["schemas"]["id"];
+      /** @example My Fridge */
+      name: string;
+    };
     ErrorList: {
       /** @example 404 */
       status: number;
@@ -440,18 +504,19 @@ export interface components {
       /** @example 250 */
       amount?: number;
     };
+    BasicFridge: {
+      /** @example 1 */
+      id: number;
+      /** @example My Fridge */
+      name: string;
+      owner: components["schemas"]["NameAndId"];
+    };
     User: {
       /** @example 1 */
       id: number;
-      /** @example John Smith */
-      name: string;
+      name: components["schemas"]["username"];
       bannedTags: components["schemas"]["Tag"][];
-      bannedIngredients: {
-          /** @example 1 */
-          id: number;
-          /** @example Mushrooms */
-          name: string;
-        }[];
+      bannedIngredients: components["schemas"]["NameAndId"][];
     };
     RecipeIngredientEntry: WithRequired<{
       /** @example 250g of chicken */
@@ -460,21 +525,9 @@ export interface components {
     FridgeIngredientEntry: WithRequired<components["schemas"]["IngredientEntry"], "amount">;
     MadeRecipe: {
       id: components["schemas"]["id"];
-      fridge: {
-        /** @example My Fridge */
-        name: string;
-        id: components["schemas"]["id"];
-      };
-      recipe: {
-        /** @example Chicken Pie */
-        name: string;
-        id: components["schemas"]["id"];
-      };
-      users: {
-          /** @example John Smith */
-          name: string;
-          id: components["schemas"]["id"];
-        }[];
+      fridge: components["schemas"]["NameAndId"];
+      recipe: components["schemas"]["NameAndId"];
+      users: components["schemas"]["NameAndId"][];
       /**
        * Format: date-time
        * @example 2020-01-01T00:00:00.000Z
@@ -483,6 +536,12 @@ export interface components {
     };
   };
   responses: {
+    /** @description Bad Request */
+    BadRequest: {
+      content: {
+        "application/json": components["schemas"]["ErrorList"];
+      };
+    };
     /** @description Forbidden */
     Forbidden: {
       content: {
@@ -497,6 +556,12 @@ export interface components {
     };
     /** @description Too Many Requests */
     TooManyRequests: {
+      content: {
+        "application/json": components["schemas"]["ErrorList"];
+      };
+    };
+    /** @description Unauthorized */
+    Unauthorized: {
       content: {
         "application/json": components["schemas"]["ErrorList"];
       };

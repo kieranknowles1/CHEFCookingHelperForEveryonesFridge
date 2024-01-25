@@ -1,11 +1,11 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
+import apiClient, { createAuthHeaders } from '../apiClient'
+import NeedsLoginMessage from '../errorpages/NeedsLoginMessage'
 import UserContext from '../contexts/UserContext'
-import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
 import monitorStatus from '../utils/monitorStatus'
-import useSafeContext from '../contexts/useSafeContext'
 
 import History from './account/History'
 import UserPreferences from './account/UserPreferences'
@@ -13,7 +13,7 @@ import UserPreferences from './account/UserPreferences'
 type User = components['schemas']['User']
 
 export default function AccountPage (): React.JSX.Element {
-  const context = useSafeContext(UserContext)
+  const context = React.useContext(UserContext)
 
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
 
@@ -22,9 +22,15 @@ export default function AccountPage (): React.JSX.Element {
   const [bannedIngredients, setBannedIngredients] = React.useState<User['bannedIngredients']>([])
 
   React.useEffect(() => {
+    if (context === null) {
+      return
+    }
     apiClient.GET(
       '/user/{userId}',
-      { params: { path: { userId: context.userId } } }
+      {
+        params: { path: { userId: context.userId } },
+        headers: createAuthHeaders(context)
+      }
     ).then(
       monitorStatus(setStatus)
     ).then(data => {
@@ -34,8 +40,11 @@ export default function AccountPage (): React.JSX.Element {
     }).catch(err => {
       console.error(err)
     })
-  }, [context.userId])
+  }, [context])
 
+  if (context === null) {
+    return <NeedsLoginMessage />
+  }
   if (status !== 'done') {
     return <LoadingSpinner status={status} />
   }

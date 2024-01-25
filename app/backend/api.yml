@@ -197,12 +197,11 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
-  # TODO: Authentication for all fridge endpoints
-  # TODO: Implement
   /fridge/{fridgeId}:
     get:
       tags: [Fridge]
       summary: Get data about a fridge
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/fridgeId"
       responses:
@@ -219,11 +218,15 @@ paths:
                     type: object
                     properties:
                       id: { type: integer, example: 1 }
-                      name: { type: string, example: "John Smith" }
+                      name: { $ref: "#/components/schemas/username" }
                     required: [id, name]
                     additionalProperties: false
                 required: [id, name, owner]
                 additionalProperties: false
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         "404":
           $ref: "#/components/responses/NotFound"
 
@@ -235,6 +238,7 @@ paths:
       description:
         Returns a list of all ingredients in the fridge, with their amounts
         Does not include ingredients with amount 0
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/fridgeId"
       responses:
@@ -245,14 +249,18 @@ paths:
               schema:
                 type: array
                 items: { $ref: "#/components/schemas/FridgeIngredientEntry" }
+        "401":
+          $ref: "#/components/responses/Unauthorized"
         "403":
           $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
-  # TODO: Authentication
   /fridge/{fridgeId}/ingredient/{ingredientId}/amount:
     get:
       tags: [Fridge]
       summary: Get the amount of an ingredient in the fridge
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/fridgeId"
         - $ref: "#/components/parameters/ingredientId"
@@ -262,10 +270,17 @@ paths:
           content:
             application/json:
               schema: { type: number, example: 100 }
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
     post:
       tags: [Fridge]
       summary: Update the amount of an ingredient in the fridge
       description: Set the amount of `ingredientId` in `fridgeId` to `amount`
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/fridgeId"
         - $ref: "#/components/parameters/ingredientId"
@@ -277,8 +292,11 @@ paths:
       responses:
         "204":
           description: No Content
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
 
-  # TODO: Authentication
   /fridge/{fridgeId}/recipe/{recipeId}/maderecipe:
     post:
       tags: [Fridge]
@@ -286,6 +304,7 @@ paths:
       description:
         Log that a recipe has been made and deduct the ingredients from the fridge.
         If there are not enough of an ingredient, its amount will be set to 0.
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/fridgeId"
         - $ref: "#/components/parameters/recipeId"
@@ -299,14 +318,40 @@ paths:
       responses:
         "204":
           description: No Content
+        "401":
+          $ref: "#/components/responses/Unauthorized"
         "403":
           $ref: "#/components/responses/Forbidden"
 
-  # TODO: Authentication
+  /login:
+    post:
+      tags: [User]
+      summary: Authenticate as a user
+      description: Authenticate as a user using HTTP Basic Authentication.
+        Returns a token that can be used for future requests.
+      security: [Basic: []]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string, example: "abc123" }
+                  userId: { $ref: "#/components/schemas/id" }
+                required: [token, userId]
+                additionalProperties: false
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
   /user/{userId}:
     get:
       tags: [User]
       summary: Get a user by ID
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/userId"
       responses:
@@ -315,14 +360,38 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/User" }
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         "404":
           $ref: "#/components/responses/NotFound"
 
-  # TODO: Authentication
+  /user/{userId}/fridges:
+    get:
+      tags: [User]
+      summary: Get all fridges a user has access to
+      security: [Bearer: []]
+      parameters:
+        - $ref: "#/components/parameters/userId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/BasicFridge" }
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
   /user/{userId}/history:
     get:
       tags: [User]
       summary: Get a user's recipe history, ordered by most recent first
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/userId"
         - in: query
@@ -343,14 +412,18 @@ paths:
               schema:
                 type: array
                 items: { $ref: "#/components/schemas/MadeRecipe" }
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         "404":
           $ref: "#/components/responses/NotFound"
 
-  # TODO: Authentication
   /user/{userId}/preference/tag/{tagId}:
     post:
       tags: [User]
       summary: Add or remove a tag from a user's banned tags
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/userId"
         - $ref: "#/components/parameters/tagId"
@@ -362,6 +435,8 @@ paths:
       responses:
         "204":
           description: No Content
+        "401":
+          $ref: "#/components/responses/Unauthorized"
         "403":
           $ref: "#/components/responses/Forbidden"
 
@@ -369,6 +444,7 @@ paths:
     post:
       tags: [User]
       summary: Add or remove an ingredient from a user's banned ingredients
+      security: [Bearer: []]
       parameters:
         - $ref: "#/components/parameters/userId"
         - $ref: "#/components/parameters/ingredientId"
@@ -380,10 +456,21 @@ paths:
       responses:
         "204":
           description: No Content
+        "401":
+          $ref: "#/components/responses/Unauthorized"
         "403":
           $ref: "#/components/responses/Forbidden"
 
 components:
+  securitySchemes:
+    Basic:
+      type: http
+      scheme: basic
+
+    Bearer:
+      type: http
+      scheme: bearer
+
   parameters:
     fridgeId:
       in: path
@@ -412,6 +499,12 @@ components:
       required: true
 
   responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorList" }
+
     Forbidden:
       description: Forbidden
       content:
@@ -430,6 +523,12 @@ components:
         application/json:
           schema: { $ref: "#/components/schemas/ErrorList" }
 
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorList" }
+
   schemas:
     id:
       type: integer
@@ -437,6 +536,20 @@ components:
       minimum: 1
       # MAX_SAFE_INTEGER, database does not support bigint
       maximum: 9007199254740991
+
+    username:
+      type: string
+      example: "johnsmith"
+      pattern: "^[^:]+$"
+      maxLength: 255
+
+    NameAndId:
+      type: object
+      properties:
+        id: { $ref: "#/components/schemas/id" }
+        name: { type: string, example: "My Fridge" }
+      required: [id, name]
+      additionalProperties: false
 
     ErrorList:
       type: object
@@ -526,23 +639,26 @@ components:
         amount: { type: number, example: 250 }
       required: [ingredient]
 
+    BasicFridge:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        name: { type: string, example: "My Fridge" }
+        owner: { $ref: "#/components/schemas/NameAndId" }
+      required: [id, name, owner]
+      additionalProperties: false
+
     User:
       type: object
       properties:
         id: { type: integer, example: 1 }
-        name: { type: string, example: "John Smith" }
+        name: { $ref: "#/components/schemas/username" }
         bannedTags:
           type: array
           items: { $ref: "#/components/schemas/Tag" }
         bannedIngredients:
           type: array
-          items:
-            type: object
-            properties:
-              id: { type: integer, example: 1 }
-              name: { type: string, example: "Mushrooms" }
-            required: [id, name]
-            additionalProperties: false
+          items: { $ref: "#/components/schemas/NameAndId" }
       required: [id, name, bannedTags, bannedIngredients]
       additionalProperties: false
 
@@ -560,29 +676,11 @@ components:
       type: object
       properties:
         id: { $ref: "#/components/schemas/id" }
-        fridge:
-          type: object
-          properties:
-            name: { type: string, example: "My Fridge" }
-            id: { $ref: "#/components/schemas/id" }
-          required: [name, id]
-          additionalProperties: false
-        recipe:
-          type: object
-          properties:
-            name: { type: string, example: "Chicken Pie" }
-            id: { $ref: "#/components/schemas/id" }
-          required: [name, id]
-          additionalProperties: false
+        fridge: { $ref: "#/components/schemas/NameAndId" }
+        recipe: { $ref: "#/components/schemas/NameAndId" }
         users:
           type: array
-          items:
-            type: object
-            properties:
-              name: { type: string, example: "John Smith" }
-              id: { $ref: "#/components/schemas/id" }
-            required: [name, id]
-            additionalProperties: false
+          items: { $ref: "#/components/schemas/NameAndId" }
         dateMade:
           type: string
           example: "2020-01-01T00:00:00.000Z"

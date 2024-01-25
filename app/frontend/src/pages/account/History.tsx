@@ -1,7 +1,8 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpinner'
-import apiClient from '../../apiClient'
+import apiClient, { createAuthHeaders } from '../../apiClient'
+import UserContext from '../../contexts/UserContext'
 import { type components } from '../../types/api.generated'
 import monitorStatus from '../../utils/monitorStatus'
 
@@ -23,6 +24,12 @@ export interface HistoryProps {
  * Clicking on a recipe name will take the user to the recipe page.
  */
 export default function History (props: HistoryProps): React.JSX.Element {
+  const context = React.useContext(UserContext)
+
+  if (context === null) {
+    throw new Error('UserContext is null')
+  }
+
   const rowStyle = 'border border-gray-400 p-1'
   const cellStyle = 'border border-gray-400 p-1'
 
@@ -32,7 +39,10 @@ export default function History (props: HistoryProps): React.JSX.Element {
   React.useEffect(() => {
     apiClient.GET(
       '/user/{userId}/history',
-      { params: { path: { userId: props.userId } } }
+      {
+        params: { path: { userId: props.userId } },
+        headers: createAuthHeaders(context)
+      }
     ).then(
       monitorStatus(setStatus)
     ).then(data => {

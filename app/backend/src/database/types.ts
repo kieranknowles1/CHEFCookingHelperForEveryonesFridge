@@ -56,6 +56,7 @@ export interface BarcodeRow {
 export interface UserRow {
   id: RowId
   username: string
+  password_hash: string
 }
 
 export interface FridgeRow {

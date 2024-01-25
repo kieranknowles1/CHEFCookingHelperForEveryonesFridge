@@ -5,6 +5,8 @@ import createApp from './createApp'
 import environment from './environment'
 import { preloadModel } from './ml/getModel'
 
+const start = Date.now()
+
 setLogger(createDefaultLogger(environment.RUNTIME_LOG_FILE))
 
 const db = new ChefDatabaseImpl(new SqliteConnection(environment.DATABASE_PATH))
@@ -19,7 +21,9 @@ try {
 }
 
 // Get the model ready for when a ML endpoint is called
-preloadModel().catch((err) => {
+preloadModel().then(() => {
+  logger.info(`Startup to model ready took ${Date.now() - start}ms`)
+}).catch((err) => {
   logger.error('Failed to preload model. ML endpoints will not work.')
   logger.error('Will retry when the model is next requested.')
   logger.caughtError(err)
@@ -31,4 +35,5 @@ const app = createApp(db, {
 
 app.listen(environment.PORT, () => {
   logger.info(`Backend listening on http://localhost:${environment.PORT}`)
+  logger.info(`Startup to listening took ${Date.now() - start}ms`)
 })

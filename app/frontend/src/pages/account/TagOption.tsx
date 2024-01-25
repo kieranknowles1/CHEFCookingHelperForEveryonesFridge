@@ -1,10 +1,10 @@
 import React from 'react'
 
 import LoadingSpinner, { DefaultSmallError, DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
+import apiClient, { createAuthHeaders } from '../../apiClient'
 import monitorStatus, { type ApiError } from '../../utils/monitorStatus'
 import ToggleButton from '../../components/inputs/ToggleButton'
 import UserContext from '../../contexts/UserContext'
-import apiClient from '../../apiClient'
 
 export interface TagOptionProps {
   name: string
@@ -27,7 +27,10 @@ export default function TagOption (props: TagOptionProps): React.JSX.Element {
   const setAllowed = (allowed: boolean): void => {
     apiClient.POST(
       '/user/{userId}/preference/tag/{tagId}',
-      { params: { path: { userId: context.userId, tagId: props.id }, query: { allow: allowed } } }
+      {
+        params: { path: { userId: context.userId, tagId: props.id }, query: { allow: allowed } },
+        headers: createAuthHeaders(context)
+      }
     ).then(
       monitorStatus(setStatus)
     ).then(() => {

@@ -1,9 +1,9 @@
 import React from 'react'
 
-import apiClient from '../../apiClient'
 import LoadingSpinner, { DefaultSmallError, DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
-import UserContext from '../../contexts/UserContext'
+import apiClient, { createAuthHeaders } from '../../apiClient'
 import monitorStatus, { type ApiError } from '../../utils/monitorStatus'
+import UserContext from '../../contexts/UserContext'
 
 export interface BannedIngredientProps {
   name: string
@@ -27,7 +27,8 @@ export default function BannedIngredient (props: BannedIngredientProps): React.J
         params: {
           path: { userId: context.userId, ingredientId: props.id },
           query: { allow: true }
-        }
+        },
+        headers: createAuthHeaders(context)
       }
     ).then(
       monitorStatus(setStatus)

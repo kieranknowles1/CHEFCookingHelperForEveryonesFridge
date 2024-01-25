@@ -1,12 +1,10 @@
-import { mdiHamburger, mdiHamburgerCheck } from '@mdi/js'
-import Icon from '@mdi/react'
+import { FaBurger } from 'react-icons/fa6'
 import React from 'react'
 
 import LoadingSpinner, { DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
+import apiClient, { createAuthHeaders } from '../../apiClient'
 import UserContext from '../../contexts/UserContext'
-import apiClient from '../../apiClient'
 import monitorStatus from '../../utils/monitorStatus'
-import useSafeContext from '../../contexts/useSafeContext'
 
 export interface MadeItButtonProps {
   recipeId: number
@@ -17,18 +15,28 @@ export interface MadeItButtonProps {
  * Used on RecipePage. Split for readability.
  */
 export default function MadeItButton (props: MadeItButtonProps): React.JSX.Element {
-  const context = useSafeContext(UserContext)
+  const context = React.useContext(UserContext)
 
   const [status, setStatus] = React.useState<LoadingStatus>('notstarted')
 
-  function handleClick (): void {
+  if (context?.fridgeId === undefined) {
+    return <p>Log in and select a fridge to track what you&apos;ve made!</p>
+  }
+
+  const handleClick = (): void => {
+    if (context.fridgeId === undefined) {
+      alert('Please select a fridge first')
+      return
+    }
+
     apiClient.POST(
       '/fridge/{fridgeId}/recipe/{recipeId}/maderecipe',
       {
         params: {
           path: { fridgeId: context.fridgeId, recipeId: props.recipeId },
           query: { users: [context.userId] }
-        }
+        },
+        headers: createAuthHeaders(context)
       }
     ).then(
       monitorStatus(setStatus)
@@ -38,11 +46,10 @@ export default function MadeItButton (props: MadeItButtonProps): React.JSX.Eleme
   }
 
   const message = status === 'done' ? 'Removed Ingredients and added to History' : 'Made it - Remove Ingredients From Fridge'
-  const icon = status === 'done' ? mdiHamburgerCheck : mdiHamburger
 
   return (
     <button onClick={handleClick} disabled={status === 'loading' || status === 'done'}>
-      <Icon path={icon} size={1} className='inline' />
+      <FaBurger size={24} className='inline' />
       {' ' + message}
       <LoadingSpinner
         status={status}

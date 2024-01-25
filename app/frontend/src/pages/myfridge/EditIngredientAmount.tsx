@@ -1,10 +1,9 @@
-import { mdiClose, mdiMinus, mdiPlus } from '@mdi/js'
-import Icon from '@mdi/react'
+import { BiMinus, BiPlus } from 'react-icons/bi'
+import { MdClose } from 'react-icons/md'
 import React from 'react'
 
+import apiClient, { createAuthHeaders } from '../../apiClient'
 import UserContext from '../../contexts/UserContext'
-import apiClient from '../../apiClient'
-import useSafeContext from '../../contexts/useSafeContext'
 
 export interface EditIngredientAmountProps {
   ingredientId: number
@@ -16,27 +15,37 @@ export interface EditIngredientAmountProps {
 }
 
 export default function EditIngredientAmount (props: EditIngredientAmountProps): React.JSX.Element {
-  const context = useSafeContext(UserContext)
+  const context = React.useContext(UserContext)
+
+  if (context === null) {
+    throw new Error('UserContext is null')
+  }
 
   const [deltaAmount, setDeltaAmount] = React.useState(0)
 
-  function onSubmit (type: 'add' | 'remove'): void {
+  const onSubmit = (type: 'add' | 'remove'): void => {
     const change = type === 'add' ? deltaAmount : -deltaAmount
     const newAmount = props.currentAmount + change
+
+    if (context.fridgeId === undefined) {
+      alert('Please select a fridge.')
+      return
+    }
 
     if (newAmount < 0) {
       alert('New amount must be greater than or equal to 0.')
       return
     }
 
-    const params = {
-      path: { fridgeId: context.fridgeId, ingredientId: props.ingredientId },
-      query: { amount: newAmount }
-    }
-
     apiClient.POST(
       '/fridge/{fridgeId}/ingredient/{ingredientId}/amount',
-      { params }
+      {
+        params: {
+          path: { fridgeId: context.fridgeId, ingredientId: props.ingredientId },
+          query: { amount: newAmount }
+        },
+        headers: createAuthHeaders(context)
+      }
     ).then(() => {
       props.setCurrentAmount(newAmount)
       props.onSubmit()
@@ -56,15 +65,15 @@ export default function EditIngredientAmount (props: EditIngredientAmountProps):
         required
       /></label>
       <button type='button' className='float-right bg-red-900 hover:bg-red-950' onClick={props.onCancel}>
-        <Icon path={mdiClose} size={1} className='inline' />
+        <MdClose size={24} className='inline' />
       </button>
       <br />
       <div className='w-full grid grid-cols-2'>
       <button className='w-full bg-lime-900 rounded hover:bg-lime-950' type='submit' onClick={() => { onSubmit('add') }}>
-        <Icon path={mdiPlus} size={1} className='inline' /> Add
+        <BiPlus size={24} className='inline' /> Add
       </button>
       <button className='w-full bg-red-900 rounded hover:bg-red-950' type='button' onClick={() => { onSubmit('remove') }}>
-        <Icon path={mdiMinus} size={1} className='inline' /> Remove
+        <BiMinus size={24} className='inline' /> Remove
       </button>
       </div>
     </form>

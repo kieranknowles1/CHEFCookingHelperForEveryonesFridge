@@ -1,6 +1,5 @@
-import Icon from '@mdi/react'
+import { BiSearch } from 'react-icons/bi'
 import React from 'react'
-import { mdiMagnify } from '@mdi/js'
 
 export interface SearchProps {
   setQuery: React.Dispatch<string>
@@ -12,7 +11,7 @@ export interface SearchProps {
 export default function Search (props: SearchProps): React.JSX.Element {
   return (
     <label>
-      <Icon path={mdiMagnify} size={1} className='inline' /> Search: <input
+      <BiSearch size={24} className='inline' /> Search: <input
         type='search'
         onChange={e => { props.setQuery(e.target.value) }}
       />

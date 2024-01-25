@@ -93,13 +93,17 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
         SELECT
           recipe.name, recipe.id,
           COUNT(
-            CASE WHEN
-              -- Check if fridge has ingredient
-              (fridge_ingredient.amount IS NULL)
-              -- Optionally check if fridge has enough ingredient
-              OR (:checkAmount AND fridge_ingredient.amount < recipe_ingredient.amount)
-            THEN 1 END
-          ) as missing_count, -- Meaningless if fridgeId is null
+            CASE
+              -- If fridgeId is null, then we can't create a meaningful missing count
+              WHEN :fridgeId IS NULL THEN NULL
+
+              -- Check if we have any of the ingredients
+              WHEN fridge_ingredient.amount IS NULL THEN 1
+
+              -- Optionally check if we have enough of the ingredients
+              WHEN :checkAmount AND fridge_ingredient.amount < recipe_ingredient.amount THEN 1
+            END
+          ) as missing_count,
           CASE WHEN :search IS NULL THEN NULL ELSE ml_similarity(embedding.embedding, :search) END AS similarity
         FROM recipe
           JOIN embedding ON embedding.sentence = recipe.name
