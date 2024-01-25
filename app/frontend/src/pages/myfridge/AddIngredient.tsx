@@ -27,7 +27,7 @@ export default function AddIngredient (props: AddIngredientProps): React.JSX.Ele
   const onSubmit = (event: React.FormEvent): void => {
     event.preventDefault()
 
-    if (context.fridge === undefined) {
+    if (context.fridgeId === undefined) {
       alert('Please select a fridge.')
       return
     }
@@ -44,7 +44,7 @@ export default function AddIngredient (props: AddIngredientProps): React.JSX.Ele
     apiClient.POST(
       '/fridge/{fridgeId}/ingredient/{ingredientId}/amount',
       {
-        params: { path: { fridgeId: context.fridge.id, ingredientId: selected.id }, query: { amount } },
+        params: { path: { fridgeId: context.fridgeId, ingredientId: selected.id }, query: { amount } },
         headers: createAuthHeaders(context)
       }
     ).then(() => {

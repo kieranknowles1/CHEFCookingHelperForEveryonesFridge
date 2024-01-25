@@ -45,7 +45,7 @@ export default function FindRecipesPage (props: FindRecipesPageProps): React.JSX
         params: {
           query: {
             ...filters,
-            availableForFridge: context?.fridge?.id,
+            availableForFridge: context?.fridgeId,
             limit: 1000,
             suitableForUsers: context !== null ? [context.userId] : undefined,
             search: query === '' ? undefined : query,
@@ -88,11 +88,11 @@ export default function FindRecipesPage (props: FindRecipesPageProps): React.JSX
         Click any recipe to view details and/or mark it as have been made.
       </p>
       {context !== null && <FridgePicker
-        selectedId={context.fridge?.id}
-        setSelected={fridge => {
+        selected={context.fridgeId}
+        setSelected={fridgeId => {
           props.setUserState({
             ...context,
-            fridge
+            fridgeId
           })
         }}
       />}

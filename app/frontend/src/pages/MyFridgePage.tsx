@@ -31,14 +31,36 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
   const [addIngredientOpen, setAddingredientOpen] = React.useState(false)
   const [scanBarcodeOpen, setScanBarcodeOpen] = React.useState(false)
 
+  const [fridgeName, setFridgeName] = React.useState('My Fridge')
+  React.useEffect(() => {
+    if (context?.fridgeId === undefined) {
+      setFridgeName('My Fridge')
+      return
+    }
+    apiClient.GET('/fridge/{fridgeId}',
+      {
+        params: { path: { fridgeId: context.fridgeId } },
+        headers: createAuthHeaders(context)
+      }
+    ).then(
+      // Don't particularly care if this fails
+      monitorStatus(() => {})
+    ).then(data => {
+      setFridgeName(data.name)
+    }).catch(err => {
+      console.error(err)
+      setFridgeName('My Fridge')
+    })
+  }, [context?.fridgeId])
+
   const fetchIngredients = (): void => {
-    if (context?.fridge === undefined) {
+    if (context?.fridgeId === undefined) {
       return
     }
     apiClient.GET(
       '/fridge/{fridgeId}/ingredient/all/amount',
       {
-        params: { path: { fridgeId: context.fridge.id } },
+        params: { path: { fridgeId: context.fridgeId } },
         headers: createAuthHeaders(context)
       }
     ).then(
@@ -58,14 +80,14 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
 
   const picker = (
     <FridgePicker
-      selectedId={context.fridge?.id}
-      setSelected={fridge => {
-        props.setUserState({ ...context, fridge })
+      selected={context.fridgeId}
+      setSelected={fridgeId => {
+        props.setUserState({ ...context, fridgeId })
       }}
     />
   )
 
-  if (context.fridge === undefined) {
+  if (context.fridgeId === undefined) {
     return (
       <main>
         {picker}
@@ -77,7 +99,7 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
   return (
     <main>
       {picker}
-      <h1>{context.fridge.name}</h1>
+      <h1>{fridgeName}</h1>
       <LoadingSpinner status={status} />
       <button onClick={() => { setAddingredientOpen(true) } }>Add Ingredient</button>
       <ModalDialog

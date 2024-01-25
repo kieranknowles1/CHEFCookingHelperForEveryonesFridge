@@ -65,7 +65,7 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
   // Fetch available amounts
   React.useEffect(() => {
     setAvailableAmounts(null)
-    if (context?.fridge === undefined) {
+    if (context?.fridgeId === undefined) {
       // Don't try to fetch available amounts if the user is not logged in or has not selected a fridge
       setAvailableAmountsStatus('done')
       return
@@ -73,7 +73,7 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
     apiClient.GET(
       '/fridge/{fridgeId}/ingredient/all/amount',
       {
-        params: { path: { fridgeId: context.fridge.id } },
+        params: { path: { fridgeId: context.fridgeId } },
         headers: createAuthHeaders(context)
       }
     ).then(
@@ -125,12 +125,12 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
         {context !== null
           ? <>
             <FridgePicker
-              selectedId={context.fridge?.id}
-              setSelected={fridge => {
-                props.setUserState({ ...context, fridge })
+              selected={context.fridgeId}
+              setSelected={fridgeId => {
+                props.setUserState({ ...context, fridgeId })
               }}
             />
-            {context.fridge !== undefined && <MadeItButton recipeId={recipe.id} />}
+            {context.fridgeId !== undefined && <MadeItButton recipeId={recipe.id} />}
           </>
           : <p>Log in to add this recipe to your history</p>
         }

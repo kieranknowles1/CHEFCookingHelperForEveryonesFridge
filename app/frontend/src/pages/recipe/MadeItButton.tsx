@@ -19,12 +19,12 @@ export default function MadeItButton (props: MadeItButtonProps): React.JSX.Eleme
 
   const [status, setStatus] = React.useState<LoadingStatus>('notstarted')
 
-  if (context?.fridge === undefined) {
+  if (context?.fridgeId === undefined) {
     return <p>Log in and select a fridge to track what you&apos;ve made!</p>
   }
 
   const handleClick = (): void => {
-    if (context.fridge === undefined) {
+    if (context.fridgeId === undefined) {
       alert('Please select a fridge first')
       return
     }
@@ -33,7 +33,7 @@ export default function MadeItButton (props: MadeItButtonProps): React.JSX.Eleme
       '/fridge/{fridgeId}/recipe/{recipeId}/maderecipe',
       {
         params: {
-          path: { fridgeId: context.fridge.id, recipeId: props.recipeId },
+          path: { fridgeId: context.fridgeId, recipeId: props.recipeId },
           query: { users: [context.userId] }
         },
         headers: createAuthHeaders(context)

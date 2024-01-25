@@ -27,7 +27,7 @@ export default function EditIngredientAmount (props: EditIngredientAmountProps):
     const change = type === 'add' ? deltaAmount : -deltaAmount
     const newAmount = props.currentAmount + change
 
-    if (context.fridge === undefined) {
+    if (context.fridgeId === undefined) {
       alert('Please select a fridge.')
       return
     }
@@ -41,7 +41,7 @@ export default function EditIngredientAmount (props: EditIngredientAmountProps):
       '/fridge/{fridgeId}/ingredient/{ingredientId}/amount',
       {
         params: {
-          path: { fridgeId: context.fridge.id, ingredientId: props.ingredientId },
+          path: { fridgeId: context.fridgeId, ingredientId: props.ingredientId },
           query: { amount: newAmount }
         },
         headers: createAuthHeaders(context)
