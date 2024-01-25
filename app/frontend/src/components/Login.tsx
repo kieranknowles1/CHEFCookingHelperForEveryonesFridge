@@ -31,9 +31,6 @@ export default function Login (props: LoginProps): React.JSX.Element {
     ).then(
       monitorStatus(setStatus)
     ).then(data => {
-      // TODO: Store token in local storage
-      // TODO: Have a way of selecting which fridge to use
-
       props.handleLogin({
         token: data.token,
         userId: data.userId
@@ -65,8 +62,8 @@ export default function Login (props: LoginProps): React.JSX.Element {
               errorMessage={DefaultTinyError}
               className='inline-block'
             />
-            <label>Username: <input type='text' onChange={e => { setUsername(e.target.value) }} /></label>{' '}
-            <label>Password: <input type='password' onChange={e => { setPassword(e.target.value) }} /></label>{' '}
+            <label>Username: <input type='text' value={username} onChange={e => { setUsername(e.target.value) }} /></label>{' '}
+            <label>Password: <input type='password' value={password} onChange={e => { setPassword(e.target.value) }} /></label>{' '}
             <button type='submit' className={buttonStyle}>
               Log in
             </button>
