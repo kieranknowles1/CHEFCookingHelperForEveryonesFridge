@@ -2,6 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
+import RecipeSearchOptions, { type SearchFilters } from '../components/RecipeSearchOptions'
 import UserContext, { type UserState } from '../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../apiClient'
 import monitorStatus, { type ApiError } from '../utils/monitorStatus'
@@ -28,7 +29,11 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
 
   const [recipeStatus, setRecipeStatus] = React.useState<LoadingStatus | 'notfound'>('loading')
   const [recipe, setRecipe] = React.useState<Recipe>()
-  const [onlyAvailable, setOnlyAvailable] = React.useState<boolean>(true)
+
+  const [filters, setFilters] = React.useState<SearchFilters>({
+    checkAmounts: true,
+    maxMissingIngredients: 0
+  })
 
   const [availableAmountsStatus, setAvailableAmountsStatus] = React.useState<LoadingStatus>('loading')
   const [availableAmounts, setAvailableAmounts] = React.useState<Map<number, number> | null>(null)
@@ -39,6 +44,7 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
     return <NotFoundMessage />
   }
 
+  // Fetch recipe data
   React.useEffect(() => {
     setRecipe(undefined)
     apiClient.GET(
@@ -56,6 +62,7 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
     })
   }, [idNumber])
 
+  // Fetch available amounts
   React.useEffect(() => {
     setAvailableAmounts(null)
     if (context?.fridge === undefined) {
@@ -77,6 +84,13 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
       console.error(err)
     })
   }, [context])
+
+  // Set meal type to the recipe's meal type
+  React.useEffect(() => {
+    if (recipe !== undefined) {
+      setFilters({ ...filters, mealType: recipe.mealType })
+    }
+  }, [recipe])
 
   if (recipeStatus === 'notfound') {
     return <NotFoundMessage />
@@ -126,18 +140,15 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
         <SingleRecipeHistory userId={context.userId} recipeId={recipe.id} />
       </>}
       <h2>Similar recipes</h2>
-      <label>Only show recipes with ingredients available in my fridge:{' '}
-        <input
-          type='checkbox'
-          checked={onlyAvailable}
-          onChange={e => { setOnlyAvailable(e.target.checked) }}
-        />
-      </label>
+      <RecipeSearchOptions
+        filters={filters}
+        setFilters={setFilters}
+      />
       <SimilarRecipes
         recipe={recipe}
         limit={MAX_SIMILAR_RECIPES}
         minSimilarity={MIN_SIMILARITY}
-        onlyAvailable={onlyAvailable}
+        filters={filters}
       />
     </main>
   )

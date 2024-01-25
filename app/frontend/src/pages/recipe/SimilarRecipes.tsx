@@ -3,6 +3,7 @@ import React from 'react'
 import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpinner'
 import RecipeList from '../../components/RecipeList'
 import { type RecipeProps } from '../../components/Recipe'
+import { type SearchFilters } from '../../components/RecipeSearchOptions'
 import UserContext from '../../contexts/UserContext'
 import apiClient from '../../apiClient'
 import { type components } from '../../types/api.generated'
@@ -14,7 +15,7 @@ export interface SimilarRecipeProps {
   recipe: Recipe
   limit: number
   minSimilarity: number
-  onlyAvailable: boolean
+  filters: SearchFilters
 }
 
 export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.Element {
@@ -32,7 +33,13 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
       '/recipe/search',
       {
         params: {
-          query: { limit: props.limit, minSimilarity: props.minSimilarity, availableForFridge, search: props.recipe.name }
+          query: {
+            ...props.filters,
+            limit: props.limit,
+            minSimilarity: props.minSimilarity,
+            availableForFridge,
+            search: props.recipe.name
+          }
         }
       }
     ).then(
@@ -42,7 +49,7 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
     }).catch(err => {
       console.error(err)
     })
-  }, [props.recipe.name, props.limit, props.minSimilarity, props.onlyAvailable, context])
+  }, [props.recipe.name, props.limit, props.minSimilarity, props.filters, context])
 
   return (
     <div>

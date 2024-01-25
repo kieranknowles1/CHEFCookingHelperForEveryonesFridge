@@ -9,7 +9,7 @@ import LoadingSpinner, { DefaultSmallSpinner, type LoadingStatus } from './Loadi
 export interface SearchFilters {
   checkAmounts: boolean
   maxMissingIngredients: number
-  mealType: string | undefined
+  mealType?: string
 }
 
 export interface RecipeSearchOptionsProps {
