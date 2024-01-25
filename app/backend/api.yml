@@ -230,7 +230,6 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
-  # TODO: Authentication
   /fridge/{fridgeId}/ingredient/all/amount:
     get:
       tags: [Fridge]

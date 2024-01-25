@@ -45,7 +45,6 @@ export default function Login (props: LoginProps): React.JSX.Element {
   }
 
   function handleLogout (): void {
-    // TODO: Flush any data that needs to be flushed
     props.handleLogin(null)
   }
 
