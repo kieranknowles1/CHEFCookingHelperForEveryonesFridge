@@ -79,9 +79,9 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
   }
 
   const picker = (
-    <FridgePicker
+    <label>Fridge: <FridgePicker
       setUserState={props.setUserState}
-    />
+    /></label>
   )
 
   if (context.fridgeId === undefined) {

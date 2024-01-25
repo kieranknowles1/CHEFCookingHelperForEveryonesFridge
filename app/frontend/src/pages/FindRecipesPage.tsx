@@ -5,7 +5,6 @@ import React from 'react'
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
 import RecipeSearchOptions, { type SearchFilters } from '../components/RecipeSearchOptions'
 import UserContext, { type UserState } from '../contexts/UserContext'
-import { FridgePicker } from '../components/FridgePicker'
 import RecipeList from '../components/RecipeList'
 import { type RecipeProps } from '../components/Recipe'
 import Search from '../components/inputs/Search'
@@ -87,10 +86,11 @@ export default function FindRecipesPage (props: FindRecipesPageProps): React.JSX
         <br />
         Click any recipe to view details and/or mark it as have been made.
       </p>
-      {context !== null && <FridgePicker
+      <RecipeSearchOptions
+        filters={filters}
         setUserState={props.setUserState}
-      />}
-      <RecipeSearchOptions filters={filters} setFilters={setFilters} />
+        setFilters={setFilters}
+      />
       <hr className='my-2 mx-2' />
       {status === 'done' && <p>{recipes.length} recipes found.</p>}
       <Search setQuery={q => { setQuery(q); setPage(0) }} />

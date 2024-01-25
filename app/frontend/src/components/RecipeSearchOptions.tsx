@@ -1,10 +1,11 @@
 import React from 'react'
 
-import UserContext from '../contexts/UserContext'
+import UserContext, { type UserState } from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import monitorStatus from '../utils/monitorStatus'
 
 import LoadingSpinner, { DefaultSmallSpinner, type LoadingStatus } from './LoadingSpinner'
+import { FridgePicker } from './FridgePicker'
 
 export interface SearchFilters {
   checkAmounts: boolean
@@ -14,6 +15,7 @@ export interface SearchFilters {
 
 export interface RecipeSearchOptionsProps {
   filters: SearchFilters
+  setUserState: (userState: UserState) => void
   setFilters: (filters: SearchFilters) => void
 }
 
@@ -64,6 +66,9 @@ export default function RecipeSearchOptions (props: RecipeSearchOptionsProps): R
       {context === null
         ? <p>Log in to filter by the ingredients you have!</p>
         : <>
+            <label>Fridge: <FridgePicker
+              setUserState={props.setUserState}
+            /></label><br />
             <label>Check I have enough of each ingredient:{' '}
               <input
                 type='checkbox'

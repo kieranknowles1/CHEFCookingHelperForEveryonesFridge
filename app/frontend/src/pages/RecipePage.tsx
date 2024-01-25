@@ -122,14 +122,9 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
             <li key={index}>{line}</li>
           )}
         </ol>
-        {context !== null
-          ? <>
-            <FridgePicker
-              setUserState={props.setUserState}
-            />
-            {context.fridgeId !== undefined && <MadeItButton recipeId={recipe.id} />}
-          </>
-          : <p>Log in to add this recipe to your history</p>
+        {context?.fridgeId !== undefined
+          ? <MadeItButton recipeId={recipe.id} />
+          : <p>Log in and select a fridge to mark this recipe as made!</p>
         }
       </div>
       {context !== null && <>
@@ -139,6 +134,7 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
       <h2>Similar recipes</h2>
       <RecipeSearchOptions
         filters={filters}
+        setUserState={props.setUserState}
         setFilters={setFilters}
       />
       <SimilarRecipes
