@@ -125,7 +125,7 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
         {context !== null
           ? <>
             <FridgePicker
-              selected={context.fridge}
+              selectedId={context.fridge?.id}
               setSelected={fridge => {
                 props.setUserState({ ...context, fridge })
               }}

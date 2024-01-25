@@ -10,7 +10,7 @@ import LoadingSpinner, { type LoadingStatus } from './LoadingSpinner'
 type BasicFridge = components['schemas']['BasicFridge']
 
 export interface FridgePickerProps {
-  selected?: BasicFridge
+  selectedId?: number
   setSelected: (fridge: BasicFridge) => void
 }
 
@@ -46,7 +46,7 @@ export function FridgePicker (props: FridgePickerProps): React.JSX.Element {
 
   return (
     <select
-      value={props.selected?.id ?? ''}
+      value={props.selectedId ?? ''}
       onChange={event => {
         const fridge = fridges.find(fridge => fridge.id.toString() === event.target.value)
         if (fridge !== undefined) {
