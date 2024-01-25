@@ -11,7 +11,7 @@ type BasicFridge = components['schemas']['BasicFridge']
 
 export interface FridgePickerProps {
   selectedId?: number
-  setSelected: (fridge: BasicFridge) => void
+  setSelected: (fridge?: BasicFridge) => void
 }
 
 /**
@@ -49,12 +49,11 @@ export function FridgePicker (props: FridgePickerProps): React.JSX.Element {
       value={props.selectedId ?? ''}
       onChange={event => {
         const fridge = fridges.find(fridge => fridge.id.toString() === event.target.value)
-        if (fridge !== undefined) {
-          props.setSelected(fridge)
-        }
+        // Will be undefined if selected value is none
+        props.setSelected(fridge)
       }}
     >
-      <option value='' disabled>Select a fridge</option>
+      <option value=''>None</option>
       {fridges.map(fridge => (
         <option key={fridge.id} value={fridge.id}>{fridge.name}</option>
       ))}
