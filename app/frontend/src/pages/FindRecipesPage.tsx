@@ -31,11 +31,10 @@ export default function FindRecipesPage (props: FindRecipesPageProps): React.JSX
   })
 
   const [query, setQuery] = React.useState('')
-  const [filtered, setFiltered] = React.useState<RecipeProps[]>([])
 
   const [page, setPage] = React.useState(0)
   function getTotalPages (): number {
-    return Math.ceil(filtered.length / PAGE_SIZE)
+    return Math.ceil(recipes.length / PAGE_SIZE)
   }
 
   React.useEffect(() => {
@@ -48,7 +47,9 @@ export default function FindRecipesPage (props: FindRecipesPageProps): React.JSX
             ...filters,
             availableForFridge: context?.fridge?.id,
             limit: 1000,
-            suitableForUsers: context !== null ? [context.userId] : undefined
+            suitableForUsers: context !== null ? [context.userId] : undefined,
+            search: query === '' ? undefined : query,
+            minSimilarity: 0
           }
         }
       }
@@ -59,16 +60,12 @@ export default function FindRecipesPage (props: FindRecipesPageProps): React.JSX
     }).catch(err => {
       console.error(err)
     })
-  }, [context, filters])
-
-  React.useEffect(() => {
-    setFiltered(recipes.filter(r => r.name.toLowerCase().includes(query.toLowerCase())))
-  }, [recipes, query])
+  }, [context, filters, query])
 
   const [pageItems, setPageItems] = React.useState<RecipeProps[]>([])
   React.useEffect(() => {
-    setPageItems(filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE))
-  }, [filtered, page])
+    setPageItems(recipes.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE))
+  }, [recipes, page])
 
   const pageButtons = (
     <div className='flex justify-center'>
