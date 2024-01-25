@@ -327,8 +327,7 @@ paths:
     post:
       tags: [User]
       summary: Authenticate as a user
-      description:
-        Authenticate as a user using HTTP Basic Authentication.
+      description: Authenticate as a user using HTTP Basic Authentication.
         Returns a token that can be used for future requests.
       security: [Basic: []]
       responses:
@@ -387,7 +386,6 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "403":
           $ref: "#/components/responses/Forbidden"
-
 
   /user/{userId}/history:
     get:
