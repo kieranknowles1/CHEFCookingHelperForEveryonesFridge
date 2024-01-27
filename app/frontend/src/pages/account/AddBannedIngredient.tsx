@@ -2,10 +2,11 @@ import React from 'react'
 
 import LoadingSpinner, { DefaultSmallError, DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
 import apiClient, { createAuthHeaders } from '../../apiClient'
-import monitorStatus, { type ApiError } from '../../utils/monitorStatus'
+import { type ApiError } from '../../types/ApiError'
 import { IngredientPicker } from '../../components/IngredientPicker'
 import UserContext from '../../contexts/UserContext'
 import { type components } from '../../types/api.generated'
+import monitorStatus from '../../utils/monitorStatus'
 
 type Ingredient = components['schemas']['Ingredient']
 

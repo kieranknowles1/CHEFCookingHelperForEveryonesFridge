@@ -1,9 +1,10 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpinner'
-import monitorStatus, { type ApiError } from '../../utils/monitorStatus'
+import { type ApiError } from '../../types/ApiError'
 import apiClient from '../../apiClient'
 import { type components } from '../../types/api.generated'
+import monitorStatus from '../../utils/monitorStatus'
 
 import TagOption from './TagOption'
 

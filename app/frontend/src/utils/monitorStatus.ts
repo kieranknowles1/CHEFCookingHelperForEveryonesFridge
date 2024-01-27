@@ -1,6 +1,8 @@
 import { type LoadingStatus } from '../components/LoadingSpinner'
 import { type components } from '../types/api.generated'
 
+import { ApiError } from '../types/ApiError'
+
 type ErrorList = components['schemas']['ErrorList']
 
 type StatusSetter = (status: LoadingStatus) => void
@@ -16,16 +18,6 @@ type GenericFetchResponse<TData> = {
 }
 
 export type StatusMonitor = <TData>(response: GenericFetchResponse<TData>) => Promise<TData>
-
-export class ApiError extends Error {
-  public readonly errors: ErrorList
-
-  constructor (errors: ErrorList) {
-    super(errors.errors[0].message)
-    this.name = ApiError.name
-    this.errors = errors
-  }
-}
 
 /**
  * Helper function to monitor the status of an API call.

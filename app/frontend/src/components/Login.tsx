@@ -1,8 +1,9 @@
 import React from 'react'
 
 import UserContext, { type UserState } from '../contexts/UserContext'
-import monitorStatus, { type ApiError } from '../utils/monitorStatus'
+import { type ApiError } from '../types/ApiError'
 import apiClient from '../apiClient'
+import monitorStatus from '../utils/monitorStatus'
 
 import LoadingSpinner, { DefaultSmallSpinner, DefaultTinyError, type LoadingStatus } from './LoadingSpinner'
 

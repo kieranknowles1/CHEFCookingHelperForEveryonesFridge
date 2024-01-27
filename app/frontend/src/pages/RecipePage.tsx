@@ -5,9 +5,10 @@ import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner
 import RecipeSearchOptions, { type SearchFilters } from '../components/RecipeSearchOptions'
 import UserContext, { type UserState } from '../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../apiClient'
-import monitorStatus, { type ApiError } from '../utils/monitorStatus'
+import { type ApiError } from '../types/ApiError'
 import NotFoundMessage from '../errorpages/NotFoundMessage'
 import { type components } from '../types/api.generated'
+import monitorStatus from '../utils/monitorStatus'
 
 import MadeItButton from './recipe/MadeItButton'
 import RecipeIngredient from './recipe/RecipeIngredient'

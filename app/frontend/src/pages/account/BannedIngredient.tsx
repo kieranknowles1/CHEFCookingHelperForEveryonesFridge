@@ -2,8 +2,9 @@ import React from 'react'
 
 import LoadingSpinner, { DefaultSmallError, DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
 import apiClient, { createAuthHeaders } from '../../apiClient'
-import monitorStatus, { type ApiError } from '../../utils/monitorStatus'
+import { type ApiError } from '../../types/ApiError'
 import UserContext from '../../contexts/UserContext'
+import monitorStatus from '../../utils/monitorStatus'
 
 export interface BannedIngredientProps {
   name: string
