@@ -40,7 +40,7 @@ export type StatusMonitor = <TData>(response: GenericFetchResponse<TData>) => Pr
  *  .then((response) => {
  *   // Do something with response
  *  }).catch((error: ApiError) => {
- *   // Do something with error
+ *   handleApiError(error, setUserState)
  *  })
  * ```
  */

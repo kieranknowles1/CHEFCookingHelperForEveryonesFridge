@@ -13,13 +13,14 @@ import monitorStatus from '../utils/monitorStatus'
 
 import AddIngredient from './myfridge/AddIngredient'
 import FridgeIngredient from './myfridge/FridgeIngredient'
+import handleApiError from '../utils/handleApiError'
 
 const ScanBarcode = React.lazy(async () => await import('./myfridge/ScanBarcode'))
 
 type FridgeIngredientEntry = components['schemas']['FridgeIngredientEntry']
 
 interface MyFridgePageProps {
-  setUserState: (userState: UserState) => void
+  setUserState: (userState: UserState | null) => void
 }
 
 export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Element {
@@ -48,7 +49,7 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
     ).then(data => {
       setFridgeName(data.name)
     }).catch(err => {
-      console.error(err)
+      handleApiError(err, props.setUserState)
       setFridgeName('My Fridge')
     })
   }, [context?.fridgeId])
