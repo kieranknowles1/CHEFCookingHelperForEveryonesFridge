@@ -2,7 +2,7 @@ import React from 'react'
 
 import UserContext, { type UserState } from '../contexts/UserContext'
 import apiClient from '../apiClient'
-import monitorStatus from '../utils/monitorStatus'
+import monitorOutcome from '../utils/monitorOutcome'
 
 import LoadingSpinner, { DefaultSmallSpinner, type LoadingStatus } from './LoadingSpinner'
 import { FridgePicker } from './FridgePicker'
@@ -35,7 +35,7 @@ export default function RecipeSearchOptions (props: RecipeSearchOptionsProps): R
     apiClient.GET(
       '/mealtype/list'
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus)
     ).then(data => {
       setMealTypes(data)
     }).catch(err => {

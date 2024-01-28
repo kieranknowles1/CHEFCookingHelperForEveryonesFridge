@@ -5,7 +5,7 @@ import apiClient, { createAuthHeaders } from '../../apiClient'
 import { type ApiError } from '../../types/ApiError'
 import ToggleButton from '../../components/inputs/ToggleButton'
 import UserContext from '../../contexts/UserContext'
-import monitorStatus from '../../utils/monitorStatus'
+import monitorOutcome from '../../utils/monitorOutcome'
 
 export interface TagOptionProps {
   name: string
@@ -33,7 +33,7 @@ export default function TagOption (props: TagOptionProps): React.JSX.Element {
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus)
     ).then(() => {
       props.onChange(allowed)
     }).catch((err: ApiError) => {

@@ -5,7 +5,7 @@ import apiClient, { createAuthHeaders } from '../apiClient'
 import NeedsLoginMessage from '../errorpages/NeedsLoginMessage'
 import UserContext from '../contexts/UserContext'
 import { type components } from '../types/api.generated'
-import monitorStatus from '../utils/monitorStatus'
+import monitorOutcome from '../utils/monitorOutcome'
 
 import History from './account/History'
 import UserPreferences from './account/UserPreferences'
@@ -32,7 +32,7 @@ export default function AccountPage (): React.JSX.Element {
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus)
     ).then(data => {
       setUserName(data.name)
       setBannedTags(data.bannedTags)

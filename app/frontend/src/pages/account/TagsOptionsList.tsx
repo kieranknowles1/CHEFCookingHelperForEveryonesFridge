@@ -4,7 +4,7 @@ import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpin
 import { type ApiError } from '../../types/ApiError'
 import apiClient from '../../apiClient'
 import { type components } from '../../types/api.generated'
-import monitorStatus from '../../utils/monitorStatus'
+import monitorOutcome from '../../utils/monitorOutcome'
 
 import TagOption from './TagOption'
 
@@ -23,7 +23,7 @@ export default function TagsOptionsList (props: TagsOptionsProps): React.JSX.Ele
   React.useEffect(() => {
     apiClient.GET('/tag/list')
       .then(
-        monitorStatus(setStatus)
+        monitorOutcome(setStatus)
       ).then(
         setAllTags
       ).catch((err: ApiError) => {

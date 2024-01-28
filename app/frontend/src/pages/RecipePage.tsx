@@ -8,7 +8,7 @@ import apiClient, { createAuthHeaders } from '../apiClient'
 import { type ApiError } from '../types/ApiError'
 import NotFoundMessage from '../errorpages/NotFoundMessage'
 import { type components } from '../types/api.generated'
-import monitorStatus from '../utils/monitorStatus'
+import monitorOutcome from '../utils/monitorOutcome'
 
 import MadeItButton from './recipe/MadeItButton'
 import RecipeIngredient from './recipe/RecipeIngredient'
@@ -51,7 +51,7 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
       '/recipe/{recipeId}',
       { params: { path: { recipeId: idNumber } } }
     ).then(
-      monitorStatus(setRecipeStatus)
+      monitorOutcome(setRecipeStatus)
     ).then(data => {
       setRecipe(data)
     }).catch((err: ApiError) => {
@@ -77,7 +77,7 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setAvailableAmountsStatus)
+      monitorOutcome(setAvailableAmountsStatus)
     ).then(data => {
       setAvailableAmounts(new Map(data.map(entry => [entry.ingredient.id, entry.amount])))
     }).catch((err: ApiError) => {

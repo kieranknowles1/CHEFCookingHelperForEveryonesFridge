@@ -4,7 +4,7 @@ import React from 'react'
 import LoadingSpinner, { DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
 import apiClient, { createAuthHeaders } from '../../apiClient'
 import UserContext from '../../contexts/UserContext'
-import monitorStatus from '../../utils/monitorStatus'
+import monitorOutcome from '../../utils/monitorOutcome'
 
 export interface MadeItButtonProps {
   recipeId: number
@@ -39,7 +39,7 @@ export default function MadeItButton (props: MadeItButtonProps): React.JSX.Eleme
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus)
     ).catch(err => {
       console.error(err)
     })

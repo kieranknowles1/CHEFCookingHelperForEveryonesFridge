@@ -1,11 +1,12 @@
-import { type LoadingStatus } from '../components/LoadingSpinner'
-import { type components } from '../types/api.generated'
-
 import { ApiError } from '../types/ApiError'
+import { type LoadingStatus } from '../components/LoadingSpinner'
+import { type UserState } from '../contexts/UserContext'
+import { type components } from '../types/api.generated'
 
 type ErrorList = components['schemas']['ErrorList']
 
-type StatusSetter = (status: LoadingStatus) => void
+type LoadingStatusSetter = (status: LoadingStatus) => void
+type UserStateSetter = (userState: UserState) => void
 
 type GenericFetchResponse<TData> = {
   data: TData
@@ -20,12 +21,13 @@ type GenericFetchResponse<TData> = {
 export type StatusMonitor = <TData>(response: GenericFetchResponse<TData>) => Promise<TData>
 
 /**
- * Helper function to monitor the status of an API call.
+ * Helper function to monitor the outcome of an API call.
  * Status will be set to 'loading' when the function is called (i.e., inside the useEffect hook).
  * Status will be set to 'done' or 'error' depending on the result of the API call.
  * Errors will be thrown as an ApiError on failure (i.e., when the endpoint returns a non-200 status code).
  * Error details are available in the ApiError.errors property.
  * Data is returned on success.
+ * Logout is called on 401 errors.
  *
  * Note that the endpoint must be declared as returning an ErrorList on failure
  * in the OpenAPI spec.
@@ -44,15 +46,24 @@ export type StatusMonitor = <TData>(response: GenericFetchResponse<TData>) => Pr
  *  })
  * ```
  */
-export default function monitorStatus (setStatus: StatusSetter): StatusMonitor {
+export default function monitorOutcome (
+  setStatus: LoadingStatusSetter,
+  logout: () => void
+): StatusMonitor {
   setStatus('loading')
-  return async (response) => await new Promise((resolve, reject) => {
+
+  return async (response) => {
     if (response.error !== undefined) {
       setStatus('error')
-      reject(new ApiError(response.error))
+
+      if (response.response.status === 401) {
+        logout()
+      }
+
+      throw new ApiError(response.error)
     } else {
       setStatus('done')
-      resolve(response.data)
+      return response.data
     }
-  })
+  }
 }

@@ -3,7 +3,7 @@ import React from 'react'
 import UserContext, { type UserState } from '../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../apiClient'
 import { type components } from '../types/api.generated'
-import monitorStatus from '../utils/monitorStatus'
+import monitorOutcome from '../utils/monitorOutcome'
 
 import LoadingSpinner, { type LoadingStatus } from './LoadingSpinner'
 
@@ -33,7 +33,7 @@ export function FridgePicker (props: FridgePickerProps): React.JSX.Element {
       params: { path: { userId: context.userId } },
       headers: createAuthHeaders(context)
     }).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus)
     ).then(data => {
       setFridges(data)
     }).catch(console.error)

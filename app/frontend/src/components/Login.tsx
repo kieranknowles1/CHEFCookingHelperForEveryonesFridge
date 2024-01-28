@@ -3,7 +3,7 @@ import React from 'react'
 import UserContext, { type UserState } from '../contexts/UserContext'
 import { type ApiError } from '../types/ApiError'
 import apiClient from '../apiClient'
-import monitorStatus from '../utils/monitorStatus'
+import monitorOutcome from '../utils/monitorOutcome'
 
 import LoadingSpinner, { DefaultSmallSpinner, DefaultTinyError, type LoadingStatus } from './LoadingSpinner'
 
@@ -30,7 +30,7 @@ export default function Login (props: LoginProps): React.JSX.Element {
       '/login',
       { headers: new Headers({ Authorization: 'Basic ' + btoa(username + ':' + password) }) }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus)
     ).then(data => {
       props.handleLogin({
         token: data.token,

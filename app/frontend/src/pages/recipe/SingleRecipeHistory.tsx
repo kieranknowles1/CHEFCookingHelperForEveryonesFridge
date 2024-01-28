@@ -5,7 +5,7 @@ import apiClient, { createAuthHeaders } from '../../apiClient'
 import UserContext from '../../contexts/UserContext'
 import { type components } from '../../types/api.generated'
 import formatShortDate from '../../utils/formatShortDate'
-import monitorStatus from '../../utils/monitorStatus'
+import monitorOutcome from '../../utils/monitorOutcome'
 
 type MadeRecipe = components['schemas']['MadeRecipe']
 
@@ -52,7 +52,7 @@ export default function SingleRecipeHistory (props: SingleRecipeHistoryProps): R
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus)
     ).then(data => {
       setHistory(data)
     }).catch(err => {

@@ -4,7 +4,7 @@ import LoadingSpinner, { DefaultSmallError, DefaultSmallSpinner, type LoadingSta
 import apiClient, { createAuthHeaders } from '../../apiClient'
 import { type ApiError } from '../../types/ApiError'
 import UserContext from '../../contexts/UserContext'
-import monitorStatus from '../../utils/monitorStatus'
+import monitorOutcome from '../../utils/monitorOutcome'
 
 export interface BannedIngredientProps {
   name: string
@@ -32,7 +32,7 @@ export default function BannedIngredient (props: BannedIngredientProps): React.J
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus)
     ).then(() => {
       props.onRemove()
     }).catch((err: ApiError) => {

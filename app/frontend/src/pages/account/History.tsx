@@ -4,7 +4,7 @@ import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpin
 import apiClient, { createAuthHeaders } from '../../apiClient'
 import UserContext from '../../contexts/UserContext'
 import { type components } from '../../types/api.generated'
-import monitorStatus from '../../utils/monitorStatus'
+import monitorOutcome from '../../utils/monitorOutcome'
 
 import HistoryItem from './HistoryItem'
 
@@ -44,7 +44,7 @@ export default function History (props: HistoryProps): React.JSX.Element {
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus)
     ).then(data => {
       setHistory(data)
     }).catch(err => {

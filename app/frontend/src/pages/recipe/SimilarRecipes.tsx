@@ -7,7 +7,7 @@ import { type SearchFilters } from '../../components/RecipeSearchOptions'
 import UserContext from '../../contexts/UserContext'
 import apiClient from '../../apiClient'
 import { type components } from '../../types/api.generated'
-import monitorStatus from '../../utils/monitorStatus'
+import monitorOutcome from '../../utils/monitorOutcome'
 
 type Recipe = components['schemas']['Recipe']
 
@@ -40,7 +40,7 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
         }
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus)
     ).then(data => {
       setRecipes(data.filter(recipe => recipe.id !== props.recipe.id))
     }).catch(err => {

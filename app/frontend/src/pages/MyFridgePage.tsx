@@ -9,7 +9,7 @@ import { FridgePicker } from '../components/FridgePicker'
 import ModalDialog from '../components/ModalDialog'
 import NeedsLoginMessage from '../errorpages/NeedsLoginMessage'
 import { type components } from '../types/api.generated'
-import monitorStatus from '../utils/monitorStatus'
+import monitorOutcome from '../utils/monitorOutcome'
 
 import AddIngredient from './myfridge/AddIngredient'
 import FridgeIngredient from './myfridge/FridgeIngredient'
@@ -45,7 +45,7 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
       }
     ).then(
       // Don't particularly care if this fails
-      monitorStatus(() => {})
+      monitorOutcome(() => {})
     ).then(data => {
       setFridgeName(data.name)
     }).catch(err => {
@@ -65,7 +65,7 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus)
     ).then(data => {
       setIngredients(data)
     }).catch(err => {

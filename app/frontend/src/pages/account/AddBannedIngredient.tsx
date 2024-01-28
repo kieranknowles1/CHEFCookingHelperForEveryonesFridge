@@ -6,7 +6,7 @@ import { type ApiError } from '../../types/ApiError'
 import { IngredientPicker } from '../../components/IngredientPicker'
 import UserContext from '../../contexts/UserContext'
 import { type components } from '../../types/api.generated'
-import monitorStatus from '../../utils/monitorStatus'
+import monitorOutcome from '../../utils/monitorOutcome'
 
 type Ingredient = components['schemas']['Ingredient']
 
@@ -44,7 +44,7 @@ export default function AddBannedIngredient (props: AddBannedIngredientProps): R
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus)
     ).then(() => {
       props.onSubmit(selected)
     }).catch((err: ApiError) => {
