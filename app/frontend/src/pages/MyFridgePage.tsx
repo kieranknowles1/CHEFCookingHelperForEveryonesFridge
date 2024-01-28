@@ -9,11 +9,11 @@ import { FridgePicker } from '../components/FridgePicker'
 import ModalDialog from '../components/ModalDialog'
 import NeedsLoginMessage from '../errorpages/NeedsLoginMessage'
 import { type components } from '../types/api.generated'
+import handleApiError from '../utils/handleApiError'
 import monitorOutcome from '../utils/monitorOutcome'
 
 import AddIngredient from './myfridge/AddIngredient'
 import FridgeIngredient from './myfridge/FridgeIngredient'
-import handleApiError from '../utils/handleApiError'
 
 const ScanBarcode = React.lazy(async () => await import('./myfridge/ScanBarcode'))
 
