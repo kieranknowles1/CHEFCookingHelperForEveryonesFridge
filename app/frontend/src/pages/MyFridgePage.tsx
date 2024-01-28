@@ -45,7 +45,7 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
       }
     ).then(
       // Don't particularly care if this fails
-      monitorOutcome(() => {})
+      monitorOutcome(() => {}, props.setUserState)
     ).then(data => {
       setFridgeName(data.name)
     }).catch(err => {
@@ -65,7 +65,7 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorOutcome(setStatus)
+      monitorOutcome(setStatus, props.setUserState)
     ).then(data => {
       setIngredients(data)
     }).catch(err => {

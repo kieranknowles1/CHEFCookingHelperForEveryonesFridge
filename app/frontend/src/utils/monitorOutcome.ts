@@ -6,7 +6,7 @@ import { type components } from '../types/api.generated'
 type ErrorList = components['schemas']['ErrorList']
 
 type LoadingStatusSetter = (status: LoadingStatus) => void
-type UserStateSetter = (userState: UserState) => void
+type UserStateSetter = (userState: UserState | null) => void
 
 type GenericFetchResponse<TData> = {
   data: TData
@@ -19,6 +19,17 @@ type GenericFetchResponse<TData> = {
 }
 
 export type StatusMonitor = <TData>(response: GenericFetchResponse<TData>) => Promise<TData>
+
+// Semaphore to prevent logout alerts from stacking up.
+// Needed for pages with multiple API calls. E.g., the fridge page.
+let alertVisible = false
+function alertLogout (): void {
+  if (!alertVisible) {
+    alertVisible = true
+    alert('Session expired. Please log in again.')
+    alertVisible = false
+  }
+}
 
 /**
  * Helper function to monitor the outcome of an API call.
@@ -48,7 +59,7 @@ export type StatusMonitor = <TData>(response: GenericFetchResponse<TData>) => Pr
  */
 export default function monitorOutcome (
   setStatus: LoadingStatusSetter,
-  logout: () => void
+  setUserState?: UserStateSetter
 ): StatusMonitor {
   setStatus('loading')
 
@@ -57,7 +68,10 @@ export default function monitorOutcome (
       setStatus('error')
 
       if (response.response.status === 401) {
-        logout()
+        if (setUserState !== undefined) {
+          setUserState(null)
+        }
+        alertLogout()
       }
 
       throw new ApiError(response.error)

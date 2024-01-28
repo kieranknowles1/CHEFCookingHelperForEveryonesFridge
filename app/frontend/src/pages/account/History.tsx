@@ -1,8 +1,8 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpinner'
+import UserContext, { type UserState } from '../../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../../apiClient'
-import UserContext from '../../contexts/UserContext'
 import { type components } from '../../types/api.generated'
 import monitorOutcome from '../../utils/monitorOutcome'
 
@@ -12,6 +12,7 @@ type MadeRecipe = components['schemas']['MadeRecipe']
 
 export interface HistoryProps {
   userId: number
+  setUserState: (userState: UserState | null) => void
 }
 
 /**
@@ -44,7 +45,7 @@ export default function History (props: HistoryProps): React.JSX.Element {
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorOutcome(setStatus)
+      monitorOutcome(setStatus, props.setUserState)
     ).then(data => {
       setHistory(data)
     }).catch(err => {

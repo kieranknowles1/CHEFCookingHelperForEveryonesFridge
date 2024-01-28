@@ -15,7 +15,7 @@ export interface SearchFilters {
 
 export interface RecipeSearchOptionsProps {
   filters: SearchFilters
-  setUserState: (userState: UserState) => void
+  setUserState: (userState: UserState | null) => void
   setFilters: (filters: SearchFilters) => void
 }
 
@@ -35,7 +35,7 @@ export default function RecipeSearchOptions (props: RecipeSearchOptionsProps): R
     apiClient.GET(
       '/mealtype/list'
     ).then(
-      monitorOutcome(setStatus)
+      monitorOutcome(setStatus, props.setUserState)
     ).then(data => {
       setMealTypes(data)
     }).catch(err => {

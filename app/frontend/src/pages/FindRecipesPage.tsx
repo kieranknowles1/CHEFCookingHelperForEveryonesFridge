@@ -14,7 +14,7 @@ import monitorOutcome from '../utils/monitorOutcome'
 const PAGE_SIZE = 100
 
 export interface FindRecipesPageProps {
-  setUserState: (state: UserState) => void
+  setUserState: (state: UserState | null) => void
 }
 
 export default function FindRecipesPage (props: FindRecipesPageProps): React.JSX.Element {

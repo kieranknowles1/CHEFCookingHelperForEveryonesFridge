@@ -10,7 +10,7 @@ import LoadingSpinner, { type LoadingStatus } from './LoadingSpinner'
 type BasicFridge = components['schemas']['BasicFridge']
 
 export interface FridgePickerProps {
-  setUserState: (userState: UserState) => void
+  setUserState: (userState: UserState | null) => void
 }
 
 /**
@@ -33,7 +33,7 @@ export function FridgePicker (props: FridgePickerProps): React.JSX.Element {
       params: { path: { userId: context.userId } },
       headers: createAuthHeaders(context)
     }).then(
-      monitorOutcome(setStatus)
+      monitorOutcome(setStatus, props.setUserState)
     ).then(data => {
       setFridges(data)
     }).catch(console.error)
