@@ -27,6 +27,9 @@ DISABLE_LINTERS:
   - JAVASCRIPT_STANDARD
   - TYPESCRIPT_STANDARD
 
+  # Doesn't work with Tailwind CSS
+  - CSS_STYLELINT
+
   # HTML is only present to load the React app
   - HTML_HTMLHINT
 
