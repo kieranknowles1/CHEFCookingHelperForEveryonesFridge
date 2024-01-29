@@ -63,11 +63,10 @@ export default class WritableDatabaseImpl implements IWritableDatabase {
   public addEmbedding (sentence: EmbeddedSentence): void {
     this.assertValid()
     const statement = this._connection.prepare<undefined>(`
-      INSERT INTO embedding
+      INSERT OR REPLACE INTO embedding
         (sentence, embedding)
       VALUES
         (:sentence, :embedding)
-      ON CONFLICT DO NOTHING
     `)
 
     statement.run({
