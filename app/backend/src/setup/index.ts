@@ -197,11 +197,19 @@ async function main (connection: IConnection, db: IChefDatabase): Promise<void> 
   logger.info('Setting up schema')
   db.resetDatabase('IKnowWhatIAmDoing')
 
-  logger.info('Adding dummy data')
+  logger.info('Adding initial data')
+  const initialData = readFileSync(constants.SQL_INITIAL_DATA_PATH, 'utf-8')
   const dummyData = readFileSync(constants.SQL_DUMMY_DATA_PATH, 'utf-8')
+
+  // Meal type embeddings are added later. We can't do this in SQL as it is an async function
+  // Foreign keys must be disabled here as it doesn't work with the transaction
+  // The database is validated at the end of the script to make sure all foreign keys are valid
+  connection.exec('PRAGMA foreign_keys = OFF')
   db.wrapTransaction(() => {
+    connection.exec(initialData)
     connection.exec(dummyData)
   })
+  connection.exec('PRAGMA foreign_keys = ON')
 
   logger.info('Adding meal types')
   await embedMealTypes(db)

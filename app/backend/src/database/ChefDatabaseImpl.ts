@@ -28,7 +28,6 @@ import { bufferToFloat32Array } from './bufferFloat32Array'
 import ingredientFromRow from './ingredientFromRow'
 
 const SCHEMA_PATH = path.join(process.cwd(), 'data/schema.sql')
-const INITIAL_DATA_PATH = path.join(process.cwd(), 'data/initialdata.sql')
 
 export default class ChefDatabaseImpl implements IChefDatabase {
   private readonly _connection: IConnection
@@ -57,9 +56,6 @@ export default class ChefDatabaseImpl implements IChefDatabase {
     logger.info('Running schema script')
     const schema = readFileSync(SCHEMA_PATH, 'utf-8')
     this._connection.exec(schema)
-    logger.info('Running initial data script')
-    const initialData = readFileSync(INITIAL_DATA_PATH, 'utf-8')
-    this._connection.exec(initialData)
   }
 
   public checkIntegrity (): void {

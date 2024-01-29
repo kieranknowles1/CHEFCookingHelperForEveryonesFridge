@@ -8,6 +8,7 @@ import { type Algorithm } from 'jsonwebtoken'
 export default {
   API_SPEC_PATH: './api.yml',
   SQL_DUMMY_DATA_PATH: path.join(process.cwd(), 'data/dummydata.sql'),
+  SQL_INITIAL_DATA_PATH: path.join(process.cwd(), 'data/initialdata.sql'),
 
   // Number of rounds to use for bcrypt password hashing.
   // More rounds means more secure, but slower (O(2^rounds))
