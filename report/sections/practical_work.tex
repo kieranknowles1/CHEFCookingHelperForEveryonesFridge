@@ -94,6 +94,10 @@ this was unable to check parameters automatically or the existence of endpoints
 as TypeScript types don't exist at runtime.
 
 \todo{Docs hosting}
+Swagger UI \cite{smartbear_swagger_2024} was used to serve a generated HTML page that lists all endpoints declared in
+the API specification, along with example values for both requests and responses and the ability to make requests in
+the browser. This served as a quick way to make test requests with dummy data during development, and and easy-to-use
+reference for the endpoints available to \codelisting{openapi-fetch}.
 
 \subsection{Machine Learning}
 The similarity of recipes is evaluated using the Universal Sentence Encoder model discussed in section \ref{sec:recipe_similarity} to
@@ -110,7 +114,8 @@ the embeddings are calculated during setup and stored in the database, organized
     \end{tabular}
 \end{table}
 
-At runtime, the \codelisting{/api/v1/recipe/\{id\}/similar} endpoint is used to find similar recipes ordered by their similarity score.
+At runtime, the \codelisting{/api/v1/recipe/\{id\}/search} endpoint is used to filter and order recipes by their similarity score
+relative to the query, and their availability and suitability for a user.
 This took a significant amount of time to execute at first. Despite initial assumptions that this was due to the large amount of copying
 created due to the implementation, was shown by profiling (see figure \ref{fig:similarity_flamegraph}) to instead be in TensorFlow's
 matrix maths functions.
