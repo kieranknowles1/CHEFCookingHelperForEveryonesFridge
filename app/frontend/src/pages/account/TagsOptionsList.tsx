@@ -49,7 +49,6 @@ export default function TagsOptionsList (props: TagsOptionsProps): React.JSX.Ele
           id={tag.id}
           description={tag.description}
           allowed={!bannedTagIds.has(tag.id)}
-          // TODO: Set status on server
           onChange={status => {
             props.setBannedTags(
               status
