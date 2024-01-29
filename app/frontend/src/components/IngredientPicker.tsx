@@ -3,7 +3,7 @@ import React from 'react'
 
 import apiClient from '../apiClient'
 import { type components } from '../types/api.generated'
-import monitorStatus from '../utils/monitorStatus'
+import monitorOutcome from '../utils/monitorOutcome'
 
 import LoadingSpinner, { type LoadingStatus } from './LoadingSpinner'
 
@@ -30,7 +30,7 @@ export function IngredientPicker (props: IngredientPickerProps): React.JSX.Eleme
 
   React.useEffect(() => {
     apiClient.GET('/ingredient/all')
-      .then(monitorStatus(setStatus))
+      .then(monitorOutcome(setStatus))
       .then(setAllIngredients)
       .catch(console.error)
   }, [])

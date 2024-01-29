@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { type UserState } from '../../contexts/UserContext'
 import { type components } from '../../types/api.generated'
 
 import IngredientOptionsList from './IngredientOptionsList'
@@ -14,6 +15,7 @@ export interface UserPreferencesProps {
   setBannedTags: (bannedTags: Tag[]) => void
   bannedIngredients: UserBannedIngredients
   setBannedIngredients: (bannedIngredients: UserBannedIngredients) => void
+  setUserState: (state: UserState | null) => void
 }
 
 export default function UserPreferences (props: UserPreferencesProps): React.JSX.Element {
@@ -25,6 +27,7 @@ export default function UserPreferences (props: UserPreferencesProps): React.JSX
         userId={props.userId}
         bannedTags={props.bannedTags}
         setBannedTags={props.setBannedTags}
+        setUserState={props.setUserState}
       />
 
       <h3>Disliked Ingredients</h3>
@@ -32,6 +35,7 @@ export default function UserPreferences (props: UserPreferencesProps): React.JSX
       <IngredientOptionsList
         bannedIngredients={props.bannedIngredients}
         setBannedIngredients={props.setBannedIngredients}
+        setUserState={props.setUserState}
       />
     </div>
   )

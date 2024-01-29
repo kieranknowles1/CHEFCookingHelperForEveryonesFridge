@@ -1,10 +1,11 @@
 import React from 'react'
 
 import LoadingSpinner, { DefaultSmallError, DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
+import UserContext, { type UserState } from '../../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../../apiClient'
-import monitorStatus, { type ApiError } from '../../utils/monitorStatus'
+import { type ApiError } from '../../types/ApiError'
 import ToggleButton from '../../components/inputs/ToggleButton'
-import UserContext from '../../contexts/UserContext'
+import monitorOutcome from '../../utils/monitorOutcome'
 
 export interface TagOptionProps {
   name: string
@@ -13,6 +14,7 @@ export interface TagOptionProps {
   allowed: boolean
   // Function to call after submitting and when the API call succeeds
   onChange: (allowed: boolean) => void
+  setUserState: (userState: UserState | null) => void
 }
 
 export default function TagOption (props: TagOptionProps): React.JSX.Element {
@@ -32,7 +34,7 @@ export default function TagOption (props: TagOptionProps): React.JSX.Element {
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus, props.setUserState)
     ).then(() => {
       props.onChange(allowed)
     }).catch((err: ApiError) => {

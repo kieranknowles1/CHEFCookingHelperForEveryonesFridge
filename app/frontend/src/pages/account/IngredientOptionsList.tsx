@@ -2,6 +2,7 @@ import { Dialog } from '@headlessui/react'
 import React from 'react'
 
 import ModalDialog from '../../components/ModalDialog'
+import { type UserState } from '../../contexts/UserContext'
 import { type components } from '../../types/api.generated'
 
 import AddBannedIngredient from './AddBannedIngredient'
@@ -12,6 +13,7 @@ type UserBannedIngredients = components['schemas']['User']['bannedIngredients']
 export interface IngredientOptionsListProps {
   bannedIngredients: UserBannedIngredients
   setBannedIngredients: (bannedIngredients: UserBannedIngredients) => void
+  setUserState: (state: UserState | null) => void
 }
 
 export default function IngredientOptionsList (props: IngredientOptionsListProps): React.JSX.Element {
@@ -37,6 +39,7 @@ export default function IngredientOptionsList (props: IngredientOptionsListProps
             // Add to the end of the list, much easier than trying to sort it
             props.setBannedIngredients([...props.bannedIngredients, ingredient])
           }}
+          setUserState={props.setUserState}
         />
       </ModalDialog>
       <ul className='list-inside list-disc'>
@@ -47,6 +50,7 @@ export default function IngredientOptionsList (props: IngredientOptionsListProps
             name={ingredient.name}
             id={ingredient.id}
             onRemove={() => { handleRemove(ingredient.id) }}
+            setUserState={props.setUserState}
           />
         ))}
       </ul>

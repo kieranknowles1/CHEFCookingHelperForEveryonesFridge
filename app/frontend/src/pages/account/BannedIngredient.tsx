@@ -1,14 +1,16 @@
 import React from 'react'
 
 import LoadingSpinner, { DefaultSmallError, DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
+import UserContext, { type UserState } from '../../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../../apiClient'
-import monitorStatus, { type ApiError } from '../../utils/monitorStatus'
-import UserContext from '../../contexts/UserContext'
+import { type ApiError } from '../../types/ApiError'
+import monitorOutcome from '../../utils/monitorOutcome'
 
 export interface BannedIngredientProps {
   name: string
   id: number
   onRemove: () => void
+  setUserState: (userState: UserState | null) => void
 }
 
 export default function BannedIngredient (props: BannedIngredientProps): React.JSX.Element {
@@ -31,7 +33,7 @@ export default function BannedIngredient (props: BannedIngredientProps): React.J
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus, props.setUserState)
     ).then(() => {
       props.onRemove()
     }).catch((err: ApiError) => {

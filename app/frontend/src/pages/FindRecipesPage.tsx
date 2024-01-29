@@ -9,12 +9,12 @@ import RecipeList from '../components/RecipeList'
 import { type RecipeProps } from '../components/Recipe'
 import Search from '../components/inputs/Search'
 import apiClient from '../apiClient'
-import monitorStatus from '../utils/monitorStatus'
+import monitorOutcome from '../utils/monitorOutcome'
 
 const PAGE_SIZE = 100
 
 export interface FindRecipesPageProps {
-  setUserState: (state: UserState) => void
+  setUserState: (state: UserState | null) => void
 }
 
 export default function FindRecipesPage (props: FindRecipesPageProps): React.JSX.Element {
@@ -53,7 +53,7 @@ export default function FindRecipesPage (props: FindRecipesPageProps): React.JSX
         }
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus)
     ).then(data => {
       setRecipes(data)
     }).catch(err => {

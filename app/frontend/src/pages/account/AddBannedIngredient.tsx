@@ -1,11 +1,12 @@
 import React from 'react'
 
 import LoadingSpinner, { DefaultSmallError, DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
+import UserContext, { type UserState } from '../../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../../apiClient'
-import monitorStatus, { type ApiError } from '../../utils/monitorStatus'
+import { type ApiError } from '../../types/ApiError'
 import { IngredientPicker } from '../../components/IngredientPicker'
-import UserContext from '../../contexts/UserContext'
 import { type components } from '../../types/api.generated'
+import monitorOutcome from '../../utils/monitorOutcome'
 
 type Ingredient = components['schemas']['Ingredient']
 
@@ -13,6 +14,7 @@ export interface AddBannedIngredientProps {
   currentBannedIngredients: Set<number>
   // Function to call after submitting and when the API call succeeds
   onSubmit: (ingredient: Ingredient) => void
+  setUserState: (userState: UserState | null) => void
 }
 
 export default function AddBannedIngredient (props: AddBannedIngredientProps): React.JSX.Element {
@@ -43,7 +45,7 @@ export default function AddBannedIngredient (props: AddBannedIngredientProps): R
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus, props.setUserState)
     ).then(() => {
       props.onSubmit(selected)
     }).catch((err: ApiError) => {

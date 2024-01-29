@@ -1,9 +1,12 @@
+import { ApiError } from '../types/ApiError'
 import { type LoadingStatus } from '../components/LoadingSpinner'
+import { type UserState } from '../contexts/UserContext'
 import { type components } from '../types/api.generated'
 
 type ErrorList = components['schemas']['ErrorList']
 
-type StatusSetter = (status: LoadingStatus) => void
+type LoadingStatusSetter = (status: LoadingStatus) => void
+type UserStateSetter = (userState: UserState | null) => void
 
 type GenericFetchResponse<TData> = {
   data: TData
@@ -17,23 +20,25 @@ type GenericFetchResponse<TData> = {
 
 export type StatusMonitor = <TData>(response: GenericFetchResponse<TData>) => Promise<TData>
 
-export class ApiError extends Error {
-  public readonly errors: ErrorList
-
-  constructor (errors: ErrorList) {
-    super(errors.errors[0].message)
-    this.name = ApiError.name
-    this.errors = errors
+// Semaphore to prevent logout alerts from stacking up.
+// Needed for pages with multiple API calls. E.g., the fridge page.
+let alertVisible = false
+function alertLogout (): void {
+  if (!alertVisible) {
+    alertVisible = true
+    alert('Session expired. Please log in again.')
+    alertVisible = false
   }
 }
 
 /**
- * Helper function to monitor the status of an API call.
+ * Helper function to monitor the outcome of an API call.
  * Status will be set to 'loading' when the function is called (i.e., inside the useEffect hook).
  * Status will be set to 'done' or 'error' depending on the result of the API call.
  * Errors will be thrown as an ApiError on failure (i.e., when the endpoint returns a non-200 status code).
  * Error details are available in the ApiError.errors property.
  * Data is returned on success.
+ * Logout is called on 401 errors.
  *
  * Note that the endpoint must be declared as returning an ErrorList on failure
  * in the OpenAPI spec.
@@ -48,19 +53,31 @@ export class ApiError extends Error {
  *  .then((response) => {
  *   // Do something with response
  *  }).catch((error: ApiError) => {
- *   // Do something with error
+ *   handleApiError(error, setUserState)
  *  })
  * ```
  */
-export default function monitorStatus (setStatus: StatusSetter): StatusMonitor {
+export default function monitorOutcome (
+  setStatus: LoadingStatusSetter,
+  setUserState?: UserStateSetter
+): StatusMonitor {
   setStatus('loading')
-  return async (response) => await new Promise((resolve, reject) => {
+
+  return async (response) => {
     if (response.error !== undefined) {
       setStatus('error')
-      reject(new ApiError(response.error))
+
+      if (response.response.status === 401) {
+        if (setUserState !== undefined) {
+          setUserState(null)
+        }
+        alertLogout()
+      }
+
+      throw new ApiError(response.error)
     } else {
       setStatus('done')
-      resolve(response.data)
+      return response.data
     }
-  })
+  }
 }

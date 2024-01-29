@@ -9,7 +9,8 @@ import { FridgePicker } from '../components/FridgePicker'
 import ModalDialog from '../components/ModalDialog'
 import NeedsLoginMessage from '../errorpages/NeedsLoginMessage'
 import { type components } from '../types/api.generated'
-import monitorStatus from '../utils/monitorStatus'
+import handleApiError from '../utils/handleApiError'
+import monitorOutcome from '../utils/monitorOutcome'
 
 import AddIngredient from './myfridge/AddIngredient'
 import FridgeIngredient from './myfridge/FridgeIngredient'
@@ -19,7 +20,7 @@ const ScanBarcode = React.lazy(async () => await import('./myfridge/ScanBarcode'
 type FridgeIngredientEntry = components['schemas']['FridgeIngredientEntry']
 
 interface MyFridgePageProps {
-  setUserState: (userState: UserState) => void
+  setUserState: (userState: UserState | null) => void
 }
 
 export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Element {
@@ -44,11 +45,11 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
       }
     ).then(
       // Don't particularly care if this fails
-      monitorStatus(() => {})
+      monitorOutcome(() => {}, props.setUserState)
     ).then(data => {
       setFridgeName(data.name)
     }).catch(err => {
-      console.error(err)
+      handleApiError(err, props.setUserState)
       setFridgeName('My Fridge')
     })
   }, [context?.fridgeId])
@@ -64,7 +65,7 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus, props.setUserState)
     ).then(data => {
       setIngredients(data)
     }).catch(err => {

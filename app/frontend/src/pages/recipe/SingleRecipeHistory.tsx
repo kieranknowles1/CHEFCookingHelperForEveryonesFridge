@@ -1,17 +1,18 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpinner'
+import UserContext, { type UserState } from '../../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../../apiClient'
-import UserContext from '../../contexts/UserContext'
 import { type components } from '../../types/api.generated'
 import formatShortDate from '../../utils/formatShortDate'
-import monitorStatus from '../../utils/monitorStatus'
+import monitorOutcome from '../../utils/monitorOutcome'
 
 type MadeRecipe = components['schemas']['MadeRecipe']
 
 export interface SingleRecipeHistoryProps {
   userId: number
   recipeId: number
+  setUserState: (userState: UserState | null) => void
 }
 
 // If a user has made a recipe more than this many times, say "many times" instead of the number.
@@ -52,7 +53,7 @@ export default function SingleRecipeHistory (props: SingleRecipeHistoryProps): R
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus, props.setUserState)
     ).then(data => {
       setHistory(data)
     }).catch(err => {

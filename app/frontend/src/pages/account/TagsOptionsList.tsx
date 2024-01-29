@@ -1,9 +1,11 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpinner'
-import monitorStatus, { type ApiError } from '../../utils/monitorStatus'
+import { type ApiError } from '../../types/ApiError'
+import { type UserState } from '../../contexts/UserContext'
 import apiClient from '../../apiClient'
 import { type components } from '../../types/api.generated'
+import monitorOutcome from '../../utils/monitorOutcome'
 
 import TagOption from './TagOption'
 
@@ -13,6 +15,7 @@ export interface TagsOptionsProps {
   userId: number
   bannedTags: Tag[]
   setBannedTags: (bannedTags: Tag[]) => void
+  setUserState: (userState: UserState | null) => void
 }
 
 export default function TagsOptionsList (props: TagsOptionsProps): React.JSX.Element {
@@ -22,7 +25,7 @@ export default function TagsOptionsList (props: TagsOptionsProps): React.JSX.Ele
   React.useEffect(() => {
     apiClient.GET('/tag/list')
       .then(
-        monitorStatus(setStatus)
+        monitorOutcome(setStatus, props.setUserState)
       ).then(
         setAllTags
       ).catch((err: ApiError) => {
@@ -54,6 +57,7 @@ export default function TagsOptionsList (props: TagsOptionsProps): React.JSX.Ele
                 : [...props.bannedTags, tag]
             )
           }}
+          setUserState={props.setUserState}
         />
       ))}
     </ul>

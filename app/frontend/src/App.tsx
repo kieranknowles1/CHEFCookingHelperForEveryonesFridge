@@ -43,7 +43,7 @@ function App (): React.JSX.Element {
     { path: '/', element: <HomePage />, name: 'Home' },
     { path: '/fridge', element: <MyFridgePage setUserState={handleUserStateChange} />, name: 'My Fridge' },
     { path: '/findrecipes', element: <FindRecipesPage setUserState={handleUserStateChange} />, name: 'Find Recipes' },
-    { path: '/account', element: <AccountPage />, name: 'Account' }
+    { path: '/account', element: <AccountPage setUserState={handleUserStateChange} />, name: 'Account' }
   ]
   const nonNavRoutes = [
     { path: '/recipe/:id', element: <RecipePage setUserState={handleUserStateChange} /> },

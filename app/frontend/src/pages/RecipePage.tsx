@@ -5,9 +5,10 @@ import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner
 import RecipeSearchOptions, { type SearchFilters } from '../components/RecipeSearchOptions'
 import UserContext, { type UserState } from '../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../apiClient'
-import monitorStatus, { type ApiError } from '../utils/monitorStatus'
+import { type ApiError } from '../types/ApiError'
 import NotFoundMessage from '../errorpages/NotFoundMessage'
 import { type components } from '../types/api.generated'
+import monitorOutcome from '../utils/monitorOutcome'
 
 import MadeItButton from './recipe/MadeItButton'
 import RecipeIngredient from './recipe/RecipeIngredient'
@@ -20,7 +21,7 @@ const MAX_SIMILAR_RECIPES = 100
 const MIN_SIMILARITY = 0.5
 
 export interface RecipePageProps {
-  setUserState: (userState: UserState) => void
+  setUserState: (userState: UserState | null) => void
 }
 
 export default function RecipePage (props: RecipePageProps): React.JSX.Element {
@@ -50,7 +51,7 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
       '/recipe/{recipeId}',
       { params: { path: { recipeId: idNumber } } }
     ).then(
-      monitorStatus(setRecipeStatus)
+      monitorOutcome(setRecipeStatus)
     ).then(data => {
       setRecipe(data)
     }).catch((err: ApiError) => {
@@ -76,7 +77,7 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setAvailableAmountsStatus)
+      monitorOutcome(setAvailableAmountsStatus, props.setUserState)
     ).then(data => {
       setAvailableAmounts(new Map(data.map(entry => [entry.ingredient.id, entry.amount])))
     }).catch((err: ApiError) => {
@@ -122,13 +123,13 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
           )}
         </ol>
         {context?.fridgeId !== undefined
-          ? <MadeItButton recipeId={recipe.id} />
+          ? <MadeItButton recipeId={recipe.id} setUserState={props.setUserState} />
           : <p>Log in and select a fridge to mark this recipe as made!</p>
         }
       </div>
       {context !== null && <>
         <h2>History</h2>
-        <SingleRecipeHistory userId={context.userId} recipeId={recipe.id} />
+        <SingleRecipeHistory userId={context.userId} recipeId={recipe.id} setUserState={props.setUserState} />
       </>}
       <h2>Similar recipes</h2>
       <RecipeSearchOptions

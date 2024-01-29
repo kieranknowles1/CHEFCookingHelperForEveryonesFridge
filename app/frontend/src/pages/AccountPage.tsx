@@ -1,18 +1,22 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
+import UserContext, { type UserState } from '../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../apiClient'
 import NeedsLoginMessage from '../errorpages/NeedsLoginMessage'
-import UserContext from '../contexts/UserContext'
 import { type components } from '../types/api.generated'
-import monitorStatus from '../utils/monitorStatus'
+import monitorOutcome from '../utils/monitorOutcome'
 
 import History from './account/History'
 import UserPreferences from './account/UserPreferences'
 
 type User = components['schemas']['User']
 
-export default function AccountPage (): React.JSX.Element {
+export interface AccountPageProps {
+  setUserState: (userState: UserState | null) => void
+}
+
+export default function AccountPage (props: AccountPageProps): React.JSX.Element {
   const context = React.useContext(UserContext)
 
   const [status, setStatus] = React.useState<LoadingStatus>('loading')
@@ -32,7 +36,7 @@ export default function AccountPage (): React.JSX.Element {
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus, props.setUserState)
     ).then(data => {
       setUserName(data.name)
       setBannedTags(data.bannedTags)
@@ -59,9 +63,10 @@ export default function AccountPage (): React.JSX.Element {
         setBannedTags={setBannedTags}
         bannedIngredients={bannedIngredients}
         setBannedIngredients={setBannedIngredients}
+        setUserState={props.setUserState}
       />
       <h2>Your recent activity</h2>
-      <History userId={context.userId} />
+      <History userId={context.userId} setUserState={props.setUserState} />
     </main>
   )
 }

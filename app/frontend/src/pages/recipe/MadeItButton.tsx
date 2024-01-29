@@ -2,12 +2,13 @@ import { FaBurger } from 'react-icons/fa6'
 import React from 'react'
 
 import LoadingSpinner, { DefaultSmallSpinner, type LoadingStatus } from '../../components/LoadingSpinner'
+import UserContext, { type UserState } from '../../contexts/UserContext'
 import apiClient, { createAuthHeaders } from '../../apiClient'
-import UserContext from '../../contexts/UserContext'
-import monitorStatus from '../../utils/monitorStatus'
+import monitorOutcome from '../../utils/monitorOutcome'
 
 export interface MadeItButtonProps {
   recipeId: number
+  setUserState: (userState: UserState | null) => void
 }
 
 /**
@@ -39,7 +40,7 @@ export default function MadeItButton (props: MadeItButtonProps): React.JSX.Eleme
         headers: createAuthHeaders(context)
       }
     ).then(
-      monitorStatus(setStatus)
+      monitorOutcome(setStatus, props.setUserState)
     ).catch(err => {
       console.error(err)
     })
