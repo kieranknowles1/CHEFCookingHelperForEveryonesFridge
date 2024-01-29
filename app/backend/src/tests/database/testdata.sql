@@ -1,4 +1,20 @@
 -- Data for testing the database
+-- DO NOT USE IN PRODUCTION, THIS WILL DELETE ALL DATA
+
+PRAGMA foreign_keys = OFF;
+DELETE FROM ingredient;
+DELETE FROM ingredient_tag;
+DELETE FROM ingredient_alt_name;
+DELETE FROM ingredient_substitution_group;
+DELETE FROM ingredient_substitution_entry;
+DELETE FROM recipe;
+DELETE FROM recipe_ingredient;
+DELETE FROM user;
+DELETE FROM user_banned_ingredient;
+DELETE FROM user_banned_tag;
+DELETE FROM fridge;
+DELETE FROM fridge_ingredient;
+PRAGMA foreign_keys = ON;
 
 -- Some dummy embedding data for recipe names, does not correspond to anything meaningful
 INSERT INTO embedding
