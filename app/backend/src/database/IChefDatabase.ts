@@ -68,6 +68,8 @@ export interface IWritableDatabase {
 
   setTagPreference: (userId: types.RowId, tagId: types.RowId, allow: boolean) => void
   setIngredientPreference: (userId: types.RowId, ingredientId: types.RowId, allow: boolean) => void
+
+  addUser: (username: string, passwordHash: string) => types.RowId
 }
 
 export interface IFridgeDatabase {

@@ -322,6 +322,30 @@ paths:
         "403":
           $ref: "#/components/responses/Forbidden"
 
+  /signup:
+    post:
+      tags: [User]
+      summary: Create a new user
+      description: |
+        Create a new user.
+        Returns a token that can be used for future requests.
+        Username and password will be taken from the HTTP Basic Authentication header.
+      security: [Basic: []]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string, example: "abc123" }
+                  userId: { $ref: "#/components/schemas/id" }
+                required: [token, userId]
+                additionalProperties: false
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
   /login:
     post:
       tags: [User]

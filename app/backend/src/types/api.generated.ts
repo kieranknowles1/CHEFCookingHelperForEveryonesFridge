@@ -283,6 +283,29 @@ export interface paths {
       };
     };
   };
+  "/signup": {
+    /**
+     * Create a new user
+     * @description Create a new user.
+     * Returns a token that can be used for future requests.
+     * Username and password will be taken from the HTTP Basic Authentication header.
+     */
+    post: {
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": {
+              /** @example abc123 */
+              token: string;
+              userId: components["schemas"]["id"];
+            };
+          };
+        };
+        400: components["responses"]["BadRequest"];
+      };
+    };
+  };
   "/login": {
     /**
      * Authenticate as a user

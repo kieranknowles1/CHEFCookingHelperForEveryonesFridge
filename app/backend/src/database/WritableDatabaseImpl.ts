@@ -220,4 +220,17 @@ export default class WritableDatabaseImpl implements IWritableDatabase {
 
     statement.run({ userId, ingredientId })
   }
+
+  public addUser (username: string, passwordHash: string): types.RowId {
+    const statement = this._connection.prepare<undefined>(`
+      INSERT INTO user
+        (username, password_hash)
+      VALUES
+        (:username, :passwordHash)
+    `)
+    const id = statement.run({ username, passwordHash }).lastInsertRowid
+    this.assertNotBigint(id)
+
+    return id
+  }
 }
