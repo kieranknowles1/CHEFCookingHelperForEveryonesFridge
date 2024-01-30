@@ -1,7 +1,7 @@
 import React from 'react'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
-import { type UserState } from '../contexts/UserContext'
+import UserContext, { type UserState } from '../contexts/UserContext'
 import apiClient from '../apiClient'
 import handleApiError from '../utils/handleApiError'
 import monitorOutcome from '../utils/monitorOutcome'
@@ -11,6 +11,8 @@ export interface SignUpPageProps {
 }
 
 export default function SignUpPage (props: SignUpPageProps): React.JSX.Element {
+  const context = React.useContext(UserContext)
+
   const [username, setUsername] = React.useState<string>('')
   const [password, setPassword] = React.useState<string>('')
   const [status, setStatus] = React.useState<LoadingStatus>('notstarted')
@@ -30,6 +32,15 @@ export default function SignUpPage (props: SignUpPageProps): React.JSX.Element {
       setUsername('')
       setPassword('')
     })
+  }
+
+  if (context !== null) {
+    return (
+      <main>
+        <h1>Sign Up</h1>
+        <p>You are already logged in.</p>
+      </main>
+    )
   }
 
   return (
