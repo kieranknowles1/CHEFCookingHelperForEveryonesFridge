@@ -16,11 +16,11 @@ if [ ! -f "$DATASET_PATH" ]; then
 	exit 1
 fi
 
-echo "Running setup script"
-docker-compose --env-file backend.env run --rm backend npm run setup
-
 echo "Building containers"
 docker-compose build
+
+echo "Running setup script"
+docker-compose --env-file backend.env run --rm backend npm run setup
 
 echo "Starting containers"
 docker-compose up -d
