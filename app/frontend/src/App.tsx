@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, createBrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import React from 'react'
 
 import UserContext, { type UserState } from './contexts/UserContext'
@@ -9,6 +9,7 @@ import Login from './components/Login'
 import MyFridgePage from './pages/MyFridgePage'
 import NavMenu from './components/NavMenu'
 import NotFoundMessage from './errorpages/NotFoundMessage'
+import PageTitle from './components/PageTitle'
 import RecipePage from './pages/RecipePage'
 
 const LOCAL_STORAGE_KEY = 'login'
@@ -24,8 +25,10 @@ function App (): React.JSX.Element {
     return routes.map(route => <Route
       key={route.path}
       path={route.path}
-      element={route.element}
-
+      element={<>
+        <PageTitle title={route.name}/>
+        {route.element}
+      </>}
     />)
   }
 
