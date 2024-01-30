@@ -11,6 +11,7 @@ import NavMenu from './components/NavMenu'
 import NotFoundMessage from './errorpages/NotFoundMessage'
 import PageTitle from './components/PageTitle'
 import RecipePage from './pages/RecipePage'
+import SignUpPage from './pages/SignUpPage'
 
 const LOCAL_STORAGE_KEY = 'login'
 
@@ -18,6 +19,8 @@ interface RouteItem {
   path: string
   element: React.JSX.Element
   name: string
+  /** @default true */
+  nav?: boolean
 }
 
 function App (): React.JSX.Element {
@@ -48,19 +51,20 @@ function App (): React.JSX.Element {
     }
   }
 
-  const routes = [
+  const routes: RouteItem[] = [
     { path: '/', element: <HomePage />, name: 'Home' },
     { path: '/fridge', element: <MyFridgePage setUserState={handleUserStateChange} />, name: 'My Fridge' },
     { path: '/findrecipes', element: <FindRecipesPage setUserState={handleUserStateChange} />, name: 'Find Recipes' },
     { path: '/account', element: <AccountPage setUserState={handleUserStateChange} />, name: 'Account' },
-    { path: '/recipe/:id', element: <RecipePage setUserState={handleUserStateChange} />, name: 'Recipe', noNav: true },
-    { path: '*', element: <NotFoundMessage />, name: 'Page Not Found', noNav: true }
+    { path: '/recipe/:id', element: <RecipePage setUserState={handleUserStateChange} />, name: 'Recipe', nav: false },
+    { path: '/signup', element: <SignUpPage setUserState={handleUserStateChange} />, name: 'Sign Up', nav: userState === null },
+    { path: '*', element: <NotFoundMessage />, name: 'Page Not Found', nav: false }
   ]
 
   return (
     <BrowserRouter>
       <UserContext.Provider value={userState}>
-        <NavMenu items={routes.filter(r => r.noNav !== true)} />
+        <NavMenu items={routes.filter(r => r.nav !== false)} />
         <div className='bg-raisin_black-550'>
           <Login className='float-right' handleLogin={handleUserStateChange} />
           <br />

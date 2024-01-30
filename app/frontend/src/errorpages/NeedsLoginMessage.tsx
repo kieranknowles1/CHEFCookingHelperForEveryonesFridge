@@ -10,6 +10,7 @@ export default function NeedsLoginMessage (): React.JSX.Element {
       <h1>Login Required</h1>
       <p>Please log in to view this page.</p>
       <Link to='/'>Return to the home page</Link>
+      <Link to='/signup'>Sign up for an account</Link>
     </main>
   )
 }
