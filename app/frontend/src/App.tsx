@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, createBrowserRouter } from 'react-router-dom'
 import React from 'react'
 
 import UserContext, { type UserState } from './contexts/UserContext'
@@ -16,11 +16,17 @@ const LOCAL_STORAGE_KEY = 'login'
 interface RouteItem {
   path: string
   element: React.JSX.Element
+  name: string
 }
 
 function App (): React.JSX.Element {
   function toRouteElements (routes: RouteItem[]): React.JSX.Element[] {
-    return routes.map(route => <Route key={route.path} path={route.path} element={route.element} />)
+    return routes.map(route => <Route
+      key={route.path}
+      path={route.path}
+      element={route.element}
+
+    />)
   }
 
   const rawUserState = localStorage.getItem(LOCAL_STORAGE_KEY)
@@ -43,24 +49,21 @@ function App (): React.JSX.Element {
     { path: '/', element: <HomePage />, name: 'Home' },
     { path: '/fridge', element: <MyFridgePage setUserState={handleUserStateChange} />, name: 'My Fridge' },
     { path: '/findrecipes', element: <FindRecipesPage setUserState={handleUserStateChange} />, name: 'Find Recipes' },
-    { path: '/account', element: <AccountPage setUserState={handleUserStateChange} />, name: 'Account' }
-  ]
-  const nonNavRoutes = [
-    { path: '/recipe/:id', element: <RecipePage setUserState={handleUserStateChange} /> },
-    { path: '*', element: <NotFoundMessage /> }
+    { path: '/account', element: <AccountPage setUserState={handleUserStateChange} />, name: 'Account' },
+    { path: '/recipe/:id', element: <RecipePage setUserState={handleUserStateChange} />, name: 'Recipe', noNav: true },
+    { path: '*', element: <NotFoundMessage />, name: 'Page Not Found', noNav: true }
   ]
 
   return (
     <BrowserRouter>
       <UserContext.Provider value={userState}>
-        <NavMenu items={routes} />
+        <NavMenu items={routes.filter(r => r.noNav !== true)} />
         <div className='bg-raisin_black-550'>
           <Login className='float-right' handleLogin={handleUserStateChange} />
           <br />
         </div>
         <Routes>
           {toRouteElements(routes)}
-          {toRouteElements(nonNavRoutes)}
         </Routes>
       </UserContext.Provider>
     </BrowserRouter>
