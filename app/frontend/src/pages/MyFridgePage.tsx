@@ -121,7 +121,9 @@ export default function MyFridgePage (props: MyFridgePageProps): React.JSX.Eleme
       >
         <React.Suspense fallback={<LoadingSpinner status='loading' />}>
           <Dialog.Title>Scan Barcode</Dialog.Title>
-          <ScanBarcode />
+          <ScanBarcode
+            onAdded={fetchIngredients}
+          />
         </React.Suspense>
       </ModalDialog>
 

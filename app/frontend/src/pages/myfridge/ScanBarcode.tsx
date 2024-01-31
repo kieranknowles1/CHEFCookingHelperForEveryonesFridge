@@ -9,8 +9,11 @@ import { type paths } from '../../types/api.generated'
 
 type Barcode = paths['/barcode/{code}']['get']['responses']['200']['content']['application/json']
 
-// TODO: Implement
-export default function ScanBarcode (): React.JSX.Element {
+export interface ScanBarcodeProps {
+  onAdded: () => void
+}
+
+export default function ScanBarcode (props: ScanBarcodeProps): React.JSX.Element {
   const context = React.useContext(UserContext)
 
   if (context?.fridgeId === undefined) {
@@ -46,6 +49,8 @@ export default function ScanBarcode (): React.JSX.Element {
       monitorOutcome(setStatus)
     ).then(() => {
       setAdded(true)
+      props.onAdded()
+      // TODO: Allow adding a new barcode to the database if it doesn't exist
     }).catch(console.error)
   }
 
