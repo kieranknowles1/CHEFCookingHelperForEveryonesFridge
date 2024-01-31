@@ -257,6 +257,32 @@ export interface paths {
       };
     };
   };
+  "/fridge/{fridgeId}/ingredient/{ingredientId}/modify": {
+    /**
+     * Modify the amount of an ingredient in the fridge
+     * @description Add or subtract `amount` from the amount of `ingredientId` in `fridgeId`
+     */
+    post: {
+      parameters: {
+        query: {
+          /** @description Amount to add or subtract from the ingredient */
+          delta: number;
+        };
+        path: {
+          fridgeId: components["parameters"]["fridgeId"];
+          ingredientId: components["parameters"]["ingredientId"];
+        };
+      };
+      responses: {
+        /** @description No Content */
+        204: {
+          content: never;
+        };
+        401: components["responses"]["Unauthorized"];
+        403: components["responses"]["Forbidden"];
+      };
+    };
+  };
   "/fridge/{fridgeId}/recipe/{recipeId}/maderecipe": {
     /**
      * Log that a recipe has been made and deduct the ingredients from the fridge

@@ -9,6 +9,7 @@ import registerFridgeAuthMiddleware from './v1/fridge/auth'
 import registerFridgeInfoEndpoint from './v1/fridge/info'
 import registerFridgeIngredientAllAmountEndpoint from './v1/fridge/ingredient/allAmounts'
 import registerFridgeIngredientEndpoint from './v1/fridge/ingredient/amount'
+import registerFridgeIngredientModifyEndpoint from './v1/fridge/ingredient/modifyAmount'
 import registerFridgeMadeRecipeEndpoint from './v1/fridge/madeRecipe'
 import registerGetTagsEndpoint from './v1/getTags'
 import registerIngredientAllEndpoint from './v1/getAllIngredients'
@@ -40,6 +41,7 @@ export default function registerEndpoints (app: Express, db: IChefDatabase): voi
   registerFridgeAuthMiddleware(app, db)
   registerFridgeMadeRecipeEndpoint(app, db)
   registerFridgeInfoEndpoint(app, db)
+  registerFridgeIngredientModifyEndpoint(app, db)
   registerFridgeIngredientAllAmountEndpoint(app, db)
   registerFridgeIngredientEndpoint(app, db)
 

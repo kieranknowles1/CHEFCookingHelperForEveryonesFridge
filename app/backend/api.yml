@@ -296,6 +296,28 @@ paths:
         "403":
           $ref: "#/components/responses/Forbidden"
 
+  /fridge/{fridgeId}/ingredient/{ingredientId}/modify:
+    post:
+      tags: [Fridge]
+      summary: Modify the amount of an ingredient in the fridge
+      description: Add or subtract `amount` from the amount of `ingredientId` in `fridgeId`
+      security: [Bearer: []]
+      parameters:
+        - $ref: "#/components/parameters/fridgeId"
+        - $ref: "#/components/parameters/ingredientId"
+        - in: query
+          name: delta
+          description: Amount to add or subtract from the ingredient
+          schema: { type: integer, example: 1 }
+          required: true
+      responses:
+        "204":
+          description: No Content
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
   /fridge/{fridgeId}/recipe/{recipeId}/maderecipe:
     post:
       tags: [Fridge]
