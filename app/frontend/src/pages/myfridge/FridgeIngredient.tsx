@@ -19,15 +19,13 @@ export interface FridgeIngredientProps {
  * A representation of an ingredient in a user's fridge
  */
 export default function FridgeIngredient (props: FridgeIngredientProps): React.JSX.Element {
-  const [amount, setAmount] = React.useState(props.amount)
-
   const popData = createPopper()
 
   return (
     <Popover>
       <div className='bg-raisin_black-400 text-center rounded-2xl'>
         <h2>{props.ingredient.name}</h2>
-        <p>{formatAmount(amount, props.ingredient.preferredUnit)}</p>
+        <p>{formatAmount(props.amount, props.ingredient.preferredUnit)}</p>
         <br />
         <Popover.Button
           className='w-full bg-raisin_black-600 text-citron-700 rounded'
@@ -45,13 +43,10 @@ export default function FridgeIngredient (props: FridgeIngredientProps): React.J
         {({ close }) => (
           <EditIngredientAmount
             ingredientId={props.ingredient.id}
-            currentAmount={amount}
-            setCurrentAmount={setAmount}
+            currentAmount={props.amount}
+            setCurrentAmount={props.onEditAmount}
             onCancel={close}
-            onSubmit={() => {
-              close()
-              props.onEditAmount(amount)
-            }}
+            onSubmit={close}
           />
         )}
       </Popover.Panel>
