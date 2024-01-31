@@ -40,3 +40,8 @@ VALUES
     (1, (SELECT id FROM ingredient WHERE name = 'Green Pepper'), 4),
     (1, (SELECT id FROM ingredient WHERE name = 'Red Pepper'), 8),
     (1, (SELECT id FROM ingredient WHERE name = 'Milk'), 1000);
+
+INSERT INTO barcode
+    (code, ingredient_id, product_name, amount)
+VALUES
+    (9781841499895, 1, 'This is a book, but its the only barcode I could find', 1);
