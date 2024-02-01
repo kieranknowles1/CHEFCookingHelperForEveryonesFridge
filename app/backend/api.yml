@@ -14,7 +14,7 @@ tags:
   - name: User
 
 servers:
-  - url: http://localhost:3000/api/v1
+  - url: https://chefapi.knowles.freemyip.com/api/v1
 
 paths:
   /mealtype/list:
