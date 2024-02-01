@@ -10,6 +10,7 @@ import { type RecipeProps } from '../components/Recipe'
 import Search from '../components/inputs/Search'
 import apiClient from '../apiClient'
 import monitorOutcome from '../utils/monitorOutcome'
+import { useDebounce } from 'use-debounce'
 
 const PAGE_SIZE = 100
 
@@ -29,7 +30,8 @@ export default function FindRecipesPage (props: FindRecipesPageProps): React.JSX
     mealType: undefined
   })
 
-  const [query, setQuery] = React.useState('')
+  const [originalQuery, setOriginalQuery] = React.useState('')
+  const [query] = useDebounce(originalQuery, 500)
 
   const [page, setPage] = React.useState(0)
   function getTotalPages (): number {
@@ -38,6 +40,7 @@ export default function FindRecipesPage (props: FindRecipesPageProps): React.JSX
 
   React.useEffect(() => {
     setRecipes([])
+
     apiClient.GET(
       '/recipe/search',
       {
@@ -93,7 +96,7 @@ export default function FindRecipesPage (props: FindRecipesPageProps): React.JSX
       />
       <hr className='my-2 mx-2' />
       {status === 'done' && <p>{recipes.length} recipes found.</p>}
-      <Search setQuery={q => { setQuery(q); setPage(0) }} />
+      <Search setQuery={q => { setOriginalQuery(q); setPage(0) }} />
 
       <LoadingSpinner status={status} />
       {status === 'done' && pageButtons}
