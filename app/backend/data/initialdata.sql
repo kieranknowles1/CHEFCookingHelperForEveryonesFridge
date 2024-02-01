@@ -133,7 +133,16 @@ VALUES
     ((SELECT id FROM ingredient_substitution_group WHERE name = 'Peppers'), (SELECT id FROM ingredient WHERE name = 'Red Pepper'));
 
 -- Embeddings are added in ./setup/index.ts as we can't call async functions from here
-PRAGMA foreign_keys = OFF;
+-- Add some dummy data for now. Intentionally not functional to cause errors if used.
+INSERT INTO embedding
+    (sentence, embedding)
+VALUES
+    ('Breakfast', zeroblob(1)),
+    ('Lunch', zeroblob(1)),
+    ('Dinner', zeroblob(1)),
+    ('Snack', zeroblob(1)),
+    ('Dessert', zeroblob(1));
+
 INSERT INTO meal_type
     (name)
 VALUES
@@ -142,5 +151,3 @@ VALUES
     ('Dinner'),
     ('Snack'),
     ('Dessert');
--- We run foreign_key_check after setup to ensure that these are embedded for when we run the app
-PRAGMA foreign_keys = ON;

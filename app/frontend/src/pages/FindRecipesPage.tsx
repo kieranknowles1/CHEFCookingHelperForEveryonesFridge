@@ -68,11 +68,11 @@ export default function FindRecipesPage (props: FindRecipesPageProps): React.JSX
 
   const pageButtons = (
     <div className='flex justify-center'>
-      <button className='btn' onClick={() => { setPage(page - 1) }} disabled={page === 0}>
+      <button onClick={() => { setPage(page - 1) }} disabled={page === 0}>
         <BiChevronLeft size={24} className='inline' /> Previous
       </button>
       <span className='mx-3'>Page {page + 1} / {getTotalPages()}</span>
-      <button className='btn' onClick={() => { setPage(page + 1) }} disabled={page >= getTotalPages() - 1}>
+      <button onClick={() => { setPage(page + 1) }} disabled={page >= getTotalPages() - 1}>
         Next <BiChevronRight size={24} className='inline' />
       </button>
     </div>

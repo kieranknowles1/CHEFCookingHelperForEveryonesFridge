@@ -258,10 +258,11 @@ UserWarnRegex =
   # Pretty tables--see http://texdoc.net/texmf-dist/doc/latex/booktabs/booktabs.pdf
 #   (?!#-2:Use! \toprule,! midrule,! or! \bottomrule! from! booktabs)\\hline
 
+  # CHANGE: No thanks, I don't think the vertical lines are ugly
   # This relies on it being on a single line, and not having anything
   # else on that line.  With PCRE we could match balanced [] and {},
   # but I wonder if it's worth the complexity...
-  (?!#-2:Vertical! rules! in! tables! are! ugly)\\begin\{(array|tabularx?\*?)\}(\[.*\])?\{.*\|.*\}
+#   (?!#-2:Vertical! rules! in! tables! are! ugly)\\begin\{(array|tabularx?\*?)\}(\[.*\])?\{.*\|.*\}
 
 }
 

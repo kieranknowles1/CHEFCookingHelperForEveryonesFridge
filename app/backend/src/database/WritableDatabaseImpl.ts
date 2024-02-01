@@ -63,11 +63,10 @@ export default class WritableDatabaseImpl implements IWritableDatabase {
   public addEmbedding (sentence: EmbeddedSentence): void {
     this.assertValid()
     const statement = this._connection.prepare<undefined>(`
-      INSERT INTO embedding
+      INSERT OR REPLACE INTO embedding
         (sentence, embedding)
       VALUES
         (:sentence, :embedding)
-      ON CONFLICT DO NOTHING
     `)
 
     statement.run({
@@ -220,5 +219,18 @@ export default class WritableDatabaseImpl implements IWritableDatabase {
     }
 
     statement.run({ userId, ingredientId })
+  }
+
+  public addUser (username: string, passwordHash: string): types.RowId {
+    const statement = this._connection.prepare<undefined>(`
+      INSERT INTO user
+        (username, password_hash)
+      VALUES
+        (:username, :passwordHash)
+    `)
+    const id = statement.run({ username, passwordHash }).lastInsertRowid
+    this.assertNotBigint(id)
+
+    return id
   }
 }

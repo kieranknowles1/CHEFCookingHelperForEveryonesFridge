@@ -16,4 +16,4 @@ services:
     volumes:
       - ./config:/usr/share/nginx/html/config:ro
     ports:
-      - 80:80
+      - 5173:80

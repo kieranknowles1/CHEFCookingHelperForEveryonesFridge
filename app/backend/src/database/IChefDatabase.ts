@@ -43,7 +43,7 @@ export interface IWritableDatabase {
 
   /**
    * Add an embedding for a sentence to the database for future use
-   * If the sentence already exists, nothing will be done
+   * If the sentence already exists, the embedding will be updated
    */
   addEmbedding: (sentence: EmbeddedSentence) => void
 
@@ -68,6 +68,8 @@ export interface IWritableDatabase {
 
   setTagPreference: (userId: types.RowId, tagId: types.RowId, allow: boolean) => void
   setIngredientPreference: (userId: types.RowId, ingredientId: types.RowId, allow: boolean) => void
+
+  addUser: (username: string, passwordHash: string) => types.RowId
 }
 
 export interface IFridgeDatabase {
