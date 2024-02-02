@@ -1,5 +1,3 @@
-% TODO: New extension for //SECTION
-% //SECTION - Layout
 % 11pt Arial with single line spacing on double sided A4 paper with 1.5 inch left margin
 \documentclass[11pt, twoside, a4paper]{report}
 
@@ -15,14 +13,11 @@
 % Put each section on a new page
 \AddToHook{cmd/section/before}{\clearpage}
 
-% //!SECTION - Layout
-
 % British English
 \usepackage[UKenglish]{babel}
 \usepackage{csquotes}
 
 % Don't complain if only slightly overfull (default 0.5pt)
-% TODO: Probably not the neatest way to do this
 \hfuzz=1pt
 
 \usepackage{checkbox}
@@ -72,7 +67,6 @@
 
 \usepackage{hyperref}
 
-% TODO: Package?
 \newcommand{\mainfilehyperref}[2]{
     \ifSubfilesClassLoaded{
         #2
