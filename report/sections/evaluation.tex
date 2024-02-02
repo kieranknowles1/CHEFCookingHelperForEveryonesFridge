@@ -56,3 +56,19 @@ The initial implementation of the conversion had an issue where the buffer would
 rather than 512 32-bit floats. This issue greatly reduced both the effectiveness and performance of the similarity comparisons.
 The issue was fixed by correctly parsing the buffer and by adding a check to the \codelisting{getSimilarity} function to assert
 that both of the arrays passed had the expected 512 elements.
+
+SQLite does not support passing arrays to the bind parameters of queries, which was
+necessary when implementing user preferences in the search query. This issue
+was resolved by generating a temporary table containing the preferences
+that only exists for the duration of the query. See figure \ref{fig:temp_table_substitution}
+for an example of where this is used.
+
+\begin{figure}[h]
+    \caption{\label{fig:temp_table_substitution}A temporary table that is substituted into a query with \$\{expr\}}
+    \raggedright
+
+    \codelisting{
+        (SUM(CASE WHEN ingredient\textunderscore{}tag.tag\textunderscore{}id IN
+        (SELECT tag\textunderscore{}id FROM \$\{bannedTagsTable\}) THEN 1 ELSE 0 END) = 0)
+    }
+\end{figure}
