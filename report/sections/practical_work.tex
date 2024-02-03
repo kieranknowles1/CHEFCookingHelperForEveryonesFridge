@@ -81,8 +81,8 @@ One major difference between TypeScript and Java is TypeScript's use of structur
 that implements the properties specified in an interface is considered an instance of that interface in comparison
 to Java where an interface has to be explicitly implemented by a class. As the objects retrieved from the database
 did not need their own logic, it was decided early on to do away with having a class for each type in the database
-and to instead rely only on interfaces. This simplified the database code and allowed for specialised subtypes to easily
-be added when needed for different endpoints.
+and to instead rely only on interfaces. This simplified the database code and allowed for specialized subtypes to easily
+be added as needed for different endpoints.
 
 \todo{Expressjs}
 
@@ -132,7 +132,7 @@ React was chosen as it allows for quickly producing a user interface containing
 data fetched from the API.
 
 \subsection{API Communication}
-the \codelisting{openapi-fetch} package was used along with the types generated from the API documentation was
+The \codelisting{openapi-fetch} package was used along with the types generated from the API documentation was
 used to create a type-safe wrapper for the native \codelisting{fetch} function that is able to automatically
 determine paths, parameters, and responses in a type-safe manner that could be easily updated whenever the API
 changes.
@@ -185,7 +185,7 @@ See figure \todo{Figure} for an example of a test report.
 \subsection{Code Quality Evaluation}
 The MegaLinter tool \cite{vuillamy_megalinter_nodate} was configured to run on every pull request on the application's Git repository. This includes a wide array
 of checks to ensure that style guides were adhered to and to catch potential issues, such as making potentially incorrect
-assumptions about the type of an object. This generates a report that is attached to each pull request detailing
+assumptions about an object's type. This generates a report that is attached to each pull request detailing
 any issues that were found (figure \ref{fig:metalinter_report}).
 
 The configuration for MegaLinter and its linters can be found in the root directory of the repository.

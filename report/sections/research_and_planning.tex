@@ -136,188 +136,205 @@ other. See figure \ref{rev:review_lack_variety} for the review.
 %   #1 Requirement
 %   #2 Source
 %   #3 Priority
-\newcommand{\requirement}[3]{
+%   #4 Implemented (yes/no)
+\newcommand{\requirement}[4]{
     \requirementtype\stepcounter{functionalreqcounter}\arabic{functionalreqcounter}
         &
-    #1
+    % Don't have much space to work with, so flushright looks messy.
+    \raggedright#1
         &
     #2
         &
     #3
+        &
+    #4
         \\\hline
 }
 
-\begin{table}[H]
+\begin{longtable}{|l|p{128pt}|l|l|l|}
     \caption{Functional Requirements}
     \label{tab:functional_requirements}
-    \begin{tabulary}{\textwidth}{|l|L|l|l|}
-        \hline
-        \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} \\\hline
+    \\\hline
+    \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} & \textbf{Implemented} \\\hline
 
-        \requirement{
-            \textbf{User registration.} The system \textbf{must} allow users to sign up and log in to the app.
-        }{
-            Trivial
-        }{
-            Must-have
-        }
+    \requirement{
+        \textbf{User registration.} The system \textbf{must} allow users to sign up and log in to the app.
+    }{
+        Trivial
+    }{
+        Must-have
+    }{
+        Yes
+    }
 
-        \requirement{
-            \textbf{Share ingredient lists.} The system \textbf{must} allow for multiple users to share one \virtualfridge
-        }{
-            TODO: Source
-        }{
-            Must-have
-        }
+    \requirement{
+        \textbf{Share ingredient lists.} The system \textbf{must} allow for multiple users to share one \virtualfridge
+    }{
+        TODO: Source
+    }{
+        Must-have
+    }{
+        Partially
+    }
 
-        \requirement{
-            \textbf{Select dietary requirements/preferences.} The system \textbf{must} allow for users to select their
-            dietary requirements and preferences, such as allergies or disliked ingredients.
-        }{
-            TODO: Source
-        }{
-            Must-have
-        }
+    \requirement{
+        \textbf{Select dietary requirements/preferences.} The system \textbf{must} \newline
+        allow for users to select their dietary requirements and preferences, such as allergies or disliked ingredients.
+    }{
+        TODO: Source
+    }{
+        Must-have
+    }{
+        Yes
+    }
 
-        \requirement{
-            \textbf{Recipe Suggestion.} the system \textbf{must} suggest recipes based on the user's available ingredients
-        }{
-            Competitor Analysis
-        }{
-            Must-have
-        }
+    \requirement{
+        \textbf{Recipe Suggestion.} the system \textbf{must} suggest recipes based on the user's available ingredients
+    }{
+        Competitor Analysis
+    }{
+        Must-have
+    }{
+        Yes
+    }
 
-        \requirement{
-            \textbf{Avoid recipes with missing ingredients.} The system \textbf{must} not suggest recipes that the user
-            is missing ingredients for unless explicitly requested.
-        }{
-            Competitor Analysis
-        }{
-            Must-have
-        }
+    \requirement{
+        \textbf{Avoid recipes with missing ingredients.} The system \textbf{must} not suggest recipes that the user
+        is missing ingredients for unless explicitly requested.
+    }{
+        Competitor Analysis
+    }{
+        Must-have
+    }{
+        Yes
+    }
 
-        \requirement{
-            \textbf{Scan ingredients.} The system \textbf{should} allow the user to scan the barcodes of ingredients to add
-            them to their \virtualfridge
-        }{
-            TODO: Source
-        }{
-            Should-have
-        }
+    \requirement{
+        \textbf{Scan ingredients.} The system \textbf{should} allow the user to scan the barcodes of ingredients to add
+        them to their \virtualfridge
+    }{
+        TODO: Source
+    }{
+        Should-have
+    }{
+        Yes
+    }
 
-        \requirement{
-            \textbf{Use metric units.} All units \textbf{should} be displayed in metric.
-        }{
-            Competitor Analysis
-        }{
-            Should-have
-        }
+    \requirement{
+        \textbf{Use metric units.} All units \textbf{should} be displayed in metric.
+    }{
+        Competitor Analysis
+    }{
+        Should-have
+    }{
+        Yes
+    }
 
-        \requirement{
-            \textbf{Scan receipt.} The system \textbf{could} allow the user to scan a receipt from a store to add ingredients
-            to their \virtualfridge
-        }{
-            TODO: Source
-        }{
-            Could-have
-        }
+    \requirement{
+        \textbf{Scan receipt.} The system \textbf{could} allow the user to scan a receipt from a store to add ingredients
+        to their \virtualfridge
+    }{
+        TODO: Source
+    }{
+        Could-have
+    }{
+        No
+    }
 
-        \requirement{
-            \label{req:similar_recipes}
-            \textbf{Find similar recipes.} The system \textbf{should} use a machine learning model to find and suggest
-            similar recipes to those that the user has previously made.
-        }{
-            TODO: Source
-        }{
-            Should-have
-        }
+    \requirement{
+        \label{req:similar_recipes}
+        \textbf{Find similar recipes.} The system \textbf{should} use a machine learning model to find and suggest
+        similar recipes to those that the user has previously made.
+    }{
+        TODO: Source
+    }{
+        Should-have
+    }{
+        Yes
+    }
 
-        \requirement{
-            \textbf{Avoid repeating recipes.} The system \textbf{should} avoid suggesting recipes that are too similar
-            to those that have been made recently using the same model as \hyperref[req:similar_recipes]{\textbf{Find similar recipes}}
-        }{
-            TODO: Source
-        }{
-            Should-have
+    \requirement{
+        \textbf{Avoid repeating recipes.} The system \textbf{should} avoid suggesting recipes that are too similar
+        to those that have been made recently using the same model as \hyperref[req:similar_recipes]{\textbf{Find similar recipes}}
+    }{
+        TODO: Source
+    }{
+        Should-have
+    }{
+        No
+    }
+\end{longtable}
 
-            % NOTE: This has to be in the last argument of the last requirement
-            \setcounter{functionalreqcounter}{0}
-        }
-    \end{tabulary}
-\end{table}
-
-\renewcommand{\requirementtype}{NFR}
-\begin{table}[H]
+\setcounter{functionalreqcounter}{0}\renewcommand{\requirementtype}{NFR}
+\begin{longtable}{|l|p{128pt}|l|l|l|}
     \caption{Non-functional Requirements}
     \label{tab:non_functional_requirements}
+    \\\hline
+    \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} & \textbf{Implemented} \\\hline
 
-    \begin{tabulary}{\textwidth}{|l|L|l|l|}
-        \hline
-        \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} \\\hline
+    \requirement{
+        \textbf{Performance.} The system \textbf{should} be responsive to user input and requests to the API \textbf{should}
+        be responded to in under 200ms on average.
+    }{
+        Trivial
+    }{
+        Should-have
+    }{
+        Yes
+    }
 
-        \requirement{
-            \textbf{Performance.} The system \textbf{should} be responsive to user input and requests to the API \textbf{should}
-            be responded to in under 200ms on average.
-        }{
-            Trivial
-        }{
-            Should-have
-        }
+    \requirement{
+        \textbf{Reliability.} The system \textbf{should} be reliable and resilient should the user incorrectly use an element of
+        the app.
+    }{
+        Trivial
+    }{
+        Should-have
+    }{
+        Yes
+    }
 
-        \requirement{
-            \textbf{Reliability.} The system \textbf{should} be reliable and resilient should the user incorrectly use an element of
-            the app.
-        }{
-            Trivial
-        }{
-            Should-have
-        }
+    \requirement{
+        \textbf{Usability.} The system \textbf{should} be intuitive and easy to use.
+    }{
+        Trivial
+    }{
+        Should-have
+    }{
+        Yes
+    }
 
-        \requirement{
-            \textbf{Usability.} The system \textbf{should} be intuitive and easy to use.
-        }{
-            Trivial
-        }{
-            Should-have
-        }
+    \requirement{
+        \textbf{Maintainability.} The system \textbf{should} be structured in a way that is maintainable and upgradable
+        in the future.
+    }{
+        Trivial
+    }{
+        Should-have
+    }{
+        Yes
+    }
 
-        \requirement{
-            \textbf{Maintainability.} The system \textbf{should} be structured in a way that is maintainable and upgradable
-            in the future.
-        }{
-            Trivial
-        }{
-            Should-have
-        }
+    \requirement{
+        \textbf{Code quality.} The system \textbf{must} pass all of its unit tests.
+    }{
+        Trivial
+    }{
+        Must-have
+    }{
+        Yes
+    }
 
-        \requirement{
-            \textbf{Code quality.} The system \textbf{must} pass all of its unit tests.
-        }{
-            Trivial
-        }{
-            Must-have
-        }
-
-        \requirement{
-            \textbf{Ease of setup.} The system \textbf{should} be installable using a single script and minimal manual input.
-        }{
-            Trivial
-        }{
-            Should-have
-        }
-
-        \requirement{
-            TODO: Name
-        }{
-            TODO: Source
-        }{
-            TODO: Priority
-
-            % NOTE: This has to be in the last argument of the last requirement
-            \setcounter{functionalreqcounter}{0}
-        }
-    \end{tabulary}
-\end{table}
+    \requirement{
+        \textbf{Ease of setup.} The system \textbf{should} be installable using a single script and minimal manual input.
+    }{
+        Trivial
+    }{
+        Should-have
+    }{
+        Yes
+    }
+\end{longtable}
 
 \todoinline{
     Summarize the requirements for the product to be built.
