@@ -119,8 +119,10 @@ This took a significant amount of time to execute at first. Despite initial assu
 created due to the implementation, was shown by profiling (see figure \ref{fig:similarity_flamegraph}) to instead be in TensorFlow's
 matrix maths functions.
 
-This could be accelerated using a hardware-accelerated build of TensorFlow, which was not done at first due to the difficulty of installing
-it on Windows. \todo{Update this and add benchmark for after hardware accel and fix. Want to run the initial benchmark on my main PC}
+This could be accelerated using a hardware-accelerated build of TensorFlow, which was not done due to the difficulty of installing
+it on Windows. Given that machine learning performance was only a concern during setup, this was deemed a low-priority
+issue and was not resolved.
+\todo{Update this and add benchmark for after hardware accel and fix. Want to run the initial benchmark on my main PC}
 
 \section{Frontend Implementation}
 \todo{Frontend}
@@ -128,8 +130,8 @@ it on Windows. \todo{Update this and add benchmark for after hardware accel and 
 The front end of the application is written in React with TypeScript for the reasons discussed previously in
 section \ref{sec:backend_language}, and is styled using Tailwind CSS.
 
-React was chosen as it allows for quickly producing a user interface containing
-data fetched from the API.
+React was chosen as it allows for quickly producing a user interface that is responsive to the user's device and dynamically
+fetches data from the API.
 
 \subsection{API Communication}
 The \codelisting{openapi-fetch} package was used along with the types generated from the API documentation was
@@ -169,6 +171,13 @@ changes.
 }
 
 \todo{Testing}
+
+\subsection{Compiler Checks}
+TypeScript was configured with the \codelisting{strict} option enabled. This enables additional error checking over the
+default configuration, such as by disallowing passing a value that could be null to a function unless the function
+explicitly allows null.
+
+\todo{Compiler Checks}
 
 \subsection{Unit Testing}
 The backend of the application is tested using the Mocha test framework \cite{noauthor_mocha_nodate} with API tests additionally using Supertest \cite{noauthor_ladjssupertest_2024}
