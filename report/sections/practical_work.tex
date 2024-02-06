@@ -68,21 +68,22 @@
 
 \todo{Implementation}
 
-\section{Backend Implementation}
-\label{sec:backend_language}
-\todo{Backend}
-\todo{Should I be explaining what TypeScript is or not?}
-The backend was the first component to be developed to have a data source for the frontend to connect to. This was
-implemented in TypeScript using the Node.js runtime. TypeScript was chosen as it compiles into JavaScript which can run in web browsers
-while adding compile-time type checking similar to statically typed languages such as Java. This would allow for the same language
-to be used for both the front and back end.
+The \chef{} app is implemented using a React frontend and an Express.js backend, both written in TypeScript.
+This language was chosen as it compiles into JavaScript that can run in a browser, allowing the same language to be used for both
+the front and back ends, while adding compile-time type checking similar to strongly typed languages such as Java that
+is effective at preventing bugs from being introduced, especially when checks for \texttt{null} and \texttt{undefined} are
+enabled.~\cite{gao_type_2017}
 
-One major difference between TypeScript and Java is TypeScript's use of structural typing. This means that any object
-that implements the properties specified in an interface is considered an instance of that interface in comparison
-to Java where an interface has to be explicitly implemented by a class. As the objects retrieved from the database
-did not need their own logic, it was decided early on to do away with having a class for each type in the database
-and to instead rely only on interfaces. This simplified the database code and allowed for specialized subtypes to easily
-be added as needed for different endpoints.
+\section{Backend Implementation}
+\todo{Backend}
+
+% TODO: Put this in above section
+% One major difference between TypeScript and Java is TypeScript's use of structural typing. This means that any object
+% that implements the properties specified in an interface is considered an instance of that interface in comparison
+% to Java where an interface has to be explicitly implemented by a class. As the objects retrieved from the database
+% did not need their own logic, it was decided early on to do away with having a class for each type in the database
+% and to instead rely only on interfaces. This simplified the database code and allowed for specialized subtypes to easily
+% be added as needed for different endpoints.
 
 \todo{Expressjs}
 
@@ -127,11 +128,12 @@ issue and was not resolved.
 \section{Frontend Implementation}
 \todo{Frontend}
 
-The front end of the application is written in React with TypeScript for the reasons discussed previously in
-section \ref{sec:backend_language}, and is styled using Tailwind CSS.
+% TODO: Rework this
+% The front end of the application is written in React with TypeScript for the reasons discussed previously in
+% section \ref{sec:backend_language}, and is styled using Tailwind CSS.
 
-React was chosen as it allows for quickly producing a user interface that is responsive to the user's device and dynamically
-fetches data from the API.
+% React was chosen as it allows for quickly producing a user interface that is responsive to the user's device and dynamically
+% fetches data from the API.
 
 \subsection{API Communication}
 The \codelisting{openapi-fetch} package was used along with the types generated from the API documentation was
@@ -173,9 +175,10 @@ changes.
 \todo{Testing}
 
 \subsection{Compiler Checks}
-TypeScript was configured with the \codelisting{strict} option enabled. This enables additional error checking over the
-default configuration, such as by disallowing passing a value that could be null to a function unless the function
-explicitly allows null.
+% TODO: Talked about this earlier
+% TypeScript was configured with the \codelisting{strict} option enabled. This enables additional error checking over the
+% default configuration, such as by disallowing passing a value that could be null to a function unless the function
+% explicitly allows null.
 
 \todo{Compiler Checks}
 
@@ -202,6 +205,9 @@ Certain issues, such as incorrect indentation, are fixed automatically when a pu
 must be corrected manually. Overall, MegaLinter aids in ensuring code quality and preventing the use of bad practices.
 
 \todo{May want more here}
+
+\section{Deployment}
+\todo{Describe how Docker was used}
 
 \section{Investigation}
 \todoinline{
