@@ -77,6 +77,14 @@
     }
 }
 
+% https://tex.stackexchange.com/questions/11707/how-to-force-output-to-a-left-or-right-page
+% Force the next page to be on the left
+% clearpage forces even, but since the first page is the title this will be on the right after binding
+\newcommand*\cleartoleftpage{%
+  \clearpage
+  \ifodd\value{page}\hbox{}\newpage\fi
+}
+
 
 \begin{document}
 %TC:ignore
@@ -250,7 +258,7 @@ The following packages were used from npm for the application:
 
 \subfile{sections/user_reviews.tex}
 
-\section{Interface Prototypes}
+\cleartoleftpage\section{Interface Prototypes}
 \begin{figure}
     \centering
     \includesvg[height=0.9\textwidth,angle=90,pretex=\relscale{0.8}]{figures/InterfacePrototypes}
@@ -263,17 +271,17 @@ The following packages were used from npm for the application:
     \caption{The find recipes page, showing recipes that can be made by the user. }
 \end{figure}
 
-\section{Figures}
-\begin{figure}
+\cleartoleftpage\section{Figures}
+\begin{figure}[h!]
     \centering
-    \caption{\label{fig:similarity_flamegraph}Flame graph for the similarity endpoint. Most time is spent in matrix maths functions}
-    \includegraphics[angle=90,height=0.9\textheight]{figures/similarity_flamegraph.png}
+    \caption{\label{fig:metalinter_report}A MegaLinter report that was automatically attached as a comment to a pull request.}
+    \includegraphics[width=\textwidth]{figures/megalinter_report.png}
 \end{figure}
 
 \begin{figure}
     \centering
-    \caption{\label{fig:metalinter_report}A MegaLinter report that was automatically attached as a comment to a pull request.}
-    \includegraphics[width=\textwidth]{figures/megalinter_report.png}
+    \caption{\label{fig:similarity_flamegraph}Flame graph for the similarity endpoint. Most time is spent in matrix maths functions}
+    \includegraphics[angle=90,height=0.9\textheight]{figures/similarity_flamegraph.png}
 \end{figure}
 
 % Appendices
