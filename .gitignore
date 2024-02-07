@@ -19,6 +19,7 @@
 
 svg-inkscape/
 
+*.svg.bkp
 *.drawio.bkp
 *.drawio.dtmp
 
