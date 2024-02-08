@@ -77,22 +77,37 @@ enabled.~\cite{gao_type_2017}
 \section{Backend Implementation}
 \todo{Backend}
 
-% TODO: Put this in above section
-% One major difference between TypeScript and Java is TypeScript's use of structural typing. This means that any object
-% that implements the properties specified in an interface is considered an instance of that interface in comparison
-% to Java where an interface has to be explicitly implemented by a class. As the objects retrieved from the database
-% did not need their own logic, it was decided early on to do away with having a class for each type in the database
-% and to instead rely only on interfaces. This simplified the database code and allowed for specialized subtypes to easily
-% be added as needed for different endpoints.
+The backend of the app is implemented as a REST API based on Express.js with SQLite
+used for the database.
 
 \todo{Expressjs}
+
+SQLite was chosen for the database as it is the simplest to set up, being implemented through
+a library rather than requiring a dedicated server, while being somewhat portable with other
+database systems.~\cite{kreibich_using_2010} This would allow for the database to be migrated to
+another backend with a limited number of changes needing to be made.
+
+One major difference between TypeScript and Java is that TypeScript uses structural typing, where objects are considered
+the same if they have the same structure. While Java uses nominal typing and requrires an interface to be explicitly
+implemented by a class. This allows for different modules to be interoperable through sharing the same structure of objects.~\cite{gil_whiteoak_2008}
+For this reason, along with the fact that the data transfer objects did not need their own logic, it was decided early on
+to not use classes for objects retrieved from the database and instead to rely on interfaces only.
+
 
 \subsection{Documentation}
 The API was declared and documented using the OpenAPI format and converted
 into TypeScript types using the \codelisting{openapi-typescript} package. These
-generated types were then used to check the return types from the API. Unfortunately,
-this was unable to check parameters automatically or the existence of endpoints
-as TypeScript types don't exist at runtime.
+generated types were then used to check the return types from the API.
+
+The \codelisting{express-openapi-validator} package was used separately to validate
+request parameters against the OpenAPI schema. This implementation avoided having
+to duplicate validation specificiations and removed the possibility of having the values that
+the server accepts differ from what was documented.
+
+One limitation that was not resolved with either of the above packages is that there is no validation
+for whether the endpoints exist which lead to some confusion when testing endpoints that had not been registered
+with Express. A different combination of packages may have been able to check for this,
+but was not considered due to time constraints.
 
 Swagger UI \cite{smartbear_swagger_2024} was used to serve a generated HTML page that lists all endpoints declared in
 the API specification, along with example values for both requests and responses and the ability to make requests in
