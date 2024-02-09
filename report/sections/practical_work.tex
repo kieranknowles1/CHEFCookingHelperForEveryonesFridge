@@ -122,10 +122,10 @@ the embeddings are calculated during setup and stored in the database, organized
 \begin{table}[h]
     \centering
     \caption{\label{fig:embedding_table}An example of the contents of the embedding table.}
-    \begin{tabular}{|c|c|}
-        \hline
-        \textbf{Original String} & \textbf{Embedding (format is an implementation detail)} \\\hline
-        Pasta & BLOB \\\hline
+    \begin{tabular}{cc}
+        \toprule
+        \textbf{Original String} & \textbf{Embedding (format is an implementation detail)} \\\midrule
+        Pasta & BLOB \\\bottomrule
     \end{tabular}
 \end{table}
 

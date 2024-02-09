@@ -146,13 +146,13 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     #3
         &
     #4
-        \\\hline
+        \\
 }
 
-\begin{longtable}{|l|p{128pt}|l|l|l|}
+\begin{longtable}{lp{128pt}lll}
     \caption{Functional Requirements}\label{tab:functional_requirements}
-    \\\hline
-    \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} & \textbf{Implemented} \\\hline
+    \\\toprule
+    \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} & \textbf{Implemented} \\\midrule
 
     \requirement{
         \textbf{User registration.} The system \textbf{must} allow users to sign up and log in to the app.
@@ -280,13 +280,15 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     }{
         No
     }
+
+    \bottomrule
 \end{longtable}
 
 \setcounter{functionalreqcounter}{0}\renewcommand{\requirementtype}{NFR}
-\begin{longtable}{|l|p{128pt}|l|l|l|}
+\begin{longtable}{lp{128pt}lll}
     \caption{Non-functional Requirements}\label{tab:non_functional_requirements}
-    \\\hline
-    \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} & \textbf{Implemented} \\\hline
+    \\\toprule
+    \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} & \textbf{Implemented} \\\midrule
 
     \requirement{
         \textbf{Performance.} The system \textbf{should} be responsive to user input and requests to the API \textbf{should}
@@ -350,6 +352,7 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     }{
         Yes
     }
+    \bottomrule
 \end{longtable}
 
 \todoinline{
@@ -408,21 +411,22 @@ The following information is included for each recipe:
 \begin{table}[h!]
     \caption{RecipeNLG Row Format}\label{tab:recipenlg_row_format}
 
-    \begin{tabulary}{\textwidth}{|l|l|L|}
-        \hline
-        \textbf{Name} & \textbf{Type} & \textbf{Description} \\\hline
+    \begin{tabulary}{\textwidth}{llL}
+        \toprule
+        \textbf{Name} & \textbf{Type} & \textbf{Description} \\\midrule
 
-        Title & String & The name of the recipe.\\\hline
+        Title & String & The name of the recipe.\\
 
-        Ingredients & String array & A list of ingredients along with the quantity required. Quantities are presented in imperial units.\\\hline
+        Ingredients & String array & A list of ingredients along with the quantity required. Quantities are presented in imperial units.\\
 
-        Directions & String array & A list of directions to make the recipe. Temperatures are presented in Fahrenheit.\\\hline
+        Directions & String array & A list of directions to make the recipe. Temperatures are presented in Fahrenheit.\\
 
-        Link & String & A link to the page where the recipe was sourced.\\\hline
+        Link & String & A link to the page where the recipe was sourced.\\
 
-        Source & String & The dataset the recipe was sourced from, \enquote*{Gathered} for recipes collected for RecipeNLG itself or the name of another dataset.\\\hline
+        Source & String & The dataset the recipe was sourced from, \enquote*{Gathered} for recipes collected for RecipeNLG itself or the name of another dataset.\\
 
-        NER & String array & A list of ingredients without quantities.\\\hline
+        NER & String array & A list of ingredients without quantities.\\
+        \bottomrule
     \end{tabulary}
 \end{table}
 
