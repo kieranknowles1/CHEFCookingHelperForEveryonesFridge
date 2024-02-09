@@ -86,7 +86,7 @@
 }
 
 \subsection{Recipe Similarity Evaluation}\label{sec:recipe_similarity}
-The similarity of recipes can be evaluated using a sentence embedding model \todo{Source?}. For the \chef{} app,
+The similarity of recipes can be evaluated using a sentence embedding model \todo{Source}. For the \chef{} app,
 the pre-trained Universal Sentence Encoder~\cite{cer_universal_2018} was decided upon. This can run in a Node.js
 environment via TensorFlow.js.
 
@@ -112,7 +112,7 @@ Additionally, the only way to update available ingredients is to manually add or
 each ingredient, so there is no way to know if the user has enough of an ingredient without checking manually.
 
 Neither app tracks which recipes have been made recently, so there is no way to avoid suggesting similar recipes to ones that have been recently made which could lead to
-users getting bored of eating the same meals over and over.
+users getting bored with eating the same meals over and over.
 
 MyFridgeFood has a feature to submit new recipes which are shared between all users. This is a useful feature as it allows for the community to contribute to the database
 of recipes, however, these cannot be kept private to just one user.
@@ -269,6 +269,17 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     }{
         No
     }
+
+    \requirement{
+        \textbf{Add recipes.} The system \textbf{won't currently} allow for users to add their own recipes
+        to the database.
+    }{
+        Competitor Analysis
+    }{
+        Won't-have
+    }{
+        No
+    }
 \end{longtable}
 
 \setcounter{functionalreqcounter}{0}\renewcommand{\requirementtype}{NFR}
@@ -418,6 +429,12 @@ The following information is included for each recipe:
 This data is imported into the app's database during setup. See \todo{Schema} for the schema.
 
 \todo{Sample entry}
+
+\subsubsection{Limitations}
+While it contains many recipes, the RecipeNLG dataset includes numberous recipes with identical names.
+As similarity is evaluated based on the name (section \ref{sec:recipe_similarity}), and as such
+these would be considered identical, it was decided to filter the dataset to only include each name once,
+ordered by which appears first in the dataset.
 
 \todo{Dataset}
 
