@@ -237,6 +237,32 @@ must be corrected manually. Overall, MegaLinter aids in ensuring code quality an
 \todo{Investigation}
 
 \section{Results}
+
+The dataset used contains a number of meaningless and nonsensical recipes (see figure
+\ref{fig:bad_recipe_entry}), which were imported by the \chef{} system during setup.
+A possible reason for these being included in RecipeNLG is that some of the
+data sources scraped for it allow for user-submitted recipes, this contributes to
+an unclean and noisy dataset.~\cite{kicherer_what_2018}
+
+\begin{figure}[h]
+    \centering
+    \caption{\label{fig:bad_recipe_entry}A nonsensical recipe that was included in the dataset.}
+    \includegraphics{figures/bad_recipe_entry.png}
+\end{figure}
+
+A possible solution for this issue would have been to further pre-process the
+data beyond what is discussed in section \ref{sec:data_pre_process} to remove
+these entries.\todo{Source}
+
+\subsection{Similar Recipes}
+\todo{Similar Recipes}
+
+\subsubsection{Recipe Search}
+\todo{Recipe search, based on same model as similar}
+
+\subsection{Meal Type Prediction}
+\todo{Meal type prediction}
+
 \todoinline{
     The final part of is the presentation of your results. You may have quantitative or qualitative data, or even both. The best way of presenting your results will be determined
     by the type of data and the nature of your investigation but will usually involve summarising the data in some way.  Data analysis is too large and varied a topic to discuss
