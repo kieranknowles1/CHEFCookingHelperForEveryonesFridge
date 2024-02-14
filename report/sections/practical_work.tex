@@ -244,7 +244,7 @@ A possible reason for these being included in RecipeNLG is that some of the
 data sources scraped for it allow for user-submitted recipes, this contributes to
 an unclean and noisy dataset.~\cite{kicherer_what_2018}
 
-\begin{figure}[h]
+\begin{figure}
     \centering
     \caption{\label{fig:bad_recipe_entry}A nonsensical recipe that was included in the dataset.}
     \includegraphics{figures/bad_recipe_entry.png}
@@ -256,6 +256,11 @@ these entries.\todo{Source}
 
 \subsection{Similar Recipes}
 \todo{Similar Recipes}
+
+As recipe similarity only takes the name into account, it is unable to find similarities
+in other areas such as ingredient list or directions. An alternative approach to using
+recipe names could have been to take the ingredients and directions of the recipe into account,
+similar to the strategy used by Freyne and Berkovsky.~\cite{freyne_intelligent_2010}
 
 \subsubsection{Recipe Search}
 \todo{Recipe search, based on same model as similar}
