@@ -1,9 +1,9 @@
 \section{Literature Review}
 \todoinline{
     A literature review has four main objectives:
-    • Outlines the area you are researching - what is the context of your work?
+    • Outlines the area you are researching --- what is the context of your work?
 
-    • Explain why it matters - what is the state of the art in your project area?
+    • Explain why it matters --- what is the state of the art in your project area?
 
     • Summarises prior research that has been done in this area, particularly any key studies
 
@@ -11,13 +11,13 @@
 
     • Identifies a set of possible techniques/methods for solving the problem
 
-    • Presents your research question(s) as the natural conclusion of the literature review (this is especially relevant for investigative projects)
+    • Presents your research questions as the natural conclusion of the literature review (this is especially relevant for investigative projects)
 
     A literature review is *not* just a summary! It provides a firm foundation for your project work
 
     Identify and synthesize the existing papers on the topic
 
-    2500-3000 words
+    2500--3000 words
 
     Organize papers while reading and make notes on them. Could include these notes as an appendix
 
@@ -52,7 +52,7 @@
     For example, you can quote certain terms that were coined by the author, not common knowledge, or taken directly from the study.
     • Summarize and synthesize: Remember to summarize and synthesize your sources within
     each paragraph as well as throughout the review.
-    • Keep your voice: While the literature review presents others' ideas, your voice (the writer's)should remain front and centre.
+    • Keep your voice: While the literature review presents others' ideas, your voice (the writer's) should remain front and centre.
     For example, weave references to other sources into your text, but you can still maintain your voice by starting and ending the paragraph with your ideas and
     your own words. The sources then act as a way of supporting what you are saying.• Use caution when paraphrasing: When paraphrasing a source that is not your own, be sure to
     represent the author's information or opinions accurately and in your own words. You still need to reference the source to avoid plagiarism.
@@ -73,40 +73,38 @@
     • Simply list each book/paper you have read with a summary of it
     • Quoting or closely paraphrasing long passages
     • Trying to cover many topics and give very little on each.
-    • Find one source on each topic and stop there. You cannot build an argument around consensus "literature states" with one source.
-    • You can dismiss other approaches - while demonstrating you are aware of them, e.g.: "I refer to [key term] as described by Creswell and Creswell (2018). For other common uses see Y (2014), and Z and X (2015)".
+    • Find one source on each topic and stop there. You cannot build an argument around consensus \enquote*{literature states} with one source.
+    • You can dismiss other approaches --- while demonstrating you are aware of them, e.g., \enquote*{I refer to [key term] as described by Creswell and Creswell (2018). For other common uses see Y (2014), and Z and X (2015)}.
     • No attempt at critical engagement of the literature provided. Not all literature is created equal or is equally as useful to you.
     • There is literature, but it lacks an argument. It's there, but not in support of any central argument.
     • Not using the literature to its full advantage. Pick key figures out of quotes:
-    "Smith (2011) agrees there is a large increase in figures in this area" OR
-    "Smith (2011) highlights the significance of the increase in the sector, asserting there was a 57\% increase within 5 years from 2012 -2017"
+    \enquote*{Smith (2011) agrees there is a large increase in figures in this area} OR
+    \enquote*{Smith (2011) highlights the significance of the increase in the sector, asserting there was a 57\% increase within 5 years from 2012--2017}
     • No literature at all!
 
     Look at the academic phrase bank
 }
 
-\subsection{Recipe Similarity Evaluation}
-\label{sec:recipe_similarity}
-The similarity of recipes can be evaluated using a sentence embedding model \todo{Source?}. For the \chef{} app,
-the pre-trained Universal Sentence Encoder \cite{cer_universal_2018} was decided upon. This can run in a Node.js
+\subsection{Recipe Similarity Evaluation}\label{sec:recipe_similarity}
+The similarity of recipes can be evaluated using a sentence embedding model \todo{Source}. For the \chef{} app,
+the pre-trained Universal Sentence Encoder~\cite{cer_universal_2018} was decided upon. This can run in a Node.js
 environment via TensorFlow.js.
 
-% Jaccard doesn't make sense for embeddings
+\todo{Jaccard doesn't make sense for embeddings}
 % The Jaccard similarity metric has previously been found to be an effective model for recommendation generation based on similarity
 % between data points \cite{jeswani_extent_2021}.
 
-\section{Competitor Analysis}
-\label{sec:competitor_analysis}
-As part of the development of \chef{}, a competitor analysis has been performed on the existing solutions MyFridgeFood
-\cite{myfridgefood_myfridgefood_nodate} and SuperCook \cite{supercook_supercook_nodate} as part of the research
-into the problem domain. These solutions, while useful, had limitations as discussed below. \chef{} aims to address
+\section{Competitor Analysis}\label{sec:competitor_analysis}
+As part of the development of \chef{}, a competitor analysis has been performed on the existing solutions
+MyFridgeFood~\cite{myfridgefood_myfridgefood_nodate} and SuperCook~\cite{supercook_supercook_nodate} as part of the research
+into the problem domain. These solutions, while useful, had limitations as discussed below. The \chef{} app aims to address
 these limitations and provide a more useful solution.
 
 Both of the analyzed competitors provide a user account system
 that saves a user's list of available ingredients. Creating an account also allows for recipes to be favourited/bookmarked
 which would then be shown on a dedicated page. SuperCook additionally shows which of the user's favourite recipes
 can be made using available ingredients and which ingredients are missing. Both apps also use exclusively imperial
-units for ingredients that are not understood by the majority of the world. \chef{} will use metric units by default
+units for ingredients that are not understood by the majority of the world. The \chef{} app will use metric units by default
 as it is targeted at a UK audience.
 
 However, neither of these apps has a system for sharing pantries between users or specifying disliked ingredients. These features would be useful for households with multiple people.
@@ -114,7 +112,7 @@ Additionally, the only way to update available ingredients is to manually add or
 each ingredient, so there is no way to know if the user has enough of an ingredient without checking manually.
 
 Neither app tracks which recipes have been made recently, so there is no way to avoid suggesting similar recipes to ones that have been recently made which could lead to
-users getting bored of eating the same meals over and over.
+users getting bored with eating the same meals over and over.
 
 MyFridgeFood has a feature to submit new recipes which are shared between all users. This is a useful feature as it allows for the community to contribute to the database
 of recipes, however, these cannot be kept private to just one user.
@@ -122,10 +120,10 @@ of recipes, however, these cannot be kept private to just one user.
 \subsection{User Reviews}
 
 A frequent complaint about MyFridgeFood was that it suggested
-recipes that users lacked ingredients for. See figure \ref{rev:review_missing_ingredients} for an example.
+recipes that users lacked ingredients for. See figure~\ref{rev:review_missing_ingredients} for an example.
 
 Another user found that MyFridgeFood gave them suggestions that were too similar to each
-other. See figure \ref{rev:review_lack_variety} for the review.
+other. See figure~\ref{rev:review_lack_variety} for the review.
 
 \section{Product Requirements}
 
@@ -148,14 +146,13 @@ other. See figure \ref{rev:review_lack_variety} for the review.
     #3
         &
     #4
-        \\\hline
+        \\
 }
 
-\begin{longtable}{|l|p{128pt}|l|l|l|}
-    \caption{Functional Requirements}
-    \label{tab:functional_requirements}
-    \\\hline
-    \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} & \textbf{Implemented} \\\hline
+\begin{longtable}{lp{128pt}lll}
+    \caption{Functional Requirements}\label{tab:functional_requirements}
+    \\\toprule
+    \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} & \textbf{Implemented} \\\midrule
 
     \requirement{
         \textbf{User registration.} The system \textbf{must} allow users to sign up and log in to the app.
@@ -168,7 +165,7 @@ other. See figure \ref{rev:review_lack_variety} for the review.
     }
 
     \requirement{
-        \textbf{Share ingredient lists.} The system \textbf{must} allow for multiple users to share one \virtualfridge
+        \textbf{Share ingredient lists.} The system \textbf{must} allow for multiple users to share one \virtualfridge{}
     }{
         TODO: Source
     }{
@@ -211,7 +208,7 @@ other. See figure \ref{rev:review_lack_variety} for the review.
 
     \requirement{
         \textbf{Scan ingredients.} The system \textbf{should} allow the user to scan the barcodes of ingredients to add
-        them to their \virtualfridge
+        them to their \virtualfridge{}
     }{
         TODO: Source
     }{
@@ -221,7 +218,7 @@ other. See figure \ref{rev:review_lack_variety} for the review.
     }
 
     \requirement{
-        \textbf{Use metric units.} All units \textbf{should} be displayed in metric.
+        \textbf{Use metric units.} All units \textbf{should} be displayed in metric by default.
     }{
         Competitor Analysis
     }{
@@ -231,8 +228,18 @@ other. See figure \ref{rev:review_lack_variety} for the review.
     }
 
     \requirement{
+        \textbf{Optionally use imperial units.} There \textbf{could} be an option to display imperial units instead of metric.
+    }{
+        Competitor Analysis
+    }{
+        Could-have
+    }{
+        No
+    }
+
+    \requirement{
         \textbf{Scan receipt.} The system \textbf{could} allow the user to scan a receipt from a store to add ingredients
-        to their \virtualfridge
+        to their \virtualfridge{}
     }{
         TODO: Source
     }{
@@ -241,8 +248,7 @@ other. See figure \ref{rev:review_lack_variety} for the review.
         No
     }
 
-    \requirement{
-        \label{req:similar_recipes}
+    \requirement{\label{req:similar_recipes}
         \textbf{Find similar recipes.} The system \textbf{should} use a machine learning model to find and suggest
         similar recipes to those that the user has previously made.
     }{
@@ -263,14 +269,26 @@ other. See figure \ref{rev:review_lack_variety} for the review.
     }{
         No
     }
+
+    \requirement{
+        \textbf{Add recipes.} The system \textbf{won't currently} allow for users to add their own recipes
+        to the database.
+    }{
+        Competitor Analysis
+    }{
+        Won't-have
+    }{
+        No
+    }
+
+    \bottomrule
 \end{longtable}
 
 \setcounter{functionalreqcounter}{0}\renewcommand{\requirementtype}{NFR}
-\begin{longtable}{|l|p{128pt}|l|l|l|}
-    \caption{Non-functional Requirements}
-    \label{tab:non_functional_requirements}
-    \\\hline
-    \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} & \textbf{Implemented} \\\hline
+\begin{longtable}{lp{128pt}lll}
+    \caption{Non-functional Requirements}\label{tab:non_functional_requirements}
+    \\\toprule
+    \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} & \textbf{Implemented} \\\midrule
 
     \requirement{
         \textbf{Performance.} The system \textbf{should} be responsive to user input and requests to the API \textbf{should}
@@ -334,6 +352,7 @@ other. See figure \ref{rev:review_lack_variety} for the review.
     }{
         Yes
     }
+    \bottomrule
 \end{longtable}
 
 \todoinline{
@@ -346,12 +365,12 @@ other. See figure \ref{rev:review_lack_variety} for the review.
     • The spec and the report chapter are not the same thing!
     • A DISCUSSION AND JUSTIFICATION of the requirements is expected in the report
 
-    Functional requirements - what the system does.
-    • Processing, inputs, outputs, data...
-    • Non-functional requirements - how it does it.
+    Functional requirements --- what the system does.
+    • Processing, inputs, outputs, data\ldots
+    • Non-functional requirements --- how it does it.
     • Software quality: performance, throughput, availability etc.
     • Usability \& user characteristics
-    • Environment - physical, organisational etc.
+    • Environment --- physical, organisational etc.
     • Required computing hardware, software tools etc
 
     Use MoSCoW requirements, W stands for would like to have, but won't currently
@@ -364,11 +383,11 @@ other. See figure \ref{rev:review_lack_variety} for the review.
 
     http://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?punumber=6146377
 
-    • IEEE 830-1998 (older)
+    • IEEE 830--1998 (older)
 
     http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=720574
 
-    • You don't have to use this - but
+    • You don't have to use this --- but
         • it gives you a structure that you can adapt
         • it can encompass various approaches such as use case modelling.
         • Other templates available.
@@ -377,11 +396,11 @@ other. See figure \ref{rev:review_lack_variety} for the review.
 \section{Approach/Methodology}
 \todo{Approach/Methodology}
 
-\subsection{The Dataset}
+\subsection{The Dataset}\label{sec:data_pre_process}
 
 \todo{Should I talk about how Recipe Box was considered?}
 
-The RecipeNLG dataset \cite{bien_recipenlg_2020} was decided upon for the \chef{} app. This contains ~2 million recipes
+The RecipeNLG dataset~\cite{bien_recipenlg_2020} was decided upon for the \chef{} app. This contains approximately 2 million recipes
 each with an ingredient list, a list of directions, and its source URL.
 
 While licensing restrictions would prevent this from being used for a commercial app, it is still available for
@@ -390,30 +409,36 @@ research purposes.
 The following information is included for each recipe:
 
 \begin{table}[h!]
-    \caption{RecipeNLG Row Format}
-    \label{tab:recipenlg_row_format}
+    \caption{RecipeNLG Row Format}\label{tab:recipenlg_row_format}
 
-    \begin{tabulary}{\textwidth}{|l|l|L|}
-        \hline
-        \textbf{Name} & \textbf{Type} & \textbf{Description} \\\hline
+    \begin{tabulary}{\textwidth}{llL}
+        \toprule
+        \textbf{Name} & \textbf{Type} & \textbf{Description} \\\midrule
 
-        Title & String & The name of the recipe. \\\hline
+        Title & String & The name of the recipe.\\
 
-        Ingredients & String array & A list of ingredients along with the quantity required. Quantities are presented in imperial units. \\\hline
+        Ingredients & String array & A list of ingredients along with the quantity required. Quantities are presented in imperial units.\\
 
-        Directions & String array & A list of directions to make the recipe. Temperatures are presented in Fahrenheit. \\\hline
+        Directions & String array & A list of directions to make the recipe. Temperatures are presented in Fahrenheit.\\
 
-        Link & String & A link to the page where the recipe was sourced. \\\hline
+        Link & String & A link to the page where the recipe was sourced.\\
 
-        Source & String & The dataset the recipe was sourced from, \enquote*{Gathered} for recipes collected for RecipeNLG itself or the name of another dataset. \\\hline
+        Source & String & The dataset the recipe was sourced from, \enquote*{Gathered} for recipes collected for RecipeNLG itself or the name of another dataset.\\
 
-        NER & String array & A list of ingredients without quantities. \\\hline
+        NER & String array & A list of ingredients without quantities.\\
+        \bottomrule
     \end{tabulary}
 \end{table}
 
 This data is imported into the app's database during setup. See \todo{Schema} for the schema.
 
 \todo{Sample entry}
+
+\subsubsection{Limitations}
+While it contains many recipes, the RecipeNLG dataset includes numberous recipes with identical names.
+As similarity is evaluated based on the name (section \ref{sec:recipe_similarity}), and as such
+these would be considered identical, it was decided to filter the dataset to only include each name once,
+ordered by which appears first in the dataset.
 
 \todo{Dataset}
 
@@ -444,17 +469,17 @@ This data is imported into the app's database during setup. See \todo{Schema} fo
     that apply. Beware of presenting a shallow treatment of the subject which might be obtained from standard texts. You are expected to support your argument by exploring
     academic literature which is seminal and up-to-date.
 
-    The background and problem description should describe the actual problem you are looking at and set it in context. You should tell the reader about the computing problem(s)
-    to be investigated, the product to be built, etc. as relevant, building on the brief overview given in the introduction. Bring out features of the problem you would not
+    The background and problem description should describe the actual problem you are looking at and set it in context. You should tell the reader about the computing problems
+    to be investigated, the product to be built, etc., as relevant, building on the brief overview given in the introduction. Bring out features of the problem you would not
     expect the reader to know about. Do not state the obvious.
 
     The literature review will be a very important component of the research. Your literature review may discuss the problem that you are trying to solve, the question that
-    you are trying to answer, possible solutions, methods of investigation, etc. as appropriate to your needs. You need to find out the state of the art - what others have
+    you are trying to answer, possible solutions, methods of investigation, etc., as appropriate to your needs. You need to find out the state of the art --- what others have
     done in this area, what solutions have been proposed, what findings have been achieved, what products have been created to tackle the same problem, and what
     tools/techniques/approaches have been proven to be useful. The purpose is to help you analyse the problem and its context, learn from existing related work, and
     propose appropriate solutions for your project. You need to look for important concepts and principles, possible techniques, methods, tools, structures, etc that
     you could use in your project.
-    Note that the marking scheme says that a 'critical review' is required. You should not simply be relaying information or paraphrasing the sources that you have found, but
+    Note that the marking scheme says that a \enquote*{critical review} is required. You should not simply be relaying information or paraphrasing the sources that you have found, but
     identifying principles, structuring ideas, discussing the relevance to your project, and making evaluative comments about what you have found. It is useful to end the
     literature review by summarising the key ideas that it has contributed to the project.
 
@@ -463,23 +488,23 @@ This data is imported into the app's database during setup. See \todo{Schema} fo
     of significance is said about any of them, and perhaps only one source (or no sources!) is cited for each. In this case, assuming that the project topic is suitable, the
     student would have been better advised to take a narrower focus.
 
-    The length of a literature review should be guided by the needs of the specific project, but they are typically 2500 - 3000 words. You should use respectable academic sources,
+    The length of a literature review should be guided by the needs of the specific project, but they are typically 2500--3000 words. You should use respectable academic sources,
     such as refereed journals conferences, or other reliable and authoritative sources of information.
 
     Once you have described your problem and put it into context by carrying out the literature review, you are in a position to identify and justify the appropriate approach
     to take to solve the problem. You will need to explain your approach at an overview level and give your reasons for choosing this approach. We are looking for a
-    high-level discussion here. You will go into the details of exactly what you did (e.g. how you built the product, set up experiments, chose your participants, ran your
+    high-level discussion here. You will go into the details of exactly what you did (e.g., how you built the product, set up experiments, chose your participants, ran your
     tests, etc.) in the practical work chapters.
 
     If your practical work is to investigate a research question/hypothesis, you should discuss the possible strategies for conducting research or
     investigations in your subject area. This could be quite different for projects in different subject areas, for example, forensics, networking or HCI. You may need to
-    consider research methods - for example, are you using one of the many varieties of experimental design? are you carrying out your study in lab conditions or the
+    consider research methods --- for example, are you using one of the many varieties of experimental design? are you carrying out your study in lab conditions or the
     field? will you be taking measurements of the performance of real equipment, or using a computer simulation? You should review the possible alternative approaches, and
     explain why your chosen strategy was preferable to others, or was the only possibility.
 
     If you plan to build a product, you need to identify the requirements for the product and produce its specifications. The actual specification of requirements is part
     of your product and is marked under the product component. The research and planning chapters include your discussion and justification of those requirements. Reasons
-    for choosing particular requirements could relate to user needs, constraints on project scope, the findings of your literature review, etc. - whatever is appropriate
+    for choosing particular requirements could relate to user needs, constraints on project scope, the findings of your literature review, etc., --- whatever is appropriate
     to your particular project. You should discuss the methods you used to establish the product requirements, e.g., requirements elicitation and modelling, interviews,
     and examination of existing products. It is appropriate to comment on significant findings that affect the decisions and to include any artefacts produced and the outputs
     of your investigations in the product documentation. It is expected that your requirements specification covers both functional and non-functional requirements. It is

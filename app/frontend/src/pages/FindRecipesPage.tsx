@@ -1,6 +1,7 @@
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 import React from 'react'
+import { useDebounce } from 'use-debounce'
 
 import LoadingSpinner, { type LoadingStatus } from '../components/LoadingSpinner'
 import RecipeSearchOptions, { type SearchFilters } from '../components/RecipeSearchOptions'
@@ -10,7 +11,6 @@ import { type RecipeProps } from '../components/Recipe'
 import Search from '../components/inputs/Search'
 import apiClient from '../apiClient'
 import monitorOutcome from '../utils/monitorOutcome'
-import { useDebounce } from 'use-debounce'
 
 const PAGE_SIZE = 100
 

@@ -3,6 +3,7 @@ services:
   backend:
     build: ./backend
     container_name: chef_backend
+    restart: unless-stopped
     volumes:
       - ./backend_data:/data
       - ./dataset:/dataset:ro
@@ -13,6 +14,7 @@ services:
   frontend:
     build: ./frontend
     container_name: chef_app
+    restart: unless-stopped
     volumes:
       - ./config:/usr/share/nginx/html/config:ro
     ports:

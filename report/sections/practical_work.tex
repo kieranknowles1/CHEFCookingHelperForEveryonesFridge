@@ -68,32 +68,45 @@
 
 \todo{Implementation}
 
-\section{Backend Implementation}
-\label{sec:backend_language}
-\todo{Backend}
-\todo{Should I be explaining what TypeScript is or not?}
-The backend was the first component to be developed to have a data source for the frontend to connect to. This was
-implemented in TypeScript using the Node.js framework. TypeScript was chosen as it compiles into JavaScript which can run in web browsers
-while adding compile-time type checking similar to statically typed languages such as Java. This would allow for the same language
-to be used for both the front and back end.
+The \chef{} app is implemented using a React frontend and an Express.js backend, both written in TypeScript.
+This language was chosen as it compiles into JavaScript that can run in a browser, allowing the same language to be used for both
+the front and back ends, while adding compile-time type checking similar to strongly typed languages such as Java.
 
-One major difference between TypeScript and Java is TypeScript's use of structural typing. This means that any object
-that implements the properties specified in an interface is considered an instance of that interface in comparison
-to Java where an interface has to be explicitly implemented by a class. As the objects retrieved from the database
-did not need their own logic, it was decided early on to do away with having a class for each type in the database
-and to instead rely only on interfaces. This simplified the database code and allowed for specialized subtypes to easily
-be added when needed for different endpoints.
+\section{Backend Implementation}
+\todo{Backend}
+
+The backend of the app is implemented as a REST API based on Express.js with SQLite
+used for the database.
 
 \todo{Expressjs}
+
+SQLite was chosen for the database as it is the simplest to set up, being implemented through
+a library rather than requiring a dedicated server, while being somewhat portable with other
+database systems.~\cite{kreibich_using_2010} This would allow for the database to be migrated to
+another backend with a limited number of changes needing to be made.
+
+One major difference between TypeScript and Java is that TypeScript uses structural typing, where objects are considered
+the same if they have the same structure. While Java uses nominal typing and requrires an interface to be explicitly
+implemented by a class. This allows for different modules to be interoperable through sharing the same structure of objects.~\cite{gil_whiteoak_2008}
+For this reason, along with the fact that the data transfer objects did not need their own logic, it was decided early on
+to not use classes for objects retrieved from the database and instead to rely on interfaces only.
+
 
 \subsection{Documentation}
 The API was declared and documented using the OpenAPI format and converted
 into TypeScript types using the \codelisting{openapi-typescript} package. These
-generated types were then used to check the return types from the API. Unfortunately,
-this was unable to check parameters automatically or the existence of endpoints
-as TypeScript types don't exist at runtime.
+generated types were then used to check the return types from the API.
 
-\todo{Docs hosting}
+The \codelisting{express-openapi-validator} package was used separately to validate
+request parameters against the OpenAPI schema. This implementation avoided having
+to duplicate validation specificiations and removed the possibility of having the values that
+the server accepts differ from what was documented.
+
+One limitation that was not resolved with either of the above packages is that there is no validation
+for whether the endpoints exist which lead to some confusion when testing endpoints that had not been registered
+with Express. A different combination of packages may have been able to check for this,
+but was not considered due to time constraints.
+
 Swagger UI \cite{smartbear_swagger_2024} was used to serve a generated HTML page that lists all endpoints declared in
 the API specification, along with example values for both requests and responses and the ability to make requests in
 the browser. This served as a quick way to make test requests with dummy data during development, and an easy-to-use
@@ -101,16 +114,16 @@ reference for the endpoints available to \codelisting{openapi-fetch}.
 
 \subsection{Machine Learning}
 The similarity of recipes is evaluated using the Universal Sentence Encoder model discussed in section \ref{sec:recipe_similarity} to
-compare the names of recipes. Due to the high runtime cost of embedding sentences at approximatively 100ms per string,
+compare the names of recipes. Due to the high runtime cost of embedding sentences at approximately 100ms per string,
 the embeddings are calculated during setup and stored in the database, organized by their source strings as shown in table \ref{fig:embedding_table}.
 
 \begin{table}[h]
     \centering
     \caption{\label{fig:embedding_table}An example of the contents of the embedding table.}
-    \begin{tabular}{|c|c|}
-        \hline
-        \textbf{Original String} & \textbf{Embedding (format is an implementation detail)} \\\hline
-        Pasta & BLOB \\\hline
+    \begin{tabular}{cc}
+        \toprule
+        \textbf{Original String} & \textbf{Embedding (format is an implementation detail)} \\\midrule
+        Pasta & BLOB \\\bottomrule
     \end{tabular}
 \end{table}
 
@@ -120,14 +133,20 @@ This took a significant amount of time to execute at first. Despite initial assu
 created due to the implementation, was shown by profiling (see figure \ref{fig:similarity_flamegraph}) to instead be in TensorFlow's
 matrix maths functions.
 
-This could be accelerated using a hardware-accelerated build of TensorFlow, which was not done at first due to the difficulty of installing
-it on Windows. \todo{Update this and add benchmark for after hardware accel and fix. Want to run the initial benchmark on my main PC}
+This could be accelerated using a hardware-accelerated build of TensorFlow, which was not done due to the difficulty of installing
+it on Windows. Given that machine learning performance was only a concern during setup, this was deemed a low-priority
+issue and was not resolved.
+\todo{Update this and add benchmark for after hardware accel and fix. Want to run the initial benchmark on my main PC}
 
 \section{Frontend Implementation}
 \todo{Frontend}
 
-The front end of the application is written in React with TypeScript for the reasons discussed previously in section
-\ref{sec:backend_language}
+% TODO: Rework this
+% The front end of the application is written in React with TypeScript for the reasons discussed previously in
+% section \ref{sec:backend_language}, and is styled using Tailwind CSS.
+
+% React was chosen as it allows for quickly producing a user interface that is responsive to the user's device and dynamically
+% fetches data from the API.
 
 \subsection{API Communication}
 The \codelisting{openapi-fetch} package was used along with the types generated from the API documentation was
@@ -168,17 +187,54 @@ changes.
 
 \todo{Testing}
 
+\subsection{Test Plan}
+The backend of the app will be unit tested using the Mocha.js framework in order
+to verify that it functions as intended and to catch any regressions. Tests for lower-level components
+such as validation functions and the database will be written before those for higher-level
+components such as the API. These test cases will be executed on every push automatically
+with an alert being sent should any of them fail.
+\todo{Test plan}
+
+\subsection{Compiler Checks}
+The compile-type checks added by TypeScript are effective at preventing bugs from being introduced, especially with
+the checks for \texttt{null} and \texttt{undefined} enabled as is performed with the \texttt{strict} option enabled.~\cite{gao_type_2017}
+
+See figure \ref{fig:type_check} for an example of an issue that would not be caught
+by JavaScript, but would be caught by the TypeScript compiler.
+
+\begin{figure}[h]
+    \caption{\label{fig:type_check}A code snippet that would fail TypeScript's checks.}
+    \begin{verbatim}
+function take_str(str: string): void {
+    console.log(str)
+}
+
+// This would compile, as it is passed the expected type
+take_str('Hello')
+
+// This would not compile as take_str expects a string,
+// but a number was passed
+take_str(123)
+
+// This would also not compile as take_str does not return
+// anything
+const ret = take_str('World')
+    \end{verbatim}
+\end{figure}
+
+\todo{Compiler Checks}
+
 \subsection{Unit Testing}
-The application is tested using the Mocha test framework \cite{noauthor_mocha_nodate} with API tests additionally using Supertest \cite{noauthor_ladjssupertest_2024}
+The backend of the application is tested using the Mocha test framework \cite{noauthor_mocha_nodate} with API tests additionally using Supertest \cite{noauthor_ladjssupertest_2024}
 and coverage reports generated by Istanbul \cite{noauthor_istanbul_nodate}.
 This can be run from the root directory of the individual applications \todo{Need to test front end as well, how will this be done?} using the commands
 \codelisting{npm run test} and \codelisting{npm run test:coverage} and is executed automatically after every push via a GitHub action.
 
-See figure \todo{Figure} for an example of a test report.
+See figure \ref{fig:test_report} for an example of a test report, \ref{fig:coverage_report}
+for a coverage report, and figure \todo{figure} for an email that is sent if a test fails when a commit
+is pushed.
 
 \todo{Unit testing}
-\todo{Include an example test report}
-\todo{Include an example coverage report}
 
 \subsection{Code Quality Evaluation}
 The MegaLinter tool \cite{vuillamy_megalinter_nodate} was configured to run on every pull request on the application's Git repository. This includes a wide array
@@ -186,11 +242,16 @@ of checks to ensure that style guides were adhered to and to catch potential iss
 assumptions about an object's type. This generates a report that is attached to each pull request detailing
 any issues that were found (figure \ref{fig:metalinter_report}).
 
+As with the unit tests action, an email is sent if any of the checks fail.
+
 The configuration for MegaLinter and its linters can be found in the root directory of the repository.
 Certain issues, such as incorrect indentation, are fixed automatically when a pull request is created, while others
 must be corrected manually. Overall, MegaLinter aids in ensuring code quality and preventing the use of bad practices.
 
 \todo{May want more here}
+
+\section{Deployment}
+\todo{Describe how Docker was used}
 
 \section{Investigation}
 \todoinline{
@@ -205,6 +266,37 @@ must be corrected manually. Overall, MegaLinter aids in ensuring code quality an
 \todo{Investigation}
 
 \section{Results}
+
+The dataset used contains a number of meaningless and nonsensical recipes (see figure
+\ref{fig:bad_recipe_entry}), which were imported by the \chef{} system during setup.
+A possible reason for these being included in RecipeNLG is that some of the
+data sources scraped for it allow for user-submitted recipes, this contributes to
+an unclean and noisy dataset.~\cite{kicherer_what_2018}
+
+\begin{figure}
+    \centering
+    \caption{\label{fig:bad_recipe_entry}A nonsensical recipe that was included in the dataset.}
+    \includegraphics{figures/bad_recipe_entry.png}
+\end{figure}
+
+A possible solution for this issue would have been to further pre-process the
+data beyond what is discussed in section \ref{sec:data_pre_process} to remove
+these entries.\todo{Source}
+
+\subsection{Similar Recipes}
+\todo{Similar Recipes}
+
+As recipe similarity only takes the name into account, it is unable to find similarities
+in other areas such as ingredient list or directions. An alternative approach to using
+recipe names could have been to take the ingredients and directions of the recipe into account,
+similar to the strategy used by Freyne and Berkovsky.~\cite{freyne_intelligent_2010}
+
+\subsubsection{Recipe Search}
+\todo{Recipe search, based on same model as similar}
+
+\subsection{Meal Type Prediction}
+\todo{Meal type prediction}
+
 \todoinline{
     The final part of is the presentation of your results. You may have quantitative or qualitative data, or even both. The best way of presenting your results will be determined
     by the type of data and the nature of your investigation but will usually involve summarising the data in some way.  Data analysis is too large and varied a topic to discuss
