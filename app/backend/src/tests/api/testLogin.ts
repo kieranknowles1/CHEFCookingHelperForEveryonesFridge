@@ -28,6 +28,19 @@ describe('/api/v1/login', () => {
         .expect(200)
     })
 
+    it('should be case-insensitive for username', async () => {
+      const username = 'TESTY MCTESTFACE'
+      const password = '12345'
+      const headers = {
+        Authorization: `Basic ${btoa(username + ':' + password)}`
+      }
+
+      await request(app.server)
+        .post('/api/v1/login')
+        .set(headers)
+        .expect(200)
+    })
+
     it('should return 401 for invalid login', async () => {
       const username = 'Testy McTestFace'
       const password = 'wrong_one'
