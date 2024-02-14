@@ -9,7 +9,7 @@ export interface BasicAuth {
 }
 
 function throwInvalidHeader (): never {
-  throw new error.BadRequest({ path: 'header', message: 'Invalid Authorization header' })
+  throw new error.Unauthorized({ path: 'header', message: 'Invalid Authorization header' })
 }
 
 /**
@@ -20,6 +20,7 @@ function throwInvalidHeader (): never {
  */
 export default function decodeBasicAuth (header: string): BasicAuth {
   const [type, encoded] = header.split(' ')
+  // openapi-validator should catch this, but just in case
   if (type !== 'Basic') {
     throwInvalidHeader()
   }
