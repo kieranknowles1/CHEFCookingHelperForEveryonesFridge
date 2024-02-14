@@ -19,13 +19,13 @@
     "strictNullChecks": true,
     "noUnusedLocals": false,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
     "src",
     "postcss.config.js",
     "tailwind.config.ts",
-    "vite.config.ts",
+    "vite.config.ts"
   ],
-  "references": [{ "path": "./tsconfig.node.json" }],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
