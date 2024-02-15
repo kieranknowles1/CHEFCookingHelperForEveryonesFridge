@@ -25,8 +25,7 @@ export default class FridgeDatabaseImpl implements IFridgeDatabase {
 
     return {
       id: result.id,
-      name: result.name,
-      ownerId: result.owner_id
+      name: result.name
     }
   }
 

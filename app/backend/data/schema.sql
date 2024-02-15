@@ -182,8 +182,7 @@ CREATE TABLE user_banned_ingredient (
 
 CREATE TABLE fridge (
     id INTEGER NOT NULL PRIMARY KEY,
-    name TEXT NOT NULL,
-    owner_id INTEGER NOT NULL REFERENCES user(id)
+    name TEXT NOT NULL
 );
 
 CREATE TABLE fridge_user (

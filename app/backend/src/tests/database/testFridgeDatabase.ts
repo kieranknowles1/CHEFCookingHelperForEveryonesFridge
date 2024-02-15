@@ -17,8 +17,7 @@ describe('database/FridgeDatabaseImpl', () => {
       const fridge = database.fridges.get(1)
       assert.deepStrictEqual(fridge, {
         id: 1,
-        name: 'The Test Fridge',
-        ownerId: 1
+        name: 'The Test Fridge'
       })
     })
   })

@@ -18,11 +18,11 @@ VALUES
     (2, (SELECT id FROM ingredient WHERE name = 'Mushrooms'));
 
 INSERT INTO fridge
-    (id, name, owner_id)
+    (id, name)
 VALUES
-    (1, 'Alice Fridge', 1),
-    (2, 'Bobs Fridge', 2),
-    (3, 'Shared Fridge', 1);
+    (1, 'Alice Fridge'),
+    (2, 'Bobs Fridge'),
+    (3, 'Shared Fridge');
 
 INSERT INTO fridge_user
     (fridge_id, user_id)

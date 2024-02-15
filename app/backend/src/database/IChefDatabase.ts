@@ -71,7 +71,7 @@ export interface IWritableDatabase {
 
   addUser: (username: string, passwordHash: string) => types.RowId
 
-  addFridge: (name: string, ownerId: types.RowId) => types.RowId
+  addFridge: (name: string, userId: types.RowId) => types.RowId
 }
 
 export interface IFridgeDatabase {
@@ -120,17 +120,13 @@ export interface GetHistoryParams {
 export interface AvailableFridge {
   id: types.RowId
   name: string
-  owner: {
-    id: types.RowId
-    name: string
-  }
 }
 
 export interface IUserDatabase {
   get: (id: types.RowId) => User
 
   /**
-   * Get all fridges that the user has access to, along with the names and IDs of their owners
+   * Get all fridges that the user has access to
    */
   getAvailableFridges: (userId: types.RowId) => AvailableFridge[]
 

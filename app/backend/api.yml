@@ -217,14 +217,7 @@ paths:
                 properties:
                   id: { type: integer, example: 1 }
                   name: { type: string, example: "My Fridge" }
-                  owner:
-                    type: object
-                    properties:
-                      id: { type: integer, example: 1 }
-                      name: { $ref: "#/components/schemas/username" }
-                    required: [id, name]
-                    additionalProperties: false
-                required: [id, name, owner]
+                required: [id, name]
                 additionalProperties: false
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -694,8 +687,7 @@ components:
       properties:
         id: { type: integer, example: 1 }
         name: { type: string, example: "My Fridge" }
-        owner: { $ref: "#/components/schemas/NameAndId" }
-      required: [id, name, owner]
+      required: [id, name]
       additionalProperties: false
 
     User:

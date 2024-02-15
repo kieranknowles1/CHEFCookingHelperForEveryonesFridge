@@ -173,11 +173,6 @@ export interface paths {
               id: number;
               /** @example My Fridge */
               name: string;
-              owner: {
-                /** @example 1 */
-                id: number;
-                name: components["schemas"]["username"];
-              };
             };
           };
         };
@@ -560,7 +555,6 @@ export interface components {
       id: number;
       /** @example My Fridge */
       name: string;
-      owner: components["schemas"]["NameAndId"];
     };
     User: {
       /** @example 1 */

@@ -67,9 +67,9 @@ VALUES
 
 
 INSERT INTO fridge
-    (id, name, owner_id)
+    (id, name)
 VALUES
-    (1, 'The Test Fridge', 1);
+    (1, 'The Test Fridge');
 INSERT INTO fridge_user
     (fridge_id, user_id)
 VALUES
