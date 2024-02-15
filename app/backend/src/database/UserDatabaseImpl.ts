@@ -58,7 +58,7 @@ export default class UserDatabaseImpl implements IUserDatabase {
     const statement = this._connection.prepare<Result>(`--sql
       SELECT
         fridge.id,
-        fridge.name,
+        fridge.name
       FROM fridge
       JOIN fridge_user ON fridge_user.fridge_id = fridge.id
       WHERE fridge_user.user_id = :userId
