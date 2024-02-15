@@ -1,5 +1,6 @@
 import { type Express, type Request } from 'express'
 import { BadRequest } from 'express-openapi-validator/dist/openapi.validator'
+import { SqliteError } from 'better-sqlite3'
 import expressAsyncHandler from 'express-async-handler'
 
 import type IChefDatabase from '../../database/IChefDatabase'
@@ -24,9 +25,19 @@ export default function registerSignUpEndpoint (app: Express, db: IChefDatabase)
       const { username, password } = decodeBasicAuth(header)
       const hash = await generateHash(password)
 
-      const id = db.wrapTransaction(writable => {
-        return writable.addUser(username, hash)
-      })
+      let id
+      try {
+        id = db.wrapTransaction(writable => {
+          return writable.addUser(username, hash)
+        })
+      } catch (e) {
+        // Unique constraint means the username already exists
+        if (e instanceof SqliteError && e.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+          throw new BadRequest({ path: 'username', message: 'Username already in use' })
+        }
+        // Rethrow any other errors
+        throw e
+      }
 
       res.status(201).json({
         token: issueToken(id),

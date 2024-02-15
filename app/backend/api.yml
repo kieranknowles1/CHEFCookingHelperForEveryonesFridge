@@ -14,7 +14,10 @@ tags:
   - name: User
 
 servers:
+  - url: http://localhost:3000/api/v1
+    description: Development server
   - url: https://chefapi.knowles.freemyip.com/api/v1
+    description: Production server
 
 paths:
   /mealtype/list:

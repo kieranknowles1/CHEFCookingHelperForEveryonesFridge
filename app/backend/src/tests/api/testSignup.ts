@@ -46,8 +46,8 @@ describe('/api/v1/signup', () => {
       .expect(201)
 
     const { token, userId } = response.body
-    assert.strictEqual(typeof token, 'string')
-    assert.strictEqual(typeof userId, 'string')
+    assert.strictEqual(typeof token, 'string', 'Token is not a string')
+    assert.strictEqual(typeof userId, 'number', 'userId is not a number')
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- above assert checks the type
     const decoded = decode(token)
