@@ -286,10 +286,20 @@ these entries.\todo{Source}
 \subsection{Similar Recipes}
 \todo{Similar Recipes}
 
+The recipe similarity algorithm was found to be fairly effective at suggesting related items.
+For example, \enquote*{Sphagetti Casserole} is evaluated as having 90\% similarity to
+\enquote*{Spinaich Casserole} and has high similarity to other casseroles. A more surprising
+outcome is the suggestion of seemingly unrelated recipes, such as how \enquote*{Potato Salad}
+was rated as more similar to the casserole than casserole is to other Italian recipes such as
+pasta.
+
 As recipe similarity only takes the name into account, it is unable to find similarities
 in other areas such as ingredient list or directions. An alternative approach to using
 recipe names could have been to take the ingredients and directions of the recipe into account,
 similar to the strategy used by Freyne and Berkovsky.~\cite{freyne_intelligent_2010}
+
+Despite these limitations, the similar recipe suggestion algorithm appears to be an effective
+method of finding new recipes.
 
 \subsubsection{Recipe Search}
 \todo{Recipe search, based on same model as similar}
