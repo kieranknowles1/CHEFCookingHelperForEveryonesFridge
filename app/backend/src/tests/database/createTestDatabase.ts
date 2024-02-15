@@ -39,5 +39,9 @@ export const testValues = {
       name: 'Nuts',
       description: 'Any kind of nut that you may be allergic to'
     }]])
+  },
+  fridge: {
+    id: 1,
+    name: 'The Test Fridge'
   }
 }

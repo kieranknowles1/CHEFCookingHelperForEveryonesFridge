@@ -54,7 +54,8 @@ INSERT INTO user
     (id, username, password_hash)
 VALUES
     -- Password is '12345'
-    (1, 'Testy McTestface', '$2b$12$pbng8MtE8Zgfy0oSGEo0mOWO7Pt5uMnX/evVmXiHq.9EEQj4DpyJi');
+    (1, 'Testy McTestface', '$2b$12$pbng8MtE8Zgfy0oSGEo0mOWO7Pt5uMnX/evVmXiHq.9EEQj4DpyJi'),
+    (2, 'Tester The Second', '$2b$12$pbng8MtE8Zgfy0oSGEo0mOWO7Pt5uMnX/evVmXiHq.9EEQj4DpyJi');
 INSERT INTO user_banned_ingredient
     (user_id, ingredient_id)
 VALUES

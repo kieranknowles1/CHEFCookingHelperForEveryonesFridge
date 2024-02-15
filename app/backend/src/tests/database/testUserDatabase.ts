@@ -24,4 +24,16 @@ describe('database/UserDatabaseImpl', () => {
       assert.throws(() => { database.users.get(314159) }, InvalidIdError)
     })
   })
+
+  describe('getAvailableFridges', () => {
+    it('should get the fridges available to a user', () => {
+      const fridges = database.users.getAvailableFridges(1)
+      assert.deepStrictEqual(fridges, [testValues.fridge])
+    })
+
+    it('should not return fridges that the user does not have access to', () => {
+      const fridges = database.users.getAvailableFridges(2)
+      assert.deepStrictEqual(fridges, [])
+    })
+  })
 })
