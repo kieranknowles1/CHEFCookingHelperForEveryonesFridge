@@ -32,6 +32,7 @@
 \todo{Project Process}
 
 \subsection{Issues Encountered}
+\todo{Make this a table}
 
 An unexpected issue during data import was the number of unique ingredients found which totalled ~200,000. This was worked
 around by instead only including a more limited list of ingredients that would suffice to import a target of \todo{Target} of
@@ -62,6 +63,10 @@ necessary when implementing user preferences in the search query. This issue
 was resolved by generating a temporary table containing the preferences
 that only exists for the duration of the query. See figure \ref{fig:temp_table_substitution}
 for an example of where this is used.
+
+The signup endpoint was initially coded to return \texttt{200 OK} when it should have returned
+\texttt{201 Created}. This issue was caught while generating test cases with GitHub Copilot and resolved
+soon after.
 
 \begin{figure}[h]
     \caption{\label{fig:temp_table_substitution}A temporary table that is substituted into a query with \$\{expr\}}

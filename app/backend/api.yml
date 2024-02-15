@@ -354,8 +354,8 @@ paths:
         Username and password will be taken from the HTTP Basic Authentication header.
       security: [Basic: []]
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           content:
             application/json:
               schema:

@@ -13,7 +13,7 @@ type endpoint = paths['/signup']['post']
 
 export default function registerSignUpEndpoint (app: Express, db: IChefDatabase): void {
   app.post('/api/v1/signup',
-    expressAsyncHandler(async (req: Request, res: TypedResponse<endpoint, 200>) => {
+    expressAsyncHandler(async (req: Request, res: TypedResponse<endpoint, 201>) => {
       const header = req.header('Authorization')
       // NOTE: express-openapi-validator will throw an error if the header is missing
       // This is a sanity check and helps make typescript happy
@@ -28,7 +28,7 @@ export default function registerSignUpEndpoint (app: Express, db: IChefDatabase)
         return writable.addUser(username, hash)
       })
 
-      res.json({
+      res.status(201).json({
         token: issueToken(id),
         userId: id
       })

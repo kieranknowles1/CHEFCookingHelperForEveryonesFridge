@@ -318,8 +318,8 @@ export interface paths {
      */
     post: {
       responses: {
-        /** @description OK */
-        200: {
+        /** @description Created */
+        201: {
           content: {
             "application/json": {
               /** @example abc123 */
