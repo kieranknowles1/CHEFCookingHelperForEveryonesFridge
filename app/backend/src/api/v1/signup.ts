@@ -25,10 +25,13 @@ export default function registerSignUpEndpoint (app: Express, db: IChefDatabase)
       const { username, password } = decodeBasicAuth(header)
       const hash = await generateHash(password)
 
-      let id
+      let ids
       try {
-        id = db.wrapTransaction(writable => {
-          return writable.addUser(username, hash)
+        ids = db.wrapTransaction(writable => {
+          const userId = writable.addUser(username, hash)
+          const fridgeId = writable.addFridge(`${username}'s fridge`, userId)
+
+          return { userId, fridgeId }
         })
       } catch (e) {
         // Unique constraint means the username already exists
@@ -40,8 +43,9 @@ export default function registerSignUpEndpoint (app: Express, db: IChefDatabase)
       }
 
       res.status(201).json({
-        token: issueToken(id),
-        userId: id
+        token: issueToken(ids.userId),
+        userId: ids.userId,
+        fridgeId: ids.fridgeId
       })
     }))
 }

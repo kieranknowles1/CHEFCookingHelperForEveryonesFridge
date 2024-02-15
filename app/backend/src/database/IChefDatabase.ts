@@ -70,6 +70,8 @@ export interface IWritableDatabase {
   setIngredientPreference: (userId: types.RowId, ingredientId: types.RowId, allow: boolean) => void
 
   addUser: (username: string, passwordHash: string) => types.RowId
+
+  addFridge: (name: string, ownerId: types.RowId) => types.RowId
 }
 
 export interface IFridgeDatabase {
