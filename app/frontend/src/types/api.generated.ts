@@ -315,6 +315,7 @@ export interface paths {
      * @description Create a new user.
      * Returns a token that can be used for future requests.
      * Username and password will be taken from the HTTP Basic Authentication header.
+     * A fridge will be created for the user and can be accessed using the returned token.
      */
     post: {
       responses: {
@@ -325,6 +326,7 @@ export interface paths {
               /** @example abc123 */
               token: string;
               userId: components["schemas"]["id"];
+              fridgeId: components["schemas"]["id"];
             };
           };
         };
