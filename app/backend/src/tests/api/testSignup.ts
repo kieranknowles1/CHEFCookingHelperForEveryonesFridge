@@ -46,13 +46,14 @@ describe('/api/v1/signup', () => {
       .expect(201)
 
     const { token, userId } = response.body
-    assert(typeof token === 'string')
-    assert(typeof userId === 'string')
+    assert.strictEqual(typeof token, 'string')
+    assert.strictEqual(typeof userId, 'string')
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- above assert checks the type
     const decoded = decode(token)
     assert(typeof decoded === 'object' && decoded !== null)
 
-    assert.strictEqual(decoded.sub, userId)
+    assert.strictEqual(decoded.sub, userId.toString())
   })
 
   it('should not allow signing up with an existing username, case insensitive', async () => {
