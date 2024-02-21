@@ -80,7 +80,11 @@ used for the database.
 
 \todo{Expressjs}
 
-SQLite was chosen for the database as it is the simplest to set up, being implemented through
+The API itself uses the Express.js framework, this was chosen as it is quick and easy to set up, is easily extensible
+through external libraries, and provides high performance, in some cases even exceeding that of
+compiled languages~\cite{karlsson_performance_2021}.
+
+SQLite was chosen for the database as it is simple to set up, being implemented through
 a library rather than requiring a dedicated server, while being somewhat portable with other
 database systems.~\cite{kreibich_using_2010} This would allow for the database to be migrated to
 another backend with a limited number of changes needing to be made.
@@ -271,14 +275,14 @@ must be corrected manually. Overall, MegaLinter aids in ensuring code quality an
 
 The dataset used contains a number of meaningless and nonsensical recipes (see figure
 \ref{fig:bad_recipe_entry}), which were imported by the \chef{} system during setup.
-A possible reason for these being included in RecipeNLG is that some of the
+A possible reason for these being included in RecipeNLG is that some
 data sources scraped for it allow for user-submitted recipes, this contributes to
 an unclean and noisy dataset.~\cite{kicherer_what_2018}
 
 \begin{figure}
     \centering
     \caption{\label{fig:bad_recipe_entry}A nonsensical recipe that was included in the dataset.}
-    \includegraphics{figures/bad_recipe_entry.png}
+    \includegraphics[scale=0.75]{figures/bad_recipe_entry.png}
 \end{figure}
 
 A possible solution for this issue would have been to further pre-process the
@@ -300,17 +304,58 @@ in other areas such as ingredient list or directions. An alternative approach to
 recipe names could have been to take the ingredients and directions of the recipe into account,
 similar to the strategy used by Freyne and Berkovsky.~\cite{freyne_intelligent_2010}
 
-Despite these limitations, the similar recipe suggestion algorithm appears to be an effective
-method of finding new recipes.
+Despite these limitations, the similar recipe suggestion algorithm appears to be a fairly effective
+means of finding new recipes. Most of the suggested recipes appear to be closely related to the entry they are
+compared with. However, some recipes are suggested despite seemingly having little or not correlation with the
+recipe they are contained to as shown in table \ref{tab:similar_spaghetti} where \enquote*{Potato Salad} is considered
+to be similar to \enquote*{Spaghetti}. With other recipes, the suggestions have little variety as shown in table
+\ref{tab:similar_apple_crumble}. This issue is part of the reason that
+\hyperref[req:too_similar]{FR\arabic{toosimilarid}} was not considered to be implemented.
+
+\begin{table}
+    \centering
+    \caption{
+        \label{tab:similar_spaghetti}A sample of similar recipes for \enquote*{Spaghetti}.
+        Most results were ommited for brevity.}
+    \begin{tabular}{cc}\toprule
+        \textbf{Recipe} & \textbf{Similarity} \\\midrule
+        Spaghetti Casserole & 85\% \\
+        Pasta & 76\% \\
+        Potato Salad & 74\% \\
+        Noodles & 71\% \\
+        Ravioli & 71\% \\
+        Garlic Cheese & 71\% \\
+        Garlic Bread & 69\% \\
+        Pizza & 69\% \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{table}
+    \centering
+    \caption{\label{tab:similar_apple_crumble}A sample of similar recipes for \enquote*{Apple Crumble}.
+    Most results were ommited for brevity.}
+    \begin{tabular}{cc}\toprule
+        \textbf{Recipe} & \textbf{Similarity} \\\midrule
+        Apple Custard Pie & 81 \% \\
+        Apple Nut Cake & 77\% \\
+        Apple Muffins & 77\% \\
+        Apple Pie & 72\% \\
+        Apple Custard Pie & 72\% \\
+        Raspberry Pie & 72\% \\
+        \bottomrule
+    \end{tabular}
+\end{table}
 
 \subsubsection{Recipe Search}
 \todo{Recipe search, based on same model as similar}
 
-Recipe searching is implemented nearly identically to the similar recipe comparison, only differing in that
+Searching of recipes is implemented nearly identically to the similar recipe comparison, only differing in that
 it compares the user's query rather than the selected recipe's name.
 
-An area that was not accounted for was that Unversal Sentence Encoder is case sensitive \todo{source}.
-Because of this, searching for \enquote*{pasta} would yield different results to searching \enquote*{Pasta}.
+An area that was not accounted for was that Unversal Sentence Encoder is case-sensitive. \todo{source}
+Because of this, searching for \enquote*{pasta} would yield different results to searching \enquote*{Pasta} as
+shown in figure \todo{figure}.
 
 \subsection{Meal Type Prediction}
 \todo{Meal type prediction}

@@ -259,7 +259,7 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
         Yes
     }
 
-    \requirement{
+    \requirement{\label{req:too_similar}\newcounter{toosimilarid}\setcounter{toosimilarid}{\thefunctionalreqcounter}
         \textbf{Avoid repeating recipes.} The system \textbf{should} avoid suggesting recipes that are too similar
         to those that have been made recently using the same model as \hyperref[req:similar_recipes]{\textbf{Find similar recipes}}
     }{
