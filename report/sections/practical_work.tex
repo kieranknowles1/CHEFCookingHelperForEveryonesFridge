@@ -234,6 +234,8 @@ See figure \ref{fig:test_report} for an example of a test report, \ref{fig:cover
 for a coverage report, and figure \todo{figure} for an email that is sent if a test fails when a commit
 is pushed.
 
+All test cases are contained in the \texttt{app/backend/src/tests} directory.
+
 \todo{Unit testing}
 
 \subsection{Code Quality Evaluation}
@@ -303,6 +305,12 @@ method of finding new recipes.
 
 \subsubsection{Recipe Search}
 \todo{Recipe search, based on same model as similar}
+
+Recipe searching is implemented nearly identically to the similar recipe comparison, only differing in that
+it compares the user's query rather than the selected recipe's name.
+
+An area that was not accounted for was that Unversal Sentence Encoder is case sensitive \todo{source}.
+Because of this, searching for \enquote*{pasta} would yield different results to searching \enquote*{Pasta}.
 
 \subsection{Meal Type Prediction}
 \todo{Meal type prediction}
