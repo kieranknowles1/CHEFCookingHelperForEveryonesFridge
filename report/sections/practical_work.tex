@@ -235,12 +235,12 @@ and run automatically after every push via a GitHub action.
 
 See figure \ref{fig:test_report} for an example of a test report, \ref{fig:coverage_report}
 for a coverage report, and figure \todo{figure} for an email that is sent if a test fails when a commit
-is pushed.
+is pushed. All test cases for the backend are contained in the \texttt{app/backend/src/tests} directory. See figure
+\ref{fig:test_case} for an example of a test case.
 
 \todo{Sources for coverage and unit testing effectiveness}
 
-All test cases are contained in the \texttt{app/backend/src/tests} directory. See figure
-\ref{fig:test_case} for an example of a test case.
+Unit tests were chosen as they \todo{source for why they are a good idea}
 
 \begin{figure}[p]
     \caption{\label{fig:test_case}An example of a test case from \texttt{testGetEmbedding.ts}}
@@ -272,6 +272,16 @@ it('should return dissimilar embeddings for dissimilar strings',
 \end{figure}
 
 \todo{Unit testing}
+
+\subsubsection{Regression Testing}
+
+Regression testing was implemented by adding new test cases after fixing an
+issue to ensure that the issue was not reintroduced \todo{Source for effectiveness}
+
+As an example, after fixing the round-trip accuracy of storing an embedding in the database
+(see section \ref{sec:embedding_round_trip} for an in-depth explanation), test cases were
+added that ensure an identical array was returned after encoding it as a buffer
+and decoding back in \texttt{testBufferFloat32Array.ts}.
 
 \subsection{Code Quality Evaluation}
 The MegaLinter tool \cite{vuillamy_megalinter_nodate} was configured to run on every pull request on the application's Git repository. This includes a wide array
