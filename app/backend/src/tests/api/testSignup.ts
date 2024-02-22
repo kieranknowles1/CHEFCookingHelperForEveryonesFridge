@@ -54,6 +54,11 @@ describe('/api/v1/signup', () => {
     assert(typeof decoded === 'object' && decoded !== null)
 
     assert.strictEqual(decoded.sub, userId.toString())
+
+    await request(app.server)
+      .get(`/api/v1/user/${userId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
   })
 
   it('should not allow signing up with an existing username, case insensitive', async () => {
