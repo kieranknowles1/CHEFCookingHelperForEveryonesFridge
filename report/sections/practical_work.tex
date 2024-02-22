@@ -145,12 +145,9 @@ issue and was not resolved.
 \section{Frontend Implementation}
 \todo{Frontend}
 
-% TODO: Rework this
-% The front end of the application is written in React with TypeScript for the reasons discussed previously in
-% section \ref{sec:backend_language}, and is styled using Tailwind CSS.
-
-% React was chosen as it allows for quickly producing a user interface that is responsive to the user's device and dynamically
-% fetches data from the API.
+The application's frontend was implemented in React using TypeScript for the reasons discussed in section
+\ref{sec:why_typescript}, and is styled using Tailwind CSS. Combined, these frameworks allow for a responsive
+user interface to be quickly produced that fetches data from the API.
 
 \subsection{API Communication}
 The \codelisting{openapi-fetch} package was used along with the types generated from the API documentation was
@@ -200,6 +197,7 @@ with an alert being sent should any of them fail.
 \todo{Test plan}
 
 \subsection{Compiler Checks}
+\label{sec:why_typescript}
 The compile-type checks added by TypeScript are effective at preventing bugs from being introduced, especially with
 the checks for \texttt{null} and \texttt{undefined} enabled as is performed with the \texttt{strict} option enabled.~\cite{gao_type_2017}
 
@@ -323,7 +321,6 @@ data beyond what is discussed in section \ref{sec:data_pre_process} to remove
 these entries.\todo{Source}
 
 \subsection{Similar Recipes}
-\todo{Similar Recipes}
 
 The recipe similarity algorithm was found to be fairly effective at suggesting related items.
 For example, \enquote*{Sphagetti Casserole} is evaluated as having 90\% similarity to
