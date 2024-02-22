@@ -355,7 +355,14 @@ it compares the user's query rather than the selected recipe's name.
 
 An area that was not accounted for was that Unversal Sentence Encoder is case-sensitive. \todo{source}
 Because of this, searching for \enquote*{pasta} would yield different results to searching \enquote*{Pasta} as
-shown in figure \todo{figure}.
+shown in figure \ref{fig:search_case_sensitive}
+
+\begin{figure}
+    \centering
+    \caption{\label{fig:search_case_sensitive}An example of the case sensitivity of searches.}
+    \includegraphics[width=0.45\textwidth]{figures/search_lower.png}
+    \includegraphics[width=0.45\textwidth]{figures/search_upper.png}
+\end{figure}
 
 \subsection{Meal Type Prediction}
 \todo{Meal type prediction}
