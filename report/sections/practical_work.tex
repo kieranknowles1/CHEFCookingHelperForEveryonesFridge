@@ -206,7 +206,7 @@ the checks for \texttt{null} and \texttt{undefined} enabled as is performed with
 See figure \ref{fig:type_check} for an example of issues that would not be caught
 by JavaScript, but would be caught by the TypeScript compiler.
 
-\begin{figure}[h]
+\begin{figure}[p]
     \caption{\label{fig:type_check}A code snippet that would fail TypeScript's checks.}
     \begin{verbatim}
 function take_str(str: string): void {
@@ -244,8 +244,8 @@ is pushed.
 All test cases are contained in the \texttt{app/backend/src/tests} directory. See figure
 \ref{fig:test_case} for an example of a test case.
 
-\begin{figure}[h]
-    \caption{\label{fig:test_case}An example of a test case.}
+\begin{figure}[p]
+    \caption{\label{fig:test_case}An example of a test case from \texttt{testGetEmbedding.ts}}
     \begin{verbatim}
 it('should return similar embeddings for similar strings',
   async function () {
@@ -312,7 +312,7 @@ A possible reason for these being included in RecipeNLG is that some
 data sources scraped for it allow for user-submitted recipes, this contributes to
 an unclean and noisy dataset.~\cite{kicherer_what_2018}
 
-\begin{figure}
+\begin{figure}[p]
     \centering
     \caption{\label{fig:bad_recipe_entry}A nonsensical recipe that was included in the dataset.}
     \includegraphics[scale=0.75]{figures/bad_recipe_entry.png}
@@ -345,39 +345,34 @@ to be similar to \enquote*{Spaghetti}. With other recipes, the suggestions have 
 \ref{tab:similar_apple_crumble}. This issue is part of the reason that
 \hyperref[req:too_similar]{FR\arabic{toosimilarid}} was not considered to be implemented.
 
-\begin{table}
+\begin{table}[p]
     \centering
-    \caption{
-        \label{tab:similar_spaghetti}A sample of similar recipes for \enquote*{Spaghetti}.
-        Most results were ommited for brevity.}
-    \begin{tabular}{cc}\toprule
-        \textbf{Recipe} & \textbf{Similarity} \\\midrule
-        Spaghetti Casserole & 85\% \\
-        Pasta & 76\% \\
-        Potato Salad & 74\% \\
-        Noodles & 71\% \\
-        Ravioli & 71\% \\
-        Garlic Cheese & 71\% \\
-        Garlic Bread & 69\% \\
-        Pizza & 69\% \\
-        \bottomrule
-    \end{tabular}
-\end{table}
-
-\begin{table}
-    \centering
-    \caption{\label{tab:similar_apple_crumble}A sample of similar recipes for \enquote*{Apple Crumble}.
-    Most results were ommited for brevity.}
-    \begin{tabular}{cc}\toprule
-        \textbf{Recipe} & \textbf{Similarity} \\\midrule
-        Apple Custard Pie & 81 \% \\
-        Apple Nut Cake & 77\% \\
-        Apple Muffins & 77\% \\
-        Apple Pie & 72\% \\
-        Apple Custard Pie & 72\% \\
-        Raspberry Pie & 72\% \\
-        \bottomrule
-    \end{tabular}
+    \caption{\label{tab:similar}Similar recipes for \enquote*{Spaghetti} and \enquote*{Apple Crumble}. Most results are omitted for brevity.}
+    \subfloat[Spaghetti]{
+        \label{tab:similar_spaghetti}\begin{tabular}{cc}\toprule
+            \textbf{Recipe} & \textbf{Similarity} \\\midrule
+            Spaghetti Casserole & 85\% \\
+            Pasta & 76\% \\
+            Potato Salad & 74\% \\
+            Noodles & 71\% \\
+            Ravioli & 71\% \\
+            Garlic Cheese & 71\% \\
+            Garlic Bread & 69\% \\
+            Pizza & 69\% \\
+            \bottomrule
+        \end{tabular}}
+    \quad
+    \subfloat[Apple Crumble]{
+        \label{tab:similar_apple_crumble}\begin{tabular}{cc}\toprule
+            \textbf{Recipe} & \textbf{Similarity} \\\midrule
+            Apple Custard Pie & 81 \% \\
+            Apple Nut Cake & 77\% \\
+            Apple Muffins & 77\% \\
+            Apple Pie & 72\% \\
+            Apple Custard Pie & 72\% \\
+            Raspberry Pie & 72\% \\
+            \bottomrule
+        \end{tabular}}
 \end{table}
 
 \subsubsection{Recipe Search}
@@ -390,7 +385,7 @@ An area that was not accounted for was that Unversal Sentence Encoder is case-se
 Because of this, searching for \enquote*{pasta} would yield different results to searching \enquote*{Pasta} as
 shown in figure \ref{fig:search_case_sensitive}
 
-\begin{figure}
+\begin{figure}[p]
     \centering
     \caption{\label{fig:search_case_sensitive}An example of the case sensitivity of searches.}
     \includegraphics[width=0.45\textwidth]{figures/search_lower.png}
