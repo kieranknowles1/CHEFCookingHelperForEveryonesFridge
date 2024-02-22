@@ -196,33 +196,33 @@ components such as the API. These test cases will be executed on every push auto
 with an alert being sent should any of them fail.
 \todo{Test plan}
 
-\subsection{Compiler Checks}
-\label{sec:why_typescript}
-The compile-type checks added by TypeScript are effective at preventing bugs from being introduced, especially with
-the checks for \texttt{null} and \texttt{undefined} enabled as is performed with the \texttt{strict} option enabled.~\cite{gao_type_2017}
+\subsection{Compiler Checks}\label{sec:why_typescript}
+\todo{Move to planning}
+% The compile-type checks added by TypeScript are effective at preventing bugs from being introduced, especially with
+% the checks for \texttt{null} and \texttt{undefined} enabled as is performed with the \texttt{strict} option enabled.~\cite{gao_type_2017}
 
-See figure \ref{fig:type_check} for an example of issues that would not be caught
-by JavaScript, but would be caught by the TypeScript compiler.
+% See figure \ref{fig:type_check} for an example of issues that would not be caught
+% by JavaScript, but would be caught by the TypeScript compiler.
 
-\begin{figure}[p]
-    \caption{\label{fig:type_check}A code snippet that would fail TypeScript's checks.}
-    \begin{verbatim}
-function take_str(str: string): void {
-    console.log(str)
-}
+% \begin{figure}[p]
+%     \caption{\label{fig:type_check}A code snippet that would fail TypeScript's checks.}
+%     \begin{verbatim}
+% function take_str(str: string): void {
+%     console.log(str)
+% }
 
-// This would compile, as it is passed the expected type
-take_str('Hello')
+% // This would compile, as it is passed the expected type
+% take_str('Hello')
 
-// This would not compile as take_str expects a string,
-// but a number was passed
-take_str(123)
+% // This would not compile as take_str expects a string,
+% // but a number was passed
+% take_str(123)
 
-// This would also not compile as take_str does not return
-// anything
-const ret = take_str('World')
-    \end{verbatim}
-\end{figure}
+% // This would also not compile as take_str does not return
+% // anything
+% const ret = take_str('World')
+%     \end{verbatim}
+% \end{figure}
 
 \todo{Compiler Checks}
 

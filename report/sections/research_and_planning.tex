@@ -396,6 +396,21 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
 \section{Approach/Methodology}
 \todo{Approach/Methodology}
 
+\subsection{Language}\label{sec:language}
+It was decided early on to implement \chef{} as a web application with a
+frontend using written for the React framework. This supports using either
+the JavaScript or  TypeScript language.
+
+Multiple languages were considered for the backend including C\#, Python, Node,
+and PHP. It was eventually decided to use Node as it would allow using the same
+language and libraries as the frontend.
+
+Finally, out of JavaScript and TypeScript, TypeScript was chosen as a language
+for both components as it adds robust type checking that is effective at preventing
+bugs from being introduced, especially when the checks for \texttt{null} and
+\texttt{undefined} are enabled,~\cite{gao_type_2017} which will be done for
+the application.
+
 \subsection{The Dataset}\label{sec:data_pre_process}
 
 \todo{Should I talk about how Recipe Box was considered?}
