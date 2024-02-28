@@ -13,8 +13,12 @@ function makeRequest (app: TestApp, fridgeId: number, recipeId: number): request
 
 describe('POST /fridge/:fridgeId/recipe/:recipeId/maderecipe', () => {
   let app: TestApp
-  beforeEach(() => {
+  before(() => {
     app = createTestApp()
+  })
+
+  after(() => {
+    app.server.close()
   })
 
   it('should return 204', async () => {
