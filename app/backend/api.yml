@@ -163,7 +163,7 @@ paths:
           required: false
         - in: query
           name: mealType
-          description: If specified, only return recipes of this type. By default, all recipes are returned.
+          description: If specified, only return recipes of this type. By default, all meal types are returned.
           schema: { type: string, example: "Dinner" }
           required: false
 

@@ -91,3 +91,84 @@ ORDER BY missing_count ASC, similarity DESC
 LIMIT :limit
   \end{verbatim}
 \end{figure}
+
+\begin{figure}
+  \caption{\label{fig:search_params}The parameters of the \texttt{search} endpoint}
+  \begin{verbatim}
+- in: query
+  name: search
+  description: Search term
+  schema: { type: string, example: "chicken pie" }
+  required: false
+- in: query
+  name: minSimilarity
+  description:
+    Minimum similarity score,
+    meaningless if `search` is not specified
+  schema:
+    type: number
+    example: 0.5
+    minimum: 0
+    maximum: 1
+    default: 0.5
+  required: false
+
+- in: query
+  name: availableForFridge
+  description:
+    If specified, only return recipes that can be
+    made with the ingredients in the fridge.
+  schema: { $ref: "#/components/schemas/id" }
+  required: false
+- in: query
+  name: maxMissingIngredients
+  description:
+    Maximum number of ingredients that can be missing.
+    Meaningless if `availableForFridge` is not specified.
+  schema:
+    type: integer
+    minimum: 0
+    example: 1
+    default: 0
+  required: false
+- in: query
+  name: checkAmounts
+  description:
+    Whether to check that there is enough of each ingredient.
+    Meaningless if `availableForFridge` is not specified.
+  schema: { type: boolean, example: true, default: true }
+  required: false
+  \end{verbatim}
+\end{figure}
+
+\begin{figure}\ContinuedFloat{}
+  \begin{verbatim}
+- in: query
+  name: limit
+  description: Maximum number of results to return.
+  schema:
+    type: integer
+    example: 10
+    minimum: 1
+    default: 10
+  required: false
+- in: query
+  name: mealType
+  description:
+    If specified, only return recipes of this type.
+    By default, all recipes are returned.
+  schema: { type: string, example: "Dinner" }
+  required: false
+
+- in: query
+  name: suitableForUsers
+  description:
+    If specified, only return recipes that are suitable for
+    all of these users considering their dietary restrictions.
+    By default, no restrictions are applied.
+  schema:
+    type: array
+    items: { $ref: "#/components/schemas/id" }
+  required: false
+  \end{verbatim}
+\end{figure}

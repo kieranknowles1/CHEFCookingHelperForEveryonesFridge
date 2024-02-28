@@ -84,9 +84,15 @@ soon after.
     }
 \end{figure}
 
-\section{Potential Improvements}
+\subsection{Potential Improvements}
+
+\subsubsection{Query Complexity}\label{sec:search_complexity}
 One potential area for improvement would have been to use an ORM instead of
 writing queries directly. This would improve maintainability of the more complex
 queries, such as the one used for searching recipes as shown in figure \ref{fig:search_query}.
 Including queries of such complexity has been shown as having a negative impact on the perceived
 maintainability of a codebase~\cite{yamashita_code_2012} (n=6).
+
+The endpoint and query function included many parameters by the end of development
+(see figure \ref{fig:search_params}) which made it versatile as needed for the frontend,
+but difficult to maintain, extend, or test.
