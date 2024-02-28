@@ -83,3 +83,10 @@ soon after.
         (SELECT tag\textunderscore{}id FROM \$\{bannedTagsTable\}) THEN 1 ELSE 0 END) = 0)
     }
 \end{figure}
+
+\section{Potential Improvements}
+One potential area for improvement would have been to use an ORM instead of
+writing queries directly. This would improve maintainability of the more complex
+queries, such as the one used for searching recipes as shown in figure \ref{fig:search_query}.
+Including queries of such complexity has been shown as having a negative impact on the perceived
+maintainability of a codebase~\cite{yamashita_code_2012} (n=6).

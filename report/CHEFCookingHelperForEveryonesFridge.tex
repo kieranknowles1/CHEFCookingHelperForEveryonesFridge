@@ -30,6 +30,7 @@
 \usepackage[notransparent]{svg}
 \usepackage{booktabs}
 \usepackage{float}
+\usepackage{graphicx}
 \usepackage{longtable}
 \usepackage{makecell}
 \usepackage{pgfgantt}
@@ -134,14 +135,16 @@
 
 \chapter*{Acronyms and Glossary}
 
-\textbf{\chef} Cooking Helper for Everyone's Fridge \\
-\textbf{\virtualfridge} A group of user's available ingredients
+\begin{itemize}
+    \item \textbf{\chef} Cooking Helper for Everyone's Fridge.
+    \item \textbf{ORM} Object Relational Mapping. Abstracts database queries away from the app code.
+    \item \textbf{\virtualfridge} A group of user's available ingredients.
+\end{itemize}
 
 
-\todo{Figures, Tables, Glossary, List of Symbols}
+
+\todo{List of Symbols}
 \todoinline{
-    List of Contents
-    List the contents of the report by chapter and sub-section against page numbers. Include the appendices, which document the deliverables.
     You may additionally decide to include a list of figures by page number, a glossary and/or a table defining any special symbols used in the report.
 }
 
@@ -292,7 +295,7 @@ The following packages were used from npm for the application:
 \cleartoleftpage\section{Interface Prototypes}
 \begin{figure}
     \centering
-    \includesvg[height=0.9\textwidth,angle=90,pretex=\relscale{0.8}]{figures/InterfacePrototypes}
+    \includesvg[height=0.89\textwidth,angle=90,pretex=\relscale{0.8}]{figures/InterfacePrototypes}
     \caption{The home screen for \chef{}, allowing the user to add/remove ingredients and scan items.}
 \end{figure}
 
@@ -332,6 +335,75 @@ The following packages were used from npm for the application:
     \caption{\label{fig:coverage_report}A coverage report showing which lines were and were not executed during test cases.}
     \todo{Update once coverage is higher}
     \includegraphics[width=0.9\textwidth]{figures/coverage_report.png}
+\end{figure}
+
+\cleartoleftpage\begin{figure}
+    \centering
+    \caption{\label{fig:search_query}The query used to search recipes}
+    \begin{verbatim}
+SELECT
+  recipe.name, recipe.id,
+  -- COUNT excludes NULLs.
+  COUNT(
+    CASE
+      -- If fridgeId is null, then we can't
+      -- create a meaningful missing count
+      WHEN :fridgeId IS NULL THEN NULL
+
+      -- Check if we have any of the ingredients
+      WHEN fridge_ingredient.amount IS NULL THEN 1
+
+      -- Optionally check if we have enough of the ingredients
+      WHEN
+        :checkAmount AND
+        fridge_ingredient.amount < recipe_ingredient.amount
+        THEN 1
+    END) as missing_count,
+  CASE WHEN :search IS NULL
+    THEN NULL
+    ELSE ml_similarity(embedding.embedding, :search)
+  END AS similarity
+FROM recipe
+  JOIN embedding ON embedding.sentence = recipe.name
+  LEFT JOIN recipe_ingredient ON
+    recipe_ingredient.recipe_id = recipe.id
+  LEFT JOIN fridge_ingredient ON
+    fridge_ingredient.ingredient_id = recipe_ingredient.ingredient_id
+      AND
+    fridge_ingredient.fridge_id = :fridgeId
+  JOIN ingredient ON
+    ingredient.id = recipe_ingredient.ingredient_id AND
+    NOT ingredient.assumeUnlimited
+  LEFT JOIN ingredient_tag ON
+    ingredient_tag.ingredient_id = ingredient.id
+WHERE (
+  recipe.meal_type_id = (
+    SELECT id FROM meal_type WHERE name = :mealType
+  ) OR :mealType IS NULL
+) AND (similarity >= :minSimilarity OR :search IS NULL)
+GROUP BY recipe.id
+    \end{verbatim}
+\end{figure}
+
+\begin{figure}\ContinuedFloat{}
+    \begin{verbatim}
+HAVING
+  (missing_count <= :maxMissingIngredients OR :fridgeId IS NULL)
+  -- SUM(CASE WHEN ... THEN 1 ELSE 0 END) = 0
+  -- checks for CASE WHEN returning false for all rows
+  -- No banned tags
+  AND (SUM(CASE WHEN
+    ingredient_tag.tag_id IN
+      (SELECT tag_id FROM ${bannedTagsTable})
+  THEN 1 ELSE 0 END) = 0)
+  -- No banned ingredients
+  AND (SUM(CASE WHEN
+    recipe_ingredient.ingredient_id IN
+      (SELECT ingredient_id FROM ${bannedIngredsTable})
+  THEN 1 ELSE 0 END) = 0)
+ORDER BY missing_count ASC, similarity DESC
+LIMIT :limit
+    \end{verbatim}
 \end{figure}
 
 % Appendices
