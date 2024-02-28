@@ -7,7 +7,7 @@ import createTestApp, { type TestApp } from './createTestApp'
 const correctUsername = 'Testy McTestFace'
 const correctPassword = '12345'
 
-function tryLogin(app: TestApp, username: string, password: string): request.Test {
+function tryLogin (app: TestApp, username: string, password: string): request.Test {
   const headers = {
     Authorization: `Basic ${btoa(username + ':' + password)}`
   }
