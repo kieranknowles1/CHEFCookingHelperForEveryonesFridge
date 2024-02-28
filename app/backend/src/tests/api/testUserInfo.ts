@@ -25,5 +25,18 @@ describe('/api/v1/user/:userId/', () => {
           bannedTags: [{ id: 1, name: 'Nuts', description: 'Any kind of nut that you may be allergic to' }]
         })
     })
+
+    it('should return 401 if not logged in', async () => {
+      await request(app.server)
+        .get('/api/v1/user/1/')
+        .expect(401)
+    })
+
+    it('should return 403 for a user other than the one logged in', async () => {
+      await request(app.server)
+        .get('/api/v1/user/2/')
+        .set('Authorization', app.authHeaderValue)
+        .expect(403)
+    })
   })
 })
