@@ -317,12 +317,7 @@ export interface paths {
         /** @description Created */
         201: {
           content: {
-            "application/json": {
-              /** @example abc123 */
-              token: string;
-              userId: components["schemas"]["id"];
-              fridgeId: components["schemas"]["id"];
-            };
+            "application/json": components["schemas"]["UserCredentials"];
           };
         };
         400: components["responses"]["BadRequest"];
@@ -339,11 +334,7 @@ export interface paths {
         /** @description OK */
         200: {
           content: {
-            "application/json": {
-              /** @example abc123 */
-              token: string;
-              userId: components["schemas"]["id"];
-            };
+            "application/json": components["schemas"]["UserCredentials"];
           };
         };
         400: components["responses"]["BadRequest"];
@@ -562,6 +553,12 @@ export interface components {
       name: components["schemas"]["username"];
       bannedTags: components["schemas"]["Tag"][];
       bannedIngredients: components["schemas"]["NameAndId"][];
+    };
+    UserCredentials: {
+      /** @example abc123 */
+      token: string;
+      userId: components["schemas"]["id"];
+      fridgeId: components["schemas"]["id"];
     };
     RecipeIngredientEntry: WithRequired<{
       /** @example 250g of chicken */

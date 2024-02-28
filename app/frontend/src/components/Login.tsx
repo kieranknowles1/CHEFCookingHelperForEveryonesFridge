@@ -31,12 +31,9 @@ export default function Login (props: LoginProps): React.JSX.Element {
       { headers: new Headers({ Authorization: 'Basic ' + btoa(username + ':' + password) }) }
     ).then(
       monitorOutcome(setStatus)
-    ).then(data => {
-      props.handleLogin({
-        token: data.token,
-        userId: data.userId
-      })
-    }).catch((err: ApiError) => {
+    ).then(
+      props.handleLogin
+    ).catch((err: ApiError) => {
       console.error(err)
       alert(`Could not log in: ${err.message}`)
     }).finally(() => {

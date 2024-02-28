@@ -355,14 +355,7 @@ paths:
           description: Created
           content:
             application/json:
-              schema:
-                type: object
-                properties:
-                  token: { type: string, example: "abc123" }
-                  userId: { $ref: "#/components/schemas/id" }
-                  fridgeId: { $ref: "#/components/schemas/id" }
-                required: [token, userId, fridgeId]
-                additionalProperties: false
+              schema: { $ref: "#/components/schemas/UserCredentials" }
         "400":
           $ref: "#/components/responses/BadRequest"
 
@@ -378,13 +371,7 @@ paths:
           description: OK
           content:
             application/json:
-              schema:
-                type: object
-                properties:
-                  token: { type: string, example: "abc123" }
-                  userId: { $ref: "#/components/schemas/id" }
-                required: [token, userId]
-                additionalProperties: false
+              schema: { $ref: "#/components/schemas/UserCredentials" }
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -702,6 +689,15 @@ components:
           type: array
           items: { $ref: "#/components/schemas/NameAndId" }
       required: [id, name, bannedTags, bannedIngredients]
+      additionalProperties: false
+
+    UserCredentials:
+      type: object
+      properties:
+        token: { type: string, example: "abc123" }
+        userId: { $ref: "#/components/schemas/id" }
+        fridgeId: { $ref: "#/components/schemas/id" }
+      required: [token, userId, fridgeId]
       additionalProperties: false
 
     RecipeIngredientEntry:
