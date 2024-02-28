@@ -1,13 +1,9 @@
 import React from 'react'
 
-import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpinner'
 import UserContext, { type UserState } from '../../contexts/UserContext'
-import apiClient, { createAuthHeaders } from '../../apiClient'
-import { type components } from '../../types/api.generated'
+import LoadingSpinner from '../../components/LoadingSpinner'
 import formatShortDate from '../../utils/formatShortDate'
-import monitorOutcome from '../../utils/monitorOutcome'
-
-type MadeRecipe = components['schemas']['MadeRecipe']
+import useHistory from '../../hooks/useHistory'
 
 export interface SingleRecipeHistoryProps {
   userId: number
@@ -39,27 +35,12 @@ export default function SingleRecipeHistory (props: SingleRecipeHistoryProps): R
     throw new Error('UserContext is null')
   }
 
-  const [history, setHistory] = React.useState<MadeRecipe[]>([])
-  const [status, setStatus] = React.useState<LoadingStatus>('loading')
-
-  React.useEffect(() => {
-    apiClient.GET(
-      '/user/{userId}/history',
-      {
-        params: {
-          path: { userId: props.userId },
-          query: { recipe: props.recipeId, limit: LIMIT }
-        },
-        headers: createAuthHeaders(context)
-      }
-    ).then(
-      monitorOutcome(setStatus, props.setUserState)
-    ).then(data => {
-      setHistory(data)
-    }).catch(err => {
-      console.error(err)
-    })
-  }, [props.userId, props.recipeId])
+  const [history, status] = useHistory(
+    props.userId,
+    props.recipeId,
+    context,
+    props.setUserState
+  )
 
   if (status !== 'done') {
     return <LoadingSpinner status={status} className='' />

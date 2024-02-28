@@ -1,14 +1,10 @@
 import React from 'react'
 
-import LoadingSpinner, { type LoadingStatus } from '../../components/LoadingSpinner'
 import UserContext, { type UserState } from '../../contexts/UserContext'
-import apiClient, { createAuthHeaders } from '../../apiClient'
-import { type components } from '../../types/api.generated'
-import monitorOutcome from '../../utils/monitorOutcome'
+import LoadingSpinner from '../../components/LoadingSpinner'
+import useHistory from '../../hooks/useHistory'
 
 import HistoryItem from './HistoryItem'
-
-type MadeRecipe = components['schemas']['MadeRecipe']
 
 export interface HistoryProps {
   userId: number
@@ -34,24 +30,12 @@ export default function History (props: HistoryProps): React.JSX.Element {
   const rowStyle = 'border border-gray-400 p-1'
   const cellStyle = 'border border-gray-400 p-1'
 
-  const [history, setHistory] = React.useState<MadeRecipe[]>([])
-  const [status, setStatus] = React.useState<LoadingStatus>('loading')
-
-  React.useEffect(() => {
-    apiClient.GET(
-      '/user/{userId}/history',
-      {
-        params: { path: { userId: props.userId } },
-        headers: createAuthHeaders(context)
-      }
-    ).then(
-      monitorOutcome(setStatus, props.setUserState)
-    ).then(data => {
-      setHistory(data)
-    }).catch(err => {
-      console.error(err)
-    })
-  }, [props.userId])
+  const [history, status] = useHistory(
+    props.userId,
+    undefined,
+    context,
+    props.setUserState
+  )
 
   return (
     <table className='table-auto border'>
