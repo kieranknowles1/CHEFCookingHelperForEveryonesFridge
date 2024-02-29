@@ -12,8 +12,44 @@
 
 \begin{figure}
   \centering
-  \caption{\label{fig:test_report}A test report showing that all tests passed.}
-  \includegraphics[width=0.9\textwidth]{figures/test_report.png}
+  \caption{\label{fig:test_report}A test report showing that some tests have failed.}
+  \begin{verbatim}
+mocha --reporter dot --require ts-node/register src/tests/**/*.ts
+
+  ....................!!..................................
+  ........................................................
+  .........
+
+  119 passing (9s)
+  2 failing
+
+  1) /api/v1/signup
+        should return a valid token for the new user:
+
+      AssertionError [ERR_ASSERTION]: Expected values to
+        be strictly equal:
++ actual - expected
+
++ 'number'
+- 'string'
+      + expected - actual
+
+      -number
+      +string
+
+      at Context.<anonymous> (src/tests/api/testSignup.ts:50:12)
+      at processTicksAndRejections
+        (node:internal/process/task_queues:95:5)
+
+  2) /api/v1/signup
+        should not allow signing up with an existing username,
+        case insensitive:
+      Error: expected 400 "Bad Request",
+        got 500 "Internal Server Error"
+      at Context.<anonymous> (src/tests/api/testSignup.ts:71:8)
+      at processTicksAndRejections
+        (node:internal/process/task_queues:95:5)
+  \end{verbatim}
 \end{figure}
 
 \begin{figure}
@@ -21,6 +57,12 @@
   \caption{\label{fig:coverage_report}A coverage report showing which lines were and were not executed during test cases.}
   \todo{Update once coverage is higher}
   \includegraphics[width=0.9\textwidth]{figures/coverage_report.png}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \caption{\label{fig:test_failure}The email sent if one or more test cases fail.}
+  \includegraphics[width=0.9\textwidth]{figures/test_failure.png}
 \end{figure}
 
 \cleartoleftpage\begin{figure}
