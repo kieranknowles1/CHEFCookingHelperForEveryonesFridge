@@ -399,7 +399,7 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
 \subsection{Language}\label{sec:language}
 It was decided early on to implement \chef{} as a web application with a
 frontend using written for the React framework. This supports using either
-the JavaScript or  TypeScript language.
+the JavaScript or TypeScript language.
 
 Multiple languages were considered for the backend including C\#, Python, Node,
 and PHP. It was eventually decided to use Node as it would allow using the same
@@ -409,7 +409,28 @@ Finally, out of JavaScript and TypeScript, TypeScript was chosen as a language
 for both components as it adds robust type checking that is effective at preventing
 bugs from being introduced, especially when the checks for \texttt{null} and
 \texttt{undefined} are enabled,~\cite{gao_type_2017} which will be done for
-the application.
+the application. See figure \ref{fig:type_check} for an example of some issues
+that can be caught pre-emptively by TypeScript, but not JavaScript.
+
+\begin{figure}
+    \caption{\label{fig:type_check}A code snippet that would fail TypeScript's checks.}
+    \begin{verbatim}
+function take_str(str: string): void {
+    console.log(str)
+}
+
+// This would compile, as it is passed the expected type
+take_str('Hello')
+
+// This would not compile as take_str expects a string,
+// but a number was passed
+take_str(123)
+
+// This would also not compile as take_str does not return
+// anything
+const ret = take_str('World')
+    \end{verbatim}
+\end{figure}
 
 \subsection{The Dataset}\label{sec:data_pre_process}
 
