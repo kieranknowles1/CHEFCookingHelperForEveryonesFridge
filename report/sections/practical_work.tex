@@ -238,9 +238,14 @@ for a coverage report, and figure \todo{figure} for an email that is sent if a t
 is pushed. All test cases for the backend are contained in the \texttt{app/backend/src/tests} directory. See figure
 \ref{fig:test_case} for an example of a test case.
 
-\todo{Sources for coverage and unit testing effectiveness}
+Test cases were largely written after the functions they were intented to test
+as their is limited evicence for test-driven development leading to higher
+quality tests or greater code coverage.~\cite{tosun_effectiveness_2018,madeyski_impact_2010}
 
-Unit tests were chosen as they \todo{source for why they are a good idea}
+Likewise, while reaching a certain level of code coverage is important for detecting
+faults, coverage in of itself is not a good indicator of test suite quality.~\cite{meyer_is_2012}
+Due to this, no target coverage level was put in place with testing instead
+relying primarily on regression testing.
 
 \begin{figure}[p]
     \caption{\label{fig:test_case}An example of a test case from \texttt{testGetEmbedding.ts}}
@@ -271,17 +276,17 @@ it('should return dissimilar embeddings for dissimilar strings',
     \end{verbatim}
 \end{figure}
 
-\todo{Unit testing}
-
 \subsubsection{Regression Testing}
 
-Regression testing was implemented by adding new test cases after fixing an
-issue to ensure that the issue was not reintroduced \todo{Source for effectiveness}
+Whenever an issue was discovered in the backend, the first step taken was to
+introduce new unit tests based on the expected behaviour. The faulty code was
+then fixed and the tests kept in place. This helps to prevent the issue being
+reintroduced at a later date.
 
-As an example, after fixing the round-trip accuracy of storing an embedding in the database
-(see section \ref{sec:embedding_round_trip} for an in-depth explanation), test cases were
-added that ensure an identical array was returned after encoding it as a buffer
-and decoding back in \texttt{testBufferFloat32Array.ts}.
+One example of regression testing is that, after discovering that embeddings were
+not being properly decoded from the database (see section \ref{sec:embedding_round_trip}),
+test cases were implemented to make sure that an identical array would be returned
+after endoding to a buffer back again in \texttt{testBufferFloat32Array.ts}
 
 \subsection{Code Quality Evaluation}
 The MegaLinter tool \cite{vuillamy_megalinter_nodate} was configured to run on every pull request on the application's Git repository. This includes a wide array
