@@ -15,10 +15,17 @@ export default function SignUpPage (props: SignUpPageProps): React.JSX.Element {
 
   const [username, setUsername] = React.useState<string>('')
   const [password, setPassword] = React.useState<string>('')
+  const [passwordConfirm, setPasswordConfirm] = React.useState<string>('')
   const [status, setStatus] = React.useState<LoadingStatus>('notstarted')
 
   function handleSubmit (event: React.FormEvent<HTMLFormElement>): void {
     event.preventDefault()
+
+    if (password !== passwordConfirm) {
+      setStatus('error')
+      alert('Passwords do not match')
+      return
+    }
 
     apiClient.POST('/signup', {
       headers: new Headers({ Authorization: 'Basic ' + btoa(username + ':' + password) })
@@ -57,6 +64,12 @@ export default function SignUpPage (props: SignUpPageProps): React.JSX.Element {
           type='password'
           value={password}
           onChange={event => { setPassword(event.target.value) }}
+          required
+        /></label><br/>
+        <label>Confirm Password: <input
+          type='password'
+          value={passwordConfirm}
+          onChange={event => { setPasswordConfirm(event.target.value) }}
           required
         /></label><br/>
 

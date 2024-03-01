@@ -62,7 +62,6 @@ export interface UserRow {
 export interface FridgeRow {
   id: RowId
   name: string
-  owner_id: RowId
 }
 
 export interface TagRow {

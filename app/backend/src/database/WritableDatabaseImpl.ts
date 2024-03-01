@@ -233,4 +233,23 @@ export default class WritableDatabaseImpl implements IWritableDatabase {
 
     return id
   }
+
+  public addFridge (name: string, userId: types.RowId): types.RowId {
+    const fridgeId = this._connection.prepare<undefined>(`
+      INSERT INTO fridge
+        (name)
+      VALUES
+        (:name)
+    `).run({ name }).lastInsertRowid
+
+    this.assertNotBigint(fridgeId)
+    this._connection.prepare<undefined>(`
+      INSERT INTO fridge_user
+        (fridge_id, user_id)
+      VALUES
+        (:fridgeId, :userId)
+    `).run({ fridgeId, userId })
+
+    return fridgeId
+  }
 }

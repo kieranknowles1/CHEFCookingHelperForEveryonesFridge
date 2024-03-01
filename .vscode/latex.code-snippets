@@ -1,5 +1,5 @@
 {
-	// Place your CHEFCookingHelperForEveryonesFridge workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+	// Place your workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
 	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
 	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
 	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
@@ -19,25 +19,16 @@
 		"scope": "latex",
 		"prefix": "\\logbookentry",
 		"body": [
-			"\\logbookentry{",
-			"	${1:TODO: Heading}",
-			"}{",
-			"	${2:TODO: Date/time}",
-			"}{"
-			"	${3:TODO: Description of work since the last meeting}"
-			"}{",
-			"	${4:TODO: Number of hours since the last meeting}",
-			"}{",
-			"	${5:TODO: Questions/items to discuss at the meeting}",
-			"}{",
-			"	${6:TODO: Agreed tasks for the next meeting}",
-			"}{",
-			"	${7:TODO: Documents discussed/other issues}",
-			"}{",
-			"	${8:TODO: Date/time of next meeting}",
-			"}{",
-			"	${9:TODO: As scheduled?}",
-			"}",
+			"\\logbookentry",
+			"{${1:TODO: Heading}}",
+			"{${2:TODO: Date/time}}",
+			"{${3:TODO: Description of work since the last meeting}}",
+			"{${4:TODO: Number of hours since the last meeting}}",
+			"{${5:TODO: Questions/items to discuss at the meeting}}",
+			"{${6:TODO: Agreed tasks for the next meeting}}",
+			"{${7:TODO: Documents discussed/other issues}}",
+			"{${8:TODO: Date/time of next meeting}}",
+			"{${9:TODO: As scheduled?}}",
 		],
 		"description": "An entry into the weekly logbook",
 	}

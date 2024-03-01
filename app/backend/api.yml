@@ -14,7 +14,10 @@ tags:
   - name: User
 
 servers:
+  - url: http://localhost:3000/api/v1
+    description: Development server
   - url: https://chefapi.knowles.freemyip.com/api/v1
+    description: Production server
 
 paths:
   /mealtype/list:
@@ -160,7 +163,7 @@ paths:
           required: false
         - in: query
           name: mealType
-          description: If specified, only return recipes of this type. By default, all recipes are returned.
+          description: If specified, only return recipes of this type. By default, all meal types are returned.
           schema: { type: string, example: "Dinner" }
           required: false
 
@@ -214,14 +217,7 @@ paths:
                 properties:
                   id: { type: integer, example: 1 }
                   name: { type: string, example: "My Fridge" }
-                  owner:
-                    type: object
-                    properties:
-                      id: { type: integer, example: 1 }
-                      name: { $ref: "#/components/schemas/username" }
-                    required: [id, name]
-                    additionalProperties: false
-                required: [id, name, owner]
+                required: [id, name]
                 additionalProperties: false
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -352,19 +348,14 @@ paths:
         Create a new user.
         Returns a token that can be used for future requests.
         Username and password will be taken from the HTTP Basic Authentication header.
+        A fridge will be created for the user and can be accessed using the returned token.
       security: [Basic: []]
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           content:
             application/json:
-              schema:
-                type: object
-                properties:
-                  token: { type: string, example: "abc123" }
-                  userId: { $ref: "#/components/schemas/id" }
-                required: [token, userId]
-                additionalProperties: false
+              schema: { $ref: "#/components/schemas/UserCredentials" }
         "400":
           $ref: "#/components/responses/BadRequest"
 
@@ -380,13 +371,7 @@ paths:
           description: OK
           content:
             application/json:
-              schema:
-                type: object
-                properties:
-                  token: { type: string, example: "abc123" }
-                  userId: { $ref: "#/components/schemas/id" }
-                required: [token, userId]
-                additionalProperties: false
+              schema: { $ref: "#/components/schemas/UserCredentials" }
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -689,8 +674,7 @@ components:
       properties:
         id: { type: integer, example: 1 }
         name: { type: string, example: "My Fridge" }
-        owner: { $ref: "#/components/schemas/NameAndId" }
-      required: [id, name, owner]
+      required: [id, name]
       additionalProperties: false
 
     User:
@@ -705,6 +689,15 @@ components:
           type: array
           items: { $ref: "#/components/schemas/NameAndId" }
       required: [id, name, bannedTags, bannedIngredients]
+      additionalProperties: false
+
+    UserCredentials:
+      type: object
+      properties:
+        token: { type: string, example: "abc123" }
+        userId: { $ref: "#/components/schemas/id" }
+        fridgeId: { $ref: "#/components/schemas/id" }
+      required: [token, userId, fridgeId]
       additionalProperties: false
 
     RecipeIngredientEntry:

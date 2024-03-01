@@ -21,11 +21,7 @@ describe('/api/v1/fridge/:id', () => {
     it('should return information about the fridge', async () => {
       const expected: FridgeInfoResponse = {
         id: 1,
-        name: 'The Test Fridge',
-        owner: {
-          id: 1,
-          name: 'Testy McTestface'
-        }
+        name: 'The Test Fridge'
       }
 
       await request(app.server)

@@ -173,11 +173,6 @@ export interface paths {
               id: number;
               /** @example My Fridge */
               name: string;
-              owner: {
-                /** @example 1 */
-                id: number;
-                name: components["schemas"]["username"];
-              };
             };
           };
         };
@@ -315,17 +310,14 @@ export interface paths {
      * @description Create a new user.
      * Returns a token that can be used for future requests.
      * Username and password will be taken from the HTTP Basic Authentication header.
+     * A fridge will be created for the user and can be accessed using the returned token.
      */
     post: {
       responses: {
-        /** @description OK */
-        200: {
+        /** @description Created */
+        201: {
           content: {
-            "application/json": {
-              /** @example abc123 */
-              token: string;
-              userId: components["schemas"]["id"];
-            };
+            "application/json": components["schemas"]["UserCredentials"];
           };
         };
         400: components["responses"]["BadRequest"];
@@ -342,11 +334,7 @@ export interface paths {
         /** @description OK */
         200: {
           content: {
-            "application/json": {
-              /** @example abc123 */
-              token: string;
-              userId: components["schemas"]["id"];
-            };
+            "application/json": components["schemas"]["UserCredentials"];
           };
         };
         400: components["responses"]["BadRequest"];
@@ -558,7 +546,6 @@ export interface components {
       id: number;
       /** @example My Fridge */
       name: string;
-      owner: components["schemas"]["NameAndId"];
     };
     User: {
       /** @example 1 */
@@ -566,6 +553,12 @@ export interface components {
       name: components["schemas"]["username"];
       bannedTags: components["schemas"]["Tag"][];
       bannedIngredients: components["schemas"]["NameAndId"][];
+    };
+    UserCredentials: {
+      /** @example abc123 */
+      token: string;
+      userId: components["schemas"]["id"];
+      fridgeId: components["schemas"]["id"];
     };
     RecipeIngredientEntry: WithRequired<{
       /** @example 250g of chicken */

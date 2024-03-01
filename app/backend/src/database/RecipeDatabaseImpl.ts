@@ -92,6 +92,7 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
       const statement = this._connection.prepare<SearchRecipesResultRow>(`--sql
         SELECT
           recipe.name, recipe.id,
+          -- COUNT excludes NULLs.
           COUNT(
             CASE
               -- If fridgeId is null, then we can't create a meaningful missing count
@@ -102,8 +103,7 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
 
               -- Optionally check if we have enough of the ingredients
               WHEN :checkAmount AND fridge_ingredient.amount < recipe_ingredient.amount THEN 1
-            END
-          ) as missing_count,
+            END) as missing_count,
           CASE WHEN :search IS NULL THEN NULL ELSE ml_similarity(embedding.embedding, :search) END AS similarity
         FROM recipe
           JOIN embedding ON embedding.sentence = recipe.name
@@ -115,7 +115,6 @@ export default class RecipeDatabaseImpl implements IRecipeDatabase {
           (recipe.meal_type_id = (SELECT id FROM meal_type WHERE name = :mealType) OR :mealType IS NULL)
           AND (similarity >= :minSimilarity OR :search IS NULL)
         GROUP BY recipe.id
-        -- COUNT excludes NULLs. Less than used to optionally allow missing ingredients
         HAVING
           (missing_count <= :maxMissingIngredients OR :fridgeId IS NULL)
           -- SUM(CASE WHEN ... THEN 1 ELSE 0 END) = 0 checks for CASE WHEN returning false for all rows

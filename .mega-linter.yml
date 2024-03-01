@@ -37,8 +37,9 @@ DISABLE_LINTERS:
   - SPELL_CSPELL
   - SPELL_LYCHEE
 
-  # This is designed for Transact-SQL, not SQLite
+  # These don't support SQLite
   - SQL_TSQLLINT
+  - SQL_SQL_LINT
 
 # DISABLE:
 # - COPYPASTE # Uncomment to disable checks of excessive copy-pastes

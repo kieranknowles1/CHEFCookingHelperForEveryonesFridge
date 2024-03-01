@@ -54,28 +54,19 @@ export default class UserDatabaseImpl implements IUserDatabase {
     interface Result {
       id: types.RowId
       name: string
-      owner_id: types.RowId
-      owner_name: string
     }
     const statement = this._connection.prepare<Result>(`--sql
       SELECT
         fridge.id,
-        fridge.name,
-        user.id AS owner_id,
-        user.username AS owner_name
+        fridge.name
       FROM fridge
       JOIN fridge_user ON fridge_user.fridge_id = fridge.id
-      JOIN user ON user.id = fridge.owner_id
       WHERE fridge_user.user_id = :userId
     `)
 
     return statement.all({ userId }).map(row => ({
       id: row.id,
-      name: row.name,
-      owner: {
-        id: row.owner_id,
-        name: row.owner_name
-      }
+      name: row.name
     }))
   }
 

@@ -18,7 +18,7 @@ function throwNotAuthorized (): never {
 
 export default function registerLoginEndpoint (app: Express, db: IChefDatabase): void {
   app.post('/api/v1/login',
-    expressAsyncHandler(async (req: Request, res: TypedResponse<endpoint, 200> & TypedResponse<endpoint, 401>) => {
+    expressAsyncHandler(async (req: Request, res: TypedResponse<endpoint, 200>) => {
       const header = req.header('Authorization')
       // NOTE: express-openapi-validator will throw an error if the header is missing
       // This is a sanity check and helps make typescript happy
@@ -40,7 +40,8 @@ export default function registerLoginEndpoint (app: Express, db: IChefDatabase):
 
       res.json({
         token: issueToken(credentials.id),
-        userId: credentials.id
+        userId: credentials.id,
+        fridgeId: db.users.getAvailableFridges(credentials.id)[0].id
       })
     }))
 }

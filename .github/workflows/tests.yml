@@ -5,6 +5,8 @@ on: push
 jobs:
   tests:
     runs-on: ubuntu-latest
+    # Mocha + Supertest hangs if we forget to close the server
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
         with:

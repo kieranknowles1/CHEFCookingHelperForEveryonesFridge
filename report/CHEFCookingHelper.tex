@@ -30,19 +30,27 @@
 \usepackage[notransparent]{svg}
 \usepackage{booktabs}
 \usepackage{float}
+\usepackage{graphicx}
 \usepackage{longtable}
 \usepackage{makecell}
 \usepackage{pgfgantt}
 \usepackage{relsize}
 \usepackage{soul}
+\usepackage{subcaption}
 \usepackage{subfiles}
 \usepackage{tabulary}
 
 
 % //SECTION - Citations
-\usepackage{biblatex}
-\addbibresource{CHEFCookingHelperForEveryonesFridge.bib}
+\usepackage[
+    defernumbers=true
+]{biblatex}
+\addbibresource{CHEFCookingHelper.bib}
 \renewcommand{\cite}[1]{\parencite{#1}}
+
+% https://tex.stackexchange.com/questions/6967/how-to-split-bibliography-into-works-cited-and-works-not-cited
+\DeclareBibliographyCategory{cited}
+\AtEveryCitekey{\addtocategory{cited}{\thefield{entrykey}}}
 
 % Allow line breaks in URLs at any character, with a preference for uppercase
 % Needed for ONS URLs
@@ -92,7 +100,7 @@
 
 \title{
     A report submitted in partial fulfilment of the regulations governing the award of the Degree of \\
-    BSc. (Honours) Computer Science \\
+    B.Sc. (Honours) Computer Science \\
     University of Northumbria at Newcastle
 
     \underline{Project Report}
@@ -133,14 +141,16 @@
 
 \chapter*{Acronyms and Glossary}
 
-\textbf{\chef} Cooking Helper for Everyone's Fridge \\
-\textbf{\virtualfridge} A group of user's available ingredients
+\begin{itemize}
+    \item \textbf{\chef} Cooking Helper for Everyone's Fridge.
+    \item \textbf{ORM} Object Relational Mapping. Abstracts database queries away from the app code.
+    \item \textbf{\virtualfridge} A group of user's available ingredients.
+\end{itemize}
 
 
-\todo{Figures, Tables, Glossary, List of Symbols}
+
+\todo{List of Symbols}
 \todoinline{
-    List of Contents
-    List the contents of the report by chapter and sub-section against page numbers. Include the appendices, which document the deliverables.
     You may additionally decide to include a list of figures by page number, a glossary and/or a table defining any special symbols used in the report.
 }
 
@@ -181,46 +191,48 @@
     \chapter{#1}
     \markboth{#1}{#1}
 }
-\printbibliography{}
-\todoinline{
-    References
-    It should be clear from the text which of the material presented and opinions expressed are yours and which are those of other people. This includes showing clearly when
-    you are quoting from other people's work, by means of quotation marks or indentation, and referencing all quotations or information derived from other sources. You do not
-    need to worry about copyright in making direct quotations or copying figures provided you acknowledge the source. It is not good practice to copy sections of more than a
-    few lines from another author, even if the source is identified. Paraphrasing helps to demonstrate your understanding better than quoting, but long paraphrased sections
-    are to be avoided and it is not acceptable to take someone else's work and simply change a few words.
-    You should indicate in your work each point at which you have used one of your information sources, and provide a complete list of references after the last chapter of
-    your report. Both of these are required: it is not sufficient only to provide a reference list. References should follow one of the approved referencing formats.
-    A common style is the Harvard system, which is used in this section. An authoritative definition of how to reference a wide variety of sources is given in \enquote*{Cite Them Right,}
-    (Pears \& Shields, 2013). You are strongly advised to use the online version or to buy a copy if needed (Palgrave Macmillan, 2014).
-    Full details are:
-    Pears, R. \& Shields, G. (2013) Cite Them Right: the essential referencing guide, 9th edn. Basingstoke: Palgrave Macmillan.
-    Palgrave Macmillan (2014) Cite Them Right Online. Available at http://www.citethemrightonline.com/ (Accessed 03 September 2022)
-    Increasingly, Internet sites are a source of reference material. These must be used with care, as many web sites are of poor quality and contain unreliable information.
-    However, many excellent academic papers are also available online. When citing a Web source, you must include the name of the author or organisation, the source date,
-    the title of the page, the full URL and the date the site was visited, \enquote*{Cite them Right} gives fuller details. If you have written about software or other media, these
-    must also be referenced properly.
-    If you have made use of library software (other than standard language libraries) or other pre-existing software elements, media etc.\ in your product or deliverables,
-    appropriate credit must be given for these. You should indicate in your report that they have been used, and include the references in your list. Comments in your
-    product code should indicate any code used that you have acquired from elsewhere.
-}
+
+\nocite{*}
+\printbibliography[category=cited]{}
 
 \section{Node Packages}
-\todo{List used packages, add 0x which isnt included in package json}
-
 The following packages were used from npm for the application:
 \begin{itemize}
     \item 0x --- Flame graph performance profiler.
+    \item Async Mutex --- Synchronize asynchronous code.
+    \item Bcrypt --- Hash passwords.
+    \item Body Parser --- JSON parsing of HTTP POST bodies.
+    \item Cli Progress --- Show progress bars in the terminal.
+    \item Commander --- Parse command line arguments.
+    \item Cors --- Automatically set cross-origin headers on responses.
+    \item Csv Parse --- Parse CSV files.
+    \item Eslint --- Linting tool to enforce code style.
+    \item Express Async Handler --- Simplify async request handlers.
+    \item Fraction.js --- Parse fractions into floats.
+    \item Io-ts --- Type checking for runtime values.
+    \item Istanbul --- Code coverage tool.
+    \item Json Web Token --- Generate and verify JWTs.
+    \item Loader Spinner --- Loading spinners for React.
+    \item Mocha --- Test framework.
+    \item Nodemon --- Development server with auto reload.
+    \item OpenAPI Fetch --- Generate an API client from an OpenAPI schema.
+    \item OpenAPI-TypeScript --- Generate type declarations from API schema.
+    \item Progress Stream --- Show progress bars for file uploads.
+    \item React --- Frontend library.
+    \item React Icons --- Icon library for React.
+    \item Supertest --- Simulate HTTP requests for testing.
+    \item TailwindCSS --- CSS framework.
+    \item TensorFlowJS --- Machine learning library.
+    \item TypeScript --- Language for writing the application.
+    \item Use Debounce --- Debounce user input.
+    \item Vite --- Frontend build tool.
+    \item Vite Bundle Visualizer --- Analyse bundle size.
+    \item Winston --- Logging library.
+    \item Yaml --- Parse YAML files.
+    \item Zxing --- Barcode scanning library.
 \end{itemize}
 
-\chapter{Bibliography}
-\todo{Bibliography}
-\todoinline{
-    Bibliography
-    The bibliography is a list of sources that were consulted during the project, but which are not directly used and therefore do not need to be cited and included in
-    the reference list. This might include programming texts, other technical reference material that you consulted, general introductions to a topic, and other useful
-    background material.
-}
+\printbibliography[title=Bibliography,notcategory=cited]{}
 
 \chapter{Appendices}
 \todo{Appendices}
@@ -260,49 +272,10 @@ The following packages were used from npm for the application:
 \subfile{sections/user_reviews.tex}
 
 \cleartoleftpage\section{Interface Prototypes}
-\begin{figure}
-    \centering
-    \includesvg[height=0.9\textwidth,angle=90,pretex=\relscale{0.8}]{figures/InterfacePrototypes}
-    \caption{The home screen for \chef{}, allowing the user to add/remove ingredients and scan items.}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includesvg[height=0.9\textwidth,angle=90,pretex=\relscale{0.8}]{figures/FindRecipePage}
-    \caption{The find recipes page, showing recipes that can be made by the user. }
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includesvg[height=0.9\textwidth,angle=90,pretex=\relscale{0.8}]{figures/AccountPage}
-    \caption{The account page, allowing the user to change their preferences.}
-\end{figure}
+\subfile{sections/prototypes.tex}
 
 \cleartoleftpage\section{Figures}
-\begin{figure}[h!]
-    \centering
-    \caption{\label{fig:metalinter_report}A MegaLinter report that was automatically attached as a comment to a pull request.}
-    \includegraphics[width=\textwidth]{figures/megalinter_report.png}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \caption{\label{fig:similarity_flamegraph}Flame graph for the similarity endpoint. Most time is spent in matrix maths functions}
-    \includegraphics[angle=90,height=0.9\textheight]{figures/similarity_flamegraph.png}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \caption{\label{fig:test_report}A test report showing that all tests passed.}
-    \includegraphics[width=0.9\textwidth]{figures/test_report.png}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \caption{\label{fig:coverage_report}A coverage report showing which lines were and were not executed during test cases.}
-    \todo{Update once coverage is higher}
-    \includegraphics[width=0.9\textwidth]{figures/coverage_report.png}
-\end{figure}
+\subfile{sections/figures.tex}
 
 % Appendices
 
