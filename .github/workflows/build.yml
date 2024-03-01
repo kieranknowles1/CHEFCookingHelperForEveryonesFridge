@@ -1,0 +1,21 @@
+---
+# Build the report on push
+name: Build Report
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.ref }}
+    - uses: xu-cheng/latex-action@v3
+      with:
+        root_file: report/CHEFCookingHelperForEveryonesFridge.tex
+        working_directory: report
+        args: -shell-escape
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: report
+        path: report/CHEFCookingHelperForEveryonesFridge.pdf

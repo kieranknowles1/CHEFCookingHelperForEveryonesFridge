@@ -2,7 +2,7 @@
 
 \subsection{The Need to Reduce Food Waste}
 Gloally, nearly one third of food produced is wasted with figures being highest
-in industrialised countrie, leading to unnecessary greenhouse gas emissions and
+in industrialized countrie, leading to unnecessary greenhouse gas emissions and
 waste of natural resources.~\cite{gustavsson_global_2011} A signigicant proportion
 of this wastage occurs at the household level, totalling approximatly 50\% of all
 food waste as of 2012.~\cite{stenmarck_estimates_2016} Overall, food waste contributes
@@ -178,121 +178,78 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     \\\toprule
     \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} & \textbf{Implemented} \\\midrule
 
-    \requirement{
-        \textbf{User registration.} The system \textbf{must} allow users to sign up and log in to the app.
-    }{
-        Trivial
-    }{
-        Must-have
-    }{
-        Yes
-    }
+    \requirement
+    {\textbf{User registration.} The system \textbf{must} allow users to sign up and log in to the app.}
+    {Trivial}
+    {Must-have}
+    {Yes}
 
-    \requirement{
-        \textbf{Share ingredient lists.} The system \textbf{must} allow for multiple users to share one \virtualfridge{}
-    }{
-        TODO: Source
-    }{
-        Must-have
-    }{
-        Partially
-    }
+    \requirement
+    {\textbf{Share ingredient lists.} The system \textbf{must} allow for multiple users to share one \virtualfridge{}}
+    {\todo{TODO: Source}}
+    {Must-have}
+    {Partially}
 
-    \requirement{
-        \textbf{Select dietary requirements/preferences.} The system \textbf{must} \newline
-        allow for users to select their dietary requirements and preferences, such as allergies or disliked ingredients.
-    }{
-        TODO: Source
-    }{
-        Must-have
-    }{
-        Yes
-    }
+    \requirement
+    {\textbf{Select dietary requirements/preferences.} The system \textbf{must} \newline
+        allow for users to select their dietary requirements and preferences, such as allergies or disliked ingredients.}
+    {\todo{TODO: Source}
+    }{Must-have}
+    {Yes}
 
-    \requirement{
-        \textbf{Recipe Suggestion.} the system \textbf{must} suggest recipes based on the user's available ingredients
-    }{
-        Competitor Analysis
-    }{
-        Must-have
-    }{
-        Yes
-    }
+    \requirement
+    {\textbf{Recipe Suggestion.} the system \textbf{must} suggest recipes based on the user's available ingredients}
+    {Competitor Analysis}
+    {Must-have}
+    {Yes}
 
-    \requirement{
-        \textbf{Avoid recipes with missing ingredients.} The system \textbf{must} not suggest recipes that the user
-        is missing ingredients for unless explicitly requested.
-    }{
-        Competitor Analysis
-    }{
-        Must-have
-    }{
-        Yes
-    }
+    \requirement
+    {\textbf{Avoid recipes with missing ingredients.} The system \textbf{must} not suggest recipes that the user
+    is missing ingredients for unless explicitly requested.}
+    {Competitor Analysis}
+    {Must-have}
+    {Yes}
 
-    \requirement{
-        \textbf{Scan ingredients.} The system \textbf{should} allow the user to scan the barcodes of ingredients to add
-        them to their \virtualfridge{}
-    }{
-        TODO: Source
-    }{
-        Should-have
-    }{
-        Yes
-    }
+    \requirement
+    {\textbf{Scan ingredients.} The system \textbf{should} allow the user to scan the barcodes of ingredients to add
+    them to their \virtualfridge}
+    {\todo{TODO: Source}}
+    {Should-have}
+    {Yes}
 
-    \requirement{
-        \textbf{Use metric units.} All units \textbf{should} be displayed in metric by default.
-    }{
-        Competitor Analysis
-    }{
-        Should-have
-    }{
-        Yes
-    }
+    \requirement
+    {\textbf{Use metric units.} All units \textbf{should} be displayed in metric by default.}
+    {Competitor Analysis}
+    {Should-have}
+    {Yes}
 
-    \requirement{
-        \textbf{Optionally use imperial units.} There \textbf{could} be an option to display imperial units instead of metric.
-    }{
-        Competitor Analysis
-    }{
-        Could-have
-    }{
-        No
-    }
+    \requirement
+    {\textbf{Optionally use imperial units.} There \textbf{could} be an option to display imperial units instead of metric.}
+    {Competitor Analysis}
+    {Could-have}
+    {No}
 
-    \requirement{
-        \textbf{Scan receipt.} The system \textbf{could} allow the user to scan a receipt from a store to add ingredients
-        to their \virtualfridge{}
-    }{
-        TODO: Source
-    }{
-        Could-have
-    }{
-        No
-    }
+    \requirement
+    {\textbf{Scan receipt.} The system \textbf{could} allow the user to scan a receipt from a store to add ingredients
+    to their \virtualfridge}
+    {\todo{TODO: Source}}
+    {Could-have}
+    {No}
 
-    \requirement{\label{req:similar_recipes}
-        \textbf{Find similar recipes.} The system \textbf{should} use a machine learning model to find and suggest
-        similar recipes to those that the user has previously made.
-    }{
-        TODO: Source
-    }{
-        Should-have
-    }{
-        Yes
-    }
+    \requirement
+    {\label{req:similar_recipes}\textbf{Find similar recipes.} The system \textbf{should} use a machine learning model to find and suggest
+    similar recipes to those that the user has previously made.}
+    {\todo{TODO: Source}}
+    {Should-have}
+    {Yes}
 
-    \requirement{\label{req:too_similar}\newcounter{toosimilarid}\setcounter{toosimilarid}{\thefunctionalreqcounter}
-        \textbf{Avoid repeating recipes.} The system \textbf{should} avoid suggesting recipes that are too similar
-        to those that have been made recently using the same model as \hyperref[req:similar_recipes]{\textbf{Find similar recipes}}
-    }{
-        TODO: Source
-    }{
-        Should-have
-    }{
-        No
-    }
+    \requirement
+    {\label{req:too_similar}\newcounter{toosimilarid}\setcounter{toosimilarid}{\thefunctionalreqcounter}
+    \textbf{Avoid repeating recipes.} The system \textbf{should} avoid suggesting recipes that are too similar
+    to those that have been made recently using the same model as \hyperref[req:similar_recipes]{\textbf{Find similar recipes}}}
+    {\todo{TODO: Source}}
+    {Should-have}
+    {No}
 
     \requirement{
         \textbf{Add recipes.} The system \textbf{won't currently} allow for users to add their own recipes
@@ -314,68 +271,44 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     \\\toprule
     \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} & \textbf{Implemented} \\\midrule
 
-    \requirement{
-        \textbf{Performance.} The system \textbf{should} be responsive to user input and requests to the API \textbf{should}
-        be responded to in under 200ms on average.
-    }{
-        Trivial
-    }{
-        Should-have
-    }{
-        Yes
-    }
+    \requirement
+    {\textbf{Performance.} The system \textbf{should} be responsive to user input and requests to the API \textbf{should}
+    be responded to in under 200ms on average.}
+    {Trivial}
+    {Should-have}
+    {Yes}
 
-    \requirement{
-        \textbf{Reliability.} The system \textbf{should} be reliable and resilient should the user incorrectly use an element of
-        the app.
-    }{
-        Trivial
-    }{
-        Should-have
-    }{
-        Yes
-    }
+    \requirement
+    {\textbf{Reliability.} The system \textbf{should} be reliable and resilient should the user incorrectly use an element of
+    the app.}
+    {Trivial}
+    {Should-have}
+    {Yes}
 
-    \requirement{
-        \textbf{Usability.} The system \textbf{should} be intuitive and easy to use.
-    }{
-        Trivial
-    }{
-        Should-have
-    }{
-        Yes
-    }
+    \requirement
+    {\textbf{Usability.} The system \textbf{should} be intuitive and easy to use.}
+    {Trivial}
+    {Should-have}
+    {Yes}
 
-    \requirement{
-        \textbf{Maintainability.} The system \textbf{should} be structured in a way that is maintainable and upgradable
-        in the future.
-    }{
-        Trivial
-    }{
-        Should-have
-    }{
-        Yes
-    }
+    \requirement
+    {\textbf{Maintainability.} The system \textbf{should} be structured in a way that is maintainable and upgradable
+    in the future.}
+    {Trivial}
+    {Should-have}
+    {Yes}
 
-    \requirement{
-        \textbf{Code quality.} The system \textbf{must} pass all of its unit tests.
-    }{
-        Trivial
-    }{
-        Must-have
-    }{
-        Yes
-    }
+    \requirement
+    {\textbf{Code quality.} The system \textbf{must} pass all of its unit tests.}
+    {Trivial}
+    {Must-have}
+    {Yes}
 
-    \requirement{
-        \textbf{Ease of setup.} The system \textbf{should} be installable using a single script and minimal manual input.
-    }{
-        Trivial
-    }{
-        Should-have
-    }{
-        Yes
-    }
+    \requirement
+    {\textbf{Ease of setup.} The system \textbf{should} be installable using a single script and minimal manual input.}
+    {Trivial}
+    {Should-have}
+    {Yes}
     \bottomrule
 \end{longtable}
 
