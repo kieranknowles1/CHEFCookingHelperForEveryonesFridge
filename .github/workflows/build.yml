@@ -11,11 +11,11 @@ jobs:
         ref: ${{ github.ref }}
     - uses: xu-cheng/latex-action@v3
       with:
-        root_file: report/CHEFCookingHelperForEveryonesFridge.tex
+        root_file: report/CHEFCookingHelper.tex
         working_directory: report
         args: -shell-escape
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
       with:
         name: report
-        path: report/CHEFCookingHelperForEveryonesFridge.pdf
+        path: report/CHEFCookingHelper.pdf
