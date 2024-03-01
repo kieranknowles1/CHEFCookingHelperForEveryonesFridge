@@ -42,9 +42,15 @@
 
 
 % //SECTION - Citations
-\usepackage{biblatex}
+\usepackage[
+    defernumbers=true
+]{biblatex}
 \addbibresource{CHEFCookingHelperForEveryonesFridge.bib}
 \renewcommand{\cite}[1]{\parencite{#1}}
+
+% https://tex.stackexchange.com/questions/6967/how-to-split-bibliography-into-works-cited-and-works-not-cited
+\DeclareBibliographyCategory{cited}
+\AtEveryCitekey{\addtocategory{cited}{\thefield{entrykey}}}
 
 % Allow line breaks in URLs at any character, with a preference for uppercase
 % Needed for ONS URLs
@@ -185,29 +191,9 @@
     \chapter{#1}
     \markboth{#1}{#1}
 }
-\printbibliography{}
-\todoinline{
-    References
-    It should be clear from the text which of the material presented and opinions expressed are yours and which are those of other people. This includes showing clearly when
-    you are quoting from other people's work, by means of quotation marks or indentation, and referencing all quotations or information derived from other sources. You do not
-    need to worry about copyright in making direct quotations or copying figures provided you acknowledge the source. It is not good practice to copy sections of more than a
-    few lines from another author, even if the source is identified. Paraphrasing helps to demonstrate your understanding better than quoting, but long paraphrased sections
-    are to be avoided and it is not acceptable to take someone else's work and simply change a few words.
-    You should indicate in your work each point at which you have used one of your information sources, and provide a complete list of references after the last chapter of
-    your report. Both of these are required: it is not sufficient only to provide a reference list. References should follow one of the approved referencing formats.
-    A common style is the Harvard system, which is used in this section. An authoritative definition of how to reference a wide variety of sources is given in \enquote*{Cite Them Right,}
-    (Pears \& Shields, 2013). You are strongly advised to use the online version or to buy a copy if needed (Palgrave Macmillan, 2014).
-    Full details are:
-    Pears, R. \& Shields, G. (2013) Cite Them Right: the essential referencing guide, 9th edn. Basingstoke: Palgrave Macmillan.
-    Palgrave Macmillan (2014) Cite Them Right Online. Available at http://www.citethemrightonline.com/ (Accessed 03 September 2022)
-    Increasingly, Internet sites are a source of reference material. These must be used with care, as many web sites are of poor quality and contain unreliable information.
-    However, many excellent academic papers are also available online. When citing a Web source, you must include the name of the author or organisation, the source date,
-    the title of the page, the full URL and the date the site was visited, \enquote*{Cite them Right} gives fuller details. If you have written about software or other media, these
-    must also be referenced properly.
-    If you have made use of library software (other than standard language libraries) or other pre-existing software elements, media etc.\ in your product or deliverables,
-    appropriate credit must be given for these. You should indicate in your report that they have been used, and include the references in your list. Comments in your
-    product code should indicate any code used that you have acquired from elsewhere.
-}
+
+\nocite{*}
+\printbibliography[category=cited]{}
 
 \section{Node Packages}
 The following packages were used from npm for the application:
@@ -246,14 +232,7 @@ The following packages were used from npm for the application:
     \item Zxing --- Barcode scanning library.
 \end{itemize}
 
-\chapter{Bibliography}
-\todo{Bibliography}
-\todoinline{
-    Bibliography
-    The bibliography is a list of sources that were consulted during the project, but which are not directly used and therefore do not need to be cited and included in
-    the reference list. This might include programming texts, other technical reference material that you consulted, general introductions to a topic, and other useful
-    background material.
-}
+\printbibliography[title=Bibliography,notcategory=cited]{}
 
 \chapter{Appendices}
 \todo{Appendices}
