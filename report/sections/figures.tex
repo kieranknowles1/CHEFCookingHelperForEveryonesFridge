@@ -68,7 +68,7 @@ mocha --reporter dot --require ts-node/register src/tests/**/*.ts
 \cleartoleftpage\begin{figure}
   \centering
   \caption{\label{fig:search_query}The query used to search recipes}
-  \begin{verbatim}
+  \begin{minted}{sql}
 SELECT
 recipe.name, recipe.id,
 -- COUNT excludes NULLs.
@@ -105,16 +105,16 @@ JOIN ingredient ON
 LEFT JOIN ingredient_tag ON
   ingredient_tag.ingredient_id = ingredient.id
 WHERE (
-recipe.meal_type_id = (
-  SELECT id FROM meal_type WHERE name = :mealType
-) OR :mealType IS NULL
+  recipe.meal_type_id = (
+    SELECT id FROM meal_type WHERE name = :mealType
+  ) OR :mealType IS NULL
 ) AND (similarity >= :minSimilarity OR :search IS NULL)
 GROUP BY recipe.id
-  \end{verbatim}
+  \end{minted}
 \end{figure}
 
 \begin{figure}\ContinuedFloat{}
-  \begin{verbatim}
+  \begin{minted}{sql}
 HAVING
 (missing_count <= :maxMissingIngredients OR :fridgeId IS NULL)
 -- SUM(CASE WHEN ... THEN 1 ELSE 0 END) = 0
@@ -131,12 +131,12 @@ AND (SUM(CASE WHEN
 THEN 1 ELSE 0 END) = 0)
 ORDER BY missing_count ASC, similarity DESC
 LIMIT :limit
-  \end{verbatim}
+  \end{minted}
 \end{figure}
 
 \begin{figure}
   \caption{\label{fig:search_params}The parameters of the \texttt{search} endpoint}
-  \begin{verbatim}
+  \begin{minted}{yaml}
 - in: query
   name: search
   description: Search term
@@ -180,11 +180,11 @@ LIMIT :limit
     Meaningless if `availableForFridge` is not specified.
   schema: { type: boolean, example: true, default: true }
   required: false
-  \end{verbatim}
+  \end{minted}
 \end{figure}
 
 \begin{figure}\ContinuedFloat{}
-  \begin{verbatim}
+  \begin{minted}{yaml}
 - in: query
   name: limit
   description: Maximum number of results to return.
@@ -212,5 +212,5 @@ LIMIT :limit
     type: array
     items: { $ref: "#/components/schemas/id" }
   required: false
-  \end{verbatim}
+  \end{minted}
 \end{figure}

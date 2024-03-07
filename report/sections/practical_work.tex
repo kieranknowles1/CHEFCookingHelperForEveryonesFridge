@@ -219,7 +219,7 @@ relying primarily on regression testing.
 
 \begin{figure}[p]
     \caption{\label{fig:test_case}An example of a test case from \texttt{testGetEmbedding.ts}}
-    \begin{verbatim}
+    \begin{minted}{ts}
 it('should return similar embeddings for similar strings',
   async function () {
     const emb1 = await getEmbedding('Hello world')
@@ -243,7 +243,7 @@ it('should return dissimilar embeddings for dissimilar strings',
     )
   }
 )
-    \end{verbatim}
+    \end{minted}
 \end{figure}
 
 \subsubsection{Regression Testing}

@@ -383,7 +383,7 @@ that can be caught pre-emptively by TypeScript, but not JavaScript.
 
 \begin{figure}
     \caption{\label{fig:type_check}A code snippet that would fail TypeScript's checks.}
-    \begin{verbatim}
+    \begin{minted}{ts}
 function take_str(str: string): void {
     console.log(str)
 }
@@ -398,7 +398,7 @@ take_str(123)
 // This would also not compile as take_str does not return
 // anything
 const ret = take_str('World')
-    \end{verbatim}
+    \end{minted}
 \end{figure}
 
 \subsection{The Dataset}\label{sec:data_pre_process}

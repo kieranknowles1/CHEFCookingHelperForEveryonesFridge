@@ -11,6 +11,8 @@
 *.lot
 *.out
 *.pdf
+*.pygstyle
+*.pygtex
 *.run.xml
 *.synctex.gz
 *.synctex(busy)
