@@ -10,14 +10,13 @@ import NotFoundMessage from '../errorpages/NotFoundMessage'
 import { type components } from '../types/api.generated'
 import monitorOutcome from '../utils/monitorOutcome'
 
+import SimilarRecipes, { suggestionIndexes } from './recipe/SimilarRecipes'
 import MadeItButton from './recipe/MadeItButton'
 import RecipeIngredient from './recipe/RecipeIngredient'
-import SimilarRecipes from './recipe/SimilarRecipes'
 import SingleRecipeHistory from './recipe/SingleRecipeHistory'
 
 type Recipe = components['schemas']['Recipe']
 
-const MAX_SIMILAR_RECIPES = 100
 const MIN_SIMILARITY = 0.5
 
 export interface RecipePageProps {
@@ -139,9 +138,9 @@ export default function RecipePage (props: RecipePageProps): React.JSX.Element {
       />
       <SimilarRecipes
         recipe={recipe}
-        limit={MAX_SIMILAR_RECIPES}
         minSimilarity={MIN_SIMILARITY}
         filters={filters}
+        indexes={suggestionIndexes}
       />
     </main>
   )

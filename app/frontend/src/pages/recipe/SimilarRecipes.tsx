@@ -11,12 +11,24 @@ import monitorOutcome from '../../utils/monitorOutcome'
 
 type Recipe = components['schemas']['Recipe']
 
-export interface SimilarRecipeProps {
+/**
+ * Indexes into recommendations that will be displayed to the user
+ * Based on paper by (Bollen et al., 2010) "Understanding Choice Overload in Recommender Systems"
+ * See main report for more details
+ */
+export const suggestionIndexes = [
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+  10, 20, 30, 40, 50, 60, 70, 80, 90,
+  100, 150, 200, 250, 300, 350, 400, 450, 500
+]
+
+export type SimilarRecipeProps = {
   recipe: Recipe
-  limit: number
   minSimilarity: number
   filters: SearchFilters
-}
+} & (
+  { limit: number } | { indexes: number[] }
+)
 
 export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.Element {
   const context = React.useContext(UserContext)
@@ -32,7 +44,7 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
         params: {
           query: {
             ...props.filters,
-            limit: props.limit,
+            limit: 'limit' in props ? props.limit : props.indexes[props.indexes.length - 1] + 1,
             minSimilarity: props.minSimilarity,
             availableForFridge: context?.fridgeId,
             search: props.recipe.name
@@ -46,12 +58,15 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
     }).catch(err => {
       console.error(err)
     })
-  }, [props.recipe.name, props.limit, props.minSimilarity, props.filters, context])
+  }, [props.recipe.name, props.minSimilarity, props.filters, context])
 
   return (
     <div>
       <LoadingSpinner status={status} />
-      <RecipeList recipes={recipes} status={status} />
+      <RecipeList recipes={'limit' in props
+        ? recipes
+        : props.indexes.map(index => recipes[index])
+        } status={status} />
     </div>
   )
 }
