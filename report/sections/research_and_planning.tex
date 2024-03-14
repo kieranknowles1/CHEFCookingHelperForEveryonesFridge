@@ -11,7 +11,7 @@ chain.~\cite{scherhaufer_environmental_2018}
 
 \todo{The need to reduce food waste}
 
-\subsection{Prior Work}
+\subsection{Prior Work in Subject Area}
 Stefan et al. found that \enquote*{the intention not to waste food does not have a
 significant effect on reported food waste}. Instead, planning before shopping to
 check what is already available was found to have a negative impact on food waste.~\cite{stefan_avoiding_2013}
@@ -19,11 +19,23 @@ check what is already available was found to have a negative impact on food wast
 
 While providing a user with variety of choices can improve their satisfaction
 with the overall system, care must be taken to avoid information overload.
-Bollen et. al. found that offering a small number of items predicted to be among a user's
+Bollen et al. found that offering a more limited set items predicted to be among a user's
 highest rated, followed by a larger set of more varied items with lower rankings, led to
 higher satisfaction on average.~\cite{bollen_understanding_2010}
 
-\todo{https://www.sciencedirect.com/science/article/pii/S0957417423026684}
+\subsubsection{Techniques Common to Food Reccomendation Systems}
+There exist a broad range of techniques used by food reccomendation systems, using both machine learning
+and statistical models, the most popular method in existing studies being machine learning based on the
+contents of recipes. Most of which were not personalized to the individual user.~\cite{bondevik_systematic_2024}
+
+Among prior systems, the majority source their training data from textual data with the most commonly used
+attributes being ingredients, cooking instructions, and the recipe title itself. There has been limited research
+into combining multiple attributes of the recipe or giving attributes different weights.~\cite{chen_cross-modal_2017} These factors are often
+considered to be merely a subject for future research or unimportant, which is beleived to degrade the performance
+of systems.~\cite{bondevik_systematic_2024}
+
+\todo{https://www.sciencedirect.com/science/article/pié*i/S0957417423026684}
+
 
 \subsection{AI Recipe Suggestion and Generation}
 Prior studies have explored generating variants of existing recipes using large language models such as GPT-3.
@@ -36,7 +48,6 @@ For example, Chinese recipe names often bear little resembelance to the contents
 of the recipe itself.~\cite{wang_substructure_2008} This limits the effectiveness
 of suggestions systems based on names and as such a more complex system as discussed
 by Wang et al. would be needed.
-
 \todo{ai recipe suggestion}
 
 \subsection{Gaps in Existing Literature}
@@ -372,6 +383,10 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
 }
 
 \section{Approach/Methodology}
+As this study is primarily an algorithmic one, it was decided not to interview people
+or demonstarte the final product with them.
+
+
 \todo{Approach/Methodology}
 
 \subsection{Language}\label{sec:language}

@@ -107,18 +107,19 @@ to duplicate validation specificiations and removed the possibility of having th
 the server accepts differ from what was documented.
 
 One limitation that was not resolved with either of the above packages is that there is no validation
-for whether the endpoints exist which lead to some confusion when testing endpoints that had not been registered
-with Express. A different combination of packages may have been able to check for this,
+for whether the endpoints exist which lead to some confusion with endpoints returning 404 as the function to
+register it with Express was not being called. A different combination of packages may have been able to check for this,
 but was not considered due to time constraints.
 
 Swagger UI \cite{smartbear_swagger_2024} was used to serve a generated HTML page that lists all endpoints declared in
 the API specification, along with example values for both requests and responses and the ability to make requests in
 the browser. This served as a quick way to make test requests with dummy data during development, and an easy-to-use
-reference for the endpoints available to \codelisting{openapi-fetch}.
+reference for the endpoints available to \codelisting{openapi-fetch}. See figure \ref{fig:api_docs} for an example of the
+generated documentation page.
 
 \subsection{Machine Learning}
 The similarity of recipes is evaluated using the Universal Sentence Encoder model discussed in section \ref{sec:recipe_similarity} to
-compare the names of recipes. Due to the high runtime cost of embedding sentences at approximately 100ms per string,
+embed and compare the names of recipes. Due to the high runtime cost of embedding sentences at approximately 100ms per string,
 the embeddings are calculated during setup and stored in the database, organized by their source strings as shown in table \ref{fig:embedding_table}.
 
 \begin{table}[h]
@@ -209,7 +210,7 @@ is pushed. All test cases for the backend are contained in the \texttt{app/backe
 \ref{fig:test_case} for an example of a test case.
 
 Test cases were largely written after the functions they were intented to test
-as their is limited evicence for test-driven development leading to higher
+as there is limited evicence for test-driven development leading to higher
 quality tests or greater code coverage.~\cite{tosun_effectiveness_2018,madeyski_impact_2010}
 
 Likewise, while reaching a certain level of code coverage is important for detecting
@@ -250,7 +251,7 @@ it('should return dissimilar embeddings for dissimilar strings',
 
 Whenever an issue was discovered in the backend, the first step taken was to
 introduce new unit tests based on the expected behaviour. The faulty code was
-then fixed and the tests kept in place. This helps to prevent the issue being
+then fixed, and the tests kept in place. This helps to prevent the issue being
 reintroduced at a later date.
 
 One example of regression testing is that, after discovering that embeddings were
