@@ -34,9 +34,6 @@ into combining multiple attributes of the recipe or giving attributes different 
 considered to be merely a subject for future research or unimportant, which is beleived to degrade the performance
 of systems.~\cite{bondevik_systematic_2024}
 
-\todo{https://www.sciencedirect.com/science/article/pié*i/S0957417423026684}
-
-
 \subsection{AI Recipe Suggestion and Generation}
 Prior studies have explored generating variants of existing recipes using large language models such as GPT-3.
 This was found to be an effective system and to generate meaningful recipes.~\cite{kansaksiri_smart_2023}
@@ -230,7 +227,7 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     {Yes}
 
     \requirement
-    {\textbf{Recipe Suggestion.} the system \textbf{must} suggest recipes based on the user's available ingredients}
+    {\textbf{Recipe Suggestion.} The system \textbf{must} suggest recipes based on the user's available ingredients}
     {Competitor Analysis}
     {Must-have}
     {Yes}
@@ -243,11 +240,25 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     {Yes}
 
     \requirement
+    {\label{req:sources}\newcounter{sourcesid}\setcounter{sourcesid}{\thefunctionalreqcounter}%
+    \textbf{Include sources.} The system \textbf{must} include its sources for recipes.}
+    {Trivial}
+    {Must-have}
+    {Yes}
+
+    \requirement
     {\textbf{Scan ingredients.} The system \textbf{should} allow the user to scan the barcodes of ingredients to add
     them to their \virtualfridge}
     {\todo{TODO: Source}}
     {Should-have}
     {Yes}
+
+    \requirement
+        {\label{req:track_amounts}\newcounter{trackamountsid}\setcounter{trackamountsid}{\thefunctionalreqcounter}%
+        \textbf{Track ingredient amounts.} The system \textbf{should} track the amount of each ingredient the user has available.}
+        {Competitor Analysis}
+        {Should-have}
+        {Yes}
 
     \requirement
     {\textbf{Use metric units.} All units \textbf{should} be displayed in metric by default.}
@@ -269,30 +280,26 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     {No}
 
     \requirement
-    {\label{req:similar_recipes}\textbf{Find similar recipes.} The system \textbf{should} use a machine learning model to find and suggest
+    {\label{req:similar_recipes}\newcounter{findsimilarid}\setcounter{findsimilarid}{\thefunctionalreqcounter}%
+    \textbf{Find similar recipes.} The system \textbf{should} use a machine learning model to find and suggest
     similar recipes to those that the user has previously made.}
     {\todo{TODO: Source}}
     {Should-have}
     {Yes}
 
     \requirement
-    {\label{req:too_similar}\newcounter{toosimilarid}\setcounter{toosimilarid}{\thefunctionalreqcounter}
+    {\label{req:too_similar}\newcounter{toosimilarid}\setcounter{toosimilarid}{\thefunctionalreqcounter}%
     \textbf{Avoid repeating recipes.} The system \textbf{should} avoid suggesting recipes that are too similar
-    to those that have been made recently using the same model as \hyperref[req:similar_recipes]{\textbf{Find similar recipes}}}
+    to those that have been made recently using the same model as \hyperref[req:similar_recipes]{FR\arabic{findsimilarid}}}
     {\todo{TODO: Source}}
     {Should-have}
     {No}
 
-    \requirement{
-        \textbf{Add recipes.} The system \textbf{won't currently} allow for users to add their own recipes
-        to the database.
-    }{
-        Competitor Analysis
-    }{
-        Won't-have
-    }{
-        No
-    }
+    \requirement
+    {\textbf{Add recipes.} The system \textbf{won't currently} allow for users to add their own recipes to the database.}
+    {Competitor Analysis}
+    {Won't-have}
+    {No}
 
     \bottomrule
 \end{longtable}
@@ -389,7 +396,7 @@ or demonstarte the final product with them.
 
 \todo{Approach/Methodology}
 
-\subsection{Language}\label{sec:language}
+\subsection{Choice of Programming Language}\label{sec:language}
 It was decided early on to implement \chef{} as a web application with a
 frontend using written for the React framework. This supports using either
 the JavaScript or TypeScript language.
@@ -427,15 +434,22 @@ const ret = take_str('World')
 
 \subsection{The Dataset}\label{sec:data_pre_process}
 
-\todo{Should I talk about how Recipe Box was considered?}
+The Recipe Box~\cite{lee_recipe_2017} dataset was initially considered, but later disregarded as the pre-scraped download only includes the
+hashed versions of the source URLs and the scraping scripts no longer function due to changes in website design. This would have made
+\hyperref[req:sources]{FR\arabic{sourcesid}} impossible to achieve.
 
-The RecipeNLG dataset~\cite{bien_recipenlg_2020} was decided upon for the \chef{} app. This contains approximately 2 million recipes
+An additional dataset that was considered was the Food.com Recipes and Interactions dataset~\cite{li_foodcom_2019}. However, this only includes
+ingredient names and not IDs, which was insufficient to cover \hyperref[req:track_amounts]{FR\arabic{trackamountsid}}
+
+In the end, RecipeNLG~\cite{bien_recipenlg_2020} was the dataset of choice for the \chef{} app. This contains approximately 2 million recipes
 each with an ingredient list, a list of directions, and its source URL.
 
 While licensing restrictions would prevent this from being used for a commercial app, it is still available for
 research purposes.
 
-The following information is included for each recipe:
+See table \ref{tab:recipenlg_row_format} for the information that is included with each recipe and that is imported into
+the app's database during setup. The schema script for the database is located at \texttt{./app/backend/data/schema.sql}
+in the project's Git repository and is not included in this report due to its length.
 
 \begin{table}
     \caption{RecipeNLG Row Format}\label{tab:recipenlg_row_format}
@@ -459,15 +473,16 @@ The following information is included for each recipe:
     \end{tabulary}
 \end{table}
 
-This data is imported into the app's database during setup. See \todo{Schema} for the schema.
-
 \todo{Sample entry}
 
-\subsubsection{Limitations}
-While it contains many recipes, the RecipeNLG dataset includes numberous recipes with identical names.
-As similarity is evaluated based on the name (section \ref{sec:recipe_similarity}), and as such
-these would be considered identical, it was decided to filter the dataset to only include each name once,
-ordered by which appears first in the dataset.
+\subsubsection{Data Pre-processing}
+Many existing papers in the area do not pre-process their recipe data. Among those that do, the most
+common methods are text cleaning and exclusion, with duplicate removal being a rare step to undertake.~\cite{bondevik_systematic_2024}
+
+The duplicate removal step was the only pre-processing method used in \chef{} as it evaluates similarity
+based on the recipe name (see section \ref{sec:recipe_similarity}). Therefore, two recipes with the same
+name would be considered identical. It was decided therefore to only incude recipes with any given name
+once, disregarding any with a name that was seen before during import.
 
 \todo{Dataset}
 
