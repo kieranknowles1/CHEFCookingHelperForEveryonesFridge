@@ -1,7 +1,7 @@
 # MegaLinter GitHub Action configuration file
 # More info at https://megalinter.io
 ---
-name: MegaLinter
+name: Lint
 
 # Trigger mega-linter at every push. Action will also be visible from
 # Pull Requests to main
@@ -183,3 +183,23 @@ jobs:
           commit_message: "[MegaLinter] Apply linters fixes"
           commit_user_name: megalinter-bot
           commit_user_email: nicolas.vuillamy@ox.security
+
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - name: Install Modules
+        run: npm install --save-dev
+      - name: Install backend dependencies
+        run: |
+          cd app/backend
+          npm install --save-dev
+      - name: Install frontend dependencies
+        run: |
+          cd app/frontend
+          npm install --save-dev
+      - name: Run ESLint
+        run: npx eslint . --ext .js,.jsx,.ts,.tsx
