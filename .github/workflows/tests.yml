@@ -10,8 +10,6 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
       - name: Install backend dependencies
         run: |
           cd app/backend
