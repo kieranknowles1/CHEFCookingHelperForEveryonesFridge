@@ -1,0 +1,21 @@
+---
+# Build on push
+name: Build
+on: push
+jobs:
+  build_report:
+    name: Build Report
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: xu-cheng/latex-action@v3
+        with:
+          extra_system_packages: inkscape
+          working_directory: report
+          root_file: CHEFCookingHelper.tex
+          latexmk_shell_escape: true
+          latexmk_use_xelatex: true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: report
+          path: report/ChefCookingHelper.pdf
