@@ -9,12 +9,12 @@
     •	Projects focusing on the development of a product
     You should discuss the design, implementation, and testing of your product. There are sections on each of these below. If there were other activities involved in development,
     such as analysis modelling based on the requirements specification, or if your project involved other practical work such as an experiment using your product, you should also
-    include these: say what you did and discuss any interesting decisions or problems. If your product does not fit this model - for example, a project whose product is an
-    information strategy - this section should discuss the work needed to create that product.
+    include these: say what you did and discuss any interesting decisions or problems. If your product does not fit this model --- for example, a project whose product is an
+    information strategy --- this section should discuss the work needed to create that product.
 
     The narrative should especially identify areas of the work that were particularly interesting or difficult. Assume that the readership of the report will be computer
     literate individuals who will appreciate the problems you have tackled.
-    Justify in detail the method(s) you chose to synthesise a solution to the problem. Discuss how your reading of the literature guided you in your work. You may wish to
+    Justify in detail the methods you chose to synthesise a solution to the problem. Discuss how your reading of the literature guided you in your work. You may wish to
     refer to supporting documentation in your discussion of the solution; these will be held in appendices to the report.
     In general, there should be neither bookwork nor theoretical material here. You should tell the reader what you did, why you did it and how you did it. Unless you have
     developed a worthwhile product or solved a challenging problem there will be little for you to say (and few marks to gain).
@@ -27,7 +27,7 @@
 
 \subsection{Frontend Design}
 \todo{Frontend design}
-Design of the \chef{} app began with creating interface prototypes (see figures \ref{fig:proto_home}, \ref{fig:proto_find_recipes}, and \ref{fig:proto_account})
+Design of the \chef{} app began with creating interface prototypes (see figures~\ref{fig:proto_home},~\ref{fig:proto_find_recipes}, and~\ref{fig:proto_account})
 
 \todoinline{
     Good products, whether software or hardware, must be designed. It is not professional to hack out a solution! You must describe and provide a rationale for that design.
@@ -35,7 +35,7 @@ Design of the \chef{} app began with creating interface prototypes (see figures 
     decisions. Throughout the design section you should justify your choices. Discuss the implications of making different design choices, and the reasons for the design
     that you have selected.
 
-    The design chapter(s) should give a top-level view of how your product meets its requirements. For a software product, a good starting point is to describe the architecture
+    The design chapters should give a top-level view of how your product meets its requirements. For a software product, a good starting point is to describe the architecture
     of the software. (If your product is not software, what corresponds to the software architecture?)  For example, suppose you are going to produce a computer game that
     could be played across the web. This will involve some software concerned with the communications across the network, some software concerned with the specific game and
     some with aspects that could be common to many games. This suggests an architecture consisting of three subsystems. You may feel there are other possible designs. If so,
@@ -61,7 +61,7 @@ Design of the \chef{} app began with creating interface prototypes (see figures 
 \todoinline{
     In an implementation chapter, you are describing and justifying how you implemented your product, which for a software product means at the code level.
     Do not attempt to describe every detail. For a software product, do not include large sections of program code. Any code presented should be to illustrate important
-    and interesting features. You might want to describe the data structures you elected to use, e.g. in Java a LinkedList or a Vector, and explain why you chose the one
+    and interesting features. You might want to describe the data structures you elected to use, e.g.\ in Java a LinkedList or a Vector, and explain why you chose the one
     you did. If there were any interesting low-level algorithms, you should describe these. If you feel it is important to put a significant volume of program code into
     your report, put it in an appendix and reference the appendix. (The appendix usually contains examples of your code, but the place for your full code is in your OneDrive
     product folder.)
@@ -105,7 +105,7 @@ to not use classes for objects retrieved from the database and instead to rely o
 \subsection{Documentation}
 The API was declared and documented using the OpenAPI format and converted
 into TypeScript types using the \codelisting{openapi-typescript} package. These
-generated types were then used to check the return types from the API.
+generated types were then used to check the return the API's return types at compile time.
 
 The \codelisting{express-openapi-validator} package was used separately to validate
 request parameters against the OpenAPI schema. This implementation avoided having
@@ -117,16 +117,16 @@ for whether the endpoints exist which lead to some confusion with endpoints retu
 register it with Express was not being called. A different combination of packages may have been able to check for this,
 but was not considered due to time constraints.
 
-Swagger UI \cite{smartbear_swagger_2024} was used to serve a generated HTML page that lists all endpoints declared in
+Swagger UI~\cite{smartbear_swagger_2024} was used to serve a generated HTML page that lists all endpoints declared in
 the API specification, along with example values for both requests and responses and the ability to make requests in
 the browser. This served as a quick way to make test requests with dummy data during development, and an easy-to-use
-reference for the endpoints available to \codelisting{openapi-fetch}. See figure \ref{fig:api_docs} for an example of the
+reference for the endpoints available to \codelisting{openapi-fetch}. See figure~\ref{fig:api_docs} for an example of the
 generated documentation page.
 
 \subsection{Machine Learning}
-The similarity of recipes is evaluated using the Universal Sentence Encoder model discussed in section \ref{sec:recipe_similarity} to
+The similarity of recipes is evaluated using the Universal Sentence Encoder model discussed in Section~\ref{sec:recipe_similarity} to
 embed and compare the names of recipes. Due to the high runtime cost of embedding sentences at approximately 100ms per string,
-the embeddings are calculated during setup and stored in the database, organized by their source strings as shown in table \ref{fig:embedding_table}.
+the embeddings are calculated during setup and stored in the database, organized by their source strings as shown in table~\ref{fig:embedding_table}.
 
 \begin{table}[h]
     \centering
@@ -141,7 +141,7 @@ the embeddings are calculated during setup and stored in the database, organized
 At runtime, the \codelisting{/api/v1/recipe/\{id\}/search} endpoint is used to filter and order recipes by their similarity score
 relative to the query, and their availability and suitability for a user.
 This took a significant amount of time to execute at first. Despite initial assumptions that this was due to the large amount of copying
-created due to the implementation, was shown by profiling (see figure \ref{fig:similarity_flamegraph}) to instead be in TensorFlow's
+created due to the implementation, was shown by profiling (see figure~\ref{fig:similarity_flamegraph}) to instead be in TensorFlow's
 matrix maths functions.
 
 This could be accelerated using a hardware-accelerated build of TensorFlow, which was not done due to the difficulty of installing
@@ -152,9 +152,9 @@ issue and was not resolved.
 \section{Frontend Implementation}
 \todo{Frontend}
 
-The application's frontend was implemented in React using TypeScript for the reasons discussed in section
-\ref{sec:language}, and is styled using Tailwind CSS. Combined, these frameworks allow for a responsive
-user interface to be quickly produced that fetches data from the API.
+The application's frontend was implemented in React using TypeScript for the reasons covered in
+Section~\ref{sec:language}, and is styled using Tailwind. Combined, these frameworks allow for a responsive
+user interface to be quickly produced that fetches API data.
 
 \subsection{API Communication}
 The \codelisting{openapi-fetch} package was used along with the types generated from the API documentation was
@@ -171,7 +171,7 @@ changes.
     you should discuss how tests were selected, why they are sufficient, why a reader should believe that no important tests were omitted, and why the reader should believe
     that the system will really operate as desired.
     You should explain your overall strategy for testing: black box and/or white box, top down and/or bottom up, kinds of test beds or test drivers used, sources of test data,
-    test suites, coverage metrics, compile-time checks vs. run-time assertions, reasoning about your code, etc. You might want to use different techniques (or combinations
+    test suites, coverage metrics, compile-time checks vs.\ run-time assertions, reasoning about your code, etc. You might want to use different techniques (or combinations
     of techniques) in different parts of the program. In each case, justify your decisions. It is not necessary to describe the techniques; the reader knows about them.
     Tell the reader what you used and why in the context of your product. If you carried out usability testing, explain your approach to this.
 
@@ -199,7 +199,7 @@ changes.
 The backend of the app will be unit tested using the Mocha.js framework in order
 to verify that it functions as intended and to catch any regressions. Tests for lower-level components
 such as validation functions and the database will be written before those for higher-level
-components such as the API. These test cases will be executed on every push automatically
+components such as API endpoints. These test cases will be executed on every push automatically
 with an alert being sent should any of them fail.
 \todo{Test plan}
 
@@ -210,10 +210,10 @@ used to simulate API calls. Finally, coverage reports are generated with Istanbu
 The test cases can be manually using the commands \texttt{npm run test} and \texttt{npm run test:coverage}
 and run automatically after every push via a GitHub action.
 
-See figure \ref{fig:test_report} for an example of a test report, \ref{fig:coverage_report}
-for a coverage report, and figure \ref{fig:test_failure} for an email that is sent if a test fails when a commit
-is pushed. All test cases for the backend are contained in the \texttt{app/backend/src/tests} directory. See figure
-\ref{fig:test_case} for an example of a test case.
+See figure~\ref{fig:test_report} for an example of a test report,~\ref{fig:coverage_report}
+for a coverage report, and figure~\ref{fig:test_failure} for an email that is sent if a test fails when a commit
+is pushed. All test cases for the backend are contained in the \texttt{app/backend/src/tests} directory. See
+figure~\ref{fig:test_case} for an example of a test case.
 
 Test cases were largely written after the functions they were intented to test
 as there is limited evicence for test-driven development leading to higher
@@ -261,15 +261,15 @@ then fixed, and the tests kept in place. This helps to prevent the issue being
 reintroduced at a later date.
 
 One example of regression testing is that, after discovering that embeddings were
-not being properly decoded from the database (see section \ref{sec:embedding_round_trip}),
+not being properly decoded from the database (see Section~\ref{sec:embedding_round_trip}),
 test cases were implemented to make sure that an identical array would be returned
 after endoding to a buffer back again in \texttt{testBufferFloat32Array.ts}
 
 \subsection{Code Quality Evaluation}
-The MegaLinter tool \cite{vuillamy_megalinter_nodate} was configured to run on every pull request on the application's Git repository. This includes a wide array
+The MegaLinter tool~\cite{vuillamy_megalinter_nodate} was configured to run on every pull request on the application's Git repository. This includes a wide array
 of checks to ensure that style guides were adhered to and to catch potential issues, such as making potentially incorrect
 assumptions about an object's type. This generates a report that is attached to each pull request detailing
-any issues that were found (figure \ref{fig:metalinter_report}).
+any issues that were found (figure~\ref{fig:metalinter_report}).
 
 As with the unit tests action, an email is sent if any of the checks fail.
 
@@ -281,20 +281,24 @@ As an example, the jscpd linter included with MegaLinter checks for duplicate co
 smell that should be exown function and reused.~\cite{fowler_refactoring_1997}
 
 Another design flaw that can lead to code smell is the existence of \enquote*{god} objects
-and methods that include large amounts of logic, increasing complexity \cite{marinescu_measurement_2005,vaucher_tracking_2009}
+and methods that include large amounts of logic, increasing complexity~\cite{marinescu_measurement_2005,vaucher_tracking_2009}
 Care was taken to avoid the introduction of these into the \chef{} app, although no specific
 metrics were used. One notable exception discussed is the search query and endpoint discussed in
-section \ref{sec:search_complexity}.
+Section~\ref{sec:search_complexity}.
 
 \todo{May want more here}
 
 \section{Deployment}
+
+During development, command line tasks were used to allow for rapid iteration. Docker is used to deploy
+the app with the backend and frontend each running in their own container.
+
 \todo{Describe how Docker was used}
 
 \section{Investigation}
 \todoinline{
     You should also discuss the investigation process. This does not mean that you have to repeat what you have already said about the design of your investigation,
-    but you should comment on what happened during the investigation, e.g. how you conducted the experiments, how you collected data, or anything new or interesting
+    but you should comment on what happened during the investigation, e.g.\ how you conducted the experiments, how you collected data, or anything new or interesting
     that occurred, and perhaps add details that arose from events. You may have had to adapt your approach in some way. If things went wrong, or in the event
     you took an approach different from the one you planned, then you can explain what happened, what you did about it, and why. (It isn’t expected that everything will
     go according to the design: how you deal with situations that arise can be a very interesting part of your report.) If you have produced deliverables, you can present
@@ -305,8 +309,8 @@ section \ref{sec:search_complexity}.
 
 \section{Results}
 
-The dataset used contains a number of meaningless and nonsensical recipes (see figure
-\ref{fig:bad_recipe_entry}), which were imported by the \chef{} system during setup.
+The dataset used contains a number of meaningless and nonsensical recipes (see
+figure~\ref{fig:bad_recipe_entry}), which were imported by the \chef{} system during setup.
 A possible reason for these being included in RecipeNLG is that some
 data sources scraped for it allow for user-submitted recipes, this contributes to
 an unclean and noisy dataset.~\cite{kicherer_what_2018}
@@ -318,7 +322,7 @@ an unclean and noisy dataset.~\cite{kicherer_what_2018}
 \end{figure}
 
 A possible solution for this issue would have been to further pre-process the
-data beyond what is discussed in section \ref{sec:data_pre_process} to remove
+data beyond what is discussed in Section~\ref{sec:data_pre_process} to remove
 these entries.\todo{Source}
 
 \subsection{Similar Recipes}
@@ -338,16 +342,16 @@ similar to the strategy used by Freyne and Berkovsky.~\cite{freyne_intelligent_2
 Despite these limitations, the similar recipe suggestion algorithm appears to be a fairly effective
 means of finding new recipes. Most of the suggested recipes appear to be closely related to the entry they are
 compared with. However, some recipes are suggested despite seemingly having little or not correlation with the
-recipe they are contained to as shown in table \ref{tab:similar_spaghetti} where \enquote*{Potato Salad} is considered
-to be similar to \enquote*{Spaghetti}. With other recipes, the suggestions have little variety as shown in table
-\ref{tab:similar_apple_crumble}. This issue is part of the reason that
+recipe they are contained to as shown in table~\ref{tab:similar_spaghetti} where \enquote*{Potato Salad} is considered
+to be similar to \enquote*{Spaghetti}. With other recipes, the suggestions have little variety as shown by
+table~\ref{tab:similar_apple_crumble}. This issue is part of the reason that
 \hyperref[req:too_similar]{FR\arabic{toosimilarid}} was not considered to be implemented.
 
 \begin{table}[p]
     \centering
     \caption{\label{tab:similar}Similar recipes for \enquote*{Spaghetti} and \enquote*{Apple Crumble}. Most results are omitted for brevity.}
-    \subfloat[Spaghetti]{
-        \label{tab:similar_spaghetti}\begin{tabular}{cc}\toprule
+    \subfloat[Spaghetti]{\label{tab:similar_spaghetti}
+        \begin{tabular}{cc}\toprule
             \textbf{Recipe} & \textbf{Similarity} \\\midrule
             Spaghetti Casserole & 85\% \\
             Pasta & 76\% \\
@@ -360,8 +364,8 @@ to be similar to \enquote*{Spaghetti}. With other recipes, the suggestions have 
             \bottomrule
         \end{tabular}}
     \quad
-    \subfloat[Apple Crumble]{
-        \label{tab:similar_apple_crumble}\begin{tabular}{cc}\toprule
+    \subfloat[Apple Crumble]{\label{tab:similar_apple_crumble}
+        \begin{tabular}{cc}\toprule
             \textbf{Recipe} & \textbf{Similarity} \\\midrule
             Apple Custard Pie & 81 \% \\
             Apple Nut Cake & 77\% \\
@@ -379,9 +383,9 @@ to be similar to \enquote*{Spaghetti}. With other recipes, the suggestions have 
 Searching of recipes is implemented nearly identically to the similar recipe comparison, only differing in that
 it compares the user's query rather than the selected recipe's name.
 
-An area that was not accounted for was that Unversal Sentence Encoder is case-sensitive. \todo{source}
+An area that was not accounted for was that Unversal Sentence Encoder is case-sensitive.~\todo{source}
 Because of this, searching for \enquote*{pasta} would yield different results to searching \enquote*{Pasta} as
-shown in figure \ref{fig:search_case_sensitive}
+shown in figure~\ref{fig:search_case_sensitive}
 
 \begin{figure}[p]
     \centering
@@ -397,7 +401,7 @@ shown in figure \ref{fig:search_case_sensitive}
     The final part of is the presentation of your results. You may have quantitative or qualitative data, or even both. The best way of presenting your results will be determined
     by the type of data and the nature of your investigation but will usually involve summarising the data in some way.  Data analysis is too large and varied a topic to discuss
     in detail here, and how you do it will be very dependent on the project that you are doing. You are likely to have found out about appropriate methods as part of your
-    project. In some cases, it may be appropriate to present calculations, e.g. to demonstrate how performance figures are derived. If you are doing statistical analyses,
+    project. In some cases, it may be appropriate to present calculations, e.g.\ to demonstrate how performance figures are derived. If you are doing statistical analyses,
     it will be helpful include levels of significance with the results where applicable. The presentation of qualitative data may involve summarising it, identifying significant
     factors, including representative examples, discussing interesting cases or critical incidents in depth, the use of quotations and illustrations, or identifying significant
     categories of content from textual data and looking at how often they occur.  For example, if you had been interviewing people about their use of information, you might
@@ -407,7 +411,7 @@ shown in figure \ref{fig:search_case_sensitive}
 
     In general, raw data in the body of your report will be limited to small elements or examples that that you are discussing. Further data can go in your appendices or
     (if bulky) on your OneDrive folder, and you should tell the reader where to look for it. Identifiable personal data should never be included in any part of your submission.
-    If you need to refer to individuals, you can mention ‘Participant A’ in your study, or in organisational settings it may be appropriate to refer to someone by their job title.
+    If you need to refer to individuals, you can mention \enquote*{Participant A} in your study, or in organisational settings it may be appropriate to refer to someone by their job title.
 }
 
 \todo{Results}
