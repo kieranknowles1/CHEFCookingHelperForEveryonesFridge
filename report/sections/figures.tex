@@ -18,6 +18,27 @@
 
 \begin{figure}
   \centering
+  \caption{\label{fig:buffer_float_array}The test case for round trip accuracy between buffers and float arrays}
+  \begin{minted}{ts}
+it('should convert a Float32Array to a Buffer and back without changes',
+  // Generate some random data
+  () => {
+    const input = Float32Array.from(
+      { length: 10 }, () => faker.number.float({ min: 0, max: 1 })
+    )
+
+    // Convert it to a buffer and back again
+    const buffer = bufferFromFloat32Array(input)
+    const output = bufferToFloat32Array(buffer)
+
+    // Check that the output is identical
+    assert.deepStrictEqual(output, input)
+})
+  \end{minted}
+\end{figure}
+
+\begin{figure}
+  \centering
   \caption{\label{fig:test_report}A test report showing that some tests have failed.}
   \begin{verbatim}
 mocha --reporter dot --require ts-node/register src/tests/**/*.ts

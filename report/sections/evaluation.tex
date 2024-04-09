@@ -51,16 +51,18 @@ The \codelisting{better-sqlite3} package declares row IDs as being \codelisting{
 while \codelisting{openapi-typescript} generates \codelisting{number}, even if the type in the API
 declaration lists the type as \codelisting{integer}. This initially required additional casting in every endpoint
 that returns an ID. As a workaround, row IDs in the application were instead declared as \codelisting{number}
-and an error is thrown if an insert produces a \codelisting{bigint} ID. As the maximum integer that can be safely stored as a number is
-$(2^{53} - 1)$~\cite{noauthor_numbermax_safe_integer_2023}, the chances of this happening were considered nonexistent.
+with checks to throw an exception if an insert produces a \codelisting{bigint} ID. As the maximum integer that can be safely stored as a number is
+$(2^{53} - 1)$~\cite{noauthor_numbermax_safe_integer_2023}, and SQLite allocates IDs using \texttt{MAX(id) + 1},
+the chances of this happening were considered nonexistent.
 
 \subsubsection{Embedding Round Trip Accuracy}\label{sec:embedding_round_trip}
 When passing embeddings through SQLite queries, they are converted to SQLite's BLOB type which is then passed to TypeScript as a \codelisting{Buffer}
 before being decoded as a \codelisting{Float32Array}.
 The initial implementation of the conversion had an issue where the buffer would be parsed as an array of 2048 8-bit integers,
 rather than 512 32-bit floats. This issue greatly reduced both the effectiveness and performance of the similarity comparisons.
-The issue was fixed by correctly parsing the buffer and by adding a check to the \codelisting{getSimilarity} function to assert
-that both of the arrays passed had the expected 512 elements.
+The issue was fixed by correctly parsing the buffer, adding a check to the \codelisting{getSimilarity} function to assert
+that both of the arrays passed had the expected 512 elements, and adding a test case to
+\texttt{testBufferFloat32Array} (see Figure \ref{fig:buffer_float_array})
 
 \subsubsection{Variable Bind Parameter Count}
 SQLite does not support passing arrays to the bind parameters of queries, which was
@@ -68,11 +70,6 @@ necessary when implementing user preferences in the search query. This issue
 was resolved by generating a temporary table containing the preferences
 that only exists for the duration of the query. See figure \ref{fig:temp_table_substitution}
 for an example of where this is used.
-
-\subsubsection{Incorrect Response Code}
-The signup endpoint was initially coded to return \texttt{200 OK} when it should have returned
-\texttt{201 Created}. This issue was caught while generating test cases with GitHub Copilot and resolved
-soon after.
 
 \begin{figure}[h]
     \caption{\label{fig:temp_table_substitution}A temporary table that is substituted into a query with \$\{expr\}}
@@ -83,6 +80,11 @@ soon after.
         (SELECT tag\textunderscore{}id FROM \$\{bannedTagsTable\}) THEN 1 ELSE 0 END) = 0)
     }
 \end{figure}
+
+\subsubsection{Incorrect Response Code}
+The signup endpoint was initially coded to return \texttt{200 OK} when it should have returned
+\texttt{201 Created}. This issue was caught while generating test cases with GitHub Copilot and resolved
+soon after.
 
 \subsection{Potential Improvements}
 
