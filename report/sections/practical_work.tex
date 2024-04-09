@@ -31,9 +31,6 @@
 \subsection{Backend Design}
 \todo{Backend design}
 
-The backend of the \chef{} app was the first component to be implemented, with endpoints created according to the requirements such that the
-frontend would have an API to fetch data from. This saved time as there was no need to create dummy data for the recipes.
-
 \subsection{Frontend Design}
 \todo{Frontend design}
 Design of the \chef{} app began with creating interface prototypes (see figures~\ref{fig:proto_home},~\ref{fig:proto_find_recipes}, and~\ref{fig:proto_account})
@@ -89,6 +86,15 @@ the front and back ends, while adding compile-time type checking similar to stro
 
 \section{Backend Implementation}
 \todo{Backend}
+
+\subsection{Data Import}
+
+A setup script is provided to convert the raw dataset into a format usable by the backend.
+This script initializes the database, adds dummy data, parses the dataset, then imports everything
+into the database. As this has to add embeddings which is slow, there is an option included
+to only import a smaller subset of the data which allows for rapid iteration and testing of the import.
+
+\subsection{API}
 
 The backend of the app is implemented as a REST API based on Express.js with SQLite
 used for the database.
