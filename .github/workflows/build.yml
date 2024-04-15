@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Configure environment
+        run: |
+          touch report/fallback.tex
       - uses: xu-cheng/latex-action@v3
         with:
           extra_system_packages: inkscape
