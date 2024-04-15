@@ -195,7 +195,6 @@
     How should I be including these references?
     StackOverflow
     TailwindCSS docs
-    Any other Node modules that are used
 }
 \defbibheading{bibliography}[\bibname]{
     \chapter{#1}
@@ -242,6 +241,10 @@ The following packages were used from npm for the application:
     \item Zxing --- Barcode scanning library.
 \end{itemize}
 
+\defbibheading{bibliography}[\bibname]{
+    \section{#1}
+    \markboth{#1}{#1}
+}
 \printbibliography[title=Bibliography,notcategory=cited]{}
 
 \chapter{Appendices}

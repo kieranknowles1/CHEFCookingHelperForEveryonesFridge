@@ -118,6 +118,15 @@ implemented by a class. This allows for different modules to be interoperable th
 For this reason, along with the fact that the data transfer objects did not need their own logic, it was decided early on
 to not use classes for objects retrieved from the database and instead to rely on interfaces only.
 
+While many node packages do not include TypeScript types, most have declarations available through the \codelisting{@types} organization.
+This allows packages such as \texttt{bcrypt} to be used with type safety and catches many errors at compile time rather than runtime as discussed
+insection~\ref{sec:language}.
+
+However, this is not a perfect solution as the quality of typing can vary greatly. For example, \texttt{better-sqlite3}
+declares all queries as returning \texttt{unknown} which must be either asserted without type checking, or checked manually, neither of which
+can be done at compile time. This is especially problematic in more complex queries and appears to be a limitation of TypeScript itself. This
+problem and its potential solutions, are discussed in more detail in section~\ref{sec:query_complexity}
+
 
 \subsection{Documentation}
 The API was declared and documented using the OpenAPI format and converted
@@ -169,9 +178,11 @@ issue and was not resolved.
 \section{Frontend Implementation}
 \todo{Frontend}
 
-The application's frontend was implemented in React using TypeScript for the reasons covered in
-Section~\ref{sec:language}, and is styled using Tailwind. Combined, these frameworks allow for a responsive
-user interface to be quickly produced that fetches API data.
+The application's frontend was implemented in React using TypeScript, and is styled using Tailwind. Combined,
+these frameworks allow for a responsive user interface to be quickly produced that fetches API data.
+
+React was chosen as it is built around the concept of reusable components, which speeds up development and
+improves code quality by avoiding duplicate code, while having access to the vast majority of Node packages.
 
 \subsection{API Communication}
 The \codelisting{openapi-fetch} package was used along with the types generated from the API documentation was
