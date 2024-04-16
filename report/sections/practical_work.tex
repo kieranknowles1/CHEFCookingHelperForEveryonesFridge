@@ -182,7 +182,10 @@ The application's frontend was implemented in React using TypeScript, and is sty
 these frameworks allow for a responsive user interface to be quickly produced that fetches API data.
 
 React was chosen as it is built around the concept of reusable components, which speeds up development and
-improves code quality by avoiding duplicate code, while having access to the vast majority of Node packages.
+improves code quality by avoiding duplicate code,~\cite{hordijk_harmfulness_2009} and abstracts away rendering
+by only re-rendering components when their state changes. In addition, it has access to the vast majority of
+Node packages along with many dedicated component libraries for common use cases such as routin between pages
+which opened the possibility of re-using the same libraries for the front and back ends.~\cite{saks_javascript_2019}
 
 \subsection{API Communication}
 The \codelisting{openapi-fetch} package was used along with the types generated from the API documentation was
