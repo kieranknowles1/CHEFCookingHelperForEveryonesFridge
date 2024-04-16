@@ -234,6 +234,11 @@ components such as API endpoints. These test cases will be executed on every pus
 with an alert being sent should any of them fail.
 \todo{Test plan}
 
+Due to the analytical nature of the project, user testing was not considered to be necessary. Instead,
+the focus was on ensuring that the system was reliable, and the results were as expected. This was done
+using automated unit tests for objective areas, i.e., \enquote*{does it work?}, and manual testing
+for subjective areas such as the quality of the recipe suggestions.
+
 \subsection{Unit Testing}
 The backend of the application is tested using the Mocha testing framework,~\cite{noauthor_mocha_nodate} with Supertest~\cite{noauthor_ladjssupertest_2024}
 used to simulate API calls. Finally, coverage reports are generated with Istanbul.~\cite{noauthor_istanbul_nodate}
