@@ -186,19 +186,10 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
 %   #2 Source
 %   #3 Priority
 %   #4 Implemented (yes/no)
-\newcommand{\requirement}[4]{
-    \requirementtype\stepcounter{functionalreqcounter}\arabic{functionalreqcounter}
-        &
+\newcommand{\requirement}[4]{%
+    \requirementtype\stepcounter{functionalreqcounter}\arabic{functionalreqcounter}%
     % Don't have much space to work with, so flushright looks messy.
-    \raggedright#1
-        &
-    #2
-        &
-    #3
-        &
-    #4
-        \\
-}
+    &\raggedright#1&#2&#3&#4\\}
 
 \begin{longtable}{lp{128pt}lll}
     \caption{Functional Requirements}\label{tab:functional_requirements}
@@ -216,14 +207,14 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     {Yes}
 
     \requirement{\textbf{Share ingredient lists.} The system \textbf{must} allow for multiple users to share one \virtualfridge{}}
-    {\todo{Source}}
+    {Trivial}
     {Must-have}
     {Partially}
 
     \requirement{\textbf{Select dietary requirements/preferences.} The system \textbf{must} \newline
         allow for users to select their dietary requirements and preferences, such as allergies or disliked ingredients.}
-    {\todo{Source}
-    }{Must-have}
+    {Competitor Analysis}
+    {Must-have}
     {Yes}
 
     \requirement{\textbf{Recipe Suggestion.} The system \textbf{must} suggest recipes based on the user's available ingredients}
@@ -245,7 +236,7 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
 
     \requirement{\textbf{Scan ingredients.} The system \textbf{should} allow the user to scan the barcodes of ingredients to add
     them to their \virtualfridge}
-    {\todo{TODO: Source}}
+    {Use Case Analysis}
     {Should-have}
     {Yes}
 
@@ -267,21 +258,21 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
 
     \requirement{\textbf{Scan receipt.} The system \textbf{could} allow the user to scan a receipt from a store to add ingredients
     to their \virtualfridge}
-    {\todo{Source}}
+    {Use Case Analysis}
     {Could-have}
     {No}
 
     \requirement{\label{req:similar_recipes}\newcounter{findsimilarid}\setcounter{findsimilarid}{\thefunctionalreqcounter}%
     \textbf{Find similar recipes.} The system \textbf{should} use a machine learning model to find and suggest
     similar recipes to those that the user has previously made.}
-    {\todo{Source}}
+    {Competitor Analysis}
     {Should-have}
     {Yes}
 
     \requirement{\label{req:too_similar}\newcounter{toosimilarid}\setcounter{toosimilarid}{\thefunctionalreqcounter}%
     \textbf{Avoid repeating recipes.} The system \textbf{should} avoid suggesting recipes that are too similar
     to those that have been made recently using the same model as \hyperref[req:similar_recipes]{FR\arabic{findsimilarid}}}
-    {\todo{Source}}
+    {Competitor Analysis}
     {Should-have}
     {No}
 
@@ -333,6 +324,10 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     {Yes}
     \bottomrule
 \end{longtable}
+
+\subsection{Sequence Diagrams}
+
+The sequence diagrams of the system are included in the appendix as Figures~\ref{fig:add_manual},~\ref{fig:add_barcode}, and~\ref{fig:add_receipt}.
 
 \todoinline{
     Summarize the requirements for the product to be built.
