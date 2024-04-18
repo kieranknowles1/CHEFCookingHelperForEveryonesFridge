@@ -375,14 +375,14 @@ be the primary testing method.
 
 \todo{Approach/Methodology}
 
-\subsection{Choice of Programming Language}\label{sec:language}
+\subsection{Choice of Language}\label{sec:language}
 It was decided early on to implement \chef{} as a web application with a
 frontend using written for the React framework. This supports using either
 the JavaScript or TypeScript language.
 
-Multiple languages were considered for the backend including C\#, Python, Node,
-and PHP. It was eventually decided to use Node as it would allow using the same
-language and libraries as the frontend.
+Multiple languages and frameworks were considered for the backend including
+C\#, Python, Node, and PHP. It was eventually decided to use Node as it would
+allow using the same language and libraries as the frontend.
 
 Finally, out of JavaScript and TypeScript, TypeScript was chosen as a language
 for both components as it adds robust type checking that is effective at preventing
@@ -430,7 +430,7 @@ See table \ref{tab:recipenlg_row_format} for the information that is included wi
 the app's database during setup. The schema script for the database is located at \texttt{./app/backend/data/schema.sql}
 in the project's Git repository and is not included in this report due to its length.
 
-\begin{table}
+\begin{table}[h]
     \caption{RecipeNLG Row Format}\label{tab:recipenlg_row_format}
 
     \begin{tabulary}{\textwidth}{llL}
@@ -452,7 +452,21 @@ in the project's Git repository and is not included in this report due to its le
     \end{tabulary}
 \end{table}
 
-\todo{Sample entry}
+\begin{table}[h]
+    \caption{\label{tab:sample_entry}A sample entry from RecipeNLG}
+    \begin{tabulary}{\textwidth}{lL}
+        \toprule
+        \textbf{Column}&\textbf{Value}\\\midrule
+            Title & No-Bake Nut Cookies\\
+            Ingredients & [\enquote*{1 c. firmly packed brown sugar}, \enquote*{1/2 tsp. vanilla}, \ldots]\\
+            Directions & [\enquote*{In a heavy 2-quart saucepan, mix brown sugar, nuts, evaporated milk and butter or margarine.},
+            \enquote*{Stir over medium heat until mixture bubbles all over top.}, \ldots]\\
+            Link & \href{www.cookbooks.com/Recipe-Details.aspx?id=44874}{www.cookbooks.com/Recipe-Details.aspx?id=44874}\\
+            Source & Gathered\\
+            NER & [\enquote*{brown sugar}, \enquote*{milk}, \ldots]\\
+        \bottomrule
+    \end{tabulary}
+\end{table}
 
 \subsubsection{Data Pre-processing}
 Many existing papers in the area do not pre-process their recipe data. Among those that do, the most
