@@ -10,14 +10,14 @@ to a significant amount of the global warming caused by the entire food supply
 chain.~\cite{scherhaufer_environmental_2018}
 
 \subsection{Prior Work in Subject Area}
-Stefan et al. found that \enquote*{the intention not to waste food does not have a
+Stefan et al.\ found that \enquote*{the intention not to waste food does not have a
 significant effect on reported food waste}. Instead, planning before shopping to
 check what is already available was found to have a negative impact on food waste.~\cite{stefan_avoiding_2013}
 \todo{Prior Work}
 
 While providing a user with variety of choices can improve their satisfaction
 with the overall system, care must be taken to avoid information overload.
-Bollen et al. found that offering a more limited set items predicted to be among a user's
+Bollen et al.\ found that offering a more limited set items predicted to be among a user's
 highest rated, followed by a larger set of more varied items with lower rankings, led to
 higher satisfaction on average.~\cite{bollen_understanding_2010}
 
@@ -42,7 +42,7 @@ that indicates what kind of recipe it is, this is not the case world-wide.
 For example, Chinese recipe names often bear little resembelance to the contents
 of the recipe itself.~\cite{wang_substructure_2008} This limits the effectiveness
 of suggestions systems based on names and as such a more complex system as discussed
-by Wang et al. would be needed.
+by Wang et al.\ would be needed.
 \todo{ai recipe suggestion}
 
 \subsection{Gaps in Existing Literature}
@@ -381,14 +381,14 @@ frontend using written for the React framework. This supports using either
 the JavaScript or TypeScript language.
 
 Multiple languages and frameworks were considered for the backend including
-C\#, Python, Node, and PHP. It was eventually decided to use Node as it would
+C\#, Python, Node, and PHP.\@ It was eventually decided to use Node as it would
 allow using the same language and libraries as the frontend.
 
 Finally, out of JavaScript and TypeScript, TypeScript was chosen as a language
 for both components as it adds robust type checking that is effective at preventing
 bugs from being introduced, especially when the checks for \texttt{null} and
 \texttt{undefined} are enabled,~\cite{gao_type_2017} which will be done for
-the application. See figure \ref{fig:type_check} for an example of some issues
+the application. See figure~\ref{fig:type_check} for an example of some issues
 that can be caught pre-emptively by TypeScript, but not JavaScript.
 
 \begin{figure}
@@ -421,12 +421,12 @@ An additional dataset that was considered was the Food.com Recipes and Interacti
 ingredient names and not IDs, which was insufficient to cover \hyperref[req:track_amounts]{FR\arabic{trackamountsid}}
 
 In the end, RecipeNLG~\cite{bien_recipenlg_2020} was the dataset of choice for the \chef{} app. This contains approximately 2 million recipes
-each with an ingredient list, a list of directions, and its source URL.
+each with an ingredient list, a list of directions, and its source URL.\@
 
 While licensing restrictions would prevent this from being used for a commercial app, it is still available for
 research purposes.
 
-See table \ref{tab:recipenlg_row_format} for the information that is included with each recipe and that is imported into
+See table~\ref{tab:recipenlg_row_format} for the information that is included with each recipe and that is imported into
 the app's database during setup. The schema script for the database is located at \texttt{./app/backend/data/schema.sql}
 in the project's Git repository and is not included in this report due to its length.
 
@@ -458,7 +458,7 @@ in the project's Git repository and is not included in this report due to its le
         \toprule
         \textbf{Column}&\textbf{Value}\\\midrule
             Title & No-Bake Nut Cookies\\
-            Ingredients & [\enquote*{1 c. firmly packed brown sugar}, \enquote*{1/2 tsp. vanilla}, \ldots]\\
+            Ingredients & [\enquote*{1 c.\@ firmly packed brown sugar}, \enquote*{1/2 tsp.\@ vanilla}, \ldots]\\
             Directions & [\enquote*{In a heavy 2-quart saucepan, mix brown sugar, nuts, evaporated milk and butter or margarine.},
             \enquote*{Stir over medium heat until mixture bubbles all over top.}, \ldots]\\
             Link & \href{www.cookbooks.com/Recipe-Details.aspx?id=44874}{www.cookbooks.com/Recipe-Details.aspx?id=44874}\\
@@ -534,7 +534,7 @@ once, disregarding any with a name that was seen before during import.
     tests, etc.) in the practical work chapters.
 
     If your practical work is to investigate a research question/hypothesis, you should discuss the possible strategies for conducting research or
-    investigations in your subject area. This could be quite different for projects in different subject areas, for example, forensics, networking or HCI. You may need to
+    investigations in your subject area. This could be quite different for projects in different subject areas, for example, forensics, networking or HCI.\@ You may need to
     consider research methods --- for example, are you using one of the many varieties of experimental design? are you carrying out your study in lab conditions or the
     field? will you be taking measurements of the performance of real equipment, or using a computer simulation? You should review the possible alternative approaches, and
     explain why your chosen strategy was preferable to others, or was the only possibility.
