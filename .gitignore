@@ -41,3 +41,6 @@ coverage/
 megalinter-reports/
 dataset/
 backend_data/
+
+# Trigger for using the fallback fonts where Arial and Consolas are not available
+fallback.tex
