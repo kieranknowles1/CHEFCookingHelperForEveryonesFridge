@@ -128,7 +128,7 @@ insection~\ref{sec:language}.
 However, this is not a perfect solution as the quality of typing can vary greatly. For example, \texttt{better-sqlite3}
 declares all queries as returning \texttt{unknown} which must be either asserted without type checking, or checked manually, neither of which
 can be done at compile time. This is especially problematic in more complex queries and appears to be a limitation of TypeScript itself. This
-problem and its potential solutions, are discussed in more detail in section~\ref{sec:query_complexity}
+problem and its potential solutions, are discussed in more detail in section~\ref{sec:search_complexity}
 
 \subsection{Documentation}
 The API was declared and documented using the OpenAPI format and converted
@@ -196,6 +196,42 @@ The \codelisting{openapi-fetch} package was used along with the types generated 
 used to create a type-safe wrapper for the native \codelisting{fetch} function that is able to automatically
 determine paths, parameters, and responses in a type-safe manner that could be easily updated whenever the API
 changes.
+
+\section{Common Components}
+\todo{Common components}
+
+The backend and frontend are tightly integrated, and share many of the same components with the frontend acting
+as little more than a wrapper around the backend. This reduced the time required to develop the app, and would
+make porting to a different frontend framework easier as there is minimal business logic in the frontend.
+
+\subsection{Recipe Search and Suggestions}
+As the primary research question of the project, recipe search and similarity had the most work put into it.
+These features initially used separate endpoints, but were later combined into a single endpoint due to the
+high similarity of them, the only difference being the embedding used to compare the recipes (the search query
+or the name of the recipe being compared).
+
+\subsection{User Preferences}
+User preferences are grouped into two types: dietary restrictions and ingredient preferences, each of which is stored
+in its own table.
+
+Dietary restrictions refer to categories of ingredients to avoid, such as \enquote*{meats} for vegetarians,
+\enquote*{animal products} for vegans, and \enquote*{dairy} for those with lactose intolerance. These are implemented
+as tags attached to ingredients and are manually assigned as part of the initial data script.
+
+Ingredient preferences refer to specific ingredients that the user dislikes, such as \enquote*{mushrooms} or
+\enquote*{chicken}. Both of these can be modified at any point through the account page.
+
+During search, the preferences of all users the meal is being prepared for are combined to filter out recipes
+that are disallowed by any of the users. See Section \ref{sec:variable_bind_count} for a discussion of how this was implemented.
+
+\subsection{Login and Account Creation}
+As security was not a part of the research question, login and registration was kept simple with only a username
+and password required. Password hashing was handled by the \codelisting{bcrypt} as this is a widely used and
+accepted algorithm.~\cite{ntantogian_evaluation_2019} That is secure enough for the purposes of the app. However,
+a commercial application would likely require more advanced security measures such as single-sign-on. Additionally,
+there are no measures in place for account recovery or protection against malicious users.
+
+The account creation subsystem was a late addition to the app, and as such, was not as well tested as other areas.
 
 \section{Testing}
 \todoinline{

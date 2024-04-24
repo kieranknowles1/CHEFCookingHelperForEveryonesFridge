@@ -63,7 +63,7 @@ The issue was fixed by correctly parsing the buffer, adding a check to the \code
 that both of the arrays passed had the expected 512 elements, and adding a test case to
 \texttt{testBufferFloat32Array} (see Figure \ref{fig:buffer_float_array})
 
-\subsubsection{Variable Bind Parameter Count}
+\subsubsection{Variable Bind Parameter Count}\label{sec:variable_bind_count}
 SQLite does not support passing arrays to the bind parameters of queries, which was
 necessary when implementing user preferences in the search query. This issue
 was resolved by generating a temporary table containing the preferences

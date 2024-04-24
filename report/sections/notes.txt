@@ -1,3 +1,5 @@
+TODO: Move all of this to the report
+
 Started by working on the back end in orderto give the front end a data source to work with
 give some technical detail  on how you looked at the structure the data source was in and designed a schemer
 i created code to import the data set following the schema which would be expanded for later editions
@@ -13,12 +15,9 @@ This coule be extended to meet the requirements
 being done before test cases were implemented
 I added machine learning to the search - because the app is about ai recipie suggestion
 I extended the search page to use the machine learning as well as the view recipe page to suggest recipes based on the ingredients in the fridge
-I merged the internal functions for both searching, finding related recipies and viewing all available recipies -  Why and add some tech details
-they were very similar in their requirements
 I added a profile page which lets the user select preferences for food types and dietary requirements
 The options there were fed back to the search function to filter results by specifications
 the back end supports filtering for multiple users this was not linked to the front end due to time constraints
 the filtering for multiple users wasn't esential for the mvp
 Account creation was the last thing to be added based on a simple user name and password log in - why I chose this simplest to implement and security wasn't one
 of the goals of research a commercial app would require some additional options for accounts or easier sign up methods such as single sign on
-TODO: Add SSO as a wont-have requirement
