@@ -92,7 +92,6 @@ the frontend required, perform some basic testing to make sure it returned the c
 would display it in a user-friendly way.
 
 \section{Backend Implementation}
-\todo{Backend}
 
 \subsection{Data Import}
 
@@ -103,6 +102,20 @@ A setup script is provided to convert the raw dataset into a format usable by th
 This script initializes the database, adds dummy data, parses the dataset, then imports everything
 into the database. As this has to add embeddings which is slow, there is an option included
 to only import a smaller subset of the data which allows for rapid iteration and testing of the import.
+
+\subsection{Database}
+
+A SQLite database is used to store the data, as it has a minimal footprint and is easy to set up. The connection
+is exposed to database classes through dependency injection and interfaces, allowing for the database system to be
+easily swapped out for another system such as PostgreSQL or MySQL.
+
+The database is designed to be in third normal form, with repeated data such as ingredient names stored in a separate
+table and linked to the recipe through foreign keys and junction tables. This allows for efficient querying and
+maintains integrity through the use of these and further constraints, such as \texttt{UNIQUE} and \texttt{NOT NULL}.~\cite{codd_further_1972}
+
+Using DI allows for a mock in-memory database to be used for testing, which gives each test case a clean slate to work with
+that cannot be affected by other test cases. This is especially important for tests that modify the database, as they can
+make assumptions about the initial state of the database.
 
 \subsection{API}
 
@@ -181,7 +194,6 @@ issue and was not resolved.
 \todo{Update this and add benchmark for after hardware accel and fix. Want to run the initial benchmark on my main PC}
 
 \section{Frontend Implementation}
-\todo{Frontend}
 
 The frontend of the application was implemented in React using TypeScript, with Tailwind used for styling. These
 frameworks allow for a quickly producing a responsive user interface that fetches data from the API with minimal
@@ -197,15 +209,16 @@ which opened the possibility of re-using the same libraries for the front and ba
 \subsection{API Communication}
 The \codelisting{openapi-fetch} package was used along with the types generated from the API documentation was
 used to create a type-safe wrapper for the native \codelisting{fetch} function that is able to automatically
-determine paths, parameters, and responses in a type-safe manner that could be easily updated whenever the API
-changes.
+determine paths, parameters, and responses in a type-safe manner that would raise compiler errors if any breaking
+changes were made. This would not have been possible with plain JavaScript or \texttt{fetch} as there would be no
+information on what the API expected or returned.
 
 \section{Common Components}
-\todo{Common components}
 
 The backend and frontend are tightly integrated, and share many of the same components with the frontend acting
-as little more than a wrapper around the backend. This reduced the time required to develop the app, and would
-make porting to a different frontend framework easier as there is minimal business logic in the frontend.
+as little more than a wrapper around the backend. This reduced the time required to develop the app, would
+make porting to a different frontend framework easier as there is minimal business logic in the frontend, and
+allowed for basic testing of the backend before automated test cases were implemented.
 
 \subsection{Recipe Search and Suggestions}
 As the primary research question of the project, recipe search and similarity had the most work put into it.
@@ -226,6 +239,8 @@ Ingredient preferences refer to specific ingredients that the user dislikes, suc
 
 During search, the preferences of all users the meal is being prepared for are combined to filter out recipes
 that are disallowed by any of the users. See Section \ref{sec:variable_bind_count} for a discussion of how this was implemented.
+Due to time constraints, the frontend only accounts for the logged in user's preferences, but the endpoint
+supports any number of users.
 
 \subsection{Login and Account Creation}
 As security was not a part of the research question, login and registration was kept simple with only a username
@@ -365,8 +380,6 @@ Care was taken to avoid the introduction of these into the \chef{} app, although
 metrics were used. One notable exception discussed is the search query and endpoint discussed in
 Section~\ref{sec:search_complexity}.
 
-\todo{May want more here}
-
 \section{Deployment}
 
 During development, command line tasks were used to allow for rapid iteration. Docker is used to deploy
@@ -374,14 +387,16 @@ the app with the backend and frontend each running in their own container. Conta
 allow for software to be more potable with little overhead and avoid the need to replicate an execution
 environment.~\cite{bernstein_containers_2014,vase_advantages_2015}
 
-\todo{Describe how Docker was used}
+The backend is based off the node image, while the frontend uses node during build and nginx at runtime.
+Nginx was chosen over Apache as it is significantly more performant than Apache with a smaller memory
+when serving static files such as those used to distribute a React app.~\cite{kunda_web_2017}
 
 \section{Investigation}
 \todoinline{
     You should also discuss the investigation process. This does not mean that you have to repeat what you have already said about the design of your investigation,
     but you should comment on what happened during the investigation, e.g.\ how you conducted the experiments, how you collected data, or anything new or interesting
     that occurred, and perhaps add details that arose from events. You may have had to adapt your approach in some way. If things went wrong, or in the event
-    you took an approach different from the one you planned, then you can explain what happened, what you did about it, and why. (It isn’t expected that everything will
+    you took an approach different from the one you planned, then you can explain what happened, what you did about it, and why. (It isn't expected that everything will
     go according to the design: how you deal with situations that arise can be a very interesting part of your report.) If you have produced deliverables, you can present
     and discuss these. Anything that would impede the flow of your chapter can be provided in the appendices or, if large, on your disk.
 }

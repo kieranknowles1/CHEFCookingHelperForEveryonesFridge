@@ -10,13 +10,6 @@ once data was available I created the view recipie page which fetched info from 
 I designed the page to view the fridge
 I went back to the back end to implement basic search functionality based on available ingredients
 This coule be extended to meet the requirements
-(near the top) I chose to work on the back and front end simultaneously so i always had something that was using each end point soon after it was implemented this meant basic testing was
-being done before test cases were implemented
 I added machine learning to the search - because the app is about ai recipie suggestion
 I extended the search page to use the machine learning as well as the view recipe page to suggest recipes based on the ingredients in the fridge
 I added a profile page which lets the user select preferences for food types and dietary requirements
-The options there were fed back to the search function to filter results by specifications
-the back end supports filtering for multiple users this was not linked to the front end due to time constraints
-the filtering for multiple users wasn't esential for the mvp
-Account creation was the last thing to be added based on a simple user name and password log in - why I chose this simplest to implement and security wasn't one
-of the goals of research a commercial app would require some additional options for accounts or easier sign up methods such as single sign on
