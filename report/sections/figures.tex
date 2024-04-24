@@ -71,6 +71,68 @@
   \end{sequencediagram}
 \end{figure}
 
+\begin{figure}[ht]
+  \centering
+  \caption{\label{fig:change_preferences}The sequence diagram for changing user preferences.}
+  \begin{sequencediagram}
+    \newthread{user}{:User}
+    \newinst[1]{web}{:Web App}
+    \newinst[1]{api}{:API}
+
+    \begin{call}{user}{Open Preferences}{web}{}
+      \begin{call}{web}{Fetch Current}{api}{}
+      \end{call}
+      \begin{call}{web}{Update Preferences}{user}{New Preferences}
+      \end{call}
+      \begin{call}{web}{Apply Changes}{api}{}
+      \end{call}
+    \end{call}
+  \end{sequencediagram}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \caption{\label{fig:find_recipe}The sequence diagram for finding recipes.}
+  \begin{sequencediagram}
+      \newthread{user}{:User}
+      \newinst[1]{web}{:Web App}
+      \newinst[1]{api}{:API}
+
+      \begin{call}{user}{Search}{web}{}
+        \begin{call}{web}{Select Filters}{user}{}
+        \end{call}
+        \begin{call}{web}{Fetch Recipes}{api}{}
+        \end{call}
+      \end{call}
+      \begin{call}{user}{View Recipe}{web}{}
+        \begin{call}{web}{Fetch Details}{api}{}
+        \end{call}
+        \begin{call}{web}{Fetch Related}{api}{}
+        \end{call}
+      \end{call}
+  \end{sequencediagram}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \caption{\label{fig:made_recipe}The sequence diagram for marking a recipe as made.}
+  \begin{sequencediagram}
+      \newthread{user}{:User}
+      \newinst[1]{web}{:Web App}
+      \newinst[1]{api}{:API}
+      \newinst[1]{db}{:Database}
+
+      \begin{call}{user}{Mark Made}{web}{}
+        \begin{call}{web}{Update History}{api}{}
+          \begin{call}{api}{Append History}{db}{}
+          \end{call}
+          \begin{call}{api}{Deduct Ingredients}{db}{}
+          \end{call}
+        \end{call}
+      \end{call}
+  \end{sequencediagram}
+\end{figure}
+
 \clearpage\subsection{Interface Prototypes}
 
 \begin{figure}[ht]
