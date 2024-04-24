@@ -1,7 +1,6 @@
 TODO: Move all of this to the report
 
 Started by working on the back end in orderto give the front end a data source to work with
-give some technical detail  on how you looked at the structure the data source was in and designed a schemer
 i created code to import the data set following the schema which would be expanded for later editions
 I created some basic end points to retrieve information such as recipies and ingredients
 this was enought to start working on the front end

@@ -96,6 +96,9 @@ would display it in a user-friendly way.
 
 \subsection{Data Import}
 
+After initial analysis of the dataset, a schema was designed to store the data in a database. The parts used by the
+data importer are shown in figure~\ref{fig:importer_schema}.
+
 A setup script is provided to convert the raw dataset into a format usable by the backend.
 This script initializes the database, adds dummy data, parses the dataset, then imports everything
 into the database. As this has to add embeddings which is slow, there is an option included

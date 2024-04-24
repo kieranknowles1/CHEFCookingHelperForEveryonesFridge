@@ -4,6 +4,51 @@
   \includegraphics[width=\columnwidth]{figures/api_docs_example.png}
 \end{figure}
 
+\begin{figure}[ht]
+  \centering
+  \caption{\label{fig:importer_schema}The parts of the schema used during import}
+  \begin{tikzpicture}[show background grid]
+    \begin{class}{Embedding}{0,4}
+      \attribute{+ sentence: string}
+      \attribute{+ embedding: Float32Array}
+    \end{class}
+
+    \begin{class}{Recipe}{0,0}
+      \attribute{+ id: int}
+      \attribute{+ name: string}
+      \attribute{+ directions: string}
+      \attribute{+ link: string}
+      \attribute{+ mealTypeId: int}
+    \end{class}
+    \association{Recipe}{name}{1}{Embedding}{sentence}{1..*}
+
+    \begin{class}{MealType}{9,2}
+      \attribute{+ id: int}
+      \attribute{+ name: string}
+    \end{class}
+    \association{Recipe}{mealTypeId}{1}{MealType}{id}{0..*}
+    \association{MealType}{name}{1}{Embedding}{sentence}{1..*}
+
+    \begin{class}{Ingredient}{9,-5}
+      \attribute{+ id: int}
+      \attribute{+ name: string}
+      \attribute{+ assumeUnlimited: bool}
+      \attribute{+ preferredUnit: string}
+      \attribute{+ density: float|null}
+    \end{class}
+
+    \begin{class}{RecipeIngredient}{0,-5}
+      \attribute{+ recipeId: int}
+      \attribute{+ ingredientId: int}
+      \attribute{+ amount: float|null}
+      \attribute{+ originalLine: string}
+    \end{class}
+    \association{Recipe}{id}{1}{RecipeIngredient}{recipeId}{0..*}
+    \association{Ingredient}{id}{1}{RecipeIngredient}{ingredientId}{0..*}
+
+  \end{tikzpicture}
+\end{figure}
+
 \clearpage\subsection{Sequence Diagrams}\label{sec:sequence_diagrams}
 
 \begin{figure}[ht]
