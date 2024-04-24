@@ -86,6 +86,11 @@ The \chef{} app is implemented using a React frontend and an Express.js backend,
 This language was chosen as it compiles into JavaScript that can run in a browser, allowing the same language to be used for both
 the front and back ends, while adding compile-time type checking similar to strongly typed languages such as Java.
 
+It was decided to work on both the frontend and backend in parallel to allow for rapid iteration and to avoid wasting time by
+developing backend endpoints that would go unused by the frontend. The typical workflow was to implement an endpoint that
+the frontend required, perform some basic testing to make sure it returned the correct data, then link it to the frontend which
+would display it in a user-friendly way.
+
 \section{Backend Implementation}
 \todo{Backend}
 
@@ -124,7 +129,6 @@ However, this is not a perfect solution as the quality of typing can vary greatl
 declares all queries as returning \texttt{unknown} which must be either asserted without type checking, or checked manually, neither of which
 can be done at compile time. This is especially problematic in more complex queries and appears to be a limitation of TypeScript itself. This
 problem and its potential solutions, are discussed in more detail in section~\ref{sec:query_complexity}
-
 
 \subsection{Documentation}
 The API was declared and documented using the OpenAPI format and converted
