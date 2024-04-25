@@ -52,8 +52,10 @@
 \usemintedstyle[yaml]{default}
 
 % //SECTION - Citations
+% Use harvard style for citations
 \usepackage[
-    defernumbers=true
+    defernumbers=true,
+    style=authoryear,
 ]{biblatex}
 \addbibresource{CHEFCookingHelper.bib}
 \renewcommand{\cite}[1]{\parencite{#1}}
