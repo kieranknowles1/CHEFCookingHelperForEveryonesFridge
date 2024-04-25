@@ -51,7 +51,7 @@ while \codelisting{openapi-typescript} generates \codelisting{number}, even if t
 declaration lists the type as \codelisting{integer}. This initially required additional casting in every endpoint
 that returns an ID. As a workaround, row IDs in the application were instead declared as \codelisting{number}
 with checks to throw an exception if an insert produces a \codelisting{bigint} ID. As the maximum integer that can be safely stored as a number is
-$(2^{53} - 1)$~\cite{noauthor_numbermax_safe_integer_2023}, and SQLite allocates IDs using \texttt{MAX(id) + 1},
+$(2^{53} - 1)$ according to Mozilla's documentation, and SQLite allocates IDs using \texttt{MAX(id) + 1},
 the chances of this happening were considered nonexistent.
 
 \subsubsection{Embedding Round Trip Accuracy}\label{sec:embedding_round_trip}
