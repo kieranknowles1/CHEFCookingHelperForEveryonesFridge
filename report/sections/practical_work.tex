@@ -292,58 +292,106 @@ components such as API endpoints. These test cases were executed on every push a
 with an alert being sent if any of them failed.
 \todo{Test plan}
 
-Due to the analytical nature of the project, user testing was not considered
-necessary. Instead, the focus was on ensuring that the system was reliable and the results were as expected. This was done
-using automated unit tests for objective areas, i.e., \enquote{did it work?}, and manual testing
-for subjective areas such as the quality of the recipe suggestions.
+\subsubsection{Testing Methodologies}
 
-\subsection{Unit Testing}
-The backend of the application was tested using the Mocha testing framework,~\cite{noauthor_mocha_nodate} with Supertest~\cite{noauthor_ladjssupertest_2024}
-used to simulate API calls. Finally, coverage reports were generated with Istanbul.~\cite{noauthor_istanbul_nodate}
+There are two main types of analysis that can be used to test software: static and dynamic. In these groups, there are
+four levels of testing: unit, integration, system, and acceptance.~\cite{luo_software_2001}
+
+TypeScript inherently provides some level of static analysis, which can catch common categories of errors such as
+incorrect types, missing properties, and null values. As mentioned in section~\ref{sec:language}, this is able to
+catch many issues pre-emtively at compile time. This could be considered a combination of unit, and to a lesser extent,
+integration testing.
+
+Due to the analytical nature of the project, user testing was not considered necessary. Instead, the focus was on ensuring
+that the system was reliable and the results were as expected. This was done using automated unit and integration tests for
+objective areas, i.e., \enquote*{did it work?}, and manual testing for subjective areas such as the quality of the recipe
+suggestions which acted as a form of system testing. If it were done, user testing would act as acceptance testing,
+as defined by~\cite{luo_software_2001}.
+
+See Table~\ref{tab:test_types} for a summary of the testing levels and how they were implemented.
+
+\begin{table}[hp]
+    \centering
+    \caption{\label{tab:test_types}The four levels of testing and how they were implemented.}
+    \begin{tabular}{cll}\toprule
+        \textbf{Type} & \textbf{Static Analysis} & \textbf{Dynamic Analysis} \\\midrule
+        \textbf{Unit} & Type Checking & Mocha.js \\
+        \textbf{Integration} & (limited) Type Checking & Supertest \\
+        \textbf{System} & None & Manual Testing \\
+        \textbf{Acceptance} & None & None \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Unit and Integration Testing}
+The backend of the application was tested using the Mocha testing framework, with Supertest
+used to simulate API calls. Finally, coverage reports were generated with the Istanbul framework.
 
 The test cases could be run manually using the commands \texttt{npm run test} and \texttt{npm run test:coverage}
 and were run automatically after every push via a GitHub action.
 
-See figure~\ref{fig:test_report} for an example of a test report,~\ref{fig:coverage_report}
-for a coverage report, and figure~\ref{fig:test_failure} for an email that was sent if a test failed when a commit
-was pushed. All test cases for the backend were contained in the \texttt{app/backend/src/tests} directory. See
-figure~\ref{fig:test_case} for an example of a test case.
+Each run of the test suite generated a test report, shown in figure~\ref{fig:test_report}. This report
+documents the number of tests run (shown as a \enquote*{\texttt{.}} for each test in the reporter used),
+and, if any tests failed, the error message, stack trace, and the expected output compared to the actual output.
 
-Test cases were largely written after the functions they were intended to test,
-as there was limited evidence for test-driven development leading to higher
+Coverage reports were likewise generated when the suite is run in coverage mode, shown in figure~\ref{fig:coverage_report}.
+This report is in HTML format and shows the percentage of lines, functions, and branches that were executed at least once
+during the test run on a per-file, per-directory, and overall basis. This allowed for easy identification of areas that
+were lacking test cases and could be improved. It did not, however, reflect the quality of the tests themselves.~\cite{meyer_is_2012}
+For this reason, there was no target coverage and the focus was on regression testing.
+
+When a test failed during an automated run, an email was sent, as shown in figure~\ref{fig:test_failure}, to alert
+about the issue. This email linked to the test logs which detailed the error in the same format as if the test had been run
+locally.
+
+Test cases were, for the most part, written after the functions they were intended to test,
+as there is limited evidence for test-driven development leading to higher
 quality tests or greater code coverage.~\cite{tosun_effectiveness_2018,madeyski_impact_2010}
 
-Likewise, while reaching a certain level of code coverage was important for detecting
-faults, coverage in of itself was not a good indicator of test suite quality.~\cite{meyer_is_2012}
-Due to this, no target coverage level was put in place, with testing instead
-relying primarily on regression testing.
+By writing unit tests immediately after implementing a feature, and automating the entire suite to run
+on every push, the \enquote*{test early, test often} principle was followed. This allowed for
+issues to be caught early and narrowed down to the specific function that caused them.~\cite{olan_unit_2003}
 
 \begin{figure}[p]
     \caption{\label{fig:test_case}An example of a test case from \texttt{testGetEmbedding.ts}}
     \begin{minted}{ts}
-it('should return similar embeddings for similar strings',
-  async function () {
-    const emb1 = await getEmbedding('Hello world')
-    const emb2 = await getEmbedding('Hello there')
-    assert(
-      getSimilarity(emb1.embedding, emb2.embedding) > 0.8,
-      'similarity should be high'
-    )
-  }
-)
+// Name of the test suite. By convention, this is in the
+// function or class being tested
+describe('ml/getEmbedding', function () {
+  // Name of the test case. By convention, this reads as
+  // <function> should <expected result>
+  it('should return similar embeddings for similar strings',
+    async function () {
+      // Get the embeddings for two strings.
+      // These should be similar as the strings are similar
+      // We need to use await as the function is asynchronous
+      const emb1 = await getEmbedding('Hello world')
+      const emb2 = await getEmbedding('Hello there')
+      assert(
+        // Assert that this condition is true
+        // In this case, that similarity is greater than a threshold
+        getSimilarity(emb1.embedding, emb2.embedding) > 0.8,
+        // If it is not, this message will be displayed
+        'similarity should be high'
+      )
+    }
+  )
 
-it('should return dissimilar embeddings for dissimilar strings',
-  async function () {
-    const emb1 = await getEmbedding('Hello world')
-    const emb2 = await getEmbedding(
-      'Did you ever hear the tragedy of Darth Plagueis the Wise?'
-    )
-    assert(
-      getSimilarity(emb1.embedding, emb2.embedding) < 0.2,
-      'similarity should be low'
-    )
-  }
-)
+  // Another test case. Very similar to the first, just
+  // testing the opposite condition
+  it('should return dissimilar embeddings for dissimilar strings',
+    async function () {
+      const emb1 = await getEmbedding('Hello world')
+      const emb2 = await getEmbedding(
+        'Did you ever hear the tragedy of Darth Plagueis the Wise?'
+      )
+      assert(
+        getSimilarity(emb1.embedding, emb2.embedding) < 0.2,
+        'similarity should be low'
+      )
+    }
+  )
+})
     \end{minted}
 \end{figure}
 
