@@ -285,37 +285,37 @@ The account creation subsystem was a late addition to the app, and as such, was 
 \todo{Testing}
 
 \subsection{Test Plan}
-The backend of the app will be unit tested using the Mocha.js framework in order
-to verify that it functions as intended and to catch any regressions. Tests for lower-level components
-such as validation functions and the database will be written before those for higher-level
-components such as API endpoints. These test cases will be executed on every push automatically
-with an alert being sent should any of them fail.
+The backend of the app was unit tested using the Mocha.js framework
+to verify that it functioned as intended and to catch any regressions. Tests for lower-level components
+such as validation functions and the database were written before those for higher-level
+components such as API endpoints. These test cases were executed on every push automatically,
+with an alert being sent if any of them failed.
 \todo{Test plan}
 
-Due to the analytical nature of the project, user testing was not considered to be necessary. Instead,
-the focus was on ensuring that the system was reliable, and the results were as expected. This was done
-using automated unit tests for objective areas, i.e., \enquote*{does it work?}, and manual testing
+Due to the analytical nature of the project, user testing was not considered
+necessary. Instead, the focus was on ensuring that the system was reliable and the results were as expected. This was done
+using automated unit tests for objective areas, i.e., \enquote{did it work?}, and manual testing
 for subjective areas such as the quality of the recipe suggestions.
 
 \subsection{Unit Testing}
-The backend of the application is tested using the Mocha testing framework,~\cite{noauthor_mocha_nodate} with Supertest~\cite{noauthor_ladjssupertest_2024}
-used to simulate API calls. Finally, coverage reports are generated with Istanbul.~\cite{noauthor_istanbul_nodate}
+The backend of the application was tested using the Mocha testing framework,~\cite{noauthor_mocha_nodate} with Supertest~\cite{noauthor_ladjssupertest_2024}
+used to simulate API calls. Finally, coverage reports were generated with Istanbul.~\cite{noauthor_istanbul_nodate}
 
-The test cases can be manually using the commands \texttt{npm run test} and \texttt{npm run test:coverage}
-and run automatically after every push via a GitHub action.
+The test cases could be run manually using the commands \texttt{npm run test} and \texttt{npm run test:coverage}
+and were run automatically after every push via a GitHub action.
 
 See figure~\ref{fig:test_report} for an example of a test report,~\ref{fig:coverage_report}
-for a coverage report, and figure~\ref{fig:test_failure} for an email that is sent if a test fails when a commit
-is pushed. All test cases for the backend are contained in the \texttt{app/backend/src/tests} directory. See
+for a coverage report, and figure~\ref{fig:test_failure} for an email that was sent if a test failed when a commit
+was pushed. All test cases for the backend were contained in the \texttt{app/backend/src/tests} directory. See
 figure~\ref{fig:test_case} for an example of a test case.
 
-Test cases were largely written after the functions they were intented to test
-as there is limited evicence for test-driven development leading to higher
+Test cases were largely written after the functions they were intended to test,
+as there was limited evidence for test-driven development leading to higher
 quality tests or greater code coverage.~\cite{tosun_effectiveness_2018,madeyski_impact_2010}
 
-Likewise, while reaching a certain level of code coverage is important for detecting
-faults, coverage in of itself is not a good indicator of test suite quality.~\cite{meyer_is_2012}
-Due to this, no target coverage level was put in place with testing instead
+Likewise, while reaching a certain level of code coverage was important for detecting
+faults, coverage in of itself was not a good indicator of test suite quality.~\cite{meyer_is_2012}
+Due to this, no target coverage level was put in place, with testing instead
 relying primarily on regression testing.
 
 \begin{figure}[p]
