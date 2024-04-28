@@ -200,6 +200,26 @@
 
 \clearpage\subsection{Code Snippets}
 
+\begin{figure}
+  \caption{\label{fig:type_check}A code snippet that would fail TypeScript's checks.}
+  \begin{minted}{ts}
+function take_str(str: string): void {
+  console.log(str)
+}
+
+// This would compile, as it is passed the expected type
+take_str('Hello')
+
+// This would not compile as take_str expects a string,
+// but a number was passed
+take_str(123)
+
+// This would also not compile as take_str does not return
+// anything
+const ret = take_str('World')
+  \end{minted}
+\end{figure}
+
 \begin{figure}[h]
   \centering
   \caption{\label{fig:buffer_float_array}The test case for round trip accuracy between buffers and float arrays}

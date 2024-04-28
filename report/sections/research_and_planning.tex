@@ -1,25 +1,27 @@
 \section{Literature Review}
 
-\subsection{The Need to Reduce Food Waste}
-Gloally, nearly one third of food produced is wasted with figures being highest
-in industrialized countrie, leading to unnecessary greenhouse gas emissions and
-waste of natural resources.~\cite{gustavsson_global_2011} A signigicant proportion
-of this wastage occurs at the household level, totalling approximatly 50\% of all
-food waste as of 2012.~\cite{stenmarck_estimates_2016} Overall, food waste contributes
-to a significant amount of the global warming caused by the entire food supply
-chain.~\cite{scherhaufer_environmental_2018}
-
 \subsection{Prior Work in Subject Area}
 Stefan et al.\ found that \enquote*{the intention not to waste food does not have a
 significant effect on reported food waste}. Instead, planning before shopping to
-check what is already available was found to have a negative impact on food waste.~\cite{stefan_avoiding_2013}
-\todo{Prior Work}
+check what is already available was found to lead to a reduction in food waste.~\cite{stefan_avoiding_2013}
+
+As planning before shopping is a key factor in reducing food waste, the need for a system
+that tracks how much of each ingredient is available was identified. This would allow for
+users to know plan meals based on what they already have, reducing the need to buy more ingredients
+and thus reducing food waste.
 
 While providing a user with variety of choices can improve their satisfaction
 with the overall system, care must be taken to avoid information overload.
 Bollen et al.\ found that offering a more limited set items predicted to be among a user's
 highest rated, followed by a larger set of more varied items with lower rankings, led to
 higher satisfaction on average.~\cite{bollen_understanding_2010}
+
+Currently, the app shows all suggestions at once, but with further development, this could be
+reduced to a more limited subset of the suggestions, with the option to view more if desired and is
+discussed in further detail in Section~\ref{sec:choice_overload}.
+
+The motivation for the \chef{} app is two-fold: to reduce the environmental impact of food waste and to
+save costs for households by allowing them to collectively track what ingredients are available to them.
 
 \subsubsection{Techniques Common to Food Reccomendation Systems}
 There exist a broad range of techniques used by food reccomendation systems, using both machine learning
@@ -32,11 +34,10 @@ into combining multiple attributes of the recipe or giving attributes different 
 considered to be merely a subject for future research or unimportant, which is beleived to degrade the performance
 of systems.~\cite{bondevik_systematic_2024}
 
-\subsection{AI Recipe Suggestion and Generation}
-Prior studies have explored generating variants of existing recipes using large language models such as GPT-3.
-This was found to be an effective system and to generate meaningful recipes.~\cite{kansaksiri_smart_2023}
+\subsection{Recipe Name-based Suggestions}
+\todo{Recipe Name-based Suggestions}
 
-\subsubsection{Name-based Suggestions in Other Cultures}
+\subsubsection{Effectiveness Outside of Western Cuisine}
 While western recipe names are typically constructed in a predictable format
 that indicates what kind of recipe it is, this is not the case world-wide.
 For example, Chinese recipe names often bear little resembelance to the contents
@@ -48,10 +49,16 @@ by Wang et al.\ would be needed.
 \subsection{Gaps in Existing Literature}
 \todo{Gaps in existing literature}
 
-\subsection{Recipe Similarity Evaluation}\label{sec:recipe_similarity}
-The similarity of recipes can be evaluated using a sentence embedding model \todo{Source}. For the \chef{} app,
-the pre-trained Universal Sentence Encoder~\cite{cer_universal_2018} was decided upon. This can run in a Node.js
-environment via TensorFlow.js.
+\subsection{Recipe Datasets}
+\todo{Recipe Datasets}
+
+\subsection{Recipe Similarity Algorithms}\label{sec:recipe_similarity}
+\todo{Recipe Similarity Evaluation}
+The similarity of recipes can be evaluated using a sentence embedding model \todo{Source}.
+
+% TODO: This should be in planning
+For the \chef{} app, the pre-trained Universal Sentence Encoder~\cite{cer_universal_2018} was decided upon.
+This can run in a Node.js environment via TensorFlow.js.
 
 The cosine similarity metric, as used in the original USE paper, can be used to evaluate the similarity of
 embeddings as a score normalized between 0 and 1. This metric provides higher precision and
@@ -146,6 +153,8 @@ queries.~\cite{ihajeer_comparison_2012}
 }
 
 \section{Competitor Analysis}\label{sec:competitor_analysis}
+\todo{Need more here. Discuss the positives and negatives of each competitor.}
+
 As part of the development of \chef{}, a competitor analysis has been performed on the existing solutions
 MyFridgeFood~\cite{myfridgefood_myfridgefood_nodate} and SuperCook~\cite{supercook_supercook_nodate} as part of the research
 into the problem domain. These solutions, while useful, had limitations as discussed below. The \chef{} app aims to address
@@ -178,6 +187,8 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
 
 \section{Product Requirements}
 
+\todo{Where did these specificvations come from ? How did you develop them?}
+
 % https://tex.stackexchange.com/questions/503668/increment-a-counter
 \newcounter{functionalreqcounter}
 \newcommand{\requirementtype}{FR}
@@ -197,12 +208,12 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} & \textbf{Implemented} \\\midrule
 
     \requirement{\textbf{Web app.} The system \textbf{must} be a web app that fetches from a REST API}
-    {Trivial}
+    {Competitor Analysis}
     {Must-have}
     {Yes}
 
     \requirement{\textbf{User registration.} The system \textbf{must} allow users to sign up and log in to the app.}
-    {Trivial}
+    {Competitor Analysis}
     {Must-have}
     {Yes}
 
@@ -381,11 +392,14 @@ be the primary testing method.
 
 \todo{Approach/Methodology}
 
+\todo{Should go into each of the requirements, justify them, and discuss how they will be implemented}
+
 \subsection{Choice of Language}\label{sec:language}
 It was decided early on to implement \chef{} as a web application with a
 frontend using written for the React framework. This supports using either
 the JavaScript or TypeScript language.
 
+\todo{Specify why Node was chosen over other languages. Positives and negatives of each.}
 Multiple languages and frameworks were considered for the backend including
 C\#, Python, Node, and PHP.\@ It was eventually decided to use Node as it would
 allow using the same language and libraries as the frontend.
@@ -397,28 +411,8 @@ bugs from being introduced, especially when the checks for \texttt{null} and
 the application. See figure~\ref{fig:type_check} for an example of some issues
 that can be caught pre-emptively by TypeScript, but not JavaScript.
 
-\begin{figure}
-    \caption{\label{fig:type_check}A code snippet that would fail TypeScript's checks.}
-    \begin{minted}{ts}
-function take_str(str: string): void {
-    console.log(str)
-}
-
-// This would compile, as it is passed the expected type
-take_str('Hello')
-
-// This would not compile as take_str expects a string,
-// but a number was passed
-take_str(123)
-
-// This would also not compile as take_str does not return
-// anything
-const ret = take_str('World')
-    \end{minted}
-\end{figure}
-
 \subsection{The Dataset}\label{sec:data_pre_process}
-
+\todo{Why is a dataset needed?}
 The Recipe Box~\cite{lee_recipe_2017} dataset was initially considered, but later disregarded as the pre-scraped download only includes the
 hashed versions of the source URLs and the scraping scripts no longer function due to changes in website design. This would have made
 \hyperref[req:sources]{FR\arabic{sourcesid}} impossible to achieve.
@@ -431,6 +425,9 @@ each with an ingredient list, a list of directions, and its source URL.\@
 
 While licensing restrictions would prevent this from being used for a commercial app, it is still available for
 research purposes.
+
+If the app proved to be successful, a different or custom dataset could be used as the app is designed
+to be flexible in this regard. \todo{Requirement number}
 
 See table~\ref{tab:recipenlg_row_format} for the information that is included with each recipe and that is imported into
 the app's database during setup. The schema script for the database is located at \texttt{./app/backend/data/schema.sql}

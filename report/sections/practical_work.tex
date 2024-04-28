@@ -384,17 +384,6 @@ Care was taken to avoid the introduction of these into the \chef{} app, although
 metrics were used. One notable exception discussed is the search query and endpoint discussed in
 Section~\ref{sec:search_complexity}.
 
-\section{Deployment}
-
-During development, command line tasks were used to allow for rapid iteration. Docker is used to deploy
-the app with the backend and frontend each running in their own container. Containers were chosen as they
-allow for software to be more potable with little overhead and avoid the need to replicate an execution
-environment.~\cite{bernstein_containers_2014,vase_advantages_2015}
-
-The backend is based off the node image, while the frontend uses node during build and nginx at runtime.
-Nginx was chosen over Apache as it is significantly more performant than Apache with a smaller memory
-when serving static files such as those used to distribute a React app.~\cite{kunda_web_2017}
-
 \section{Investigation}
 \todoinline{
     You should also discuss the investigation process. This does not mean that you have to repeat what you have already said about the design of your investigation,
@@ -409,6 +398,7 @@ when serving static files such as those used to distribute a React app.~\cite{ku
 
 \section{Results}
 
+\todo{This should be in the methodology section as it discusses preprocessing}
 The dataset used contains a number of meaningless and nonsensical recipes (see
 figure~\ref{fig:bad_recipe_entry}), which were imported by the \chef{} system during setup.
 A possible reason for these being included in RecipeNLG is that some
@@ -430,7 +420,7 @@ constraints and the fact that the noise had minimal impact on the system's resul
 
 The recipe similarity algorithm was found to be fairly effective at suggesting related items.
 For example, \enquote*{Sphagetti Casserole} is evaluated as having 90\% similarity to
-\enquote*{Spinaich Casserole} and has high similarity to other casseroles. A more surprising
+\enquote*{Spinich Casserole} and has high similarity to other casseroles. A more surprising
 outcome is the suggestion of seemingly unrelated recipes, such as how \enquote*{Potato Salad}
 was rated as more similar to the casserole than casserole is to other Italian recipes such as
 pasta.
