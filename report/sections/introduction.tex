@@ -7,6 +7,10 @@
     the marking scheme. It is quite common for students to lose a mark or two by missing something out.
 }
 
+% Don't insert page breaks before these sections
+{
+\let\clearpage\relax
+
 \section{The Need to Reduce Food Waste}
 Gloally, nearly one third of food produced is wasted with figures being highest
 in industrialized countries, leading to unnecessary greenhouse gas emissions and
@@ -21,3 +25,5 @@ The intention of the project is to create a system based on known algorithms and
 datasets that can be used to reduce food waste. Because these algorithms and
 datasets have been proven to work for recipe suggestion, the project will focus
 instead on the implementation of the system and the evaluation of its effectiveness.
+
+} % <-- End of no-page-breaks section
