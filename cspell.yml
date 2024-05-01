@@ -12,7 +12,6 @@ ignorePaths:
   - ".vscode"
   - "megalinter"
   - "package-lock.json"
-  - "report"
 
   - "*.drawio"
   - "*.svg"

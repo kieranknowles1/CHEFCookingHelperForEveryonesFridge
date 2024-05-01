@@ -32,33 +32,4 @@
 			// cSpell: enable
 		],
 	},
-	"tasks": {
-		"version": "2.0.0",
-
-		"tasks": [
-			{
-				"label": "Tests: Spell Check Workspace",
-				"type": "shell",
-				"command": "cspell",
-				"args": [
-					"**",
-					"--gitignore",
-					"--validate-directives",
-				],
-				"problemMatcher": {
-					"source": "cSpell",
-					"owner": "cSpell",
-					"pattern": {
-						"regexp": "(.+):(\\d+):(\\d+) - (.*)",
-						"file": 1,
-						"line": 2,
-						"column": 3,
-						"message": 4,
-					},
-					"severity": "info",
-				},
-				"group": "test",
-			}
-		]
-	}
 }
