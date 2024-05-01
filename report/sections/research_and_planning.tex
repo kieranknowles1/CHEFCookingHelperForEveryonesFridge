@@ -155,12 +155,11 @@ queries.~\cite{ihajeer_comparison_2012}
 \section{Competitor Analysis}\label{sec:competitor_analysis}
 \todo{Need more here. Discuss the positives and negatives of each competitor.}
 
-As part of the development of \chef{}, a competitor analysis has been performed on the existing solutions
-MyFridgeFood~\cite{myfridgefood_myfridgefood_nodate} and SuperCook~\cite{supercook_supercook_nodate} as part of the research
+As part of the development of \chef{}, a competitor analysis has been performed on several existing solutions as part of research
 into the problem domain. These solutions, while useful, had limitations as discussed below. The \chef{} app aims to address
-these limitations and provide a more useful solution.
+these limitations and provide a more useful solution. The full list of competitors analysed is provided in Section~\ref{sec:competitors}.
 
-Both of the analyzed competitors provide a user account system
+SuperCook and MyFridgeFood both include feature an account system
 that saves a user's list of available ingredients. Creating an account also allows for recipes to be favourited/bookmarked
 which would then be shown on a dedicated page. SuperCook additionally shows which of the user's favourite recipes
 can be made using available ingredients and which ingredients are missing. Both apps also use exclusively imperial
@@ -187,7 +186,7 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
 
 \section{Product Requirements}
 
-\todo{Where did these specificvations come from ? How did you develop them?}
+\todo{Where did these specificvations come from? How did you develop them?}
 
 % https://tex.stackexchange.com/questions/503668/increment-a-counter
 \newcounter{functionalreqcounter}
@@ -218,7 +217,7 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     {Yes}
 
     \requirement{\textbf{Share ingredient lists.} The system \textbf{must} allow for multiple users to share one \virtualfridge{}}
-    {Trivial}
+    {Competitor Analysis}
     {Must-have}
     {Partially}
 
@@ -243,6 +242,12 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     \textbf{Include sources.} The system \textbf{must} include its sources for recipes.}
     {Trivial}
     {Must-have}
+    {Yes}
+
+    \requirement{\label{req:data_flexible}\newcounter{flexibleid}\setcounter{flexibleid}{\thefunctionalreqcounter}%
+    \textbf{Flexible Data Sources.} The system \textbf{should} be flexible regarding the dataset it uses}
+    {Dataset Selection}
+    {Should-have}
     {Yes}
 
     \requirement{\textbf{Scan ingredients.} The system \textbf{should} allow the user to scan the barcodes of ingredients to add
@@ -413,6 +418,10 @@ that can be caught pre-emptively by TypeScript, but not JavaScript.
 
 \subsection{The Dataset}\label{sec:data_pre_process}
 \todo{Why is a dataset needed?}
+
+It was decided to use a pre-existing dataset for the app in order to save time by removing the need to manually enter recipes
+or create a web scraper to gather them, and is both a legal and ethical grey area.~\cite{murray_state_university_legality_2020}
+
 The Recipe Box~\cite{lee_recipe_2017} dataset was initially considered, but later disregarded as the pre-scraped download only includes the
 hashed versions of the source URLs and the scraping scripts no longer function due to changes in website design. This would have made
 \hyperref[req:sources]{FR\arabic{sourcesid}} impossible to achieve.
@@ -421,13 +430,12 @@ An additional dataset that was considered was the Food.com Recipes and Interacti
 ingredient names and not amounts, which was insufficient to cover \hyperref[req:track_amounts]{FR\arabic{trackamountsid}}
 
 In the end, RecipeNLG~\cite{bien_recipenlg_2020} was the dataset of choice for the \chef{} app. This contains approximately 2 million recipes
-each with an ingredient list, a list of directions, and its source URL.\@
-
-While licensing restrictions would prevent this from being used for a commercial app, it is still available for
-research purposes.
+each with an ingredient list, a list of directions, and its source URL. This dataset was chosen as it includes all the features needed to
+fulfill the requirements of the app and is available freely for research and educational purposes.
 
 If the app proved to be successful, a different or custom dataset could be used as the app is designed
-to be flexible in this regard. \todo{Requirement number}
+to be flexible in this regard, as the setup script is the only component to interact with the dataset.
+\todo{Requirement number}
 
 See table~\ref{tab:recipenlg_row_format} for the information that is included with each recipe and that is imported into
 the app's database during setup. The schema script for the database is located at \texttt{./app/backend/data/schema.sql}

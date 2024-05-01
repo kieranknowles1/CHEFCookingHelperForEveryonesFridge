@@ -181,11 +181,6 @@
 % Print the bibliography as a chapter
 % From biblatex docs
 \renewcommand{\bibname}{References}\label{sec:reference_list}
-\todoinline{
-    How should I be including these references?
-    StackOverflow
-    TailwindCSS docs
-}
 \defbibheading{bibliography}[\bibname]{
     \chapter{#1}
     \markboth{#1}{#1}
@@ -194,18 +189,45 @@
 \nocite{*}
 \printbibliography[category=cited]{}
 
-\section{Node Packages}
-The following packages were used from npm for the application:
+\defbibheading{bibliography}[\bibname]{
+    \section{#1}
+    \markboth{#1}{#1}
+}
+\printbibliography[title=Bibliography,notcategory=cited]{}
+
+\section{Additional Tools, Libraries and Resources}
+
+\subsection{Tools and Documentation Used}
+The following tools and resources were relied on during development:
 \begin{itemize}
     \item 0x --- Flame graph performance profiler.
+    \item Eslint --- Linting tool to enforce code style.
+    \item Git --- Version Control.
+    \item GitHub CoPilot --- AI code suggestions.
+    \item StackOverflow --- Q\&A for technical questions, cited in source code as-and-when it was used.
+    \item Swagger UI --- API documentation generator.
+    \item Visual Studio Code --- Development Environment.
+\end{itemize}
+
+\subsection{Competitors Analysed}\label{sec:competitors}
+The following competitor apps were analysed during research:
+\begin{itemize}
+    \item MyFridgeFood --- \url{https://myfridgefood.com}
+    \item RecipeRadar --- \url{https://www.reciperadar.com/},\\\url{https://github.com/openculinary}
+    \item SuperCook --- \url{https://www.supercook.com/}
+\end{itemize}
+
+\subsection{Node Packages}
+The following packages were used from npm for the application, along with their documentation
+being used as a guideline:
+\begin{itemize}
     \item Async Mutex --- Synchronize asynchronous code.
-    \item Bcrypt --- Hash passwords.
+    \item Bcrypt --- Password hashing.
     \item Body Parser --- JSON parsing of HTTP POST bodies.
     \item Cli Progress --- Show progress bars in the terminal.
     \item Commander --- Parse command line arguments.
     \item Cors --- Automatically set cross-origin headers on responses.
     \item Csv Parse --- Parse CSV files.
-    \item Eslint --- Linting tool to enforce code style.
     \item Express Async Handler --- Simplify async request handlers.
     \item Fraction.js --- Parse fractions into floats.
     \item Io-ts --- Type checking for runtime values.
@@ -230,12 +252,6 @@ The following packages were used from npm for the application:
     \item Yaml --- Parse YAML files.
     \item Zxing --- Barcode scanning library.
 \end{itemize}
-
-\defbibheading{bibliography}[\bibname]{
-    \section{#1}
-    \markboth{#1}{#1}
-}
-\printbibliography[title=Bibliography,notcategory=cited]{}
 
 \chapter{Appendices}
 
