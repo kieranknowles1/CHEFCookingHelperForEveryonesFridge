@@ -244,6 +244,7 @@ it('should convert a Float32Array to a Buffer and back without changes',
 \cleartoleftpage\begin{figure}
   \centering
   \caption{\label{fig:search_query}The query used to search recipes}
+  % cSpell: disable
   \begin{minted}{sql}
 SELECT
 recipe.name, recipe.id,
@@ -308,6 +309,7 @@ THEN 1 ELSE 0 END) = 0)
 ORDER BY missing_count ASC, similarity DESC
 LIMIT :limit
   \end{minted}
+  % cSpell: enable
 \end{figure}
 
 \cleartoleftpage\begin{figure}
@@ -408,6 +410,7 @@ LIMIT :limit
 \begin{figure}
   \centering
   \caption{\label{fig:test_report}A test report showing that some tests have failed.}
+  % cSpell: disable
   \begin{verbatim}
 mocha --reporter dot --require ts-node/register src/tests/**/*.ts
 
@@ -445,6 +448,7 @@ mocha --reporter dot --require ts-node/register src/tests/**/*.ts
       at processTicksAndRejections
         (node:internal/process/task_queues:95:5)
   \end{verbatim}
+  % cSpell: enable
 \end{figure}
 
 \begin{figure}

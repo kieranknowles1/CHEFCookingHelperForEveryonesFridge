@@ -116,7 +116,7 @@ database systems.~\cite{kreibich_using_2010} This would allow for the database t
 another backend with a limited number of changes needing to be made.
 
 One major difference between TypeScript and Java is that TypeScript uses structural typing, where objects are considered
-the same if they have the same structure. While Java uses nominal typing and requrires an interface to be explicitly
+the same if they have the same structure. While Java uses nominal typing and requires an interface to be explicitly
 implemented by a class. This allows for different modules to be interoperable through sharing the same structure of objects.~\cite{gil_whiteoak_2008}
 For this reason, along with the fact that the data transfer objects did not need their own logic, it was decided early on
 to not use classes for objects retrieved from the database and instead to rely on interfaces only.
@@ -141,8 +141,10 @@ generated types were then used to check the return the API's return types at com
 
 The \codelisting{express-openapi-validator} package was used separately to validate
 request parameters against the OpenAPI schema. This implementation avoided having
-to duplicate validation specificiations and removed the possibility of having the values that
-the server accepts differ from what was documented.
+to duplicate validation specifications and removed the possibility of having the values that
+the server accepts differ from what was documented. There is additional functionality to validate
+responses which is useful during development and the test suite, but can be disabled in production
+for better performance.
 
 One limitation that was not resolved with either of the above packages is that there is no validation
 for whether the endpoints exist which lead to some confusion with endpoints returning 404 as the function to
@@ -191,7 +193,7 @@ to build the application for deployment.
 React was chosen as it is built around the concept of reusable components, which speeds up development and
 improves code quality by avoiding duplicate code,~\cite{hordijk_harmfulness_2009} and abstracts away rendering
 by only re-rendering components when their state changes. In addition, it has access to the vast majority of
-Node packages along with many dedicated component libraries for common use cases such as routin between pages
+Node packages along with many dedicated component libraries for common use cases such as routing between pages
 which opened the possibility of re-using the same libraries for the front and back ends.~\cite{saks_javascript_2019}
 
 \subsection{API Communication}
@@ -227,7 +229,7 @@ Ingredient preferences refer to specific ingredients that the user dislikes, suc
 
 During search, the preferences of all users the meal is being prepared for are combined to filter out recipes
 that are disallowed by any of the users. See Section \ref{sec:variable_bind_count} for a discussion of how this was implemented.
-Due to time constraints, the frontend only accounts for the logged in user's preferences, but the endpoint
+Due to time constraints, the frontend only accounts for the logged-in user's preferences, but the endpoint
 supports any number of users.
 
 \subsection{Login and Account Creation}
@@ -255,11 +257,11 @@ four levels of testing: unit, integration, system, and acceptance.~\cite{luo_sof
 
 TypeScript inherently provides some level of static analysis, which can catch common categories of errors such as
 incorrect types, missing properties, and null values. As mentioned in section~\ref{sec:language}, this is able to
-catch many issues pre-emtively at compile time. This could be considered a combination of unit, and to a lesser extent,
+catch many issues pre-emptively at compile time. This could be considered a combination of unit, and to a lesser extent,
 integration testing.
 
 Due to the analytical nature of the project, user testing was not considered necessary. Instead, the focus was on ensuring
-that the system was reliable and the results were as expected. This was done using automated unit and integration tests for
+that the system was reliable, and the results were as expected. This was done using automated unit and integration tests for
 objective areas, i.e., \enquote*{did it work?}, and manual testing for subjective areas such as the quality of the recipe
 suggestions which acted as a form of system testing. If it was performed, user testing would have acted as acceptance testing,
 as defined by~\cite{luo_software_2001}.
@@ -361,7 +363,7 @@ reintroduced at a later date.
 One example of regression testing is that, after discovering that embeddings were
 not being properly decoded from the database (see Section~\ref{sec:embedding_round_trip}),
 test cases were implemented to make sure that an identical array would be returned
-after endoding to a buffer back again in \texttt{testBufferFloat32Array.ts}
+after encoding to a buffer back again in \texttt{testBufferFloat32Array.ts}
 
 \subsection{Code Quality Evaluation}
 The MegaLinter tool~\cite{vuillamy_megalinter_nodate} was configured to run on every pull request on the application's Git repository. This includes a wide array
@@ -417,8 +419,8 @@ constraints and the fact that the noise had minimal impact on the system's resul
 \subsection{Similar Recipes}
 
 The recipe similarity algorithm was found to be fairly effective at suggesting related items.
-For example, \enquote*{Sphagetti Casserole} is evaluated as having 90\% similarity to
-\enquote*{Spinich Casserole} and has high similarity to other casseroles. A more surprising
+For example, \enquote*{Spaghetti Casserole} is evaluated as having 90\% similarity to
+\enquote*{Spinach Casserole} and has high similarity to other casseroles. A more surprising
 outcome is the suggestion of seemingly unrelated recipes, such as how \enquote*{Potato Salad}
 was rated as more similar to the casserole than casserole is to other Italian recipes such as
 pasta.
@@ -472,7 +474,7 @@ table~\ref{tab:similar_apple_crumble}. This issue is part of the reason that
 Searching of recipes is implemented nearly identically to the similar recipe comparison, only differing in that
 it compares the user's query rather than the selected recipe's name.
 
-An area that was not accounted for was that Unversal Sentence Encoder is case-sensitive.~\todo{source}
+An area that was not accounted for was that Universal Sentence Encoder is case-sensitive.~\todo{source}
 Because of this, searching for \enquote*{pasta} would yield different results to searching \enquote*{Pasta} as
 shown in figure~\ref{fig:search_case_sensitive}
 

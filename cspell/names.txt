@@ -1,7 +1,12 @@
+Bollen
+Berkovsky
 Cecchinato
 drawio
+Freyne
 Grammarly
 Jaccard
 megalinter
 oxsecurity
+Plagueis
 Rooksby
+vite

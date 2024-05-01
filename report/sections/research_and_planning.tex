@@ -24,14 +24,14 @@ The motivation for the \chef{} app is two-fold: to reduce the environmental impa
 save costs for households by allowing them to collectively track what ingredients are available to them.
 
 \subsubsection{Techniques Common to Food Reccomendation Systems}
-There exist a broad range of techniques used by food reccomendation systems, using both machine learning
+There exist a broad range of techniques used by food recommendation systems, using both machine learning
 and statistical models, the most popular method in existing studies being machine learning based on the
 contents of recipes. Most of which were not personalized to the individual user.~\cite{bondevik_systematic_2024}
 
 Among prior systems, the majority source their training data from textual data with the most commonly used
 attributes being ingredients, cooking instructions, and the recipe title itself. There has been limited research
 into combining multiple attributes of the recipe or giving attributes different weights.~\cite{chen_cross-modal_2017} These factors are often
-considered to be merely a subject for future research or unimportant, which is beleived to degrade the performance
+considered to be merely a subject for future research or unimportant, which is believed to degrade the performance
 of systems.~\cite{bondevik_systematic_2024}
 
 \subsection{Recipe Name-based Suggestions}
@@ -40,7 +40,7 @@ of systems.~\cite{bondevik_systematic_2024}
 \subsubsection{Effectiveness Outside of Western Cuisine}
 While western recipe names are typically constructed in a predictable format
 that indicates what kind of recipe it is, this is not the case world-wide.
-For example, Chinese recipe names often bear little resembelance to the contents
+For example, Chinese recipe names often bear little resemblance to the contents
 of the recipe itself.~\cite{wang_substructure_2008} This limits the effectiveness
 of suggestions systems based on names and as such a more complex system as discussed
 by Wang et al.\ would be needed.
@@ -62,7 +62,7 @@ This can run in a Node.js environment via TensorFlow.js.
 
 The cosine similarity metric, as used in the original USE paper, can be used to evaluate the similarity of
 embeddings as a score normalized between 0 and 1. This metric provides higher precision and
-recall than other metrics which make it an effective measure for ranked retreival from
+recall than other metrics which make it an effective measure for ranked retrieval from
 queries.~\cite{ihajeer_comparison_2012}
 \todo{https://ieeexplore.ieee.org/abstract/document/7032612}
 
