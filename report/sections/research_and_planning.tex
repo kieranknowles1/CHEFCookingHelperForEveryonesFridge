@@ -52,19 +52,8 @@ by Wang et al.\ would be needed.
 \subsection{Recipe Datasets}
 \todo{Recipe Datasets}
 
-\subsection{Recipe Similarity Algorithms}\label{sec:recipe_similarity}
-\todo{Recipe Similarity Evaluation}
-The similarity of recipes can be evaluated using a sentence embedding model \todo{Source}.
-
-% TODO: This should be in planning
-For the \chef{} app, the pre-trained Universal Sentence Encoder~\cite{cer_universal_2018} was decided upon.
-This can run in a Node.js environment via TensorFlow.js.
-
-The cosine similarity metric, as used in the original USE paper, can be used to evaluate the similarity of
-embeddings as a score normalized between 0 and 1. This metric provides higher precision and
-recall than other metrics which make it an effective measure for ranked retrieval from
-queries.~\cite{ihajeer_comparison_2012}
-\todo{https://ieeexplore.ieee.org/abstract/document/7032612}
+\subsection{The Research Question}
+\todo{The Research Question}
 
 \todoinline{
     A literature review has four main objectives:
@@ -206,7 +195,8 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     \\\toprule
     \textbf{ID} & \textbf{Requirement} & \textbf{Source} & \textbf{Priority} & \textbf{Implemented} \\\midrule
 
-    \requirement{\textbf{Web app.} The system \textbf{must} be a web app that fetches from a REST API}
+    \requirement{\label{req:web_app}\newcounter{webappid}\setcounter{webappid}{\thefunctionalreqcounter}%
+        \textbf{Web app.} The system \textbf{must} be a web app that fetches from a REST API}
     {Competitor Analysis}
     {Must-have}
     {Yes}
@@ -250,7 +240,7 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     {Should-have}
     {Yes}
 
-    \requirement{\textbf{Scan ingredients.} The system \textbf{should} allow the user to scan the barcodes of ingredients to add
+    \requirement{\textbf{Scan barcodes.} The system \textbf{should} allow the user to scan the barcodes of ingredients to add
     them to their \virtualfridge}
     {Use Case Analysis}
     {Should-have}
@@ -281,7 +271,7 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     \requirement{\label{req:similar_recipes}\newcounter{findsimilarid}\setcounter{findsimilarid}{\thefunctionalreqcounter}%
     \textbf{Find similar recipes.} The system \textbf{should} use a machine learning model to find and suggest
     similar recipes to those that the user has previously made.}
-    {Competitor Analysis}
+    {Literature Review}
     {Should-have}
     {Yes}
 
@@ -343,6 +333,12 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     {Trivial}
     {Should-have}
     {Yes}
+
+    \requirement{\label{req:localization}\newcounter{localizationid}\setcounter{localizationid}{\thefunctionalreqcounter}%
+        \textbf{Localization.} The system \textbf{won't currently} support multiple languages.}
+    {Trivial}
+    {Won't-have}
+    {No}
     \bottomrule
 \end{longtable}
 
@@ -399,24 +395,47 @@ be the primary testing method.
 
 \todo{Should go into each of the requirements, justify them, and discuss how they will be implemented}
 
-\subsection{Choice of Language}\label{sec:language}
-It was decided early on to implement \chef{} as a web application with a
-frontend using written for the React framework. This supports using either
-the JavaScript or TypeScript language.
+\subsection{Choice of Language (FR\arabic{webappid})}\label{sec:language}
 
-\todo{Specify why Node was chosen over other languages. Positives and negatives of each.}
-Multiple languages and frameworks were considered for the backend including
-C\#, Python, Node, and PHP.\@ It was eventually decided to use Node as it would
-allow using the same language and libraries as the frontend.
+There are numerous languages and frameworks that can be used to build a web application including
+Django (Python), Laravel (PHP), ASP.NET (C\#), and React (JavaScript/TypeScript), each of which has
+its strengths and weaknesses.
 
-Finally, out of JavaScript and TypeScript, TypeScript was chosen as a language
-for both components as it adds robust type checking that is effective at preventing
-bugs from being introduced, especially when the checks for \texttt{null} and
-\texttt{undefined} are enabled,~\cite{gao_type_2017} which will be done for
-the application. See figure~\ref{fig:type_check} for an example of some issues
-that can be caught pre-emptively by TypeScript, but not JavaScript.
+Django is a Python web framework designed to include all the features needed for a web application such
+as an ORM, authentication, and localization (which would have made NFR\arabic{localizationid}
+easier to implement).~\cite{ghimire_comparative_2020} Additionally, Python is considered to be an
+industry standard for machine learning tasks. However, it is considered to be a slow language\cite{srinath_pythonfastest_2017}
+which, coupled with a lack of personal experience beyond simple scripts, made it an unattractive choice.
 
-\subsection{The Dataset}\label{sec:data_pre_process}
+\todo{Laravel}
+
+Laravel is a PHP web framework
+
+\todo{ASP.NET}
+
+ASP.NET is a web framework based on the DotNet platform, which is primarily used with the C\# language.
+
+\todo{React}
+
+React is a JavaScript-based frontend library
+
+\todo{Node}
+Unlike the other frameworks discussed, which run server-side, React is purely a client-side library and thus
+needs to communicate with a backend server in order to fetch data. While React can fetch from any server-side
+library, Express.js running on Node.js allows for both components to be written in the same language, simplifying
+the development process by allowing code and library reuse.
+
+\todo{TypeScript descision}
+Both React and Node are based on JavaScript, which is a dynamically typed language and thus gives no guarantees
+as to the type of data that is being passed around the system. Instead, TypeScript can be used and compiled to
+JavaScript to add static type checking to the system. This can prevent many bugs from being introduced that would
+otherwise not be detected until later, especially with the checks for \texttt{null} and \texttt{undefined} enabled.~\cite{gao_type_2017}
+For this reason, TypeScript was the language of choice for both React and Node. See Figure \ref{fig:type_check} for an
+example of some issues that TypeScript can catch pre-emptively that JavaScript cannot.
+
+% \todo{Specify why Node was chosen over other languages. Positives and negatives of each.}
+
+\subsection{The Dataset (FR\arabic{sourcesid}, FR\arabic{flexibleid}, FR\arabic{trackamountsid})}\label{sec:data_pre_process}
 \todo{Why is a dataset needed?}
 
 It was decided to use a pre-existing dataset for the app in order to save time by removing the need to manually enter recipes
@@ -489,6 +508,19 @@ name would be considered identical. It was decided therefore to only include rec
 once, disregarding any with a name that was seen before during import.
 
 \todo{Dataset}
+
+\subsection{Recipe Similarity Algorithms (FR\arabic{findsimilarid})}\label{sec:recipe_similarity}
+\todo{Recipe Similarity Evaluation}
+The similarity of recipes can be evaluated using a sentence embedding model \todo{Source}.
+
+For the \chef{} app, the pre-trained Universal Sentence Encoder~\cite{cer_universal_2018} was decided upon.
+This can run in a Node.js environment via TensorFlow.js.
+
+The cosine similarity metric, as used in the original USE paper, can be used to evaluate the similarity of
+embeddings as a score normalized between 0 and 1. This metric provides higher precision and
+recall than other metrics which make it an effective measure for ranked retrieval from
+queries.~\cite{ihajeer_comparison_2012}
+\todo{https://ieeexplore.ieee.org/abstract/document/7032612}
 
 \section{Commentary on Requirements Specification}
 \todo{Commentary on Requirements Specification. Discuss the specification, which is a separate document}
