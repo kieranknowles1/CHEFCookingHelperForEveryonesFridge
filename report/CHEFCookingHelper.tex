@@ -77,18 +77,7 @@
 }
 \usepackage{todo}
 %TC:macro \todoinline [ignore]
-\newcommand{\todoinline}[1]{
-    % This is only a temporary addition, so don't be fussy with spacing
-    \begin{sloppypar}
-        \colorlet{todo old}{.}
-        \color{red}
-        % Use smaller font to stand out on a monochrome printout
-        \footnotesize
-        #1
-        \color{todo old}
-        \todo{See inline comment}
-    \end{sloppypar}
-}
+\newcommand{\todoinline}[1]{\todo{#1}}
 
 \usepackage{hyperref}
 
