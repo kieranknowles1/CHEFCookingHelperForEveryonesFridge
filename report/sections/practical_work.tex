@@ -181,7 +181,6 @@ matrix maths functions.
 This could be accelerated using a hardware-accelerated build of TensorFlow, which was not done due to the difficulty of installing
 it on Windows. Given that machine learning performance was only a concern during setup, this was deemed a low-priority
 issue and was not resolved.
-\todo{Update this and add benchmark for after hardware accel and fix. Want to run the initial benchmark on my main PC}
 
 \section{Frontend Implementation}
 
@@ -398,24 +397,6 @@ Section~\ref{sec:search_complexity}.
 
 \section{Results}
 
-\todo{This should be in the methodology section as it discusses preprocessing}
-The dataset used contains a number of meaningless and nonsensical recipes (see
-figure~\ref{fig:bad_recipe_entry}), which were imported by the \chef{} system during setup.
-A possible reason for these being included in RecipeNLG is that some
-data sources scraped for it allow for user-submitted recipes, this contributes to
-an unclean and noisy dataset.~\cite{kicherer_what_2018}
-
-\begin{figure}[p]
-    \centering
-    \caption{\label{fig:bad_recipe_entry}A nonsensical recipe that was included in the dataset.}
-    \includegraphics[scale=0.75]{figures/bad_recipe_entry.png}
-\end{figure}
-
-A possible solution for this issue would have been to further pre-process the data beyond what is
-discussed in Section~\ref{sec:data_pre_process} to remove or correct noisy entries that would otherwise
-harm the quality of the system.~\cite{garcia_big_2016} This was not considered a priority due to time
-constraints and the fact that the noise had minimal impact on the system's results.
-
 \subsection{Similar Recipes}
 
 The recipe similarity algorithm was found to be fairly effective at suggesting related items.
@@ -474,9 +455,9 @@ table~\ref{tab:similar_apple_crumble}. This issue is part of the reason that
 Searching of recipes is implemented nearly identically to the similar recipe comparison, only differing in that
 it compares the user's query rather than the selected recipe's name.
 
-An area that was not accounted for was that Universal Sentence Encoder is case-sensitive.~\todo{source}
-Because of this, searching for \enquote*{pasta} would yield different results to searching \enquote*{Pasta} as
-shown in figure~\ref{fig:search_case_sensitive}
+An area that was not accounted for was that JavaScript implementation of Universal Sentence Encoder is case-sensitive, unlike
+the original paper which lowercased input strings.~\cite{cer_universal_2018} Because of this, searching for, example, \enquote*{pasta}
+would yield different results to searching \enquote*{Pasta} as shown in figure~\ref{fig:search_case_sensitive}
 
 \begin{figure}[p]
     \centering

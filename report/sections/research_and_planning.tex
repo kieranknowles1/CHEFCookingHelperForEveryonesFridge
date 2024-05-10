@@ -439,7 +439,6 @@ example of some issues that TypeScript can catch pre-emptively that JavaScript c
 % \todo{Specify why Node was chosen over other languages. Positives and negatives of each.}
 
 \subsection{The Dataset (FR\arabic{sourcesid}, FR\arabic{flexibleid}, FR\arabic{trackamountsid})}\label{sec:data_pre_process}
-\todo{Why is a dataset needed?}
 
 It was decided to use a pre-existing dataset for the app in order to save time by removing the need to manually enter recipes
 or create a web scraper to gather them, and is both a legal and ethical grey area.~\cite{murray_state_university_legality_2020}
@@ -456,8 +455,7 @@ each with an ingredient list, a list of directions, and its source URL. This dat
 fulfill the requirements of the app and is available freely for research and educational purposes.
 
 If the app proved to be successful, a different or custom dataset could be used as the app is designed
-to be flexible in this regard, as the setup script is the only component to interact with the dataset.
-\todo{Requirement number}
+to be flexible in this regard, as the setup script is the only component to interact with the dataset. (FR\arabic{flexibleid})
 
 See table~\ref{tab:recipenlg_row_format} for the information that is included with each recipe and that is imported into
 the app's database during setup. The schema script for the database is located at \texttt{./app/backend/data/schema.sql}
@@ -505,12 +503,26 @@ in the project's Git repository and is not included in this report due to its le
 Many existing papers in the area do not pre-process their recipe data. Among those that do, the most
 common methods are text cleaning and exclusion, with duplicate removal being a rare step to undertake.~\cite{bondevik_systematic_2024}
 
-The duplicate removal step was the only pre-processing method used in \chef{} as it evaluates similarity
-based on the recipe name (see Section~\ref{sec:recipe_similarity}). Therefore, two recipes with the same
-name would be considered identical. It was decided therefore to only include recipes with any given name
-once, disregarding any with a name that was seen before during import.
+Duplicate removal was deemed the only pre-processing necessary for the \chef{} app due to similarity being
+based on the recipe name (see Section~\ref{sec:recipe_similarity}). Therefore, any number of recipes with the same
+name would be considered identical. Instead, the import script discards any recipe with a name that has been seen before.
 
-\todo{Dataset}
+The dataset used contains a number of meaningless and nonsensical recipes (see
+figure~\ref{fig:bad_recipe_entry}), which were imported by the \chef{} system during setup.
+A possible reason for these being included in RecipeNLG is that some
+data sources scraped for it allow for user-submitted recipes, this contributes to
+an unclean and noisy dataset.~\cite{kicherer_what_2018}
+
+\begin{figure}[p]
+    \centering
+    \caption{\label{fig:bad_recipe_entry}A nonsensical recipe that was included in the dataset.}
+    \includegraphics[scale=0.75]{figures/bad_recipe_entry.png}
+\end{figure}
+
+A possible solution for this issue would have been to further pre-process the data beyond what is
+discussed in Section~\ref{sec:data_pre_process} to remove or correct noisy entries that would otherwise
+harm the quality of the system.~\cite{garcia_big_2016} This was not considered a priority due to time
+constraints and the fact that the noise had minimal impact on the system's results.
 
 \subsection{Recipe Similarity Algorithms (FR\arabic{findsimilarid})}\label{sec:recipe_similarity}
 \todo{Recipe Similarity Evaluation}
