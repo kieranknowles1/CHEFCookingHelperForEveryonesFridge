@@ -411,13 +411,19 @@ easier to implement).~\cite{ghimire_comparative_2020} Additionally, Python is co
 industry standard for machine learning tasks. However, it is considered to be a slow language\cite{srinath_pythonfastest_2017}
 which, coupled with a lack of personal experience beyond simple scripts, made it an unattractive choice.
 
-\todo{Laravel}
-
-Laravel is a PHP web framework
-
-\todo{ASP.NET}
+Laravel is a PHP web framework that functions similarly to Express, with routes being defined as a series of
+middleware functions called when a request is made. User-facing pages are built using the Blade templating engine
+which combines HTML with PHP in a neater syntax than standard PHP.~\cite{nguyen_building_2015,he_design_2015}
+However, there were concerns about the suitability of PHP for machine learning tasks which would be needed for
+\hyperref[req:similar_recipes]{FR\arabic{findsimilarid}}.
 
 ASP.NET is a web framework based on the DotNet platform, which is primarily used with the C\# language.
+Similar to Django, it supports templated views in a syntax that combines HTML with C\# code. The C\# language
+itself uses a very similar syntax to Java and supports features such as nullable types and pattern matching
+which can help to prevent bugs.~\cite{gao_type_2017} An external library, TorchSharp, can be used to run
+PyTorch models in C\# which could serve as the backend for machine learning integration. However, despite
+a familiarity with C\# from previous projects, the lack of experience with ASP.NET made it a less attractive
+choice.
 
 React is a JavaScript-based frontend library that is used to build user interfaces with a component-based,
 HTML-like syntax. It features an event-driven architecture where components only update when their state changes,
@@ -435,8 +441,6 @@ JavaScript to add static type checking to the system. This can prevent many bugs
 otherwise not be detected until later, especially with the checks for \texttt{null} and \texttt{undefined} enabled.~\cite{gao_type_2017}
 For this reason, TypeScript was the language of choice for both React and Node. See Figure \ref{fig:type_check} for an
 example of some issues that TypeScript can catch pre-emptively that JavaScript cannot.
-
-% \todo{Specify why Node was chosen over other languages. Positives and negatives of each.}
 
 \subsection{The Dataset (FR\arabic{sourcesid}, FR\arabic{flexibleid}, FR\arabic{trackamountsid})}\label{sec:data_pre_process}
 
