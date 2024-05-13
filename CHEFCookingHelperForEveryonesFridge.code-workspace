@@ -13,6 +13,12 @@
 
 		"todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.)|%)\\s*($TAGS)|(\\\\todo(inline)?\\{)",
 
+		"todo-tree.filtering.excludeGlobs": [
+			"**/node_modules/*/**",
+			// This has been feature locked
+			"**/app/*/**",
+		],
+
 		"editor.tabSize": 2,
 	},
 	"extensions": {

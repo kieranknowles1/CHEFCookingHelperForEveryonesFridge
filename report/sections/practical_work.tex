@@ -443,7 +443,9 @@ table~\ref{tab:similar_apple_crumble}. This issue is part of the reason that
 \todo{Recipe search, based on same model as similar}
 
 Searching of recipes is implemented nearly identically to the similar recipe comparison, only differing in that
-it compares the user's query rather than the selected recipe's name.
+it compares the user's query rather than the selected recipe's name. By keeping the two functions similar, greater
+code reuse is achieved, and testing/debugging is simplified as the endpoint accepts any string as a query, rather
+than one taking a recipe ID to compare with and the other a string for the search query.
 
 An area that was not accounted for was that JavaScript implementation of Universal Sentence Encoder is case-sensitive, unlike
 the original paper which lowercased input strings.~\cite{cer_universal_2018} Because of this, searching for, example, \enquote*{pasta}
