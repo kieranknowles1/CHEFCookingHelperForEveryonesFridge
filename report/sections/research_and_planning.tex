@@ -49,9 +49,6 @@ by Wang et al.\ would be needed.
 \subsection{Gaps in Existing Literature}
 \todo{Gaps in existing literature}
 
-\subsection{Recipe Datasets}
-\todo{Recipe Datasets}
-
 \subsection{The Research Question}
 \todo{The Research Question. This is covering what the app is doing and how the goal is a robust app that does the job.}
 
@@ -530,94 +527,17 @@ constraints and the fact that the noise had minimal impact on the system's resul
 
 \subsection{Recipe Similarity Algorithms (FR\arabic{findsimilarid})}\label{sec:recipe_similarity}
 \todo{Recipe Similarity Evaluation}
-The similarity of recipes can be evaluated using a sentence embedding model \todo{Source}.
 
-For the \chef{} app, the pre-trained Universal Sentence Encoder~\cite{cer_universal_2018} was decided upon.
-This can run in a Node.js environment via TensorFlow.js.
+One method of evaluating the similarity of recipes is to compare their names which is considered to
+give similar results to human judgement.~\cite{trattner_learning_2020,starke_serving_2021} This method
+combined with a sentence embedding model was selected for the \chef{} app.
 
-The cosine similarity metric, as used in the original USE paper, can be used to evaluate the similarity of
-embeddings as a score normalized between 0 and 1. This metric provides higher precision and
-recall than other metrics which make it an effective measure for ranked retrieval from
-queries.~\cite{ihajeer_comparison_2012}
-\todo{https://ieeexplore.ieee.org/abstract/document/7032612}
+To generate embeddings, the pre-trained Universal Sentence Encoder~\cite{cer_universal_2018} was used.
+This model can run in a Node.js environment via TensorFlow.js, and returns a 512-dimensional vector
+for each input sentence that can then be compared using cosine similarity as used in the original
+USE paper. This metric returns a normalized score between 0 and 1 for each pair of embeddings, with
+higher scores indicating greater similarity. Overall, the metric provides higher precision and recall
+than other metrics, making it an effective measure for ranked retrieval from queries.~\cite{ihajeer_comparison_2012}
 
 \section{Commentary on Requirements Specification}
 \todo{Commentary on Requirements Specification. Discuss the specification, which is a separate document}
-
-\todoinline{
-    Research and Planning
-    The research and planning section may consist of several chapters. The exact number will depend upon the nature of the work you are undertaking.
-    Typically, this part of the report should provide the reader with information they will need to know to appreciate and understand the work you have done in
-    the rest of the project. You should assume a computer-literate reader but not a specialist in your particular topic.
-    The research and planning follow from the background given in the introduction. The marking scheme asks for the following five areas to be covered:
-    •	Clear identification and analysis of the problem to be looked at, identifying the key technical or other problems to be solved. Necessary background material
-    that goes beyond the scope of the introduction may be included.
-    •	A critical review of literature related to the topic; this will normally address some combination of the underlying principles of the problem area and
-    possible approaches to solving the problem. The relevance of these ideas to the project should be clear.
-    •	Discussion of approaches appropriate for the solution of the problem.
-    •	A discussion and justification of the product requirements if a product will be built.
-    •	Explanation and justification of the tools and techniques to be used in the project work.
-
-    Note that while all these elements are suggested, they do not necessarily map onto five separate chapters of your report. For example, a discussion of approaches to
-    solving the problem may fit naturally after your literature review. “Tools and techniques” here refer to what you use to build the product or conduct
-    the investigation, while “approaches” is used to include higher-level issues such as an overall strategy or architecture, the choice of implementing one algorithm rather
-    than another to carry out a task, a general type of solution, etc. You should arrange the material in chapters in whatever way that best suits your project. Some projects
-    will not even require all five areas. Ensure that you include everything necessary for your project.
-
-    Your research and planning should include a discussion of the wider issues, and critically examine the methods that might be used in solving the problem and any constraints
-    that apply. Beware of presenting a shallow treatment of the subject which might be obtained from standard texts. You are expected to support your argument by exploring
-    academic literature which is seminal and up-to-date.
-
-    The background and problem description should describe the actual problem you are looking at and set it in context. You should tell the reader about the computing problems
-    to be investigated, the product to be built, etc., as relevant, building on the brief overview given in the introduction. Bring out features of the problem you would not
-    expect the reader to know about. Do not state the obvious.
-
-    The literature review will be a very important component of the research. Your literature review may discuss the problem that you are trying to solve, the question that
-    you are trying to answer, possible solutions, methods of investigation, etc., as appropriate to your needs. You need to find out the state of the art --- what others have
-    done in this area, what solutions have been proposed, what findings have been achieved, what products have been created to tackle the same problem, and what
-    tools/techniques/approaches have been proven to be useful. The purpose is to help you analyse the problem and its context, learn from existing related work, and
-    propose appropriate solutions for your project. You need to look for important concepts and principles, possible techniques, methods, tools, structures, etc that
-    you could use in your project.
-    Note that the marking scheme says that a \enquote*{critical review} is required. You should not simply be relaying information or paraphrasing the sources that you have found, but
-    identifying principles, structuring ideas, discussing the relevance to your project, and making evaluative comments about what you have found. It is useful to end the
-    literature review by summarising the key ideas that it has contributed to the project.
-
-    Another pitfall to avoid is attempting to write about too many areas. You may find that there is a great deal of relevant literature and many subjects to review. It is
-    better to aim for depth in the areas that are necessary and relevant to your project. An opposite example is the review where many areas are tackled but nothing
-    of significance is said about any of them, and perhaps only one source (or no sources!) is cited for each. In this case, assuming that the project topic is suitable, the
-    student would have been better advised to take a narrower focus.
-
-    The length of a literature review should be guided by the needs of the specific project, but they are typically 2500--3000 words. You should use respectable academic sources,
-    such as refereed journals conferences, or other reliable and authoritative sources of information.
-
-    Once you have described your problem and put it into context by carrying out the literature review, you are in a position to identify and justify the appropriate approach
-    to take to solve the problem. You will need to explain your approach at an overview level and give your reasons for choosing this approach. We are looking for a
-    high-level discussion here. You will go into the details of exactly what you did (e.g., how you built the product, set up experiments, chose your participants, ran your
-    tests, etc.) in the practical work chapters.
-
-    If your practical work is to investigate a research question/hypothesis, you should discuss the possible strategies for conducting research or
-    investigations in your subject area. This could be quite different for projects in different subject areas, for example, forensics, networking or HCI.\@ You may need to
-    consider research methods --- for example, are you using one of the many varieties of experimental design? are you carrying out your study in lab conditions or the
-    field? will you be taking measurements of the performance of real equipment, or using a computer simulation? You should review the possible alternative approaches, and
-    explain why your chosen strategy was preferable to others, or was the only possibility.
-
-    If you plan to build a product, you need to identify the requirements for the product and produce its specifications. The actual specification of requirements is part
-    of your product and is marked under the product component. The research and planning chapters include your discussion and justification of those requirements. Reasons
-    for choosing particular requirements could relate to user needs, constraints on project scope, the findings of your literature review, etc., --- whatever is appropriate
-    to your particular project. You should discuss the methods you used to establish the product requirements, e.g., requirements elicitation and modelling, interviews,
-    and examination of existing products. It is appropriate to comment on significant findings that affect the decisions and to include any artefacts produced and the outputs
-    of your investigations in the product documentation. It is expected that your requirements specification covers both functional and non-functional requirements. It is
-    expected that your requirements specification covers both functional and non-functional requirements.
-
-    You must also identify and justify the methods, tools, and techniques that you will use to conduct your investigation and/or build your product. Again, the decisions
-    should be based on a literature review and/or examination of related work. You should justify that the chosen tools and methods are appropriate for solving the problem
-    and meeting the requirements, and explain the deliverables that you are going to produce.
-    You may find that you now have several possible approaches and technologies that could be used to solve the problem. If this is the case, you should provide a short
-    analysis of the possibilities justifying your selected route if the factors influencing your choices are worth discussing. There is no point in going through a spurious
-    decision process if there is no real decision to be made. Many students choose a programming language database or other software tool because they are familiar with it.
-    As long as the tool is suitable, your familiarity with it is a sufficient reason for using that technology, and it is sufficient to indicate briefly why it is appropriate.
-    If your project requires the use of some very specialised software or programming language, it may be useful to describe its main features as well as justify its use,
-    and if the focus of your project is exploring a particular tool or tool features, you will, of course, need to discuss the features in some depth. It is also suggested
-    to briefly discuss the alternatives if the chosen tools/techniques do not work as expected. For some projects, there will not be any realistic alternatives to the tools
-    and techniques that you are using. This is not a problem as long as you can justify it.
-}
