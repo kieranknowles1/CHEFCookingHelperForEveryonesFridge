@@ -28,41 +28,31 @@
     \caption{\label{fig:architecture}Architecture of the App}
 \end{figure}
 
-\subsection{Backend Design}
-\todo{Backend design}
-
-The backend of the \chef{} app was the first component to be designed in order to give the frontend a data source to work with.
-
 \subsection{Frontend Design}
-\todo{Frontend design}
-Design of the \chef{} app began with creating interface prototypes (see figures~\ref{fig:proto_home},~\ref{fig:proto_find_recipes}, and~\ref{fig:proto_account})
+Design of the \chef{} app's frontend began with creating interface prototypes (see figures~\ref{fig:proto_fridge},~\ref{fig:proto_find_recipes},
+and~\ref{fig:proto_account}). These were created according to a minimal design philosophy as this can result in \enquote*{[making] the main
+body of the interface more clear visually.}~\cite{dong_minimalist_2019}
 
-\todoinline{
-    Good products, whether software or hardware, must be designed. It is not professional to hack out a solution! You must describe and provide a rationale for that design.
-    The artefacts produced are models (and perhaps prototypes) that form part of your product. In the report you tell the reader about your design and discuss the design
-    decisions. Throughout the design section you should justify your choices. Discuss the implications of making different design choices, and the reasons for the design
-    that you have selected.
+The fridge page (Figure~\ref{fig:proto_fridge}) displays a list of all ingredients the user has available, along with modals to add new ones
+through manual search or barcode scanning. This is designed to serve as a home page for the app, and therefore includes most of the frequently
+needed functionality, such as the aforementioned ingredient management and fridge selection, as well as a link to the find recipes page.
 
-    The design chapters should give a top-level view of how your product meets its requirements. For a software product, a good starting point is to describe the architecture
-    of the software. (If your product is not software, what corresponds to the software architecture?)  For example, suppose you are going to produce a computer game that
-    could be played across the web. This will involve some software concerned with the communications across the network, some software concerned with the specific game and
-    some with aspects that could be common to many games. This suggests an architecture consisting of three subsystems. You may feel there are other possible designs. If so,
-    discuss each and then tell the reader which you decided to follow, and why.
+The find recipes page (Figure~\ref{fig:proto_find_recipes}) displays a list of all recipes that the user can make with their current ingredients,
+along with options to filter results by various criteria. A search box is included for more specific queries. The names of resulting recipes are
+displayed along with information relating to filters such as the number of missing ingredients.
 
-    Once you have selected a top-level design you can start to look at the details of each product component. You will produce design models as required by the development
-    approach that you are following, and you will need to discuss your design decisions. For example, if you are using an object-oriented approach, you will probably describe
-    and justify the important classes in your system. Design patterns are an area of increasing popularity and usefulness. Investigate making use of some. Explain which you
-    have used and why.
+The account page(Figure~\ref{fig:proto_account}) lets the user configure their dietary restrictions and ingredient preferences, as well as
+viewing a list of recipes they have made in the past. Due to the small number of items, all are shown at once.
 
-    Make careful use of figures and diagrams when describing the design. Any diagrams are there to help the reader understand what you have done. They must form a minor
-    part of the chapter. The full design documentation will be marked under the product marking part of the module.
-    Another aspect of the design, which you may wish to write about, is the user interface. There is no point in simply relating HCI theory here, and merely describing
-    or giving pictures of your screen designs is also inadequate: what the reader wants to know is how you have applied the theory. Justify your design choices in terms of
-    usability principles, and illustrate them with a few carefully selected screen dumps.
+\subsection{Backend Design}
 
-    You may wish to discuss the design process that you followed. Theoretical descriptions of design processes are unlikely to be interesting here. How you applied the
-    process and how it affected your product, might be.
-}
+Aside from a few test endpoints used to get familiar with the Express framework, the backend of the \chef{} app was designed after the frontend,
+as this would avoid unnecessary work by knowing the requirements before implementation began.
+
+Each endpoint was declared in the OpenAPI format, from which TypeScript declarations were generated and used to check endpoint return types at compile time.
+By using a declarative format, any breaking changes to the API would reflect in compiler errors which would have to be resolved before building, but would
+only be considered warnings in debug mode to allow iterating despite incomplete or outdated endpoints. See Figure~\ref{fig:search_params} for an example of
+an OpenAPI declaration and Figure~\ref{fig:api_docs} for the documentation generated from it.
 
 \section{Implementation}
 
