@@ -65,7 +65,7 @@ export default function SimilarRecipes (props: SimilarRecipeProps): React.JSX.El
       <LoadingSpinner status={status} />
       <RecipeList recipes={'limit' in props
         ? recipes
-        : props.indexes.map(index => recipes[index])
+        : props.indexes.map(index => recipes[index]).filter(i => i !== undefined)
         } status={status} />
     </div>
   )
