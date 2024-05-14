@@ -144,6 +144,8 @@
       \newinst[1]{api}{:API}
 
       \begin{call}{user}{Search}{web}{}
+        \begin{call}{web}{Select Meal Type}{user}{}
+        \end{call}
         \begin{call}{web}{Select Filters}{user}{}
         \end{call}
         \begin{call}{web}{Fetch Recipes}{api}{}

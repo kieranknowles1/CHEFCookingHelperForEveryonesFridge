@@ -259,7 +259,7 @@ See Table~\ref{tab:test_types} for a summary of the testing levels and how they 
 
 \begin{table}[hp]
     \centering
-    \caption{\label{tab:test_types}The four levels of testing and how they were implemented.}
+    \caption{\label{tab:test_types}The four levels of testing and how they were implemented as defined by~\cite{luo_software_2001}}
     \begin{tabular}{cll}\toprule
         \textbf{Type} & \textbf{Static Analysis} & \textbf{Dynamic Analysis} \\\midrule
         \textbf{Unit} & Type Checking & Mocha.js \\
@@ -440,7 +440,6 @@ table~\ref{tab:similar_apple_crumble}. This issue is part of the reason that
 \end{table}
 
 \subsubsection{Recipe Search}
-\todo{Recipe search, based on same model as similar}
 
 Searching of recipes is implemented nearly identically to the similar recipe comparison, only differing in that
 it compares the user's query rather than the selected recipe's name. By keeping the two functions similar, greater
@@ -458,24 +457,35 @@ would yield different results to searching \enquote*{Pasta} as shown in figure~\
     \includegraphics[width=0.45\textwidth]{figures/search_upper.png}
 \end{figure}
 
-\subsection{Meal Type Prediction}
-\todo{Meal type prediction}
+\clearpage\subsection{Meal Type Prediction}
+% Put this on a new page the previous section has some large figures. This puts the new section after the previous figures page.
+Meal types are predicted based on the name of the recipe compared to one of five meal type names: \enquote*{Breakfast},
+\enquote*{Lunch}, \enquote*{Dinner}, \enquote*{Snack}, and \enquote*{Dessert}. The meal type with the highest similarity
+is chosen as the predicted meal type.
 
-\todoinline{
-    The final part of is the presentation of your results. You may have quantitative or qualitative data, or even both. The best way of presenting your results will be determined
-    by the type of data and the nature of your investigation but will usually involve summarising the data in some way.  Data analysis is too large and varied a topic to discuss
-    in detail here, and how you do it will be very dependent on the project that you are doing. You are likely to have found out about appropriate methods as part of your
-    project. In some cases, it may be appropriate to present calculations, e.g.\ to demonstrate how performance figures are derived. If you are doing statistical analyses,
-    it will be helpful include levels of significance with the results where applicable. The presentation of qualitative data may involve summarising it, identifying significant
-    factors, including representative examples, discussing interesting cases or critical incidents in depth, the use of quotations and illustrations, or identifying significant
-    categories of content from textual data and looking at how often they occur.  For example, if you had been interviewing people about their use of information, you might
-    identify categories related to the type of information, the method of access, etc.
-    It may be helpful to use diagrams, charts or tables to present the work or the results. These should come with enough explanation for the reader to make sense of what
-    you are showing.
+This method was found to be fairly effective at predicting meal types, with the majority of recipes having sensible
+classifications such as \enquote*{Pancakes} being classified as \enquote*{Breakfast}, \enquote*{Chicken and Noodles} being
+classified as \enquote*{Dinner}, and \enquote*{Ice Cream} being classified as \enquote*{Dessert}.
 
-    In general, raw data in the body of your report will be limited to small elements or examples that that you are discussing. Further data can go in your appendices or
-    (if bulky) on your OneDrive folder, and you should tell the reader where to look for it. Identifiable personal data should never be included in any part of your submission.
-    If you need to refer to individuals, you can mention \enquote*{Participant A} in your study, or in organisational settings it may be appropriate to refer to someone by their job title.
-}
+However, there were a number of exceptions to this such as \enquote*{French Fries} being classified as \enquote*{Breakfast}.
+A limitation of only including the name is revealed by \enquote*{Pizza Cookies} being classified as \enquote*{Lunch}
+while reading the directions gives a very different impression as they include chocolate chips as a topping which would
+suggest a dessert. This is an instance where substructure analysis~\cite{wang_substructure_2008} may have helped.
 
-\todo{Results}
+Finally, the distribution of meal was far from even, with a disproportionate number of recipes being classified as
+desert even if another meal type would be more appropriate, such as with \enquote*{Hamburger Round-Up} being considered
+a dessert. This distribution is shown in Table~\ref{tab:meal_type_distribution}. Overall, the meal type prediction
+is a weak point of the app. Therefore, FR\arabic{mealtypeid} was only considered to be partially implemented.
+
+\begin{table}[h!]
+  \centering
+  \caption{\label{tab:meal_type_distribution}The distribution of meal types in the sample of 1949 recipes.}
+  \begin{tabular}{cc}\toprule
+    \textbf{Meal Type} & \textbf{Count} \\\midrule
+    Breakfast&428\\
+    Lunch&16\\
+    Dinner&137\\
+    Snack&227\\
+    Dessert&1141\\
+  \end{tabular}
+\end{table}
