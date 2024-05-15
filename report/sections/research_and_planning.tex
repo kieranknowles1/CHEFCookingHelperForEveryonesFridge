@@ -1,6 +1,30 @@
 \section{Literature Review}
 
+\subsection{History of Food Waste}
+
+\enquote*{Food waste is especially visible when its prevention is being counselled.}~\cite{evans_brief_2012}
+Cookery books dating back to the mid-19th century reference the need to properly manage food once brought
+into the house.~\cite{beeton_mrs_1907} Such notions continued until the 1950s where significant shifts
+occurred following the end of post World War II rationing attributed to the success of policies intended
+to restore the production of farmers and leading to a global food surplus.~\cite{evans_brief_2012}
+
+This prolonged period of surplus is believed to have led to an ideology of \enquote*{technological optimism},
+where it was believed that technology would solve all problems including food waste~\cite{krier_-easy_1985} and
+therefore avoiding waste was no longer a concern.
+
+\subsection{Current State of Food Waste and its Impacts}
+\todo{Environmental, social, and economic impacts of food waste}
+
+Following the 2008 financial crisis, food prices have continued to increase leading to elevated consumer concern
+as cheap food could no longer be taken for granted.~\cite{evans_brief_2012}
+
+Presently, much of the food waste generated is disposed of in landfills~\cite{iacovidou_food_2012}, which produces
+methane, a greenhouse gas 28 times as potent as carbon dioxide,~\cite{marmier_methane_2020} and results in higher
+environmental impacts than other methods of disposal even if the majority of the methane is captured and utilized,
+being the only disposal option that resuts in a net increase of emissions compared to consumption.~\cite{moult_greenhouse_2018}
+
 \subsection{Prior Work in Subject Area}
+\subsubsection{Food Waste}
 Stefan et al.\ found that \enquote*{the intention not to waste food does not have a
 significant effect on reported food waste}. Instead, planning before shopping to
 check what is already available was found to lead to a reduction in food waste.~\cite{stefan_avoiding_2013}
@@ -10,20 +34,14 @@ that tracks how much of each ingredient is available was identified. This would 
 users to know plan meals based on what they already have, reducing the need to buy more ingredients
 and thus reducing food waste.
 
+\subsubsection{Meal Planning}
 \label{sec:overload_intro}While providing a user with variety of choices can improve their satisfaction
 with the overall system, care must be taken to avoid information overload.
 Bollen et al.\ found that offering a more limited set items predicted to be among a user's
 highest rated, followed by a larger set of more varied items with lower rankings, led to
 higher satisfaction on average.~\cite{bollen_understanding_2010}
 
-Currently, the app shows all suggestions at once, but with further development, this could be
-reduced to a more limited subset of the suggestions, with the option to view more if desired and is
-discussed in further detail in Section~\ref{sec:choice_overload}.
-
-The motivation for the \chef{} app is two-fold: to reduce the environmental impact of food waste and to
-save costs for households by allowing them to collectively track what ingredients are available to them.
-
-\subsubsection{Techniques Common to Food Reccomendation Systems}
+\subsubsection{Techniques Common to Food Reccomender Systems}
 There exist a broad range of techniques used by food recommendation systems, using both machine learning
 and statistical models, the most popular method in existing studies being machine learning based on the
 contents of recipes. Most of which were not personalized to the individual user.~\cite{bondevik_systematic_2024}
@@ -55,7 +73,11 @@ by Wang et al.\ would be needed.
 
 \subsection{The Research Questions}
 
-The goals of the \chef{} app is to provide a robust system that allows for users to track what ingredients they have in a
+The motivation for the \chef{} app is two-fold: to reduce the environmental impact of food waste and to
+save costs for households by allowing them to collectively track what ingredients are available to them.
+This shall be achieved through implementing a system meeting the following goals:
+
+The goals of the \chef{} app are to provide a robust system that allows for users to track what ingredients they have in a
 convenient manner, and to suggest recipes based on these ingredients, user preferences, dietary requirements, and to find
 similar recipes that meet these criteria.
 
@@ -182,7 +204,7 @@ of recipes, however, these cannot be kept private to just one user.
 A frequent complaint about MyFridgeFood was that it suggested
 recipes that users lacked ingredients for. See figure~\ref{rev:review_missing_ingredients} for an example.
 
-Another user found that MyFridgeFood gave them suggestions that were too similar to each
+A different user found that MyFridgeFood gave them suggestions that were too similar to each
 other. See figure~\ref{rev:review_lack_variety} for the review.
 
 \section{Product Requirements}
@@ -229,10 +251,17 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     {Must-have}
     {Yes}
 
-    \requirement{\textbf{Recipe Suggestion.} The system \textbf{must} suggest recipes based on the user's available ingredients}
+    \requirement{\label{req:suggestion}\newcounter{suggestionid}\setcounter{suggestionid}{\thefunctionalreqcounter}%
+        \textbf{Recipe Suggestion.} The system \textbf{must} suggest recipes based on the user's available ingredients}
     {Competitor Analysis}
     {Must-have}
     {Yes}
+
+    \requirement{\label{req:overload}\newcounter{overloadid}\setcounter{overloadid}{\thefunctionalreqcounter}%
+        \textbf{Prevent Choice Overload.} The system \textbf{could} include measures to prevent choice overload.}
+    {Literature review}
+    {Could-have}
+    {Experimental}
 
     \requirement{\textbf{Avoid recipes with missing ingredients.} The system \textbf{must} not suggest recipes that the user
     is missing ingredients for unless explicitly requested.}
@@ -541,6 +570,18 @@ A possible solution for this issue would have been to further pre-process the da
 discussed in Section~\ref{sec:data_pre_process} to remove or correct noisy entries that would otherwise
 harm the quality of the system.~\cite{garcia_big_2016} This was not considered a priority due to time
 constraints and the fact that the noise had minimal impact on the system's results.
+
+\subsection{Recipe Suggestion (FR\arabic{suggestionid}, FR\arabic{overloadid}, FR\arabic{trackamountsid})}
+The app shall suggest recipes based on the user's available ingredients, as was a key feature in
+all the analysed competitors. In addition, it shall track the amount of each ingredient the user has
+as this was a feature identified to be missing from the competitors, but potentially useful for the user.
+
+Section~\ref{sec:choice_overload} of the literature review identified the potential for choice overload,
+as well as a method to reduce it. This could be implemented in the \chef{} app to improve user satisfaction.
+
+Currently, the app shows all suggestions at once, but with further development, this could be
+reduced to a more limited subset of the suggestions, with the option to view more if desired and is
+discussed in further detail in Section~\ref{sec:choice_overload}.
 
 \subsection{Recipe Similarity Algorithms (FR\arabic{findsimilarid})}\label{sec:recipe_similarity}
 \todo{Recipe Similarity Evaluation}
