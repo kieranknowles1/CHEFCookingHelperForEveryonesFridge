@@ -194,13 +194,20 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     {Must-have}
     {Yes}
 
+    \requirement{\label{req:manual_add}\newcounter{manualaddid}\setcounter{manualaddid}{\thefunctionalreqcounter}%
+        \textbf{Manually add ingredients.} The system \textbf{must} allow users to manually add ingredients to their \virtualfridge}
+    {Competitor Analysis}
+    {Must-have}
+    {Yes}
+
     \requirement{\label{req:data_flexible}\newcounter{flexibleid}\setcounter{flexibleid}{\thefunctionalreqcounter}%
     \textbf{Flexible Data Sources.} The system \textbf{should} be flexible regarding the dataset it uses}
     {Dataset Selection}
     {Should-have}
     {Yes}
 
-    \requirement{\textbf{Scan barcodes.} The system \textbf{should} allow the user to scan the barcodes of ingredients to add
+    \requirement{\label{req:scan_barcode}\newcounter{scanbarcodeid}\setcounter{scanbarcodeid}{\thefunctionalreqcounter}%
+        \textbf{Scan barcodes.} The system \textbf{should} allow the user to scan the barcodes of ingredients to add
     them to their \virtualfridge}
     {Use Case Analysis}
     {Should-have}
@@ -212,17 +219,20 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     {Should-have}
     {Yes}
 
-    \requirement{\textbf{Use metric units.} All units \textbf{should} be displayed in metric by default.}
+    \requirement{\label{req:metric_units}\newcounter{metricunitsid}\setcounter{metricunitsid}{\thefunctionalreqcounter}%
+        \textbf{Use metric units.} All units \textbf{should} be displayed in metric by default.}
     {Competitor Analysis}
     {Should-have}
     {Yes}
 
-    \requirement{\textbf{Optionally use imperial units.} There \textbf{could} be an option to display imperial units instead of metric.}
+    \requirement{\label{req:imperial_units}\newcounter{imperialunitsid}\setcounter{imperialunitsid}{\thefunctionalreqcounter}%
+        \textbf{Optionally use imperial units.} There \textbf{could} be an option to display imperial units instead of metric.}
     {Competitor Analysis}
     {Could-have}
     {No}
 
-    \requirement{\textbf{Scan receipt.} The system \textbf{could} allow the user to scan a receipt from a store to add ingredients
+    \requirement{\label{req:scan_receipt}\newcounter{scanreceiptid}\setcounter{scanreceiptid}{\thefunctionalreqcounter}%
+        \textbf{Scan receipt.} The system \textbf{could} allow the user to scan a receipt from a store to add ingredients
     to their \virtualfridge}
     {Use Case Analysis}
     {Could-have}
@@ -313,53 +323,11 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
 Before designing the user interface, use case diagrams were created to show the flow of the system. These are included in Section \ref{sec:sequence_diagrams}
 of the appendix.
 
-\todoinline{
-    Summarize the requirements for the product to be built.
-
-    How will you/did you:
-    • Discover, specify, prioritise, justify them?
-    • Do they come from clients? Literature? Competitors? Your head? Somewhere else?
-    • Your requirements specification is counted as part of the Product
-    • The spec and the report chapter are not the same thing!
-    • A DISCUSSION AND JUSTIFICATION of the requirements is expected in the report
-
-    Functional requirements --- what the system does.
-    • Processing, inputs, outputs, data\ldots
-    • Non-functional requirements --- how it does it.
-    • Software quality: performance, throughput, availability etc.
-    • Usability \& user characteristics
-    • Environment --- physical, organisational etc.
-    • Required computing hardware, software tools etc
-
-    Use MoSCoW requirements, W stands for would like to have, but won't currently
-
-    Someone should be able to build the product based only on the list of requirements
-
-    One option for structuring your requirements document is to follow the IEEE template.
-
-    • ISO/IEC/IEEE 29148
-
-    http://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?punumber=6146377
-
-    • IEEE 830--1998 (older)
-
-    http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=720574
-
-    • You don't have to use this --- but
-        • it gives you a structure that you can adapt
-        • it can encompass various approaches such as use case modelling.
-        • Other templates available.
-}
-
 \section{Approach/Methodology}
 
 This study is primarily into the algorithm used to suggest recipes. For this reason,
 it was decided not to perform interviews or user testing. Instead, unit tests will
 be the primary testing method.
-
-\todo{Approach/Methodology}
-
-\todo{Should go into each of the requirements, justify them, and discuss how they will be implemented}
 
 \subsection{Choice of Language (FR\arabic{webappid})}\label{sec:language}
 
@@ -402,7 +370,7 @@ as to the type of data that is being passed around the system. Instead, TypeScri
 JavaScript to add static type checking to the system. This can prevent many bugs from being introduced that would
 otherwise not be detected until later, especially with the checks for \texttt{null} and \texttt{undefined} enabled.~\cite{gao_type_2017}
 For this reason, TypeScript was the language of choice for both React and Node. See Figure \ref{fig:type_check} for an
-example of some issues that TypeScript can catch pre-emptively that JavaScript cannot.
+example of some issues that TypeScript can catch pre-emptively while JavaScript cannot.
 
 \subsection{The Dataset (FR\arabic{sourcesid}, FR\arabic{flexibleid}, FR\arabic{trackamountsid})}\label{sec:data_pre_process}
 
@@ -479,7 +447,7 @@ A possible reason for these being included in RecipeNLG is that some
 data sources scraped for it allow for user-submitted recipes, this contributes to
 an unclean and noisy dataset.~\cite{kicherer_what_2018}
 
-\begin{figure}[p]
+\begin{figure}[h]
     \centering
     \caption{\label{fig:bad_recipe_entry}A nonsensical recipe that was included in the dataset.}
     \includegraphics[scale=0.75]{figures/bad_recipe_entry.png}
@@ -489,6 +457,23 @@ A possible solution for this issue would have been to further pre-process the da
 discussed in Section~\ref{sec:data_pre_process} to remove or correct noisy entries that would otherwise
 harm the quality of the system.~\cite{garcia_big_2016} This was not considered a priority due to time
 constraints and the fact that the noise had minimal impact on the system's results.
+
+\subsection{Use of the Metric System (FR\arabic{metricunitsid}, FR\arabic{imperialunitsid})}
+
+All the analysed competitors used the imperial system of measurement for their ingredients. However, this
+can lead to confusion especially for users outside the US as the majority of the world uses the metric system.~\cite{pomroy_metric_2008}
+
+For this reason, \chef{} shall use the metric system by default (FR\arabic{metricunitsid}). However, an option to
+instead use the imperial system could be included for users more comfortable with it (FR\arabic{imperialunitsid}).
+
+\subsection{Ingredient Entry (FR\arabic{manualaddid}, FR\arabic{scanbarcodeid}, FR\arabic{scanreceiptid})}
+
+Another core feature of all analysed competitors was the ability to manually add ingredients into the respective
+systems. This is a key feature for the \chef{} app and is essential for the system to function as intended.
+
+Possible extensions to this feature were identified as the ability to scan barcodes of ingredients (FR\arabic{scanbarcodeid})
+and to scan a receipt from a store (FR\arabic{scanreceiptid}). These features would serve as a more convenient way to add
+ingredients, especially if there are many to add at once and could be useful features for the \chef{} app.
 
 \subsection{Recipe Suggestion (FR\arabic{suggestionid}, FR\arabic{overloadid}, FR\arabic{trackamountsid})}
 The app shall suggest recipes based on the user's available ingredients, as was a key feature in
@@ -503,7 +488,6 @@ reduced to a more limited subset of the suggestions, with the option to view mor
 discussed in further detail in Section~\ref{sec:choice_overload}.
 
 \subsection{Recipe Similarity Algorithms (FR\arabic{findsimilarid})}\label{sec:recipe_similarity}
-\todo{Recipe Similarity Evaluation}
 
 Recipe similarity shall be evaluated using recipe names as discussed in Section~\ref{sec:recipe_name_suggestions}
 with embeddings generated by the pre-trained Universal Sentence Encoder.~\cite{cer_universal_2018} model.
@@ -512,6 +496,3 @@ for each input sentence that can then be compared using cosine similarity as use
 USE paper. This metric returns a normalized score between 0 and 1 for each pair of embeddings, with
 higher scores indicating greater similarity. Overall, the metric provides higher precision and recall
 than other metrics, making it an effective measure for ranked retrieval from queries.~\cite{ihajeer_comparison_2012}
-
-\section{Commentary on Requirements Specification}
-\todo{Commentary on Requirements Specification. Discuss the specification, which is a separate document}
