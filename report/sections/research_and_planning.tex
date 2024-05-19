@@ -152,17 +152,20 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     {Must-have}
     {Yes}
 
-    \requirement{\textbf{User registration.} The system \textbf{must} allow users to sign up and log in to the app.}
+    \requirement{\label{req:userreg}\newcounter{userregid}\setcounter{userregid}{\thefunctionalreqcounter}%
+        \textbf{User registration.} The system \textbf{must} allow users to sign up and log in to the app.}
     {Competitor Analysis}
     {Must-have}
     {Yes}
 
-    \requirement{\textbf{Share ingredient lists.} The system \textbf{must} allow for multiple users to share one \virtualfridge{}}
+    \requirement{\label{req:share}\newcounter{shareid}\setcounter{shareid}{\thefunctionalreqcounter}%
+        \textbf{Share ingredient lists.} The system \textbf{must} allow for multiple users to share one \virtualfridge{}}
     {Competitor Analysis}
     {Must-have}
     {Partially}
 
-    \requirement{\textbf{Select dietary requirements/preferences.} The system \textbf{must} \newline
+    \requirement{\label{req:dietary}\newcounter{dietaryid}\setcounter{dietaryid}{\thefunctionalreqcounter}%
+        \textbf{Select dietary requirements/preferences.} The system \textbf{must} \newline
         allow for users to select their dietary requirements and preferences, such as allergies or disliked ingredients.}
     {Competitor Analysis}
     {Must-have}
@@ -180,7 +183,8 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     {Could-have}
     {Experimental}
 
-    \requirement{\textbf{Avoid recipes with missing ingredients.} The system \textbf{must} not suggest recipes that the user
+    \requirement{\label{req:avoid_missing}\newcounter{avoid_missingid}\setcounter{avoid_missingid}{\thefunctionalreqcounter}%
+        \textbf{Avoid recipes with missing ingredients.} The system \textbf{must} not suggest recipes that the user
     is missing ingredients for unless explicitly requested.}
     {Competitor Analysis}
     {Must-have}
@@ -256,12 +260,14 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     {Should-have}
     {Partially}
 
-    \requirement{\textbf{Single sign on.} The system \textbf{won't currently} support single sign on.}
+    \requirement{\label{req:single}\newcounter{singleid}\setcounter{singleid}{\thefunctionalreqcounter}%
+        \textbf{Single sign on.} The system \textbf{won't currently} support single sign on.}
     {Competitor Analysis}
     {Won't-have}
     {No}
 
-    \requirement{\textbf{Add recipes.} The system \textbf{won't currently} allow for users to add their own recipes to the database.}
+    \requirement{\label{req:add_recipes}\newcounter{addrecipeid}\setcounter{addrecipeid}{\thefunctionalreqcounter}%
+        \textbf{Add recipes.} The system \textbf{won't currently} allow for users to add their own recipes to the database.}
     {Competitor Analysis}
     {Won't-have}
     {No}
@@ -316,12 +322,38 @@ other. See figure~\ref{rev:review_lack_variety} for the review.
     \bottomrule
 \end{longtable}
 
+\begin{longtable}{lcccc}
+    \caption{Features of Competitors and the \chef{} App}\label{tab:competitor_features}
+    \\\toprule
+    \textbf{Feature}&\textbf{SuperCook}&\textbf{MyFridgeFood}&\textbf{\chef{}}&\textbf{Requirement}\\\midrule
+
+    Web app&\dingcheck{}&\dingcheck{}&\dingcheck{}&FR\arabic{webappid}\\
+    User registration&\dingcheck{} (optional)&\dingcheck{} (optional)&\dingcheck{} (required)&FR\arabic{userregid}\\
+    Share ingredient lists&\dingcross{}&\dingcross{}&½&FR\arabic{shareid}\\
+    \makecell[l]{Dietary requirements/\\preferences}&\dingcross{}&\dingcross{}&\dingcheck{}&FR\arabic{dietaryid}\\
+    Recipe suggestion&\dingcheck{}&\dingcheck{}&\dingcheck{}&FR\arabic{suggestionid}\\
+    Prevent choice overload&\dingcross{}&\dingcross{}&\makecell{¼}&FR\arabic{overloadid}\\
+    \makecell[l]{Avoid recipes\\missing ingredients}&\dingcheck{} (optional)&\dingcross{}&\dingcheck{} (optional)&FR\arabic{avoid_missingid}\\
+    Include sources&\dingcheck{}&\dingcross{}&\dingcheck{}&FR\arabic{sourcesid}\\
+    Manually add ingredients&\dingcheck{}&\dingcheck{}&\dingcheck{}&FR\arabic{manualaddid}\\
+    Scan barcodes&\dingcross{}&\dingcross{}&\dingcheck{}&FR\arabic{scanbarcodeid}\\
+    Track ingredient amounts&\dingcross{}&\dingcross{}&\dingcheck{}&FR\arabic{trackamountsid}\\
+    Use metric units&\dingcross{}&\dingcross{}&\dingcheck{}&FR\arabic{metricunitsid}\\
+    Scan receipts&\dingcross{}&\dingcross{}&\dingcross{}&FR\arabic{scanreceiptid}\\
+    View similar recipes&\dingcheck{}&\dingcross{}&\dingcheck{}&FR\arabic{findsimilarid}\\
+    Avoid repeating recipes&\dingcross{}&\dingcross{}&\dingcross{}&FR\arabic{toosimilarid}\\
+    Single sign on&\dingcross{}&\dingcross{}&\dingcross{}&FR\arabic{singleid}\\
+    Add recipes&\dingcross{}&\dingcheck{}&\dingcross{}&FR\arabic{addrecipeid}\\
+    \bottomrule
+    \multicolumn{5}{l}{\footnotesize{Key: \dingcheck{} = Present, \dingcross{} = Not Present, ½ = Partially implemented, ¼ = Implementation Started}}
+\end{longtable}
+
 \subsection{Sequence Diagrams}
 
 Before designing the user interface, use case diagrams were created to show the flow of the system. These are included in Section \ref{sec:sequence_diagrams}
 of the appendix.
 
-\section{Approach/Methodology}
+\section{Approach/Methodology}\label{sec:approach_methodology}
 
 This study is primarily into the algorithm used to suggest recipes. For this reason,
 it was decided not to perform interviews or user testing. Instead, unit tests will
