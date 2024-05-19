@@ -17,12 +17,31 @@ needed functionality, such as the aforementioned ingredient management and fridg
 
 The find recipes page (Figure~\ref{fig:proto_find_recipes}) displays a list of all recipes that the user can make with their current ingredients,
 along with options to filter results by various criteria. A search box is included for more specific queries. The names of resulting recipes are
-displayed along with information relating to filters such as the number of missing ingredients.
+displayed along with information relating to filters such as the number of missing ingredients. The filter functionality is inspired by that seen
+in Supercook, and can be seen as a natural extension to it aimed at improving the user experience.
 
 The account page(Figure~\ref{fig:proto_account}) lets the user configure their dietary restrictions and ingredient preferences, as well as
 viewing a list of recipes they have made in the past. Due to the small number of items, all are shown at once.
 
-\subsection{Backend Design}
+\begin{figure}[ht]
+  \centering
+  \includesvg[height=0.89\textwidth,width=0.7\textheight,angle=90,pretex=\relscale{0.6}]{figures/InterfacePrototypes}
+  \caption{\label{fig:proto_fridge}The fridge page for \chef{}, allowing the user to add/remove ingredients and scan items.}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includesvg[height=0.9\textwidth,angle=90,pretex=\relscale{0.8}]{figures/FindRecipePage}
+  \caption{\label{fig:proto_find_recipes}The find recipes page, showing recipes that can be made by the user. }
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includesvg[height=0.9\textwidth,angle=90,pretex=\relscale{0.8}]{figures/AccountPage}
+  \caption{\label{fig:proto_account}The account page, allowing the user to change their preferences.}
+\end{figure}
+
+\clearpage\subsection{Backend Design}
 
 Aside from a few test endpoints used to get familiar with the Express framework, the backend of the \chef{} app was designed after the frontend,
 as this would avoid unnecessary work by knowing the requirements before implementation began.
@@ -37,11 +56,19 @@ an OpenAPI declaration and Figure~\ref{fig:api_docs} for the documentation gener
 The \chef{} app is implemented using a React frontend and an Express.js backend, both written in TypeScript.
 This language was chosen as it compiles into JavaScript that can run in a browser, allowing the same language to be used for both
 the front and back ends, while adding compile-time type checking similar to strongly typed languages such as Java.
+See Figure~\ref{fig:language_distribution} for the distribution of languages in the app's repository.
 
 It was decided to work on both the frontend and backend in parallel to allow for rapid iteration and to avoid wasting time by
 developing backend endpoints that would go unused by the frontend. The typical workflow was to implement an endpoint that
 the frontend required, perform some basic testing to make sure it returned the correct data, then link it to the frontend which
 would display it in a user-friendly way.
+
+\begin{figure}[h]
+  \centering
+  \caption{\label{fig:language_distribution}The distribution of languages in the app's repository. As reported by GitHub.}
+  \includegraphics{figures/Languages.png}\\
+  \footnotesize{Ignore TeX, as it is used for the report, and Juptyer, which was used for prototyping.}
+\end{figure}
 
 \section{Backend Implementation}
 
@@ -320,6 +347,13 @@ describe('ml/getEmbedding', function () {
     \end{minted}
 \end{figure}
 
+\subsubsection{Type Checks}
+Type checks were considered to be a limited form of integration testing for the reasons discussed in section~\ref{sec:language}.
+While TypeScript supports the \texttt{any} type, and type assertions which override the type checker for a specific statement,
+the use of these was disabled, along with using an \texttt{any} returned by an external library without checking it first via
+ESLint rules. This was done to minimize the potential for an incorrect type to escape the local function and cause a runtime error,
+which could be difficult to track down as TypeScript types do not exist at runtime.~\cite{dan_vanderkam_1_2019}
+
 \subsubsection{Regression Testing}
 
 Whenever an issue was discovered in the backend, the first step taken was to
@@ -440,7 +474,7 @@ A limitation of only including the name is revealed by \enquote*{Pizza Cookies} 
 while reading the directions gives a very different impression as they include chocolate chips as a topping which would
 suggest a dessert. This is an instance where substructure analysis~\cite{wang_substructure_2008} may have helped.
 
-Finally, the distribution of meal was far from even, with a disproportionate number of recipes being classified as
+Finally, the distribution of meal types was far from even, with a disproportionate number of recipes being classified as
 desert even if another meal type would be more appropriate, such as with \enquote*{Hamburger Round-Up} being considered
 a dessert. This distribution is shown in Table~\ref{tab:meal_type_distribution}. Overall, the meal type prediction
 is a weak point of the app. Therefore, FR\arabic{mealtypeid} was only considered to be partially implemented.
