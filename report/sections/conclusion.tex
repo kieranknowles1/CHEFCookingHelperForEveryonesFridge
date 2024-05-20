@@ -1,0 +1,29 @@
+% Don't insert page breaks before these sections
+{
+\let\clearpage\relax
+
+\section{The Final Product}
+
+The project successfully created a prototype web application that allows users to search for recipes based on the ingredients they have available.
+Most of the core functional and non-functional requirements discussed in Section~\ref{sec:requirements} were implemented, with the existing
+framework being designed to be extensible for future development. The application is not deployed publicly, but can be run locally and would
+be easy to deploy to the public.
+
+\section{Deviations from the Original Plan}
+
+Certain requirements were not implemented due to time constraints, shown in the requirements tables~\ref{tab:functional_requirements}
+and~\ref{tab:non_functional_requirements} under the \enquote*{Implemented} column. While some of these would be easy to implement,
+such as the option to use imperial units, others would require significant research and refactoring, such as avoiding recipes too
+similar to those recently made by the user.
+
+Finally, the recipe search performance was not as fast as desired, with results taking multiple seconds to be returned, depending on the
+server's performance. This was due to the query iterating over all recipes and evaluating similarity, taking $O(n)$ time, where $n$ is
+the number of recipes in the database. A potential solution would have been to use a different database system optimized for such queries.
+
+\section{Potential Future Work}
+
+Future work would involve implementing the remaining requirements, and potentially migrating to a different database backend to improve
+performance. Additionally, further competitor analysis could be performed to identify additional features to be implemented for a better
+user experience.
+
+} % <-- End of no-page-breaks section
