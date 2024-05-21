@@ -31,6 +31,7 @@
 \usepackage{codelisting}
 
 \usepackage[notransparent]{svg}
+\usepackage{amssymb}
 \usepackage{booktabs}
 \usepackage{float}
 \usepackage{graphicx}
@@ -70,14 +71,6 @@
 \setcounter{biburllcpenalty}{7000}
 \setcounter{biburlucpenalty}{8000}
 % //!SECTION - Citations
-
-% TODO: Remove once done
-\ifSubfilesClassLoaded{}{
-    \usepackage{draftwatermark}
-}
-\usepackage{todo}
-%TC:macro \todoinline [ignore]
-\newcommand{\todoinline}[1]{\todo{#1}}
 
 \usepackage{hyperref}
 
@@ -256,12 +249,6 @@ being used as a guideline:
 
 \cleartoleftpage\section{Figures}
 \subfile{sections/figures.tex}
-
-% Appendices
-
-
-% TODO: Remove todo list once done
-\todos{}
 
 %TC:endignore
 
